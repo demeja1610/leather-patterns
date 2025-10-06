@@ -7,7 +7,8 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "laravelrus/sleepingowl": "dev-development"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",
@@ -69,6 +70,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    "minimum-stability": "dev",
+    "prefer-stable": false
 }
