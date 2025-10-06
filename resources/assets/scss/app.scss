@@ -1,0 +1,48 @@
+@use '@styles/common/colors.scss' as *;
+@use '@styles/common/classes.scss';
+
+@use '@styles/components/checkbox/checkbox.scss';
+@use '@styles/components/input-text/input-text.scss';
+@use '@styles/components/select/select.scss';
+
+@use '@styles/components/button/button.scss';
+@use '@styles/components/button/ghost.scss';
+@use '@styles/components/link/link.scss';
+
+@use '@styles/components/header/header.scss';
+@use '@styles/components/header/auth.scss';
+
+@use '@styles/components/pattern/list-item.scss';
+
+@use '@styles/components/pattern/single.scss';
+
+@use '@styles/components/pagination/cursor.scss';
+
+@use '@styles/components/filter/filter.scss';
+@use '@styles/components/filter/item.scss';
+@use '@styles/components/filter/item-search.scss';
+@use '@styles/components/filter/item-category.scss';
+@use '@styles/components/filter/item-tag.scss';
+@use '@styles/components/filter/item-author.scss';
+
+@use '@styles/components/theme-toggler/theme-toggler.scss';
+
+@use '@styles/components/form/form.scss';
+@use '@styles/components/form/login.scss';
+@use '@styles/components/form/register.scss';
+@use '@styles/components/form/forgot-password.scss';
+@use '@styles/components/form/reset-password.scss';
+
+@use '@styles/pages/page.scss' as page;
+@use '@styles/pages/index.scss' as index-page;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "instrument-sans", sans-serif;
+    background: var(--bg);
+}

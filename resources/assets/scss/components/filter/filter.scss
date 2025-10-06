@@ -1,0 +1,18 @@
+.filter {
+    background-color: var(--bg-elv);
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: var(--shadow-1);
+    width: 100%;
+    max-width: 290px;
+    border: 1px solid var(--gray-soft);
+
+    &__submit,
+    &__reset {
+        width: 100%;
+    }
+
+    &__submit {
+        margin-bottom: 0.5rem;
+    }
+}

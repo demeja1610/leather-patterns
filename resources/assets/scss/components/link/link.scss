@@ -1,0 +1,11 @@
+.link {
+    color: var(--red-2);
+    font-weight: 500;
+    text-decoration: none;
+    margin-right: auto;
+
+    &:hover {
+        color: var(--red-1);
+        text-decoration: underline;
+    }
+}

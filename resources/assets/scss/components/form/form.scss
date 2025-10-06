@@ -1,0 +1,14 @@
+.form {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background-color: var(--bg-elv);
+
+    &__alert {
+        padding: 1rem;
+        border-radius: 0.5rem;
+        background-color: var(--bg);
+        color: var(--text-1);
+    }
+}

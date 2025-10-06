@@ -1,0 +1,9 @@
+.button--ghost {
+    background-color: var(--bg-elv);
+    color: var(--text-1);
+    border: 1px solid var(--gray-soft);
+
+    &:hover {
+        background-color: var(--bg-alt);
+    }
+}

@@ -1,0 +1,45 @@
+.pagination {
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    &__button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background-color: var(--bg-elv);
+        color: var(--text-1);
+        border-radius: 0.75rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-1);
+
+        &:hover {
+            background-color: var(--red-soft);
+            color: var(--red-1);
+            box-shadow: var(--shadow-2);
+        }
+
+        &[href='#'] {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    }
+
+    &__icon {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    &__button--prev {
+        padding-left: 1rem;
+    }
+
+    &__button--next {
+        padding-right: 1rem;
+    }
+}

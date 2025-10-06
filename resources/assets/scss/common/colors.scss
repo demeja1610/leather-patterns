@@ -1,0 +1,117 @@
+:root {
+    --white: #ffffff;
+
+    --gray-1: #dddde3;
+    --gray-2: #e4e4e9;
+    --gray-3: #ebebef;
+    --gray-soft: rgba(142, 150, 170, .14);
+
+    --gray-on-dark-1: #515c67;
+    --gray-on-dark-2: #414853;
+    --gray-on-dark-3: #32363f;
+    --gray-on-dark-soft: rgba(101, 117, 133, .16);
+
+    --indigo-1: #3451b2;
+    --indigo-2: #3a5ccc;
+    --indigo-3: #5672cd;
+    --indigo-soft: rgba(100, 108, 255, .14);
+
+    --indigo-on-dark-1: #a8b1ff;
+    --indigo-on-dark-2: #5c73e7;
+    --indigo-on-dark-3: #3e63dd;
+    --indigo-on-dark-soft: rgba(100, 108, 255, .16);
+
+    --green-1: #18794e;
+    --green-2: #299764;
+    --green-3: #30a46c;
+    --green-soft: rgba(16, 185, 129, .14);
+
+    --green-on-dark-1: #3dd68c;
+    --green-on-dark-2: #30a46c;
+    --green-on-dark-3: #298459;
+    --green-on-dark-soft: rgba(16, 185, 129, .16);
+
+    --yellow-1: #ffb347;
+    --yellow-2: #ffd700;
+    --yellow-3: #ffc125;
+    --yellow-soft: rgba(255, 215, 0, .14);
+
+    --yellow-on-dark-1: #f9b44e;
+    --yellow-on-dark-2: #da8b17;
+    --yellow-on-dark-3: #a46a0a;
+    --yellow-on-dark-soft: rgba(234, 179, 8, .16);
+
+    --red-1: #b8272c;
+    --red-2: #d5393e;
+    --red-3: #e0575b;
+    --red-soft: rgba(244, 63, 94, .14);
+
+    --red-on-dark-1: #f66f81;
+    --red-on-dark-2: #f14158;
+    --red-on-dark-3: #b62a3c;
+    --red-on-dark-soft: rgba(244, 63, 94, .16);
+
+    --bg: #ffffff;
+    --bg-alt: #f6f6f7;
+    --bg-elv: #ffffff;
+    --bg-soft: #f6f6f7;
+
+    --bg-on-dark: #1b1b1f;
+    --bg-on-dark-alt: #161618;
+    --bg-on-dark-elv: #202127;
+    --bg-on-dark-soft: #202127;
+
+    --text-1: rgba(60, 60, 67);
+    --text-2: rgba(60, 60, 67, .78);
+    --text-3: rgba(60, 60, 67, .56);
+
+    --text-on-dark-1: rgba(255, 255, 245, .86);
+    --text-on-dark-2: rgba(235, 235, 245, .6);
+    --text-on-dark-3: rgba(235, 235, 245, .38);
+
+    --button-text-1: rgba(255, 255, 245, .86);
+    --button-text-2: rgba(235, 235, 245, .6);
+    --button-text-3: rgba(235, 235, 245, .38);
+
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, .04), 0 1px 2px rgba(0, 0, 0, .06);
+    --shadow-2: 0 3px 12px rgba(0, 0, 0, .07), 0 1px 4px rgba(0, 0, 0, .07);
+    --shadow-3: 0 12px 32px rgba(0, 0, 0, .1), 0 2px 6px rgba(0, 0, 0, .08);
+    --shadow-4: 0 14px 44px rgba(0, 0, 0, .12), 0 3px 9px rgba(0, 0, 0, .12);
+    --shadow-5: 0 18px 56px rgba(0, 0, 0, .16), 0 4px 12px rgba(0, 0, 0, .16)
+}
+
+.dark {
+    --gray-1: var(--gray-on-dark-1);
+    --gray-2: var(--gray-on-dark-2);
+    --gray-3: var(--gray-on-dark-3);
+    --gray-soft: var(--gray-on-dark-soft);
+
+    --indigo-1: var(--indigo-on-dark-1);
+    --indigo-2: var(--indigo-on-dark-2);
+    --indigo-3: var(--indigo-on-dark-3);
+    --indigo-soft: var(--indigo-on-dark-soft);
+
+    --green-1: var(--green-on-dark-1);
+    --green-2: var(--green-on-dark-2);
+    --green-3: var(--green-on-dark-3);
+    --green-soft: var(--green-on-dark-soft);
+
+    --yellow-1: var(--yellow-on-dark-1);
+    --yellow-2: var(--yellow-on-dark-2);
+    --yellow-3: var(--yellow-on-dark-3);
+    --yellow-soft: var(--yellow-on-dark-soft);
+
+    --red-1: var(--red-on-dark-1);
+    --red-2: var(--red-on-dark-2);
+    --red-3: var(--red-on-dark-3);
+    --red-soft: var(--red-on-dark-soft);
+
+    --bg: var(--bg-on-dark);
+    --bg-alt: var(--bg-on-dark-alt);
+    --bg-elv: var(--bg-on-dark-elv);
+    --bg-soft: var(--bg-on-dark-soft);
+
+    --text-1: var(--text-on-dark-1);
+    --text-2: var(--text-on-dark-2);
+    --text-3: var(--text-on-dark-3);
+}
