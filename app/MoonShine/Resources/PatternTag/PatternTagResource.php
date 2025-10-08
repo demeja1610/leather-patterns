@@ -64,10 +64,10 @@ class PatternTagResource extends ModelResource
         return $builder->withCount('patterns');
     }
 
-    protected function modifyDeleteButton(ActionButtonContract $button): ActionButtonContract
-    {
-        return $button->canSee(fn(PatternTag $item) => $item->patterns_count === 0);
-    }
+    // protected function modifyDeleteButton(ActionButtonContract $button): ActionButtonContract
+    // {
+    //     return $button->canSee(fn(PatternTag $item) => $item->patterns_count === 0);
+    // }
 
     protected function filters(): iterable
     {
