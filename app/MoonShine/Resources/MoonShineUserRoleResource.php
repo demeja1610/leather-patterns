@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
-use Illuminate\Contracts\Validation\Rule;
+use Stringable;
+use MoonShine\UI\Fields\ID;
+use MoonShine\Support\ListOf;
+use MoonShine\UI\Fields\Text;
 use MoonShine\Laravel\Enums\Action;
-use MoonShine\Laravel\Models\MoonshineUserRole;
-use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Support\Attributes\Icon;
+use MoonShine\UI\Components\Layout\Box;
+use Illuminate\Contracts\Validation\Rule;
 use MoonShine\MenuManager\Attributes\Group;
 use MoonShine\MenuManager\Attributes\Order;
-use MoonShine\Support\Attributes\Icon;
-use MoonShine\Support\ListOf;
-use MoonShine\UI\Components\Layout\Box;
-use MoonShine\UI\Fields\ID;
-use MoonShine\UI\Fields\Text;
-use Stringable;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Laravel\Models\MoonshineUserRole;
 
 #[Icon('bookmark')]
 #[Group('moonshine::ui.resource.system', 'users', translatable: true)]

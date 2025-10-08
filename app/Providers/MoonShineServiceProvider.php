@@ -11,6 +11,10 @@ use MoonShine\Laravel\DependencyInjection\MoonShine;
 use MoonShine\Laravel\DependencyInjection\MoonShineConfigurator;
 use App\MoonShine\Resources\MoonShineUserResource;
 use App\MoonShine\Resources\MoonShineUserRoleResource;
+use App\MoonShine\Resources\User\UserResource;
+use App\MoonShine\Resources\PatternCategory\PatternCategoryResource;
+use App\MoonShine\Resources\PatternTag\PatternTagResource;
+use App\MoonShine\Resources\PatternAuthor\PatternAuthorResource;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -25,6 +29,10 @@ class MoonShineServiceProvider extends ServiceProvider
             ->resources([
                 MoonShineUserResource::class,
                 MoonShineUserRoleResource::class,
+                UserResource::class,
+                PatternCategoryResource::class,
+                PatternTagResource::class,
+                PatternAuthorResource::class,
             ])
             ->pages([
                 ...$config->getPages(),

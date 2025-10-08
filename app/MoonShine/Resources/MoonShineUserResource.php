@@ -4,31 +4,31 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources;
 
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Stringable;
+use MoonShine\UI\Fields\ID;
+use MoonShine\Support\ListOf;
+use MoonShine\UI\Fields\Date;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Email;
+use MoonShine\UI\Fields\Image;
 use Illuminate\Validation\Rule;
+use MoonShine\UI\Components\Tabs;
+use MoonShine\UI\Fields\Password;
+use MoonShine\Support\Enums\Color;
 use MoonShine\Laravel\Enums\Action;
-use MoonShine\Laravel\Fields\Relationships\BelongsTo;
+use MoonShine\UI\Components\Collapse;
+use MoonShine\UI\Components\Tabs\Tab;
+use MoonShine\Support\Attributes\Icon;
+use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\PasswordRepeat;
+use MoonShine\UI\Components\Layout\Flex;
 use MoonShine\Laravel\Models\MoonshineUser;
-use MoonShine\Laravel\Resources\ModelResource;
-use MoonShine\Laravel\Models\MoonshineUserRole;
 use MoonShine\MenuManager\Attributes\Group;
 use MoonShine\MenuManager\Attributes\Order;
-use MoonShine\Support\Attributes\Icon;
-use MoonShine\Support\Enums\Color;
-use MoonShine\Support\ListOf;
-use MoonShine\UI\Components\Collapse;
-use MoonShine\UI\Components\Layout\Box;
-use MoonShine\UI\Components\Layout\Flex;
-use MoonShine\UI\Components\Tabs;
-use MoonShine\UI\Components\Tabs\Tab;
-use MoonShine\UI\Fields\Date;
-use MoonShine\UI\Fields\Email;
-use MoonShine\UI\Fields\ID;
-use MoonShine\UI\Fields\Image;
-use MoonShine\UI\Fields\Password;
-use MoonShine\UI\Fields\PasswordRepeat;
-use MoonShine\UI\Fields\Text;
-use Stringable;
+use MoonShine\Laravel\Resources\ModelResource;
+use MoonShine\Laravel\Models\MoonshineUserRole;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 
 #[Icon('users')]
 #[Group('moonshine::ui.resource.system', 'users', translatable: true)]

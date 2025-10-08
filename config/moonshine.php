@@ -1,26 +1,26 @@
 <?php
 
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Session\Middleware\AuthenticateSession;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
-use MoonShine\Laravel\Exceptions\MoonShineNotFoundException;
-use MoonShine\Laravel\Forms\FiltersForm;
 use MoonShine\Laravel\Forms\LoginForm;
-use MoonShine\Laravel\Http\Middleware\Authenticate;
-use MoonShine\Laravel\Http\Middleware\ChangeLocale;
-use MoonShine\Laravel\Layouts\AppLayout;
-use MoonShine\Laravel\Models\MoonshineUser;
 use MoonShine\Laravel\Pages\Dashboard;
 use MoonShine\Laravel\Pages\ErrorPage;
 use MoonShine\Laravel\Pages\LoginPage;
+use MoonShine\Laravel\Forms\FiltersForm;
+use MoonShine\Laravel\Layouts\AppLayout;
 use MoonShine\Laravel\Pages\ProfilePage;
+use MoonShine\Laravel\Models\MoonshineUser;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use MoonShine\Laravel\Http\Middleware\Authenticate;
+use MoonShine\Laravel\Http\Middleware\ChangeLocale;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use MoonShine\Laravel\Exceptions\MoonShineNotFoundException;
 
 return [
-    'title' => env('MOONSHINE_TITLE', 'MoonShine'),
+    'title' => 'Leather patterns Admin',
     'logo' => 'vendor/moonshine/logo.svg',
     'logo_small' => 'vendor/moonshine/logo-small.svg',
 
@@ -80,14 +80,14 @@ return [
     'layout' => App\MoonShine\Layouts\MoonShineLayout::class,
 
     'forms' => [
-        'login' => LoginForm::class,
+        'login' => App\MoonShine\Forms\LoginForm::class,
         'filters' => FiltersForm::class,
     ],
 
     'pages' => [
         'dashboard' => App\MoonShine\Pages\Dashboard::class,
         'profile' => ProfilePage::class,
-        'login' => LoginPage::class,
+        'login' => App\MoonShine\Pages\LoginPage::class,
         'error' => ErrorPage::class,
     ],
 
