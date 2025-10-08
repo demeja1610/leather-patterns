@@ -41,4 +41,9 @@ class PatternReview extends Model
     {
         return $this->belongsTo(Pattern::class);
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
