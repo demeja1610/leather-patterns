@@ -73,7 +73,7 @@ return [
     'Kepinmax' => null,
     'crazy sheep' => null,
     'с видео' => null,
-    'А4' => null,
+    'а4' => null,
     'Выкройка из кожи' => null,
     'Лекало' => null,
     'из кожи' => null,
