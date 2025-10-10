@@ -28,7 +28,7 @@ class PatternCategoryResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedListBullet; // Also can use getNavigationIcon() method
 
-    protected static ?int $navigationSort = 10; // Also can use getNavigationSort() method
+    protected static ?int $navigationSort = 20; // Also can use getNavigationSort() method
 
     public static function form(Schema $schema): Schema
     {
