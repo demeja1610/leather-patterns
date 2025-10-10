@@ -2,22 +2,16 @@
 
 namespace App\Filament\Resources\PatternCategories\Tables;
 
-use App\Filament\Filters\Date\DateFilter;
-use App\Filament\Filters\Date\DateRangeFilter;
 use Carbon\Carbon;
 use Filament\Tables\Table;
 use Filament\Actions\EditAction;
-use Filament\Tables\Filters\Filter;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Tables\Filters\Indicator;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\DatePicker;
 use Filament\Support\Enums\Size;
-use Filament\Support\Enums\Width;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\PaginationMode;
-use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Filters\Date\DateRangeFilter;
 
 class PatternCategoriesTable
 {
