@@ -695,4 +695,10 @@ return [
         ],
         'author' => 'MPR Leatherworks',
     ],
+    [
+        'tags' => [
+            'Dungeon Designs',
+        ],
+        'author' => 'Dungeon Designs',
+    ],
 ];

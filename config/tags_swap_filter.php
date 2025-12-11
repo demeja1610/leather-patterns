@@ -74,7 +74,7 @@ return [
     'crazy sheep' => null,
     'с видео' => null,
     'а4' => null,
-    'Выкройка из кожи' => null,
+    'выкройка из кожи' => null,
     'Лекало' => null,
     'из кожи' => null,
     'hallowen' => 'хэллоуин',
