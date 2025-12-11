@@ -1,0 +1,14 @@
+.admin-page--pattern-edit {
+    .form-row {
+        width: 100%;
+
+        &--fetch-selects {
+            display: flex;
+            gap: 1rem;
+        }
+    }
+
+    .fetch-select {
+        flex-grow: 1;
+    }
+}

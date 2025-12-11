@@ -1,0 +1,83 @@
+@use '@styles/common/colors.scss' as *;
+@use '@styles/common/animations.scss' as *;
+@use '@styles/common/classes.scss';
+
+
+@use '@styles/components/checkbox/checkbox.scss';
+@use '@styles/components/input-text/input-text.scss';
+@use '@styles/components/select/select.scss';
+@use '@styles/components/fetch-select/fetch-select.scss';
+@use '@styles/components/input-image/multiple.scss';
+
+@use '@styles/components/button/button.scss';
+@use '@styles/components/button/ghost.scss';
+@use '@styles/components/link/link.scss';
+
+@use '@styles/components/header/header.scss';
+@use '@styles/components/header/auth.scss';
+
+@use '@styles/components/theme-toggler/theme-toggler.scss';
+
+@use '@styles/components/sidebar-menu/menu.scss';
+@use '@styles/components/sidebar-menu/list.scss';
+@use '@styles/components/sidebar-menu/item.scss';
+
+@use '@styles/components/table/table.scss';
+@use '@styles/components/table/head.scss';
+@use '@styles/components/table/footer.scss';
+@use '@styles/components/table/tr.scss';
+@use '@styles/components/table/th.scss';
+@use '@styles/components/table/td.scss';
+@use '@styles/components/table/action.scss';
+
+@use '@styles/components/pagination/cursor.scss';
+
+// @use '@styles/components/page-header/header.scss' as admin-page-header;
+
+@use '@styles/components/page-notifications/page-notifications.scss';
+
+@use '@styles/components/modal/modal.scss';
+
+@use '@styles/components/form/confirm.scss';
+
+@use '@styles/pages/admin/page.scss' as admin-page;
+@use '@styles/pages/admin/pattern/list.scss' as admin-page-pattern-list;
+@use '@styles/pages/admin/pattern/edit.scss' as admin-page-pattern-edit;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "instrument-sans", sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .admin-layout {
+        flex-grow: 1;
+    }
+}
+
+.admin-layout {
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    gap: 1rem;
+    padding: 1rem;
+
+    &__content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .admin-menu {
+        width: 100%;
+        max-width: 290px;
+    }
+}

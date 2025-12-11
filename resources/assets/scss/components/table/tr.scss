@@ -1,0 +1,7 @@
+.admin-table__row {
+    background-color: var(--bg);
+
+    &:nth-child(2n) {
+        background-color: var(--bg-alt);
+    }
+}
