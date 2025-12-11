@@ -36,7 +36,7 @@
 
             <a
                 class="link login-form__forgot-password"
-                href="{{ route('page.forgot-password') }}"
+                href="{{ route('page.auth.forgot-password') }}"
             >
                 {{ __('auth.forgot_password') }}
             </a>
@@ -65,7 +65,7 @@
 
         <a
             class="link login-form__signup-link"
-            href="{{ route('page.register') }}"
+            href="{{ route('page.auth.register') }}"
             title="{{ __('auth.sign_up') }}"
         >
             {{ __('auth.sign_up') }}

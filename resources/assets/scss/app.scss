@@ -35,6 +35,11 @@
 
 @use '@styles/pages/page.scss' as page;
 @use '@styles/pages/index.scss' as index-page;
+@use '@styles/pages/auth/login.scss' as login-page;
+@use '@styles/pages/auth/register.scss' as register-page;
+@use '@styles/pages/auth/forgot-password.scss' as forgot-password-page;
+@use '@styles/pages/auth/reset-password.scss' as reset-password-page;
+
 
 * {
     margin: 0;

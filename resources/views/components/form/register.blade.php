@@ -47,6 +47,7 @@
             name="password"
             id="password"
             :title="__('auth.password')"
+            autocomplete="new-password"
         />
 
         <x-input-text.input-errors :messages="$errors->get('password')" />
@@ -78,7 +79,7 @@
 
         <a
             class="link register-form__signup-link"
-            href="{{ route('page.login') }}"
+            href="{{ route('page.auth.login') }}"
             :title="__('auth.sign_in')"
         >
             {{ __('auth.sign_in') }}

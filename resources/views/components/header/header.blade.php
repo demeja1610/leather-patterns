@@ -10,5 +10,7 @@
         </a>
 
         <x-theme-toggler.theme-toggler />
+
+        <x-header.auth />
     </div>
 </header>
