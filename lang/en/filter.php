@@ -14,15 +14,18 @@ return [
     'filter_authors_title' => 'Authors',
     'filter_authors_search' => 'Authors search',
 
+    'filter_with_video_title' => 'With video',
+    'filter_with_reviews_title' => 'With reviews',
+    'filter_with_author_title' => 'With author',
+
     'other_filters_title' => 'Other',
 
     'apply' => 'Apply filters',
-
     'reset' => 'Reset filters',
-
     'search_placeholder' => 'Search',
-
     'sort' => 'Sort',
+    'show_all' => 'Show all',
+    'hide' => 'Hide',
 
     'pattern_order' => [
         'default' => 'Default',

@@ -1,7 +1,7 @@
 <header class="header">
     <div class="header__content">
         <a
-            href="{{ route('page.admin.index') }}"
+            href="{{ route('admin.page.index.dashboard') }}"
             class="header__logo"
         >
             <x-icon.svg name="leather" />

@@ -66,23 +66,18 @@
         />
     </x-input-text.input-text>
 
-    <button
-        class="button register-form__submit"
-        type="submit"
-        :title="__('auth.register')"
-    >
+    <x-button.default :title="__('auth.register')">
         {{ __('auth.register') }}
-    </button>
+    </x-button.default>
 
     <p class="register-form__signup">
         {{ __('auth.already_have_account') }}
 
-        <a
-            class="link register-form__signup-link"
-            href="{{ route('page.auth.login') }}"
+        <x-link.default
+            :href="route('page.auth.login')"
             :title="__('auth.sign_in')"
         >
             {{ __('auth.sign_in') }}
-        </a>
+        </x-link.default>
     </p>
 </form>

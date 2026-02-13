@@ -34,12 +34,13 @@
         >
             {{ __('auth.password') }}
 
-            <a
-                class="link login-form__forgot-password"
+            <x-link.default
                 href="{{ route('page.auth.forgot-password') }}"
+                title="{{ __('auth.sign_up') }}"
+                class="login-form__forgot-password"
             >
                 {{ __('auth.forgot_password') }}
-            </a>
+            </x-link.default>
         </x-input-text.label>
 
         <x-input-text.input
@@ -52,23 +53,18 @@
         <x-input-text.input-errors :messages="$errors->get('password')" />
     </x-input-text.input-text>
 
-    <button
-        class="button login-form__submit"
-        type="submit"
-        title="{{ __('auth.login') }}"
-    >
+    <x-button.default :title="__('auth.login')">
         {{ __('auth.login') }}
-    </button>
+    </x-button.default>
 
     <p class="login-form__signup">
         {{ __('auth.dont_have_account') }}
 
-        <a
-            class="link login-form__signup-link"
-            href="{{ route('page.auth.register') }}"
-            title="{{ __('auth.sign_up') }}"
+        <x-link.default
+            :href="route('page.auth.register')"
+            :title="__('auth.sign_up')"
         >
             {{ __('auth.sign_up') }}
-        </a>
+        </x-link.default>
     </p>
 </form>

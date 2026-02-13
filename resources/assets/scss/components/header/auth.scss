@@ -1,7 +1,6 @@
 .header-auth {
     display: flex;
     align-items: center;
-    gap: 1rem;
 
     &__dashboard-link {
         display: flex;
@@ -41,6 +40,7 @@
         transition: background-color 0.3s ease;
         color: var(--text-2);
         transition: color 0.3s ease;
+        padding: 0 0 0 1rem;
 
         &:hover {
             color: var(--red-2);

@@ -1,0 +1,8 @@
+@use '@styles/components/link/link.scss';
+
+.button-link {
+    @extend .link;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}

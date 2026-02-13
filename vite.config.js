@@ -16,6 +16,7 @@ export default defineConfig({
     resolve: {
         alias: {
             "@styles": "/resources/assets/scss",
+            "@js": "/resources/assets/js",
             "@node_modules": "/node_modules",
         },
     },

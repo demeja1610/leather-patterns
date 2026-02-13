@@ -1,0 +1,5 @@
+@use '@styles/components/button/button.scss';
+
+.link-button-default {
+    @extend .button;
+}

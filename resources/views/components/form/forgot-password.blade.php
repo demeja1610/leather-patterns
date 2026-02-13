@@ -27,10 +27,7 @@
         <x-input-text.input-errors :messages="$errors->get('email')" />
     </x-input-text.input-text>
 
-    <button
-        class="button"
-        type="submit"
-    >
+    <x-button.default :title="__('auth.forgot_password')">
         {{ __('auth.forgot_password') }}
-    </button>
+    </x-button.default>
 </form>

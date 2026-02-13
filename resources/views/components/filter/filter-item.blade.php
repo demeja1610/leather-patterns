@@ -1,5 +1,9 @@
-<div class="filter-item {{ $class ?? '' }}">
-    @if (!empty($title))
+@props([
+    'title' => null,
+])
+
+<div {{ $attributes->merge(['class' => 'filter-item']) }}>
+    @if ($title !== null)
         <h3 class="filter-item__title">
             {{ $title }}
         </h3>

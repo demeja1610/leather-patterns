@@ -1,0 +1,11 @@
+.sidebar {
+    background-color: var(--bg-elv);
+    border-radius: 1rem;
+    padding: 1em;
+    box-shadow: var(--shadow-1);
+    width: 100%;
+    max-width: 290px;
+    border: 1px solid var(--gray-soft);
+    display: flex;
+    flex-direction: column;
+}

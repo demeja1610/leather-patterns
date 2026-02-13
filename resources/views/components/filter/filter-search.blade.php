@@ -1,14 +1,16 @@
-<x-filter.filter-item
-    :title="$title ?? null"
-    :class="'filter-item--search ' . ($class ?? '')"
->
-    <x-input-text.input-text>
+@props([
+    'placeholder' => __('filter.search_placeholder'),
+    'name' => null,
+    's' => null,
+])
+
+<x-filter.filter-item {{ $attributes->merge(['class' => 'filter-item-search']) }}>
+    <x-input-text.input-text class="filter-item-search__input">
         <x-input-text.input
-            :placeholder="$placeholder ?? __('filter.search_placeholder')"
-            :name="$name ?? null"
-            :value="$s ?? ''"
-            class="filter-item__search-input"
-            :title="$title ?? __('filter.search_placeholder')"
+            :placeholder="$placeholder"
+            :name="$name"
+            :value="$s"
+            :title="$placeholder"
         />
     </x-input-text.input-text>
 </x-filter.filter-item>

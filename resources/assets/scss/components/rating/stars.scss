@@ -1,0 +1,16 @@
+.rating-stars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    background-color: var(--bg);
+    color: var(--gray-1);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+
+    &__star {
+        &--active {
+            color: var(--yellow-3);
+        }
+    }
+}

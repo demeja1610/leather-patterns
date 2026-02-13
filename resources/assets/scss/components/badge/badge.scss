@@ -1,0 +1,16 @@
+.badge {
+    padding: 0.25rem 0.75rem;
+    background-color: var(--gray-soft);
+    color: var(--text-2);
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+
+    &:hover {
+        border-color: var(--text-2);
+    }
+}

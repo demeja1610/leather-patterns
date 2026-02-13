@@ -1,28 +1,32 @@
 import fslightbox from "fslightbox";
 
 export default function imagePopups() {
-    const imagePopupTriggers = document.querySelectorAll(
-        ".image-popup-trigger"
-    );
+    const galleries = document.querySelectorAll("[data-gallery]");
 
-    imagePopupTriggers.forEach((trigger) => {
+    if (galleries.length === 0) {
+        return;
+    }
+
+    galleries.forEach((gallery) => {
+        const trigger = gallery.querySelector("[data-gallery-trigger]");
+
+        if (trigger === null) {
+            return;
+        }
+
         trigger.addEventListener("click", (e) => {
             e.preventDefault();
 
-            const imagePopupContainer = trigger.closest(
-                ".image-popup-container"
-            );
+            const images = gallery.querySelectorAll("[data-gallery-image]");
 
-            const imagePopupItems =
-                imagePopupContainer.querySelectorAll(".image-popup-item");
-
-            const imageSrcs = Array.from(imagePopupItems).map((item) => {
+            const imageLinks = Array.from(images).map((item) => {
                 return item.src;
             });
 
             const lightbox = new FsLightbox();
 
-            lightbox.props.sources = imageSrcs;
+            lightbox.props.sources = imageLinks;
+            
             lightbox.open();
         });
     });

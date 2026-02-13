@@ -1,0 +1,17 @@
+.loader-spin {
+    color: currentColor;
+    display: inline-flex;
+    align-items: center;
+
+    &::before {
+        content: "";
+        width: 1rem;
+        height: 1rem;
+        background-color: transparent;
+        border: 1px solid transparent;
+        border-top-color: currentColor;
+        border-radius: 1000%;
+        margin-right: 0.5rem;
+        animation: spin 1s linear infinite;
+    }
+}

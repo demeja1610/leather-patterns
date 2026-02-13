@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')
+    ->name('admin.')
     ->middleware([
         'auth',
         'throttle:60,1',
@@ -12,39 +13,9 @@ Route::prefix('admin')
     ])
     ->group(function (): void {
         Route::get('/', \App\Http\Controllers\Admin\IndexController::class)
-            ->name('page.admin.index');
+            ->name('page.index.dashboard');
 
-        // Route::prefix('categories')
-        //     ->group(function (): void {
-        //         Route::get('/', \App\Http\Controllers\App\Admin\Category\ListPageController::class)
-        //             ->name('page.admin.category.list');
-
-        //         Route::group(['prefix' => 'create'], function (): void {
-        //             Route::get('/', \App\Http\Controllers\App\Admin\Category\CreatePageController::class)
-        //                 ->name('page.admin.category.create');
-
-        //             Route::post('/', \App\Http\Controllers\App\Admin\Category\CreateController::class)
-        //                 ->name('admin.category.create');
-        //         });
-
-        //         Route::post('/mass-action', \App\Http\Controllers\App\Admin\Category\MassActionController::class)
-        //             ->name('admin.category.mass-action');
-
-        //         Route::get('/search', \App\Http\Controllers\App\Admin\Category\SearchController::class)
-        //             ->name('admin.category.search');
-
-        //         Route::group(['prefix' => '{id}'], function (): void {
-
-        //             Route::get('/', \App\Http\Controllers\App\Admin\Category\EditPageController::class)
-        //                 ->name('page.admin.category.edit');
-
-        //             Route::patch('/', \App\Http\Controllers\App\Admin\Category\EditController::class)
-        //                 ->name('admin.category.update');
-
-        //             Route::delete('/', \App\Http\Controllers\App\Admin\Category\DeleteController::class)
-        //                 ->name('admin.category.delete');
-        //         });
-        //     });
+        require_once __DIR__ . '/admin/pattern-category.php';
 
         // Route::prefix('authors')
         //     ->group(function (): void {

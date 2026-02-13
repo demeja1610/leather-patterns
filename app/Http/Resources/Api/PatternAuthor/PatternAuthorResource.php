@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Http\Resources\Api\PatternAuthor;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class PatternAuthorResource extends JsonResource
+{
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+        ];
+    }
+
+    public function jsonOptions()
+    {
+        return JSON_UNESCAPED_UNICODE;
+    }
+}

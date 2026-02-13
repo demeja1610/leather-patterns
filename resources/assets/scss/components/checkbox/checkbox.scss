@@ -2,20 +2,21 @@
     display: flex;
     align-items: center;
     margin-bottom: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+    color: var(--text-1);
 
-    &__input {
+    input[type="checkbox"] {
         position: absolute;
         opacity: 0;
-        cursor: pointer;
         height: 0;
         width: 0;
 
-        &+.checkbox__label {
+        &+.checkbox__custom {
             position: relative;
             cursor: pointer;
             font-size: 1rem;
             color: var(--text-2);
-            user-select: none;
             display: flex;
             align-items: center;
 
@@ -45,16 +46,16 @@
             }
         }
 
-        &:checked+.checkbox__label:before {
+        &:checked+.checkbox__custom:before {
             background: var(--red-1);
             border-color: var(--red-1);
         }
 
-        &:checked+.checkbox__label:after {
+        &:checked+.checkbox__custom:after {
             opacity: 1;
         }
 
-        &:hover+.checkbox__label:before {
+        &:hover+.checkbox__custom:before {
             border-color: var(--red-2);
         }
     }

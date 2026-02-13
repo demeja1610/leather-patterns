@@ -1,29 +1,14 @@
-import filters from "./components/filters/filters";
-import imagePopups from "./components/image-popups";
-import toggleTheme from "./components/theme-toggler";
+import localSearchFilters from "@js/components/filters/local-search-filters";
+import patternFilters from "@js/components/filters/pattern-filters";
+import toggleTheme from "@js/components/theme-toggler";
+import imagePopups from "@js/components/image-popups";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     toggleTheme();
+
     imagePopups();
-    filters();
 
-    document.querySelectorAll(".filter label").forEach((label) => {
-        label.addEventListener("click", (e) => {
-            e.preventDefault();
+    localSearchFilters();
 
-            const labelFor = label.getAttribute("for");
-
-            if (!labelFor) {
-                return;
-            }
-
-            const input = document.getElementById(labelFor);
-
-            if (!input) {
-                return;
-            }
-
-            input.click();
-        });
-    });
+    patternFilters();
 });

@@ -1,0 +1,5 @@
+@use '@styles/components/button/button-ghost.scss';
+
+.link-button-ghost {
+    @extend .button-ghost;
+}

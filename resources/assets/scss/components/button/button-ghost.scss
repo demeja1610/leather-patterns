@@ -1,0 +1,14 @@
+@use '@styles/components/button/button.scss';
+
+.button-ghost {
+    @extend .button;
+
+    background-color: var(--bg);
+    color: var(--text-1);
+    border: none;
+    box-shadow: var(--shadow-1);
+
+    &:hover {
+        background-color: var(--bg-alt);
+    }
+}

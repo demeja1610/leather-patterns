@@ -1,11 +1,11 @@
 <div class="header-auth">
     @guest
-        <a
-            class="button header-auth__login"
-            href="{{ route('page.auth.login') }}"
+        <x-link.button-default
+            :href="route('page.auth.login')"
+            :title="__('auth.sign_in')"
         >
-            Sign in
-        </a>
+            {{ __('auth.sign_in') }}
+        </x-link.button-default>
     @endguest
 
     @auth
@@ -19,9 +19,10 @@
             />
 
             <span class="header-auth__dashboard-link-username">
-                {{ Auth::user()->name }}
+                {{ auth()->user()->name }}
             </span>
         </a>
+
         <form
             action="{{ route('auth.logout') }}"
             method="POST"

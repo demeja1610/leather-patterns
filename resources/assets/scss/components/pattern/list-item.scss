@@ -8,6 +8,7 @@
     flex-direction: column;
     border: 1px solid var(--gray-soft);
     position: relative;
+    // background-color: #000;
 
     &__link {
         position: absolute;
@@ -18,14 +19,18 @@
         z-index: 2;
     }
 
-    &:hover {
-        box-shadow: var(--shadow-2);
+    &__rating-stars {
+        position: absolute;
+        left: 1rem;
+        top: 1rem;
+        z-index: 1;
+        box-shadow: var(--shadow-1);
     }
 
     &__floating-actions {
         position: absolute;
-        right: 0.75rem;
-        top: 0.75rem;
+        right: 1rem;
+        top: 1rem;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -34,25 +39,20 @@
     }
 
     &__floating-action {
-        background-color: var(--bg);
-        color: var(--text-1);
         padding: 0.5rem;
         border-radius: 0.5rem;
-        text-decoration: none;
         transition: background-color 0.3s ease, color 0.3s ease;
         border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        z-index: 3;
+        background-color: var(--bg);
 
         &:hover {
             color: var(--red-2);
         }
 
         .icon {
-            width: 1.2rem;
-            height: 1.2rem;
+            width: 1rem;
+            height: 1rem;
         }
     }
 
@@ -62,6 +62,7 @@
         overflow: hidden;
         position: relative;
         padding-top: 56.25%;
+        color: var(--text-1);
 
         &-img {
             position: absolute;
@@ -94,7 +95,7 @@
     }
 
     &__content {
-        padding: 1.5rem;
+        padding: 1rem;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
@@ -113,110 +114,68 @@
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
+        z-index: 3;
     }
 
     &__category {
-        padding: 0.25rem 0.75rem;
         background-color: var(--red-soft);
         color: var(--red-1);
-        border-radius: 0.75rem;
-        font-size: 0.875rem;
-        text-decoration: none;
-        transition: background-color 0.3s ease, color 0.3s ease;
 
         &:hover {
-            background-color: var(--red-1);
-            color: var(--bg);
-        }
-    }
-
-    &__tag {
-        padding: 0.25rem 0.75rem;
-        background-color: var(--gray-soft);
-        color: var(--text-2);
-        border-radius: 0.75rem;
-        font-size: 0.875rem;
-        text-decoration: none;
-        transition: background-color 0.3s ease, color 0.3s ease;
-
-        &:hover {
-            background-color: var(--gray-1);
+            border-color: var(--red-1);
         }
     }
 
     &__author {
-        padding: 0.25rem 0.75rem;
         background-color: var(--indigo-soft);
-        color: var(--indigo-1);
-        border-radius: 0.75rem;
-        font-size: 0.875rem;
-        text-decoration: none;
-        transition: background-color 0.3s ease, color 0.3s ease;
+        color: var(--indigo-3);
 
         &:hover {
-            background-color: var(--indigo-1);
-            color: var(--bg);
+            border-color: var(--indigo-3);
         }
     }
 
-    &__actions {
+    &__downloads {
+        z-index: 3;
         display: flex;
-        justify-content: flex-end;
         align-items: center;
         gap: 1rem;
         flex-wrap: wrap;
         margin-top: auto;
-
-        &-row {
-            display: flex;
-            gap: 1rem;
-            width: 100%;
-        }
-
-        &-button {
-            &--look {
-                .icon {
-                    width: 1.15rem;
-                    height: 1.15rem;
-                }
-            }
-
-            &--download {
-                flex-grow: 1;
-                gap: 0.5rem;
-
-                .icon--pdf {
-                    width: 1.2rem;
-                    height: 1.2rem;
-                }
-            }
-        }
     }
 
-    &__rating {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.25rem;
-        position: absolute;
-        left: 0.75rem;
-        top: 0.75rem;
-        background-color: var(--bg);
-        z-index: 1;
-        color: var(--yellow-3);
-        padding: 0.5rem;
-        border-radius: 0.5rem;
+    &__download {
+        flex-grow: 1;
+        gap: 0.5rem;
+
+        &-text {
+            flex-grow: 1;
+        }
+
+        &-icon {
+            width: 1.2rem;
+            height: 1.2rem;
+
+            &--download {
+                width: 1rem;
+                height: 1rem;
+            }
+        }
     }
 
     &__meta {
-        padding: 0.5rem 0 0 0;
         border-top: 1px solid var(--border);
         color: var(--text-2);
+        z-index: 3;
 
         &-item {
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
             gap: 0.5rem;
         }
+    }
+
+    &:hover {
+        box-shadow: var(--shadow-2);
     }
 }

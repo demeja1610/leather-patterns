@@ -1,8 +1,4 @@
-@props(['disabled' => false])
-
-<input
-    {{ $disabled ? 'disabled' : '' }}
-    {!! $attributes->merge([
-        'class' => 'input-text__input',
-    ]) !!}
->
+<input {{ $attributes->merge([
+    'type' => 'text',
+    'class' => 'input-text__input',
+]) }}>

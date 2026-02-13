@@ -1,0 +1,15 @@
+@mixin thin-scrollbar {
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: var(--bg-soft);
+        border-radius: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--gray-2);
+        border-radius: 2px;
+    }
+}

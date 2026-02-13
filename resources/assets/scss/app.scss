@@ -1,45 +1,66 @@
+// common styles
+
 @use '@styles/common/colors.scss' as *;
-@use '@styles/common/classes.scss';
+@use '@styles/common/animations.scss' as *;
 
-@use '@styles/components/checkbox/checkbox.scss';
-@use '@styles/components/input-text/input-text.scss';
-@use '@styles/components/select/select.scss';
+// common components
 
-@use '@styles/components/button/button.scss';
-@use '@styles/components/button/ghost.scss';
-@use '@styles/components/link/link.scss';
+@use '@styles/components/checkbox/checkbox.scss' as checkbox;
+@use '@styles/components/input/text.scss' as input-text;
+@use '@styles/components/select/select.scss' as select;
 
-@use '@styles/components/header/header.scss';
-@use '@styles/components/header/auth.scss';
+@use '@styles/components/button/button.scss' as button;
+@use '@styles/components/button/button-ghost.scss' as button-ghost;
+@use '@styles/components/button/button-link.scss' as button-link;
 
-@use '@styles/components/pattern/list-item.scss';
+@use '@styles/components/link/link.scss' as link;
+@use '@styles/components/link/link-button-default.scss' as link-button-default;
+@use '@styles/components/link/link-button-ghost.scss' as link-button-ghost;
 
-@use '@styles/components/pattern/single.scss';
+@use '@styles/components/rating/stars.scss' as rating-stars;
 
-@use '@styles/components/pagination/cursor.scss';
+@use '@styles/components/badge/badge.scss' as badge;
+@use '@styles/components/badge/link.scss' as badge-link;
+@use '@styles/components/badge/button.scss' as badge-button;
 
-@use '@styles/components/filter/filter.scss';
-@use '@styles/components/filter/item.scss';
-@use '@styles/components/filter/item-search.scss';
-@use '@styles/components/filter/item-category.scss';
-@use '@styles/components/filter/item-tag.scss';
-@use '@styles/components/filter/item-author.scss';
+@use '@styles/components/theme-toggler/theme-toggler.scss' as theme-toggler;
 
-@use '@styles/components/theme-toggler/theme-toggler.scss';
+@use '@styles/components/loader/spin.scss' as loader-spin;
 
-@use '@styles/components/form/form.scss';
-@use '@styles/components/form/login.scss';
-@use '@styles/components/form/register.scss';
-@use '@styles/components/form/forgot-password.scss';
-@use '@styles/components/form/reset-password.scss';
+@use '@styles/components/pagination/cursor.scss' as pagination-cursor;
+
+// componets for pages
+
+@use '@styles/components/filter/filter.scss' as filter;
+@use '@styles/components/filter/item.scss' as filter-item;
+@use '@styles/components/filter/item-search.scss' as filter-item-search;
+@use '@styles/components/filter/item-category.scss' as filter-item-category;
+@use '@styles/components/filter/item-tag.scss' as filter-item-tag;
+@use '@styles/components/filter/item-author.scss' as filter-item-author;
+
+@use '@styles/components/form/form.scss' as form;
+@use '@styles/components/form/login.scss' as form-login;
+@use '@styles/components/form/register.scss' as form-register;
+@use '@styles/components/form/forgot-password.scss' as form-forgot-password;
+@use '@styles/components/form/reset-password.scss' as form-reset-password;
+
+@use '@styles/components/header/header.scss' as header;
+@use '@styles/components/header/auth.scss' as header-auth;
+
+@use '@styles/components/pattern/list-item.scss' as pattern-list-item;
+@use '@styles/components/pattern/pattern-reviews.scss' as pattern-reviews;
+
+@use '@styles/common/classes.scss' as common-classes; // it is important to be at the end of component import list to rewrite component styles
+
+// pages
 
 @use '@styles/pages/page.scss' as page;
-@use '@styles/pages/index.scss' as index-page;
 @use '@styles/pages/auth/login.scss' as login-page;
 @use '@styles/pages/auth/register.scss' as register-page;
 @use '@styles/pages/auth/forgot-password.scss' as forgot-password-page;
 @use '@styles/pages/auth/reset-password.scss' as reset-password-page;
-
+@use '@styles/pages/pattern/list.scss' as pattern-list-page;
+@use '@styles/pages/pattern/single.scss' as pattern-single-page;
 
 * {
     margin: 0;

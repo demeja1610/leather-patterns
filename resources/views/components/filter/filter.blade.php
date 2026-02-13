@@ -1,19 +1,20 @@
+@props(['resetUrl' => '#'])
+
 <div class="filter">
     {{ $slot }}
 
-    <button
-        type="submit"
-        class="button filter__submit"
-        title="{{ __('filter.apply') }}"
+    <x-button.default
+        :title="__('filter.apply')"
+        class="filter__submit"
     >
         {{ __('filter.apply') }}
-    </button>
+    </x-button.default>
 
-    <a
-        href="{{ $resetUrl }}"
-        class="button button--ghost filter__reset"
-        title="{{ __('filter.reset') }}"
+    <x-link.button-ghost
+        :href="$resetUrl"
+        :title="__('filter.reset')"
+        class="filter__reset"
     >
         {{ __('filter.reset') }}
-    </a>
+    </x-link.button-ghost>
 </div>

@@ -1,0 +1,19 @@
+<?php
+return [
+    'pattern_categories' => 'Pattern categories',
+    'creation' => 'Create pattern category',
+    'edition' => 'Edit pattern category',
+
+    'id' => 'ID',
+    'name' => 'Name',
+    'created_at' => 'Created at',
+
+    'admin' => [
+        'created' => 'Category with name: `:name` successfully created',
+        'updated' => 'Category with id: `:id` successfully updated',
+        'failed_to_update' => 'Failed to update category with id: `:id`',
+        'single_delete_success' => 'Category with id: `:id` successfully deleted',
+        'single_failed_to_delete' => 'Failed to delete category with id: `:id`',
+        'success_mass_deleted' => ':count categories successfully deleted',
+    ],
+];

@@ -1,40 +1,72 @@
 @extends('layouts.app')
 
+@php
+    $filters = request()->all();
+@endphp
+
 @section('content')
     <form
         action="{{ route('page.index') }}"
         method="get"
-        class="page page--index"
+        class="page page-pattern-list"
     >
         <x-filter.filter :resetUrl="route('page.index')">
-           <x-filter.filter-category
+            <x-filter.filter-category
                 :categories="$categories"
-                :activeCategories="$activeCategoriesIds"
+                :selectedCategories="$filters['category'] ?? []"
+                :showAllCategories="isset($filters['show_all_pattern_categories'])"
             />
 
-             <x-filter.filter-tag
+            <x-filter.filter-tag
                 :tags="$tags"
-                :activeTags="$activeTagsIds"
+                :selectedTags="$filters['tag'] ?? []"
+                :showAllTags="isset($filters['show_all_pattern_tags'])"
             />
 
             <x-filter.filter-author
                 :authors="$authors"
-                :activeAuthors="$activeAuthorsIds"
+                :selectedAuthors="$filters['author'] ?? []"
+                :showAllAuthors="isset($filters['show_all_pattern_authors'])"
             />
 
             <x-filter.other-filters>
-                <x-filter.filter-video :checked="$hasVideo" />
+                <x-checkbox.custom :label="__('filter.filter_with_video_title')">
+                    <input
+                        type="checkbox"
+                        class="checkbox__input"
+                        name="has_video"
+                        value="1"
+                        @checked(isset($filters['has_video']))
+                    />
+                </x-checkbox.custom>
 
-                <x-filter.filter-review :checked="$hasReview" />
+                <x-checkbox.custom :label="__('filter.filter_with_reviews_title')">
+                    <input
+                        type="checkbox"
+                        class="checkbox__input"
+                        name="has_review"
+                        value="1"
+                        @checked(isset($filters['has_review']))
+                    />
+                </x-checkbox.custom>
+
+                <x-checkbox.custom :label="__('filter.filter_with_author_title')">
+                    <input
+                        type="checkbox"
+                        class="checkbox__input"
+                        name="has_author"
+                        value="1"
+                        @checked(isset($filters['has_author']))
+                    />
+                </x-checkbox.custom>
             </x-filter.other-filters>
         </x-filter.filter>
 
         <div class="page__content">
-            <div class="page__search">
+            <div class="page-pattern-list__search">
                 <x-filter.filter-search
-                    :class="'page__filter-item-search'"
                     :name="'s'"
-                    :s="$search"
+                    :s="$filters['s'] ?? null"
                 />
 
                 <x-select.wrapper>
@@ -50,7 +82,7 @@
                         @foreach ($patternOrders as $patternOrder)
                             <x-select.option
                                 :value="$patternOrder->value"
-                                :selected="$order === $patternOrder->value"
+                                :selected="isset($filters['order']) && $filters['order'] === $patternOrder->value"
                             >
                                 {{ __('filter.sort') }}: {{ __("filter.pattern_order.{$patternOrder->value}") }}
                             </x-select.option>
@@ -58,20 +90,12 @@
                     </x-select.select>
                 </x-select.wrapper>
 
-                <button
-                    type="submit"
-                    class="button button--primary"
-                    title="{{ __('filter.search_placeholder') }}"
-                >
+                <x-button.default :title="__('filter.search_placeholder')">
                     <x-icon.svg name="search" />
-                </button>
+                </x-button.default>
             </div>
 
-            <div class="patterns">
-                @foreach ($patterns as $pattern)
-                    <x-pattern.list-item :pattern="$pattern" />
-                @endforeach
-            </div>
+            <x-pattern.list :patterns="$patterns" />
 
             @if ($patterns->previousPageUrl() || $patterns->nextPageUrl())
                 <x-pagination.cursor

@@ -43,10 +43,7 @@
         />
     </x-input-text.input-text>
 
-    <button
-        class="button reset-password-form__button"
-        type="submit"
-    >
+    <x-button.default :title="__('auth.reset_password')">
         {{ __('auth.reset_password') }}
-    </button>
+    </x-button.default>
 </form>
