@@ -9,6 +9,7 @@
     align-items: center;
     justify-content: center;
     border: 1px solid transparent;
+    outline-color: var(--gray-1);
 
     &:hover {
         border-color: var(--text-2);
