@@ -1,0 +1,19 @@
+.admin-page-list {
+    &__data {
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    &__filters-toggler {
+        &-text {
+            margin-left: 0.5rem;
+        }
+
+        &--active {
+            color: var(--red-2);
+        }
+    }
+}

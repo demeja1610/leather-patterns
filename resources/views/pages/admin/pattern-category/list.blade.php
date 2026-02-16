@@ -2,61 +2,45 @@
 
 @section('content')
     <div
-        class="admin-page"
-        x-data="{ deleteUrl: null }"
+        class="admin-page admin-page-list admin-page-pattern-category-list"
+        x-data="{ deleteUrl: null, showFilters: false }"
         x-on:close-modal="deleteUrl = null"
     >
-        <x-admin.page-header.header
-            title="{{ __('pattern_category.pattern_categories') }}"
-            actionsUrl="{{ route('admin.pattern-category.mass-action') }}"
-        >
+        <x-admin.page-header.header :title="__('pattern_category.pattern_categories')">
             <x-link.button-default :href="route('admin.pattern-category.create')">
                 {{ __('actions.add_new') }}
             </x-link.button-default>
 
             <x-slot:actions>
-                <x-select.select
-                    name="action"
-                    id="action"
-                    title="{{ __('actions.mass_actions') }}"
+                <x-button.ghost
+                    class="admin-page-list__filters-toggler"
+                    x-on:click="showFilters = !showFilters"
+                    x-bind:class="showFilters ? 'admin-page-list__filters-toggler--active' : ''"
+                    :title="__('filter.filters')"
                 >
-                    <x-select.option value="">
-                        {{ __('actions.mass_action') }}:{{ __('actions.not_selected') }}
-                    </x-select.option>
+                    <x-icon.svg name="filter" />
 
-                    <x-select.option value="delete">
-                        {{ __('actions.mass_action') }}:{{ __('actions.delete') }}
-                    </x-select.option>
-                </x-select.select>
+                    <span class="admin-page-list__filters-toggler-text">
+                        {{ count($activeFilters) }}
+                    </span>
+                </x-button.ghost>
             </x-slot:actions>
         </x-admin.page-header.header>
 
-        <form
-            action="{{ route('admin.page.pattern-category.list') }}"
-            method="POST"
-            class="form"
-        >
-            @csrf
-
-            <x-table.table x-data="{ all_checked: false }">
+        <div class="admin-page-list__data">
+            <x-table.table>
                 <x-slot:header>
                     <x-table.head>
-                        <x-table.th>
-                            <x-checkbox.custom>
-                                <input
-                                    type="checkbox"
-                                    id="ids"
-                                    x-on:change="all_checked = !all_checked"
-                                >
-                            </x-checkbox.custom>
-                        </x-table.th>
-
                         <x-table.th>
                             {{ __('pattern_category.id') }}
                         </x-table.th>
 
                         <x-table.th>
                             {{ __('pattern_category.name') }}
+                        </x-table.th>
+
+                        <x-table.th>
+                            {{ __('pattern_category.patterns_count') }}
                         </x-table.th>
 
                         <x-table.th>
@@ -73,23 +57,15 @@
                     @foreach ($categories as $category)
                         <x-table.tr>
                             <x-table.td>
-                                <x-checkbox.custom>
-                                    <input
-                                        type="checkbox"
-                                        id="category_{{ $category->id }}"
-                                        name="ids[]"
-                                        value="{{ $category->id }}"
-                                        x-bind:checked="all_checked"
-                                    >
-                                </x-checkbox.custom>
-                            </x-table.td>
-
-                            <x-table.td>
                                 {{ $category->id }}
                             </x-table.td>
 
                             <x-table.td>
                                 {{ $category->name }}
+                            </x-table.td>
+
+                            <x-table.td>
+                                {{ $category->patterns_count }}
                             </x-table.td>
 
                             <x-table.td>
@@ -114,7 +90,69 @@
                     @endforeach
                 </x-slot:rows>
             </x-table.table>
-        </form>
+
+            <x-admin.sidebar.filters
+                :url="route('admin.page.pattern-category.list')"
+                x-cloak
+                x-show="showFilters"
+            >
+                <x-input-text.input-text>
+                    <x-input-text.label for="id">
+                        {{ __('filter.id') }}
+                    </x-input-text.label>
+
+                    <x-input-text.input
+                        id="id"
+                        name="id"
+                        type="text"
+                        :value="$activeFilters['id'] ?? null"
+                        :title="__('filter.id')"
+                    />
+                </x-input-text.input-text>
+
+                <x-input-text.input-text>
+                    <x-input-text.label for="name">
+                        {{ __('filter.name') }}
+                    </x-input-text.label>
+
+                    <x-input-text.input
+                        id="name"
+                        name="name"
+                        type="text"
+                        :value="$activeFilters['name'] ?? null"
+                        :title="__('filter.name')"
+                    />
+                </x-input-text.input-text>
+
+                <x-input-text.input-text>
+                    <x-input-text.label for="older_thar">
+                        {{ __('filter.older_than') }}
+                    </x-input-text.label>
+
+                    <x-input-text.input
+                        id="older_than"
+                        name="older_than"
+                        type="datetime-local"
+                        :value="isset($activeFilters['older_than']) ? $activeFilters['older_than']->format('Y-m-d\\TH:i:s') : null"
+                        :title="__('filter.older_than')"
+                    />
+                </x-input-text.input-text>
+
+                <x-input-text.input-text>
+                    <x-input-text.label for="newer_than">
+                        {{ __('filter.newer_than') }}
+                    </x-input-text.label>
+
+                    <x-input-text.input
+                        id="newer_than"
+                        name="newer_than"
+                        type="datetime-local"
+                        :value="isset($activeFilters['newer_than']) ? $activeFilters['newer_than']->format('Y-m-d\\TH:i:s') : null"
+                        :title="__('filter.newer_than')"
+                    />
+                </x-input-text.input-text>
+            </x-admin.sidebar.filters>
+        </div>
 
         @if ($categories->nextPageUrl() || $categories->previousPageUrl())
             <x-pagination.cursor

@@ -1,28 +1,18 @@
 @props([
     'title' => null,
     'actions' => null,
-    'actionsUrl' => '#',
 ])
 
 <header class="admin-page-header">
-    <div class="admin-page-header__title-area">
-        @if ($title !== null)
-            <h1 class="admin-page-header__title">
-                {{ $title }}
-            </h1>
-        @endif
+    <h1 class="admin-page-header__title">
+        {{ $title }}
+    </h1>
 
-        {{ $slot }}
-    </div>
+    {{ $slot }}
 
-    @if ($actions !== null)
-        <form
-            action="{{ $actionsUrl }}"
-            class="admin-page-header__actions"
-        >
-            @csrf
-
+    @if ($actions)
+        <div class="admin-page-header__actions">
             {{ $actions }}
-        </form>
+        </div>
     @endif
 </header>

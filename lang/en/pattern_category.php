@@ -6,6 +6,7 @@ return [
 
     'id' => 'ID',
     'name' => 'Name',
+    'patterns_count' => 'Patterns count',
     'created_at' => 'Created at',
 
     'admin' => [

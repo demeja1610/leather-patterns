@@ -41,6 +41,8 @@
 
 @use '@styles/components/admin/page-header/header.scss' as admin-page-header;
 
+@use '@styles/components/admin/sidebar/filters.scss' as admin-sidebar-filters;
+
 @use '@styles/components/page-notifications/page-notifications.scss' as page-notifications;
 
 @use '@styles/components/table/table.scss' as table;
@@ -58,6 +60,10 @@
 @use '@styles/layouts/admin.scss' as admin-layout;
 
 @use '@styles/pages/admin/page.scss' as admin-page;
+@use '@styles/pages/admin/page-list.scss' as admin-page-list;
+
+@use '@styles/pages/admin/pattern-category/list.scss' as admin-page-pattern-category-list;
+
 @use '@styles/pages/admin/pattern/list.scss' as admin-page-pattern-list;
 @use '@styles/pages/admin/pattern/edit.scss' as admin-page-pattern-edit;
 

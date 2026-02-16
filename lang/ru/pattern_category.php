@@ -6,6 +6,7 @@ return [
 
     'id' => 'ID',
     'name' => 'Название',
+    'patterns_count' => 'Количество выкроек',
     'created_at' => 'Дата создания',
 
     'admin' => [

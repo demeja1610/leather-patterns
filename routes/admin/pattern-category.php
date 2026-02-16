@@ -7,9 +7,6 @@ Route::prefix('categories')
         Route::get('/', \App\Http\Controllers\Admin\PatternCategory\Page\ListPageController::class)
             ->name('page.pattern-category.list');
 
-        Route::post('/mass-action', \App\Http\Controllers\Admin\PatternCategory\Action\MassActionController::class)
-            ->name('pattern-category.mass-action');
-
         Route::group(['prefix' => 'create'], function (): void {
             Route::get('/', \App\Http\Controllers\Admin\PatternCategory\Page\CreatePageController::class)
                 ->name('page.pattern-category.create');
@@ -28,7 +25,7 @@ Route::prefix('categories')
                         ->name('pattern-category.update');
                 });
 
-            Route::delete('/', \App\Http\Controllers\Admin\PatternCategory\Action\DeleteController::class)
+            Route::get('/', \App\Http\Controllers\Admin\PatternCategory\Action\DeleteController::class)
                 ->name('pattern-category.delete');
         });
     });

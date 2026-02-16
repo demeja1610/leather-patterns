@@ -27,6 +27,12 @@ return [
     'show_all' => 'Show all',
     'hide' => 'Hide',
 
+    'filters' => 'Filters',
+    'id' => 'ID',
+    'name' => 'Name',
+    'older_than' => 'Older than',
+    'newer_than' => 'Newer than',
+
     'pattern_order' => [
         'default' => 'Default',
         PatternOrderEnum::DATE_ASC->value => 'By date (ascending)',

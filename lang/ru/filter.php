@@ -27,6 +27,12 @@ return [
     'show_all' => 'Показать все',
     'hide' => 'Скрыть',
 
+    'filters' => 'Фильтры',
+    'id' => 'ID',
+    'name' => 'Название',
+    'older_than' => 'Старее чем',
+    'newer_than' => 'Новее чем',
+
     'pattern_order' => [
         'default' => 'По умолчанию',
         PatternOrderEnum::DATE_ASC->value => 'По дате (от меньшего к большему)',

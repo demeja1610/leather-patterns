@@ -6,7 +6,7 @@
 
 <form
     {{ $attributes->merge(['class' => 'confirm-form']) }}
-    method="POST"
+    method="GET"
 >
     @csrf
 
