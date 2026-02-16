@@ -46,6 +46,7 @@
         &-item {
             background-color: var(--red-soft);
             color: var(--red-1);
+             outline-color: var(--red-2);
 
             &:hover {
                 border-color: var(--red-1);
@@ -57,6 +58,7 @@
         &-item {
             background-color: var(--indigo-soft);
             color: var(--indigo-3);
+             outline-color: var(--indigo-3);
 
             &:hover {
                 border-color: var(--indigo-3);
@@ -77,12 +79,14 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 1rem;
+
     }
 
     &__image {
         border-radius: 0.5rem;
         overflow: hidden;
         aspect-ratio: 16/9;
+        outline-color: var(--red-2);
 
         &-img {
             width: 100%;

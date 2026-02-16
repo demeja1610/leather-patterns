@@ -12,6 +12,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    outline-color: var(--red-1);
 
     &:hover {
         background-color: var(--red-on-dark-3);
