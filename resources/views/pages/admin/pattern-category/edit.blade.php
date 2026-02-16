@@ -45,12 +45,9 @@
                 <x-input-text.input-errors :messages="$errors->get('name')" />
             </x-input-text.input-text>
 
-            <button
-                class="button"
-                type="submit"
-            >
+            <x-button.default type="submit">
                 {{ __('actions.save') }}
-            </button>
+            </x-button.default>
         </form>
     </div>
 @endsection
