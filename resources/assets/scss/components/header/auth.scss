@@ -12,6 +12,7 @@
         border-radius: 0.75rem;
         transition: background-color 0.3s ease;
         padding: 0.5rem 1rem;
+        outline-color: var(--red-2);
 
         &:hover {
             background-color: var(--bg-soft);
@@ -40,7 +41,8 @@
         transition: background-color 0.3s ease;
         color: var(--text-2);
         transition: color 0.3s ease;
-        padding: 0 0 0 1rem;
+        padding: 0.5rem 0 0.5rem 1rem;
+        outline-color: var(--red-2);
 
         &:hover {
             color: var(--red-2);

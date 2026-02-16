@@ -28,6 +28,7 @@
             text-decoration: none;
             transition: all 0.2s ease;
             font-weight: 500;
+            outline-color: var(--red-2);
 
             &:hover {
                 color: var(--red-1);
@@ -114,6 +115,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 0.5rem;
+            outline-color: var(--red-2);
 
             &-icon {
                 transition: transform 0.3s ease;
