@@ -1,7 +1,7 @@
 @props([
-    'confirmText' => 'Confirm',
-    'cancelText' => 'Cancel',
-    'text' => 'Confirm your action',
+    'confirmText' => __('actions.confirm'),
+    'cancelText' => __('actions.cancel'),
+    'text' => __('phrases.confirm_text'),
 ])
 
 <form
@@ -17,18 +17,19 @@
     </p>
 
     <div class="confirm-form__buttons">
-        <button
-            type="submit"
-            class="button confirm-form__button confirm-form__button--delete"
+        <x-button.default
+            class="confirm-form__button"
+            :title="$confirmText"
         >
             {{ $confirmText }}
-        </button>
+        </x-button.default>
 
-        <button
-            class="button button--ghost confirm-form__button confirm-form__button--cancel"
+        <x-button.ghost
             x-on:click.prevent="$dispatch('cancel')"
+            class="confirm-form__button"
+            :title="$cancelText"
         >
             {{ $cancelText }}
-        </button>
+        </x-button.ghost>
     </div>
 </form>

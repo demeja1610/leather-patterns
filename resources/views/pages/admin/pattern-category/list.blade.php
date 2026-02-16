@@ -101,17 +101,14 @@
                                     <x-icon.svg name="edit" />
                                 </x-link.button-ghost>
 
-                                {{-- @if ($category->patterns_count === 0)
-                                    @php
-                                        $deleteUrl = route('admin.category.delete', ['id' => $category->id]);
-                                    @endphp
-
-                                    <x-table.action-delete
-                                        x-data="{ url: '{{ $deleteUrl }}' }"
-                                        href="{{ $deleteUrl }}"
-                                        x-on:click.prevent="() => {deleteUrl=url}"
-                                    />
-                                @endif --}}
+                                @if ($category->patterns_count === 0)
+                                    <x-link.button-default
+                                        :href="route('admin.pattern-category.delete', ['id' => $category->id])"
+                                        x-on:click.prevent="() => {deleteUrl=$el.href}"
+                                    >
+                                        <x-icon.svg name="delete" />
+                                    </x-link.button-default>
+                                @endif
                             </x-table.td-actions>
                         </x-table.tr>
                     @endforeach
@@ -126,19 +123,18 @@
             />
         @endif
 
-        {{-- <x-modal.modal
-            title="Confirmation"
+        <x-modal.modal
+            :title="__('phrases.confirmation')"
             x-show="deleteUrl !== null"
         >
             <x-form.confirm
                 x-on:cancel="$dispatch('close-modal')"
-                confirm-text="Delete"
-                cancel-text="Cancel"
+                :confirm-text="__('actions.delete_confirm')"
                 x-bind:action="deleteUrl"
-                text="Are you sure you want to delete this category?"
+                :text="__('pattern_category.admin.confirm_delete_text')"
             >
                 @method('DELETE')
             </x-form.confirm>
-        </x-modal.modal> --}}
+        </x-modal.modal>
     </div>
 @endsection
