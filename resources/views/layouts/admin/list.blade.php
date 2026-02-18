@@ -16,7 +16,7 @@
 
                 @hasSection('page-filters')
                     <x-button.ghost
-                        class="admin-page-list__filters-toggler"
+                        :class="'admin-page-list__filters-toggler' . ($showFilters === false ? null : ' admin-page-list__filters-toggler--has-active-filters')"
                         x-on:click="showFilters = !showFilters"
                         x-bind:class="showFilters ? 'admin-page-list__filters-toggler--active' : ''"
                         :title="__('filter.filters')"

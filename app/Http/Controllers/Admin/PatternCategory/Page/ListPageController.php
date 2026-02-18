@@ -82,5 +82,53 @@ class ListPageController extends Controller
 
             $query->where('created_at', '>', $newerThan);
         }
+
+        $hasPatterns = $request->get('has_patterns');
+
+        if ($hasPatterns !== null) {
+            $this->activeFilters['has_patterns'] = (bool) $hasPatterns;
+
+            if ((bool) $hasPatterns === true) {
+                $query->whereHas('patterns');
+            } else {
+                $query->whereDoesntHave('patterns');
+            }
+        }
+
+        $isPublished = $request->get('is_published');
+
+        if ($isPublished !== null) {
+            $this->activeFilters['is_published'] = (bool) $isPublished;
+
+            if ((bool) $isPublished === true) {
+                $query->where('is_published', true);
+            } else {
+                $query->where('is_published', false);
+            }
+        }
+
+        $hasReplacement = $request->get('has_replacement');
+
+        if ($hasReplacement !== null) {
+            $this->activeFilters['has_replacement'] = (bool) $hasReplacement;
+
+            if ((bool) $hasReplacement === true) {
+                $query->whereNotNull('replace_id');
+            } else {
+                $query->whereNull('replace_id');
+            }
+        }
+
+        $removeOnAppear = $request->get('remove_on_appear');
+
+        if ($removeOnAppear !== null) {
+            $this->activeFilters['remove_on_appear'] = (bool) $removeOnAppear;
+
+            if ((bool) $removeOnAppear === true) {
+                $query->where('remove_on_appear', true);
+            } else {
+                $query->where('remove_on_appear', false);
+            }
+        }
     }
 }
