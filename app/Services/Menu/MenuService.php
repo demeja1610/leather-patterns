@@ -19,12 +19,17 @@ class MenuService implements MenuServiceInterface
             new MenuItemDto(
                 text: __('admin_menu.pattern_category.pattern_categories'),
                 route: 'admin.page.pattern-category.list',
-                icon: 'list',
+                icon: 'category',
                 subMenu: new MenuItemListDto(
                     new MenuItemDto(
                         text: __('admin_menu.pattern_category.pattern_categories'),
                         route: 'admin.page.pattern-category.list',
-                        icon: 'list',
+                        icon: 'category',
+                    ),
+                    new MenuItemDto(
+                        text: __('admin_menu.pattern_category.add_new'),
+                        route: 'admin.page.pattern-category.create',
+                        icon: 'create',
                     ),
                 ),
             ),

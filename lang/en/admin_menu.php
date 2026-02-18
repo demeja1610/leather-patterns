@@ -5,5 +5,6 @@ return [
 
     'pattern_category' => [
         'pattern_categories' => 'Pattern Categories',
+        'add_new' => 'Add new',
     ],
 ];

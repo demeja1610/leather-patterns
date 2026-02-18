@@ -5,5 +5,6 @@ return [
 
     'pattern_category' => [
         'pattern_categories' => 'Категории выкроек',
+        'add_new' => 'Добавить запись',
     ],
 ];
