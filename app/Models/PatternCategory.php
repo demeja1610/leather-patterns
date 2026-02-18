@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $name
  * @property null|int $replace_id
  * @property bool $remove_on_appear
+ * @property bool $is_published
  *
  * @property-read \Carbon\Carbon $created_at
  * @property-read \Carbon\Carbon $updated_at
@@ -24,6 +25,7 @@ class PatternCategory extends Model
         'name',
         'replace_id',
         'remove_on_appear',
+        'is_published',
     ];
 
     public function patterns(): BelongsToMany

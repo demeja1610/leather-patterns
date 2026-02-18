@@ -72,7 +72,7 @@
             </div>
         @endif
 
-        @if ($pattern->categories !== null)
+        @if ($pattern->categories && $pattern->categories->isEmpty() === false)
             <div class="pattern-list-item__categories">
                 @foreach ($pattern->categories as $category)
                     <x-badge.link

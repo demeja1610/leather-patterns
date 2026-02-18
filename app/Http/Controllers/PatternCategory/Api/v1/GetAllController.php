@@ -23,7 +23,7 @@ class GetAllController extends Controller
 
     protected function getAllPatternCategories(GetAllRequest &$request): Collection
     {
-        $q = PatternCategory::query();
+        $q = $this->getBasePatternCategoryQuery();
 
         $this->applyFilters(
             query: $q,
@@ -36,6 +36,12 @@ class GetAllController extends Controller
         ]);
 
         return $q->orderBy('id', 'asc')->get();
+    }
+
+    protected function getBasePatternCategoryQuery(): Builder
+    {
+        return PatternCategory::query()
+            ->where('is_published', true);
     }
 
     protected function applyFilters(Builder &$query, GetAllRequest &$request): void

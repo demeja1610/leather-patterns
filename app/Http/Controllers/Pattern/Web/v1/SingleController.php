@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pattern\Web\v1;
 
 use App\Models\Pattern;
 use Illuminate\Routing\Controller;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class SingleController extends Controller
 {
@@ -25,7 +26,18 @@ class SingleController extends Controller
         $q = Pattern::query()
             ->where('id', $id)
             ->with([
-                'categories',
+                'categories' => function (BelongsToMany $sq) {
+                    $table = $sq->getRelated()->getTable();
+
+                    $sq->where('is_published', true);
+
+                    $sq->select([
+                        "{$table}.id",
+                        "{$table}.name"
+                    ]);
+
+                    return $sq;
+                },
                 'tags',
                 'author',
                 'images',

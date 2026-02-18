@@ -11,11 +11,14 @@
         class="page page-pattern-list"
     >
         <x-filter.filter :resetUrl="route('page.index')">
-            <x-filter.filter-category
-                :categories="$categories"
-                :selectedCategories="$filters['category'] ?? []"
-                :showAllCategories="isset($filters['show_all_pattern_categories'])"
-            />
+            @if ($categories->isEmpty() === false)
+                <x-filter.filter-category
+                    :categories="$categories"
+                    :selectedCategories="$filters['category'] ?? []"
+                    :showAllCategories="isset($filters['show_all_pattern_categories'])"
+                    :categoriesLimit="$categoriesLimit"
+                />
+            @endif
 
             <x-filter.filter-tag
                 :tags="$tags"

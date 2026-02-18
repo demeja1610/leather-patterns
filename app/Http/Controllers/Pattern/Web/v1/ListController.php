@@ -44,6 +44,7 @@ class ListController extends Controller
 
         return view('pages.pattern.list', [
             'categories' => $patternCategories,
+            'categoriesLimit' => $this->patternCategoriesLimit,
             'tags' => $patternTags,
             'authors' => $patternAuthors,
             'patterns' => $patterns,
@@ -169,6 +170,8 @@ class ListController extends Controller
             'categories' => function (BelongsToMany $sq) {
                 $table = $sq->getRelated()->getTable();
 
+                $sq->where('is_published', true);
+
                 $sq->select([
                     "{$table}.id",
                     "{$table}.name"
@@ -222,7 +225,8 @@ class ListController extends Controller
 
     protected function getBasePatternCategoryQuery(): Builder
     {
-        return PatternCategory::query();
+        return PatternCategory::query()
+            ->where('is_published', true);
     }
 
     protected function getBasePatternTagQuery(): Builder

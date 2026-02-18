@@ -87,6 +87,10 @@
                         {{ __('pattern_category.name') }}
                     </x-table.th>
 
+                    <x-table.th >
+                        {{ __('pattern_category.is_published') }}
+                    </x-table.th>
+
                     <x-table.th>
                         {{ __('pattern_category.patterns_count') }}
                     </x-table.th>
@@ -133,6 +137,10 @@
                             {{ $category->name }}
                         </x-table.td>
 
+                        <x-table.td-bool :value="$category->is_published">
+                            {{ $category->is_published ? __('phrases.yes') : __('phrases.no') }}
+                        </x-table.td-bool>
+
                         <x-table.td>
                             {{ $category->patterns_count }}
                         </x-table.td>
@@ -141,9 +149,9 @@
                             {{ $category->replacement?->name }}
                         </x-table.td>
 
-                        <x-table.td>
+                        <x-table.td-bool :value="$category->remove_on_appear">
                             {{ $category->remove_on_appear ? __('phrases.yes') : __('phrases.no') }}
-                        </x-table.td>
+                        </x-table.td-bool>
 
                         <x-table.td>
                             {{ $category->created_at->format('d.m.Y H:i') }}

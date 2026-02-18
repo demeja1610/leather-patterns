@@ -1,5 +1,6 @@
 @props([
     'showAllCategories' => false,
+    'categoriesLimit' => 10,
     'selectedCategories' => [],
     'categories' => [],
 ])
@@ -73,7 +74,7 @@
             </li>
         </template>
 
-        @if ($showAllCategories === false)
+        @if ($showAllCategories === false && count($categories) >= $categoriesLimit)
             <li class="filter-item-category__list-item">
                 <button
                     class="button-link filter-item-category__load-more"

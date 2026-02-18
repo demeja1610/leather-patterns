@@ -19,7 +19,8 @@ class EditController extends Controller
         $data = array_merge(
             $request->validated(),
             [
-                'remove_on_appear' => (bool) $request->get('remove_on_appear', false)
+                'remove_on_appear' => (bool) $request->get('remove_on_appear', false),
+                'is_published' => (bool) $request->get('is_published', false),
             ]
         );
 

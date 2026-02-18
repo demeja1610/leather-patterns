@@ -84,6 +84,15 @@
             />
         </x-checkbox.custom>
 
+         <x-checkbox.custom :label="__('pattern_category.is_published')">
+            <input
+                type="checkbox"
+                class="checkbox__input"
+                name="is_published"
+                @checked(old('is_published', $category->is_published))
+            />
+        </x-checkbox.custom>
+
         <x-button.default type="submit">
             {{ __('actions.save') }}
         </x-button.default>

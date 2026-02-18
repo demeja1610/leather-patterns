@@ -11,6 +11,7 @@ return [
     'replacement' => 'Заменить на',
     'remove_on_appear' => 'Удалять из выкроек при появлении',
     'remove_on_appear_short' => 'Удалять при появлении',
+    'is_published' => 'Опубликована',
 
     'admin' => [
         'created' => 'Категория выкройки: `:name` успешно создана',
