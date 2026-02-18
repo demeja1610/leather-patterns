@@ -1,0 +1,7 @@
+@use '@styles/components/table/th.scss';
+
+.table-header-actions {
+    @extend .table-header;
+
+    text-align: left;
+}

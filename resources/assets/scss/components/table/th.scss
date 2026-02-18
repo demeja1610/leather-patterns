@@ -1,10 +1,6 @@
-.table__header {
+.table-header {
     padding: 1rem;
     color: var(--text-1);
     text-align: center;
     border-bottom: 1px solid var(--gray-soft);
-
-    &--actions {
-        text-align: left;
-    }
 }

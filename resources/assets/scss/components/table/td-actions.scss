@@ -1,0 +1,14 @@
+@use '@styles/components/table/td.scss';
+
+.table-data-actions {
+    @extend .table-data;
+
+    text-align: right;
+
+    &__wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        gap: 0.5rem;
+    }
+}

@@ -1,7 +1,5 @@
-.table {
-    &__head {
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 1rem;
-        box-shadow: var(--shadow-1);
-    }
+.table-head {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    box-shadow: var(--shadow-1);
 }

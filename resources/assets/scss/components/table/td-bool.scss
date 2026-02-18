@@ -1,0 +1,25 @@
+@use '@styles/components/table/td.scss';
+
+.table-data-bool {
+    @extend .table-data;
+
+    color: var(--green-3);
+
+    &__wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    &__dot {
+        background-color: currentColor;
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+    }
+
+    &--negative {
+        color: var(--red-2);
+    }
+}

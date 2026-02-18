@@ -1,5 +1,5 @@
-<tfoot class="table__footer">
-    <tr class="table__footer-row">
+<tfoot class="table-footer">
+    <tr class="table-footer__row">
         {{ $slot }}
     </tr>
 </tfoot>

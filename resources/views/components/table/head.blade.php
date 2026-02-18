@@ -1,5 +1,5 @@
-<thead class="table__head">
-    <tr class="table__head-row">
+<thead class="table-head">
+    <tr class="table-head__row">
         {{ $slot }}
     </tr>
 </thead>

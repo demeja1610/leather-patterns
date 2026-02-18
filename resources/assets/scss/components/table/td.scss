@@ -1,22 +1,11 @@
-.table__data {
+.table-data {
     padding: 1rem;
     color: var(--text-1);
     text-align: center;
     border-bottom: 1px solid var(--gray-soft);
 
-    &-actions {
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        gap: 0.5rem;
-    }
-
     .text {
         padding: 0.5rem 1rem;
         border-radius: 0.5rem;
-    }
-
-    &--actions {
-        text-align: right;
     }
 }

@@ -50,11 +50,13 @@
 
 @use '@styles/components/table/table.scss' as table;
 @use '@styles/components/table/head.scss' as table-head;
-@use '@styles/components/table/body.scss' as table-body;
 @use '@styles/components/table/footer.scss' as table-footer;
 @use '@styles/components/table/tr.scss' as table-tr;
 @use '@styles/components/table/th.scss' as table-th;
+@use '@styles/components/table/th-actions.scss' as table-th-actions;
 @use '@styles/components/table/td.scss' as table-td;
+@use '@styles/components/table/td-actions.scss' as table-td-actions;
+@use '@styles/components/table/td-bool.scss' as table-td-bool;
 @use '@styles/components/table/overflow-x-container.scss' as table-overflow-x-container;
 
 

@@ -1,5 +1,5 @@
-<td class="table__data table__data--actions">
-    <div class="table__data-actions">
+<td class="table-data-actions">
+    <div class="table-data-actions__wrapper">
         {{ $slot }}
     </div>
 </td>

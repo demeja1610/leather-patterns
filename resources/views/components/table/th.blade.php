@@ -1,3 +1,3 @@
-<th class="table__header">
+<th class="table-header">
     {{ $slot }}
 </th>

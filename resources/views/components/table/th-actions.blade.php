@@ -1,3 +1,3 @@
-<th class="table__header table__header--actions">
+<th class="table-header-actions">
     {{ $slot }}
 </th>

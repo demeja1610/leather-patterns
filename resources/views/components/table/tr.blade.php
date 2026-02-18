@@ -1,3 +1,3 @@
-<tr class="table__row">
+<tr class="table-row">
     {{ $slot }}
 </tr>
