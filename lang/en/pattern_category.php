@@ -12,6 +12,8 @@ return [
     'remove_on_appear' => 'Remove from patterns on appear',
     'remove_on_appear_short' => 'Remove on appear',
     'is_published' => 'Is published',
+    'has_patterns' => 'Used by patterns',
+    'has_replacement' => 'Has replacement',
 
     'admin' => [
         'created' => 'Category with name: `:name` successfully created',

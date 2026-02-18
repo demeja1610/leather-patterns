@@ -10,4 +10,5 @@ return [
     'confirm_text' => 'Confirm your action',
     'yes' => 'Yes',
     'no' => 'No',
+    'nothing_found' => 'Nothing found',
 ];
