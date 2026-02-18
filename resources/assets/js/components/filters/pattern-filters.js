@@ -79,9 +79,9 @@ export default function patternFilters() {
                     }
 
                     list.insertBefore(templateContent, loadMoreEl.parentNode);
-
-                    loaded = true;
                 });
+
+                loaded = true;
             } catch (error) {
                 console.log(error);
             } finally {
