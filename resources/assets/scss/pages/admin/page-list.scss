@@ -1,10 +1,37 @@
 .admin-page-list {
-    &__data {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    &__header {
+        width: 100%;
+    }
+
+    &__content {
         width: 100%;
         display: flex;
-        gap: 1rem;
         align-items: flex-start;
         justify-content: flex-start;
+        gap: 1rem;
+
+        > .table-overflow-x-container {
+            flex-grow: 1;
+        }
+    }
+
+    &__filters {
+        max-width: 290px;
+    }
+
+    &__table-container {
+        flex-grow: 1;
+    }
+
+    &__pagination {
+        width: 100%;
+        justify-content: center;
     }
 
     &__filters-toggler {

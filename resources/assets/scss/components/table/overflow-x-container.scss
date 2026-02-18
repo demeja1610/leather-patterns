@@ -1,0 +1,21 @@
+.table-overflow-x-container {
+    overflow-x: auto;
+    border: 1px solid var(--gray-soft);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-1);
+
+    .table {
+        width: 100%;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+
+        &__header {
+            white-space: nowrap;
+        }
+
+        &__data {
+            white-space: nowrap;
+        }
+    }
+}

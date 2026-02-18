@@ -3,7 +3,7 @@
     'nextPageUrl' => '#',
 ])
 
-<div class="pagination">
+<div {{ $attributes->merge(['class' => 'pagination']) }}>
     <div class="pagination__container">
         <x-link.button-ghost :href="$prevPageUrl" class="pagination__button pagination__button--prev">
             <x-icon.svg

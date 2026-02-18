@@ -20,6 +20,7 @@
         <x-button.default
             class="confirm-form__button"
             :title="$confirmText"
+            type="submit"
         >
             {{ $confirmText }}
         </x-button.default>

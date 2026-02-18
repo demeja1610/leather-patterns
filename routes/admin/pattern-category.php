@@ -25,7 +25,7 @@ Route::prefix('categories')
                         ->name('pattern-category.update');
                 });
 
-            Route::get('/', \App\Http\Controllers\Admin\PatternCategory\Action\DeleteController::class)
+            Route::get('/delete', \App\Http\Controllers\Admin\PatternCategory\Action\DeleteController::class)
                 ->name('pattern-category.delete');
         });
     });

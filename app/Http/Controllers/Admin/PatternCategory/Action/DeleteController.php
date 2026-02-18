@@ -17,6 +17,10 @@ class DeleteController extends Controller
     {
         $category = $this->getPatternCategory($id);
 
+        if ($category === null) {
+            return redirect()->back();
+        }
+
         if ($category->patterns_count !== 0) {
             return redirect()->back()->with(
                 key: 'notifications',

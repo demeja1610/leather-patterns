@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\PatternCategory\Page;
 
+use Carbon\Carbon;
 use App\Models\PatternCategory;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\PatternCategory\ListRequest;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Requests\Admin\PatternCategory\ListRequest;
 
 class ListPageController extends Controller
 {
@@ -36,6 +36,8 @@ class ListPageController extends Controller
         );
 
         $q->withCount('patterns');
+
+        $q->with('replacement');
 
         return $q->orderBy('id', 'desc')->cursorPaginate(
             perPage: 30,

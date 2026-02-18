@@ -1,4 +1,4 @@
-<x-sidebar.sidebar>
+<x-sidebar.sidebar {{ $attributes->merge(['class' => 'admin-sidebar']) }}>
     <x-sidebar.menu>
         @foreach ($menu as $menuItem)
             <x-sidebar.menu-item :menuItem="$menuItem" />

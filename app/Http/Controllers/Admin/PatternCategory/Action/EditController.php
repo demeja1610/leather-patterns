@@ -16,7 +16,12 @@ class EditController extends Controller
 {
     public function __invoke($id, EditRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $data = array_merge(
+            $request->validated(),
+            [
+                'remove_on_appear' => (bool) $request->get('remove_on_appear', false)
+            ]
+        );
 
         $updated = PatternCategory::query()
             ->where('id', $id)

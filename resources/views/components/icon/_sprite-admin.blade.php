@@ -3,7 +3,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     width="0"
     height="0"
-    style="display: none;"
+    style="display: none; position: absolute; top: 0; left:0; width: 1px; height: 1px"
 >
     <symbol
         id="icon-leather"

@@ -43,15 +43,20 @@
 
 @use '@styles/components/admin/sidebar/filters.scss' as admin-sidebar-filters;
 
+@use '@styles/components/admin/form/create.scss' as admin-form-create;
+@use '@styles/components/admin/form/edit.scss' as admin-form-edit;
+
 @use '@styles/components/page-notifications/page-notifications.scss' as page-notifications;
 
 @use '@styles/components/table/table.scss' as table;
 @use '@styles/components/table/head.scss' as table-head;
+@use '@styles/components/table/body.scss' as table-body;
 @use '@styles/components/table/footer.scss' as table-footer;
 @use '@styles/components/table/tr.scss' as table-tr;
 @use '@styles/components/table/th.scss' as table-th;
 @use '@styles/components/table/td.scss' as table-td;
-@use '@styles/components/table/action.scss' as table-actions;
+@use '@styles/components/table/overflow-x-container.scss' as table-overflow-x-container;
+
 
 @use '@styles/components/modal/modal.scss' as modal;
 
@@ -61,11 +66,11 @@
 
 @use '@styles/pages/admin/page.scss' as admin-page;
 @use '@styles/pages/admin/page-list.scss' as admin-page-list;
+@use '@styles/pages/admin/page-single.scss' as admin-page-single;
 
-@use '@styles/pages/admin/pattern-category/list.scss' as admin-page-pattern-category-list;
-
-@use '@styles/pages/admin/pattern/list.scss' as admin-page-pattern-list;
-@use '@styles/pages/admin/pattern/edit.scss' as admin-page-pattern-edit;
+// @use '@styles/pages/admin/pattern/list.scss' as admin-page-pattern-list;
+// @use '@styles/pages/admin/pattern/edit.scss' as admin-page-pattern-edit;
+// @use '@styles/pages/admin/pattern/create.scss' as admin-page-pattern-edit;
 
 * {
     margin: 0;
@@ -79,6 +84,8 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 
 [x-cloak] {

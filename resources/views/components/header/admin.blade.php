@@ -1,4 +1,4 @@
-<header class="header">
+<header {{ $attributes->merge(['class' => 'header']) }}>
     <div class="header__content">
         <a
             href="{{ route('admin.page.index.dashboard') }}"

@@ -8,6 +8,9 @@ return [
     'name' => 'Название',
     'patterns_count' => 'Количество выкроек',
     'created_at' => 'Дата создания',
+    'replacement' => 'Заменить на',
+    'remove_on_appear' => 'Удалять из выкроек при появлении',
+    'remove_on_appear_short' => 'Удалять при появлении',
 
     'admin' => [
         'created' => 'Категория выкройки: `:name` успешно создана',

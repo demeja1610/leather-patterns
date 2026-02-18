@@ -3,10 +3,12 @@
     'actions' => null,
 ])
 
-<header class="admin-page-header">
-    <h1 class="admin-page-header__title">
-        {{ $title }}
-    </h1>
+<header {{ $attributes->merge(['class' => 'admin-page-header']) }}>
+    @if ($title !== null)
+        <h1 class="admin-page-header__title">
+            {{ $title }}
+        </h1>
+    @endif
 
     {{ $slot }}
 

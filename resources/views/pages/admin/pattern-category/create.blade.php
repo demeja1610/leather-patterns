@@ -1,38 +1,74 @@
-@extends('layouts.admin')
+@extends('layouts.admin.single', [
+    'title' => __('pattern_category.creation'),
+])
 
-@section('content')
-    <div class="admin-page">
-        <x-admin.page-header.header title="{{ __('pattern_category.creation') }}">
+@section('page')
+    <x-admin.form.create
+        :action="route('admin.page.pattern-category.create')"
+        x-data="{
+            categoryReplacements: {{ json_encode($categoryReplacements, JSON_UNESCAPED_UNICODE) }},
+            selectedReplacementId: {{ $category->replacement?->id ?? 'null' }}
+        }"
+    >
+        <x-input-text.input-text>
+            <x-input-text.label
+                for="name"
+                class="required"
+            >
+                {{ __('pattern_category.name') }}
+            </x-input-text.label>
 
-        </x-admin.page-header.header>
+            <x-input-text.input
+                id="name"
+                name="name"
+                type="text"
+                required
+                :value="old('name')"
+                title="{{ __('pattern_category.name') }}e"
+            />
 
-        <form
-            action="{{ route('admin.page.pattern-category.create') }}"
-            method="POST"
-            class="form"
-        >
-            @csrf
+            <x-input-text.input-errors :messages="$errors->get('name')" />
+        </x-input-text.input-text>
 
-            <x-input-text.input-text>
-                <x-input-text.label for="name">
-                    {{ __('pattern_category.name') }}
-                </x-input-text.label>
+        <x-select.wrapper>
+            <x-select.label for="replace_id">
+                {{ __('pattern_category.replacement') }}
+            </x-select.label>
 
-                <x-input-text.input
-                    id="name"
-                    name="name"
-                    type="text"
-                    required
-                    :value="old('name')"
-                    title="{{ __('pattern_category.name') }}e"
-                />
+            <x-select.select
+                name="replace_id"
+                id="replace_id"
+                :title="__('pattern_category.replacement')"
+                x-model.number="selectedReplacementId"
+            >
+                <x-select.option value="">
+                    {{ __('filter.not_selected') }}
+                </x-select.option>
 
-                <x-input-text.input-errors :messages="$errors->get('name')" />
-            </x-input-text.input-text>
+                <template
+                    x-for="categoryReplacement in categoryReplacements"
+                    :key="categoryReplacement.id"
+                >
+                    <x-select.option
+                        x-bind:value="categoryReplacement.id"
+                        x-text="categoryReplacement.name"
+                        x-bind:selected="categoryReplacement.id === selectedReplacementId"
+                    >
+                    </x-select.option>
+                </template>
+            </x-select.select>
+        </x-select.wrapper>
 
-            <x-button.default type="submit">
-                {{ __('actions.create') }}
-            </x-button.default>
-        </form>
-    </div>
+        <x-checkbox.custom :label="__('pattern_category.remove_on_appear')">
+            <input
+                type="checkbox"
+                class="checkbox__input"
+                name="remove_on_appear"
+            />
+        </x-checkbox.custom>
+
+        <x-button.default type="submit">
+            {{ __('actions.create') }}
+        </x-button.default>
+    </x-admin.form.create>
 @endsection

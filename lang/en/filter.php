@@ -26,6 +26,7 @@ return [
     'sort' => 'Sort',
     'show_all' => 'Show all',
     'hide' => 'Hide',
+    'not_selected' => 'Not selected',
 
     'filters' => 'Filters',
     'id' => 'ID',

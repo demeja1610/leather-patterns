@@ -16,8 +16,13 @@ class CreateController extends Controller
 {
     public function __invoke(CreateRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-
+        $data = array_merge(
+            $request->validated(),
+            [
+                'remove_on_appear' => (bool) $request->get('remove_on_appear', false)
+            ]
+        );
+        
         $category = PatternCategory::create($data);
 
         return redirect()->route('admin.page.pattern-category.list')->with(

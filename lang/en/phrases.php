@@ -7,5 +7,7 @@ return [
     'empty' => 'Empty',
     'close_modal' => 'Close window',
     'confirmation' => 'Confirmation',
-    'confirm_text' => 'Confirm your action'
+    'confirm_text' => 'Confirm your action',
+    'yes' => 'Yes',
+    'no' => 'No',
 ];

@@ -1,25 +1,27 @@
-.admin-sidebar-filters {
+.admin-page-single {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 1rem;
 
-    &__form {
+    &__header {
+        width: 100%;
+    }
+
+    &__content {
         width: 100%;
         display: flex;
-        flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
         gap: 1rem;
 
-        .input-text {
-            width: 100%;
+        > .admin-form-create {
+            flex-grow: 1;
         }
-    }
 
-    &__submit,
-    &__reset {
-        width: 100%;
+        > .admin-form-edit {
+            flex-grow: 1;
+        }
     }
 }

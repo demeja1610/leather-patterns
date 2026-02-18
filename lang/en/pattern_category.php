@@ -8,6 +8,9 @@ return [
     'name' => 'Name',
     'patterns_count' => 'Patterns count',
     'created_at' => 'Created at',
+    'replacement' => 'Replace to',
+    'remove_on_appear' => 'Remove from patterns on appear',
+    'remove_on_appear_short' => 'Remove on appear',
 
     'admin' => [
         'created' => 'Category with name: `:name` successfully created',

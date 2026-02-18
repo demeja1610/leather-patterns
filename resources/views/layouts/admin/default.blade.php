@@ -23,16 +23,19 @@
     </script>
 </head>
 
-<body>
+<body class="admin-layout">
     <x-icon._sprite-admin />
 
-    <x-header.admin />
+    <x-header.admin class="admin-layout__header" />
 
-    <div class="admin-layout">
-        <x-admin.sidebar.sidebar />
+    <div class="admin-layout__body">
+        <x-admin.sidebar.sidebar class="admin-layout__sidebar" />
 
         <div class="admin-layout__content">
-            <x-page-notifications.notifications :notifications="session()->get('notifications')" />
+            <x-page-notifications.notifications
+                class="admin-layout__notifications"
+                :notifications="session()->get('notifications')"
+            />
 
             @yield('content')
         </div>

@@ -1,16 +1,36 @@
 .admin-page {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     gap: 1rem;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: flex-start;
+    // justify-content: flex-start;
 
-    .form {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        gap: 1rem;
-    }
+
+    // .form {
+    //     width: 100%;
+    //     display: flex;
+    //     flex-direction: column;
+    //     align-items: flex-start;
+    //     justify-content: flex-start;
+    //     gap: 1rem;
+    // }
+
+    // .table {
+    //     // overflow-x: auto;
+
+    //     &__head {
+    //         &-row {
+    //             white-space: nowrap;
+    //         }
+    //     }
+
+    //     &__data {
+    //         white-space: nowrap;
+    //     }
+    // }
 }
