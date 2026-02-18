@@ -14,6 +14,7 @@
 
     &__sidebar {
         max-width: 290px;
+        min-width: 290px;
     }
 
     &__body {
@@ -25,7 +26,7 @@
     }
 
     &__content {
-        width: 100%;
+        width: calc(100% - 290px - 1rem);
         display: flex;
         flex-direction: column;
         align-items: flex-start;
