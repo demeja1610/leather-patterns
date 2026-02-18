@@ -16,7 +16,7 @@
         justify-content: flex-start;
         gap: 1rem;
 
-        > .table-overflow-x-container {
+        >.table-overflow-x-container {
             flex-grow: 1;
         }
     }
@@ -35,10 +35,8 @@
     }
 
     &__filters-toggler {
-        &-text {
-            margin-left: 0.5rem;
-        }
 
+        &--has-active-filters,
         &--active {
             color: var(--red-2);
         }
