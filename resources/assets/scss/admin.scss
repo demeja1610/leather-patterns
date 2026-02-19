@@ -75,6 +75,8 @@
 // @use '@styles/pages/admin/pattern/edit.scss' as admin-page-pattern-edit;
 // @use '@styles/pages/admin/pattern/create.scss' as admin-page-pattern-edit;
 
+@use '@styles/common/mixins/thin-scrollbar.scss' as thin-scrollbar;
+
 * {
     margin: 0;
     padding: 0;
@@ -82,6 +84,8 @@
 }
 
 body {
+    @include thin-scrollbar.thin-scrollbar;
+
     font-family: "instrument-sans", sans-serif;
     background: var(--bg);
     min-height: 100vh;

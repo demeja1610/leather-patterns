@@ -62,6 +62,8 @@
 @use '@styles/pages/pattern/list.scss' as pattern-list-page;
 @use '@styles/pages/pattern/single.scss' as pattern-single-page;
 
+@use '@styles/common/mixins/thin-scrollbar.scss' as thin-scrollbar;
+
 * {
     margin: 0;
     padding: 0;
@@ -69,6 +71,8 @@
 }
 
 body {
+    @include thin-scrollbar.thin-scrollbar;
+    
     font-family: "instrument-sans", sans-serif;
     background: var(--bg);
 }

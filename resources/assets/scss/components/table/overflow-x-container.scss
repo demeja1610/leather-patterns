@@ -1,4 +1,8 @@
+@use '@styles/common/mixins/thin-scrollbar.scss' as thin-scrollbar;
+
 .table-overflow-x-container {
+    @include thin-scrollbar.thin-scrollbar;
+
     overflow-x: auto;
     border: 1px solid var(--gray-soft);
     border-radius: 1rem;
