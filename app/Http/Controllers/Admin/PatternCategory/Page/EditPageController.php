@@ -36,7 +36,7 @@ class EditPageController extends Controller
         return PatternCategory::find($id);
     }
 
-    protected function loadReplacement(PatternCategory $category): void
+    protected function loadReplacement(PatternCategory &$category): void
     {
         if ($category->replace_id !== null) {
             $category->load('replacement');

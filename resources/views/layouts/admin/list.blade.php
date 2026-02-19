@@ -37,7 +37,8 @@
             @hasSection('page-filters')
                 <x-admin.sidebar.filters
                     class="admin-page-list__filters"
-                    :url="route('admin.page.pattern-category.list')"
+                    :url="$filterUrl ?? '#'"
+                    :resetUrl="$resetUrl ?? '#'"
                     x-cloak
                     x-show="showFilters"
                 >

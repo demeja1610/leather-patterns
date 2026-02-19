@@ -1,4 +1,4 @@
-@props(['url' => '#'])
+@props(['url' => '#', 'resetUrl' => '#'])
 
 <x-sidebar {{ $attributes->merge(['class' => 'admin-sidebar-filters']) }}>
     <h2 class="admin-sidebar-filters__title">
@@ -16,7 +16,7 @@
             {{ __('filter.apply') }}
         </x-button.default>
 
-        <x-link.button-ghost :href="route('admin.page.pattern-category.list')" class="admin-sidebar-filters__reset">
+        <x-link.button-ghost :href="$resetUrl" class="admin-sidebar-filters__reset">
             {{ __('filter.reset') }}
         </x-link.button-ghost>
     </form>

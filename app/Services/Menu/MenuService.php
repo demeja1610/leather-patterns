@@ -33,6 +33,23 @@ class MenuService implements MenuServiceInterface
                     ),
                 ),
             ),
+            new MenuItemDto(
+                text: __('admin_menu.pattern_tag.pattern_tags'),
+                route: 'admin.page.pattern-tag.list',
+                icon: 'tag',
+                subMenu: new MenuItemListDto(
+                    new MenuItemDto(
+                        text: __('admin_menu.pattern_tag.pattern_tags'),
+                        route: 'admin.page.pattern-tag.list',
+                        icon: 'tag',
+                    ),
+                    new MenuItemDto(
+                        text: __('admin_menu.pattern_tag.add_new'),
+                        route: 'admin.page.pattern-tag.create',
+                        icon: 'create',
+                    ),
+                ),
+            ),
         );
     }
 }

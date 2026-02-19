@@ -17,6 +17,8 @@ Route::prefix('admin')
 
         require_once __DIR__ . '/admin/pattern-category.php';
 
+        require_once __DIR__ . '/admin/pattern-tag.php';
+
         // Route::prefix('authors')
         //     ->group(function (): void {
         //         Route::get('/', \App\Http\Controllers\App\Admin\Author\ListPageController::class)
@@ -45,37 +47,6 @@ Route::prefix('admin')
 
         //             Route::delete('/', \App\Http\Controllers\App\Admin\Author\DeleteController::class)
         //                 ->name('admin.author.delete');
-        //         });
-        //     });
-
-        // Route::prefix('tags')
-        //     ->group(function (): void {
-        //         Route::get('/', \App\Http\Controllers\App\Admin\Tag\ListPageController::class)
-        //             ->name('page.admin.tag.list');
-
-        //         Route::group(['prefix' => 'create'], function (): void {
-        //             Route::get('/', \App\Http\Controllers\App\Admin\Tag\CreatePageController::class)
-        //                 ->name('page.admin.tag.create');
-
-        //             Route::post('/', \App\Http\Controllers\App\Admin\Tag\CreateController::class)
-        //                 ->name('admin.tag.create');
-        //         });
-
-        //         Route::post('/mass-action', \App\Http\Controllers\App\Admin\Tag\MassActionController::class)
-        //             ->name('admin.tag.mass-action');
-
-        //         Route::get('/search', \App\Http\Controllers\App\Admin\Tag\SearchController::class)
-        //             ->name('admin.tag.search');
-
-        //         Route::group(['prefix' => '{id}'], function (): void {
-        //             Route::get('/', \App\Http\Controllers\App\Admin\Tag\EditPageController::class)
-        //                 ->name('page.admin.tag.edit');
-
-        //             Route::patch('/', \App\Http\Controllers\App\Admin\Tag\EditController::class)
-        //                 ->name('admin.tag.update');
-
-        //             Route::delete('/', \App\Http\Controllers\App\Admin\Tag\DeleteController::class)
-        //                 ->name('admin.tag.delete');
         //         });
         //     });
 

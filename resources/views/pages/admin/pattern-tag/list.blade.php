@@ -1,13 +1,13 @@
 @extends('layouts.admin.list', [
-    'paginator' => $categories,
-    'title' => __('pattern_category.pattern_categories'),
+    'paginator' => $tags,
+    'title' => __('pattern_tag.pattern_tags'),
     'showFilters' => $activeFilters !== [],
-    'filterUrl' => route('admin.page.pattern-category.list'),
-    'resetUrl' => route('admin.page.pattern-category.list'),
+    'filterUrl' => route('admin.page.pattern-tag.list'),
+    'resetUrl' => route('admin.page.pattern-tag.list'),
 ])
 
 @section('header-content')
-    <x-link.button-default :href="route('admin.pattern-category.create')">
+    <x-link.button-default :href="route('admin.pattern-tag.create')">
         <x-icon.svg name="create" />
 
         {{ __('actions.add_new') }}
@@ -45,13 +45,13 @@
 
     <x-select.wrapper>
         <x-select.label for="has_patterns">
-            {{ __('pattern_category.has_patterns') }}
+            {{ __('pattern_tag.has_patterns') }}
         </x-select.label>
 
         <x-select.select
             name="has_patterns"
             id="has_patterns"
-            :title="__('pattern_category.has_patterns')"
+            :title="__('pattern_tag.has_patterns')"
         >
             <x-select.option
                 value=""
@@ -107,13 +107,13 @@
 
     <x-select.wrapper>
         <x-select.label for="is_published">
-            {{ __('pattern_category.is_published') }}
+            {{ __('pattern_tag.is_published') }}
         </x-select.label>
 
         <x-select.select
             name="is_published"
             id="is_published"
-            :title="__('pattern_category.is_published')"
+            :title="__('pattern_tag.is_published')"
         >
             <x-select.option
                 value=""
@@ -141,13 +141,13 @@
 
     <x-select.wrapper>
         <x-select.label for="has_replacement">
-            {{ __('pattern_category.has_replacement') }}
+            {{ __('pattern_tag.has_replacement') }}
         </x-select.label>
 
         <x-select.select
             name="has_replacement"
             id="has_replacement"
-            :title="__('pattern_category.has_replacement')"
+            :title="__('pattern_tag.has_replacement')"
         >
             <x-select.option
                 value=""
@@ -174,14 +174,48 @@
     </x-select.wrapper>
 
     <x-select.wrapper>
+        <x-select.label for="has_author_replacement">
+            {{ __('pattern_tag.has_author_replacement') }}
+        </x-select.label>
+
+        <x-select.select
+            name="has_author_replacement"
+            id="has_author_replacement"
+            :title="__('pattern_tag.has_author_replacement')"
+        >
+            <x-select.option
+                value=""
+                :selected="!isset($activeFilters['has_author_replacement'])"
+            >
+                {{ __('filter.not_selected') }}
+            </x-select.option>
+
+            <x-select.option
+                value="1"
+                :selected="isset($activeFilters['has_author_replacement']) && $activeFilters['has_author_replacement'] === true"
+            >
+                {{ __('phrases.yes') }}
+            </x-select.option>
+
+            <x-select.option
+                value="0"
+                :selected="isset($activeFilters['has_author_replacement']) && $activeFilters['has_author_replacement'] === false"
+            >
+                {{ __('phrases.no') }}
+            </x-select.option>
+
+        </x-select.select>
+    </x-select.wrapper>
+
+    <x-select.wrapper>
         <x-select.label for="remove_on_appear">
-            {{ __('pattern_category.remove_on_appear') }}
+            {{ __('pattern_tag.remove_on_appear') }}
         </x-select.label>
 
         <x-select.select
             name="remove_on_appear"
             id="remove_on_appear"
-            :title="__('pattern_category.remove_on_appear')"
+            :title="__('pattern_tag.remove_on_appear')"
         >
             <x-select.option
                 value=""
@@ -209,7 +243,7 @@
 @endsection
 
 @section('page')
-    @if ($categories->isEmpty())
+    @if ($tags->isEmpty())
         <x-table.empty>
             {{ __('phrases.nothing_found') }}
         </x-table.empty>
@@ -226,53 +260,57 @@
                         </x-table.th-actions>
 
                         <x-table.th>
-                            {{ __('pattern_category.id') }}
+                            {{ __('pattern_tag.id') }}
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern_category.name') }}
+                            {{ __('pattern_tag.name') }}
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern_category.is_published') }}
+                            {{ __('pattern_tag.is_published') }}
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern_category.patterns_count') }}
+                            {{ __('pattern_tag.patterns_count') }}
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern_category.replacement_for_count') }}
+                            {{ __('pattern_tag.replacement_for_count') }}
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern_category.replacement') }}
+                            {{ __('pattern_tag.replacement') }}
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern_category.remove_on_appear') }}
+                            {{ __('pattern_tag.author_replacement') }}
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern_category.created_at') }}
+                            {{ __('pattern_tag.remove_on_appear') }}
+                        </x-table.th>
+
+                        <x-table.th>
+                            {{ __('pattern_tag.created_at') }}
                         </x-table.th>
                     </x-table.head>
                 </x-slot:header>
 
                 <x-slot:rows>
-                    @foreach ($categories as $category)
+                    @foreach ($tags as $tag)
                         <x-table.tr>
                             <x-table.td-actions>
-                                @if ($category->patterns_count === 0 && $category->remove_on_appear === false && $category->replace_id === null && $category->replacement_for_count === 0)
+                                @if ($tag->patterns_count === 0 && $tag->remove_on_appear === false && $tag->replace_id === null && $tag->replace_author_id === null && $tag->replacement_for_count === 0)
                                     <x-link.button-default
-                                        :href="route('admin.pattern-category.delete', ['id' => $category->id])"
+                                        :href="route('admin.pattern-tag.delete', ['id' => $tag->id])"
                                         x-on:click.prevent="() => {deleteUrl=$el.href}"
                                     >
                                         <x-icon.svg name="delete" />
                                     </x-link.button-default>
                                 @endif
 
-                                <x-link.button-ghost :href="route('admin.page.pattern-category.edit', ['id' => $category->id])">
+                                <x-link.button-ghost :href="route('admin.page.pattern-tag.edit', ['id' => $tag->id])">
                                     <x-icon.svg name="edit" />
                                 </x-link.button-ghost>
 
@@ -280,35 +318,39 @@
                             </x-table.td-actions>
 
                             <x-table.td>
-                                {{ $category->id }}
+                                {{ $tag->id }}
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $category->name }}
+                                {{ $tag->name }}
                             </x-table.td>
 
-                            <x-table.td-bool :value="$category->is_published">
-                                {{ $category->is_published ? __('phrases.yes') : __('phrases.no') }}
+                            <x-table.td-bool :value="$tag->is_published">
+                                {{ $tag->is_published ? __('phrases.yes') : __('phrases.no') }}
                             </x-table.td-bool>
 
                             <x-table.td>
-                                {{ $category->patterns_count }}
+                                {{ $tag->patterns_count }}
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $category->replacement_for_count }}
+                                {{ $tag->replacement_for_count }}
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $category->replacement?->name }}
+                                {{ $tag->replacement?->name }}
                             </x-table.td>
 
-                            <x-table.td-bool :value="$category->remove_on_appear">
-                                {{ $category->remove_on_appear ? __('phrases.yes') : __('phrases.no') }}
+                            <x-table.td>
+                                {{ $tag->authorReplacement?->name }}
+                            </x-table.td>
+
+                            <x-table.td-bool :value="$tag->remove_on_appear">
+                                {{ $tag->remove_on_appear ? __('phrases.yes') : __('phrases.no') }}
                             </x-table.td-bool>
 
                             <x-table.td>
-                                {{ $category->created_at->translatedFormat('d F Y H:i') }}
+                                {{ $tag->created_at->translatedFormat('d F Y H:i') }}
                             </x-table.td>
                         </x-table.tr>
                     @endforeach
@@ -324,7 +366,7 @@
                     x-on:submit="setTimeout(() => $dispatch('close-modal'), 300)"
                     :confirm-text="__('actions.delete_confirm')"
                     x-bind:action="deleteUrl"
-                    :text="__('pattern_category.admin.confirm_delete_text')"
+                    :text="__('pattern_tag.admin.confirm_delete_text')"
                 >
                     @method('DELETE')
                 </x-form.confirm>

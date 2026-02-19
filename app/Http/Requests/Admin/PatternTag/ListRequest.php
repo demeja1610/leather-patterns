@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\PatternCategory;
+namespace App\Http\Requests\Admin\PatternTag;
 
 use Illuminate\Foundation\Http\FormRequest;
 

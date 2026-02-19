@@ -23,7 +23,7 @@ class GetAllController extends Controller
 
     protected function getAllPatternTags(GetAllRequest &$request): Collection
     {
-        $q = PatternTag::query();
+        $q = $this->getBasePatternTagQuery();
 
         $this->applyFilters(
             query: $q,
@@ -36,6 +36,12 @@ class GetAllController extends Controller
         ]);
 
         return $q->orderBy('id', 'asc')->get();
+    }
+
+    protected function getBasePatternTagQuery(): Builder
+    {
+        return PatternTag::query()
+            ->where('is_published', true);
     }
 
     protected function applyFilters(Builder &$query, GetAllRequest &$request): void

@@ -17,4 +17,13 @@ class PatternAuthor extends Model
     {
         return $this->hasMany(Pattern::class, 'author_id');
     }
+
+    public function replacementForTags(): HasMany
+    {
+        return $this->hasMany(
+            related: PatternTag::class,
+            foreignKey: 'replace_author_id',
+            localKey: 'id',
+        );
+    }
 }

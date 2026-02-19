@@ -1,0 +1,35 @@
+<?php
+return [
+    'pattern_tags' => 'Pattern tags',
+    'creation' => 'Create pattern tag',
+    'edition' => 'Edit pattern tag',
+
+    'id' => 'ID',
+    'name' => 'Name',
+    'patterns_count' => 'Patterns count',
+    'replacement_for_count' => 'Replaces count',
+    'created_at' => 'Created at',
+    'replacement' => 'Replace to',
+    'author_replacement' => 'Replace to author',
+    'remove_on_appear' => 'Remove from patterns on appear',
+    'remove_on_appear_short' => 'Remove on appear',
+    'is_published' => 'Is published',
+    'has_patterns' => 'Used by patterns',
+    'has_replacement' => 'Has replacement',
+    'has_author_replacement' => 'Has author replacement',
+
+    'admin' => [
+        'created' => 'Tag with name: `:name` successfully created',
+        'updated' => 'Tag with id: `:id` successfully updated',
+        'failed_to_update' => 'Failed to update tag with id: `:id`',
+        'single_delete_success' => 'Tag with name: `:name` successfully deleted',
+        'single_failed_to_delete' => 'Failed to delete tag with name: `:name`',
+        'success_mass_deleted' => ':count tags successfully deleted',
+        'patterns_not_empty' => 'Tag with name: `:name` cannot be deleted because it is used by :count patterns',
+        'tag_needed_for_replace_or_remove' => 'Tag with name: `:name` cannot be deleted because it is needed to system to replace or remove it from patterns on appear',
+        'tag_is_replacement_for' => 'Tag with name: `:name` cannot be deleted because it is replacement tag for :count other tags',
+        'confirm_delete_text' => 'Please confirm tag delete',
+        'cannot_remove_and_replace_same_time' => 'Tag cannot be removed and replaced at the same time, please choose one of the options',
+        'cannot_replace_to_tag_and_author_same_time' => 'Tag cannot be replaced to other tag and author at the same time, please choose one of the options'
+    ],
+];
