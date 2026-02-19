@@ -5,6 +5,10 @@
     justify-content: flex-start;
     gap: 1rem;
 
+    &__title {
+        color: var(--text-1);
+    }
+
     &__form {
         width: 100%;
         display: flex;
