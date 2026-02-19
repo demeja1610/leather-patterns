@@ -7,7 +7,7 @@
         :action="route('admin.page.pattern-category.create')"
         x-data="{
             categoryReplacements: {{ json_encode($categoryReplacements, JSON_UNESCAPED_UNICODE) }},
-            selectedReplacementId: {{ $category->replacement?->id ?? 'null' }}
+            selectedReplacementId: {{ old('replace_id') ?? 'null' }}
         }"
     >
         <x-input-text.input-text>
@@ -64,6 +64,7 @@
                 type="checkbox"
                 class="checkbox__input"
                 name="remove_on_appear"
+                @checked(old('remove_on_appear') !== null)
             />
         </x-checkbox.custom>
 
@@ -72,6 +73,7 @@
                 type="checkbox"
                 class="checkbox__input"
                 name="is_published"
+                @checked(old('is_published') !== null)
             />
         </x-checkbox.custom>
 

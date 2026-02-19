@@ -24,6 +24,18 @@ class EditController extends Controller
             ]
         );
 
+        if ($data['remove_on_appear'] === true && $data['replace_id'] !== null) {
+            return redirect()->back()->withInput()->with(
+                key: 'notifications',
+                value: new SessionNotificationListDto(
+                    new SessionNotificationDto(
+                        text: __('pattern_category.admin.cannot_remove_and_replace_same_time'),
+                        type: NotificationTypeEnum::ERROR,
+                    )
+                ),
+            );
+        }
+
         $updated = PatternCategory::query()
             ->where('id', $id)
             ->update($data);

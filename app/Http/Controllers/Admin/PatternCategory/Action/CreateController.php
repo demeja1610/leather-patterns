@@ -24,6 +24,18 @@ class CreateController extends Controller
             ]
         );
 
+        if ($data['remove_on_appear'] === true && $data['replace_id'] !== null) {
+            return redirect()->back()->withInput()->with(
+                key: 'notifications',
+                value: new SessionNotificationListDto(
+                    new SessionNotificationDto(
+                        text: __('pattern_category.admin.cannot_remove_and_replace_same_time'),
+                        type: NotificationTypeEnum::ERROR,
+                    )
+                ),
+            );
+        }
+
         $category = PatternCategory::create($data);
 
         return redirect()->route('admin.page.pattern-category.list')->with(

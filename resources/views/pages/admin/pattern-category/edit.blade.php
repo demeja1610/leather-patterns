@@ -7,7 +7,7 @@
         :action="route('admin.pattern-category.update', ['id' => $category->id])"
         x-data="{
             categoryReplacements: {{ json_encode($categoryReplacements, JSON_UNESCAPED_UNICODE) }},
-            selectedReplacementId: {{ $category->replacement?->id ?? 'null' }}
+            selectedReplacementId: {{ old('replace_id', $category->replacement?->id) ?? 'null' }}
         }"
     >
         @method('PATCH')
@@ -19,7 +19,7 @@
 
             <x-input-text.input
                 id="id"
-                name="nide"
+                name="id"
                 type="text"
                 disabled
                 :value="$category->id"
@@ -84,7 +84,7 @@
             />
         </x-checkbox.custom>
 
-         <x-checkbox.custom :label="__('pattern_category.is_published')">
+        <x-checkbox.custom :label="__('pattern_category.is_published')">
             <input
                 type="checkbox"
                 class="checkbox__input"
