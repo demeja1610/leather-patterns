@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Commands\Tools;
+namespace App\Console\Commands\Tools\Pattern;
 
 use App\Console\Commands\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class CalculatePatternsAverageRating extends Command
 {
-    protected $signature = 'tools:calculate-patterns-average-rating {--id=}';
+    protected $signature = 'tools:pattern:calculate-average-rating {--id=}';
 
     protected $description = 'Calculate the average rating for all patterns';
 
@@ -37,13 +38,17 @@ class CalculatePatternsAverageRating extends Command
             $q->where('patterns.id', $id);
         }
 
+        $i = 1;
+
         $q->chunkById(
             count: 100,
             column: 'patterns.id',
             alias: 'id',
-            callback: function ($patterns): void {
+            callback: function (Collection $patterns) use (&$i): void {
                 $case = 'CASE';
                 $ids = [];
+
+                $this->info("Processing chunk: {$i} containing: {$patterns->count()} patterns");
 
                 foreach ($patterns as $pattern) {
                     $case .= " WHEN id = {$pattern->id} THEN {$pattern->avg_rating}";
@@ -55,6 +60,8 @@ class CalculatePatternsAverageRating extends Command
                 DB::table('patterns')->whereIn('id', $ids)->update([
                     'avg_rating' => DB::raw($case),
                 ]);
+
+                $i++;
             },
         );
     }

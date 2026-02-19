@@ -62,8 +62,6 @@ class ParsePatternsCommand extends Command
 
         $this->call('tools:tags-to-authors-for-patterns');
 
-        $this->call('tools:remove-empty-tags');
-
         $newCategories = PatternCategory::query()->where('created_at', '>=', $startedAt)->get();
         $newTags = PatternTag::query()->where('created_at', '>=', $startedAt)->get();
         $newAuthors = PatternAuthor::query()->where('created_at', '>=', $startedAt)->get();

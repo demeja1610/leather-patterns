@@ -101,7 +101,7 @@ class ParseReviewsCommand extends Command
 
                     $pattern->meta->update(['reviews_updated_at' => now()]);
 
-                    $this->call('tools:calculate-patterns-average-rating', [
+                    $this->call('tools:pattern:calculate-average-rating', [
                         '--id' => $pattern->id,
                     ]);
 

@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Console\Commands\Tools;
+namespace App\Console\Commands\Tools\PatternFile;
 
 use App\Enum\FileTypeEnum;
 use App\Models\PatternFile;
 use Illuminate\Console\Command;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class FixPatternFilesExtensionCommand extends Command
 {
-    protected $signature = 'tools:fix-pattern-files-extension {--id=}';
+    protected $signature = 'tools:pattern-file:fix-extension {--id=}';
     protected $description = 'Fix pattern files extension';
 
     public function handle()

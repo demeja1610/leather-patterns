@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Tools;
+namespace App\Console\Commands\Tools\PatternMeta;
 
 use App\Models\Pattern;
 use App\Console\Commands\Command;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class GeneratePatternMetasCommand extends Command
 {
-    protected $signature = 'tools:generate-pattern-metas';
+    protected $signature = 'tools:pattern-meta:generate';
     protected $description = 'Generate pattern metas';
 
     public function handle()

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Tools;
+namespace App\Console\Commands\Tools\PatternFile;
 
 use App\Models\Pattern;
 use App\Console\Commands\Command;
@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 
-class MovePatternsToFoldersCommand extends Command
+class MovePatternFilesToFoldersCommand extends Command
 {
-    protected $signature = 'tools:move-patterns-to-folders';
+    protected $signature = 'tools:pattern-file:move-to-folders';
     protected $description = 'Move individual patterns to folders with pattern ids';
 
     public function handle()
@@ -43,6 +43,10 @@ class MovePatternsToFoldersCommand extends Command
 
                         foreach ($pattern->files as $file) {
                             $ids[] = $file->id;
+
+                            if (str_contains(trim($file->path, '/'), trim($folderPath, '/'))) {
+                                continue;
+                            }
 
                             $newPath = str_replace(
                                 search: 'patterns/',

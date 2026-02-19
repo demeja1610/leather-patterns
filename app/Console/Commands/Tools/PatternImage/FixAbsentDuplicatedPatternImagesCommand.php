@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Console\Commands\Tools;
+namespace App\Console\Commands\Tools\PatternImage;
 
 use App\Console\Commands\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class FixDuplicatedAbsentPatternImagesCommand extends Command
+class FixAbsentDuplicatedPatternImagesCommand extends Command
 {
-    protected $signature = 'tools:fix-duplicated-absent-pattern-images';
+    protected $signature = 'tools:pattern-image:fix-absent-duplicated';
     protected $description = 'Fix duplicated and absent pattern images';
 
     public function handle()

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Tools;
+namespace App\Console\Commands\Tools\PatternImage;
 
 use App\Models\Pattern;
 use App\Console\Commands\Command;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class MovePatternImagesToFoldersCommand extends Command
 {
-    protected $signature = 'tools:move-pattern-images-to-folders';
+    protected $signature = 'tools:pattern-image:move-to-folders';
     protected $description = 'Move individual pattern images to folders with pattern ids';
 
     public function handle()
@@ -45,6 +45,10 @@ class MovePatternImagesToFoldersCommand extends Command
 
                         foreach ($pattern->images as $image) {
                             $ids[] = $image->id;
+
+                            if (str_contains(trim($image->path, '/'), trim($folderPath, '/'))) {
+                                continue;
+                            }
 
                             $newImagePath = str_replace(
                                 search: 'images/',

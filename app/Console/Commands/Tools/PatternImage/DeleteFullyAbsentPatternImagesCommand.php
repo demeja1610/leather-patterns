@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Tools;
+namespace App\Console\Commands\Tools\PatternImage;
 
 use App\Console\Commands\Command;
 use Illuminate\Support\Collection;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class DeleteFullyAbsentPatternImagesCommand extends Command
 {
-    protected $signature = 'tools:delete-fully-absent-pattern-images';
+    protected $signature = 'tools:pattern-image:delete-fully-absent';
     protected $description = 'Delete fully absent pattern images';
 
     public function handle()

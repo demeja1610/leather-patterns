@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class FixPatternsWithAuthorInTitleCommand extends Command
 {
-    protected $signature = 'tools:fix-patterns-with-author-in-title {--id=}';
+    protected $signature = 'tools:pattern:fix-patterns-with-author-in-title {--id=}';
     protected $description = 'Fix patterns with author in title';
 
     public function handle()
