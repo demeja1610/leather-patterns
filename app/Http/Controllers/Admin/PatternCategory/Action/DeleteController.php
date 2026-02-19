@@ -21,7 +21,7 @@ class DeleteController extends Controller
             return redirect()->back();
         }
 
-        if ($category->remove_on_appear === true || $category->replace_id === null) {
+        if ($category->remove_on_appear === true || $category->replace_id !== null) {
             return redirect()->back()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
@@ -33,14 +33,34 @@ class DeleteController extends Controller
             );
         }
 
-        if ($category->patterns_count !== 0) {
-            $category->loadCount('patterns');
+        $category->loadCount('patterns');
 
+        if ($category->patterns_count !== 0) {
             return redirect()->back()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
-                        text: __('pattern_category.admin.patterns_not_empty', ['name' => $category->name]),
+                        text: __('pattern_category.admin.patterns_not_empty', [
+                            'name' => $category->name,
+                            'count' => $category->patterns_count
+                        ]),
+                        type: NotificationTypeEnum::ERROR,
+                    )
+                ),
+            );
+        }
+
+        $category->loadCount('replacementFor');
+
+        if ($category->replacement_for_count !== 0) {
+            return redirect()->back()->with(
+                key: 'notifications',
+                value: new SessionNotificationListDto(
+                    new SessionNotificationDto(
+                        text: __('pattern_category.admin.category_is_replacement_for', [
+                            'name' => $category->name,
+                            'count' => $category->replacement_for_count
+                        ]),
                         type: NotificationTypeEnum::ERROR,
                     )
                 ),

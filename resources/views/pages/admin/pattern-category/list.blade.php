@@ -240,6 +240,10 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern_category.replacement_for_count') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern_category.replacement') }}
                         </x-table.th>
 
@@ -257,7 +261,7 @@
                     @foreach ($categories as $category)
                         <x-table.tr>
                             <x-table.td-actions>
-                                @if ($category->patterns_count === 0 && $category->remove_on_appear === false && $category->replace_id === null)
+                                @if ($category->patterns_count === 0 && $category->remove_on_appear === false && $category->replace_id === null && $category->replacement_for_count === 0)
                                     <x-link.button-default
                                         :href="route('admin.pattern-category.delete', ['id' => $category->id])"
                                         x-on:click.prevent="() => {deleteUrl=$el.href}"
@@ -287,6 +291,10 @@
 
                             <x-table.td>
                                 {{ $category->patterns_count }}
+                            </x-table.td>
+
+                            <x-table.td>
+                                {{ $category->replacement_for_count }}
                             </x-table.td>
 
                             <x-table.td>

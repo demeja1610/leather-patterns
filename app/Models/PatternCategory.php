@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property-read int $id
@@ -44,6 +45,15 @@ class PatternCategory extends Model
             related: static::class,
             foreignKey: 'id',
             localKey: 'replace_id',
+        );
+    }
+
+    public function replacementFor(): HasMany
+    {
+        return $this->hasMany(
+            related: static::class,
+            foreignKey: 'replace_id',
+            localKey: 'id',
         );
     }
 }

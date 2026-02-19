@@ -35,7 +35,10 @@ class ListPageController extends Controller
             query: $q,
         );
 
-        $q->withCount('patterns');
+        $q->withCount([
+            'patterns',
+            'replacementFor',
+        ]);
 
         $q->with('replacement');
 
