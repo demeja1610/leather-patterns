@@ -23,6 +23,7 @@ return [
         'single_failed_to_delete' => 'Failed to delete category with name: `:name`',
         'success_mass_deleted' => ':count categories successfully deleted',
         'patterns_not_empty' => 'Category with name: `:name` cannot be deleted because it is used by patterns',
+        'category_needed_for_replace_or_remove' => 'Category with name: `:name` cannot be deleted because it is needed to system to replace or remove it from patterns on appear',
         'confirm_delete_text' => 'Please confirm category delete'
     ],
 ];

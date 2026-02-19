@@ -28,6 +28,11 @@ class PatternCategory extends Model
         'is_published',
     ];
 
+    protected $casts = [
+        'remove_on_appear' => 'boolean',
+        'is_published' => 'boolean',
+    ];
+
     public function patterns(): BelongsToMany
     {
         return $this->belongsToMany(Pattern::class);

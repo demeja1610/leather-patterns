@@ -21,7 +21,21 @@ class DeleteController extends Controller
             return redirect()->back();
         }
 
+        if ($category->remove_on_appear === true || $category->replace_id === null) {
+            return redirect()->back()->with(
+                key: 'notifications',
+                value: new SessionNotificationListDto(
+                    new SessionNotificationDto(
+                        text: __('pattern_category.admin.category_needed_for_replace_or_remove', ['name' => $category->name]),
+                        type: NotificationTypeEnum::ERROR,
+                    )
+                ),
+            );
+        }
+
         if ($category->patterns_count !== 0) {
+            $category->loadCount('patterns');
+
             return redirect()->back()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
@@ -56,10 +70,7 @@ class DeleteController extends Controller
     {
         $q =  PatternCategory::query();
 
-        $q->where("id", $id)
-            ->withCount([
-                'patterns',
-            ]);
+        $q->where("id", $id);
 
         return $q->first();
     }
