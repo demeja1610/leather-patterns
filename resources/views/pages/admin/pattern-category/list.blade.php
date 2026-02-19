@@ -298,7 +298,7 @@
                             </x-table.td-bool>
 
                             <x-table.td>
-                                {{ $category->created_at->format('d.m.Y H:i') }}
+                                {{ $category->created_at->translatedFormat('d F Y H:i') }}
                             </x-table.td>
                         </x-table.tr>
                     @endforeach
