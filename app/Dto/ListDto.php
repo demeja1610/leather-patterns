@@ -17,9 +17,9 @@ class ListDto extends Dto implements IteratorAggregate
         $this->items = $items;
     }
 
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
-        return new static(...$data['items']);
+        return new self(...$data['items']);
     }
 
     public function toArray(): array

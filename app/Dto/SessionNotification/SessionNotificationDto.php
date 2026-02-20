@@ -14,9 +14,9 @@ class SessionNotificationDto extends Dto
         protected readonly NotificationTypeEnum $type = NotificationTypeEnum::INFO,
     ) {}
 
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
-        return new static(
+        return new self(
             text: $data['text'],
             type: NotificationTypeEnum::from(value: $data['type']),
         );

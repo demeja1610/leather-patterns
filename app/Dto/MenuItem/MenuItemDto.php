@@ -17,9 +17,9 @@ class MenuItemDto extends Dto
         protected readonly ?string $directUrl = null,
     ) {}
 
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
-        return new static(
+        return new self(
             text: $data['text'],
             route: $data['route'],
             icon: $data['icon'],

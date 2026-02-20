@@ -10,12 +10,12 @@ class MenuItemListDto extends ListDto
 {
     public function __construct(MenuItemDto ...$items)
     {
-        return parent::__construct(...$items);
+        parent::__construct(...$items);
     }
 
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
-        return new static(
+        return new self(
             ...array_map(
                 callback: MenuItemDto::fromArray(...),
                 array: $data['items'],

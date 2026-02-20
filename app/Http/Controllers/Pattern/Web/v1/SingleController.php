@@ -32,6 +32,7 @@ class SingleController extends Controller
         $q = Pattern::query()
             ->where(column: 'id', operator: $id)
             ->with(
+                // phpstan cannot resolve magic
                 // @phpstan-ignore argument.type
                 relations: [
                     'categories' => function (BelongsToMany $sq): BelongsToMany {

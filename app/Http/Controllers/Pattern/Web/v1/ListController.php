@@ -174,52 +174,56 @@ class ListController extends Controller
             request: $request,
         );
 
-        $q->with(relations: [
-            'categories' => function (BelongsToMany $sq): void {
-                $table = $sq->getRelated()->getTable();
+        $q->with(
+            // phpstan cannot resolve magic
+            // @phpstan-ignore argument.type
+            relations: [
+                'categories' => function (BelongsToMany $sq): void {
+                    $table = $sq->getRelated()->getTable();
 
-                $sq->where('is_published', true);
+                    $sq->where('is_published', true);
 
-                $sq->select([
-                    "{$table}.id",
-                    "{$table}.name",
-                ]);
-            },
-            'tags' => function (BelongsToMany $sq): void {
-                $table = $sq->getRelated()->getTable();
+                    $sq->select([
+                        "{$table}.id",
+                        "{$table}.name",
+                    ]);
+                },
+                'tags' => function (BelongsToMany $sq): void {
+                    $table = $sq->getRelated()->getTable();
 
-                $sq->select([
-                    "{$table}.id",
-                    "{$table}.name",
-                ]);
-            },
-            'author' => function (BelongsTo $sq): void {
-                $table = $sq->getRelated()->getTable();
+                    $sq->select([
+                        "{$table}.id",
+                        "{$table}.name",
+                    ]);
+                },
+                'author' => function (BelongsTo $sq): void {
+                    $table = $sq->getRelated()->getTable();
 
-                $sq->select([
-                    "{$table}.id",
-                    "{$table}.name",
-                ]);
-            },
-            'images' => function (HasMany $sq): void {
-                $table = $sq->getRelated()->getTable();
+                    $sq->select([
+                        "{$table}.id",
+                        "{$table}.name",
+                    ]);
+                },
+                'images' => function (HasMany $sq): void {
+                    $table = $sq->getRelated()->getTable();
 
-                $sq->select([
-                    "{$table}.path",
-                    "{$table}.pattern_id",
-                ]);
-            },
-            'files' => function (HasMany $sq): void {
-                $table = $sq->getRelated()->getTable();
+                    $sq->select([
+                        "{$table}.path",
+                        "{$table}.pattern_id",
+                    ]);
+                },
+                'files' => function (HasMany $sq): void {
+                    $table = $sq->getRelated()->getTable();
 
-                $sq->select([
-                    "{$table}.path",
-                    "{$table}.extension",
-                    "{$table}.type",
-                    "{$table}.pattern_id",
-                ]);
-            },
-        ]);
+                    $sq->select([
+                        "{$table}.path",
+                        "{$table}.extension",
+                        "{$table}.type",
+                        "{$table}.pattern_id",
+                    ]);
+                },
+            ]
+        );
 
         $q->whereHas(relation: 'meta', callback: fn($query) => $query->select('pattern_downloaded')->where(column: 'pattern_downloaded', operator: true));
 
@@ -404,11 +408,12 @@ class ListController extends Controller
         }
 
         $hasAuthor = $request->has(key: 'has_author');
+
         $activeAuthorsIds = $request->input(key: 'author', default: []);
 
         if ($hasAuthor === true && $activeAuthorsIds === []) {
             $query->whereNotNull('author_id');
-        } elseif ($hasAuthor === true && $activeAuthorsIds !== []) {
+        } elseif ($hasAuthor === true && $activeAuthorsIds !== []) { // @phpstan-ignore notIdentical.alwaysTrue
             $query->whereIn('author_id', $activeAuthorsIds);
         } elseif ($hasAuthor === false && $activeAuthorsIds !== []) {
             $query->whereIn('author_id', $activeAuthorsIds);

@@ -6,9 +6,9 @@ namespace App\Dto;
 
 class Dto
 {
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
-        return new static(...$data);
+        return new self();
     }
 
     public function toArray(): array

@@ -10,12 +10,12 @@ class SessionNotificationListDto extends ListDto
 {
     public function __construct(SessionNotificationDto ...$items)
     {
-        return parent::__construct(...$items);
+        parent::__construct(...$items);
     }
 
-    public static function fromArray(array $data): static
+    public static function fromArray(array $data): self
     {
-        return new static(
+        return new self(
             ...array_map(
                 callback: SessionNotificationDto::fromArray(...),
                 array: $data['items'],
