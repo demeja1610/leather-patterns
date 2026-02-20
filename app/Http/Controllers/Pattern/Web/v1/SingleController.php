@@ -120,7 +120,7 @@ class SingleController extends Controller
 
                         return $sq;
                     },
-                ]
+                ],
             );
 
         return $q->first();

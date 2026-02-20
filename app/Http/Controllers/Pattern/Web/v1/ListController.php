@@ -220,7 +220,7 @@ class ListController extends Controller
                         "{$table}.pattern_id",
                     ]);
                 },
-            ]
+            ],
         );
 
         $q->whereHas(relation: 'meta', callback: fn($query) => $query->select('pattern_downloaded')->where(column: 'pattern_downloaded', operator: true));
