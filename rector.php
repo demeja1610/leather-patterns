@@ -8,7 +8,6 @@ use RectorLaravel\Set\LaravelLevelSetList;
 use RectorLaravel\Rector\StaticCall\CarbonToDateFacadeRector;
 use Rector\Transform\Rector\String_\StringToClassConstantRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
-use Rector\CodeQuality\Rector\FuncCall\SortCallLikeNamedArgsRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 
 return RectorConfig::configure()
