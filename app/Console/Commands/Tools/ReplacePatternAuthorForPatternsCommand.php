@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools;
 
 use App\Models\Pattern;
@@ -10,9 +12,10 @@ use Illuminate\Database\Eloquent\Collection;
 class ReplacePatternAuthorForPatternsCommand extends Command
 {
     protected $signature = 'tools:replace-pattern-author-for-patterns {--from=} {--to=} {--id=}';
+
     protected $description = 'Replace specified pattern author for another specified pattern author for all patterns with that author or for a specific pattern';
 
-    public function handle()
+    public function handle(): void
     {
         $from = $this->option('from');
         $to = $this->option('to');
@@ -57,7 +60,7 @@ class ReplacePatternAuthorForPatternsCommand extends Command
 
         $q->chunkById(
             count: 1,
-            callback: function (Collection $patterns) use (&$toAuthor, &$fromAuthor, &$result) {
+            callback: function (Collection $patterns) use (&$toAuthor, &$fromAuthor, &$result): void {
                 $pattern = $patterns->first();
 
                 $this->info("Detaching from author: {$fromAuthor->name} from pattern ID: {$pattern->id}");

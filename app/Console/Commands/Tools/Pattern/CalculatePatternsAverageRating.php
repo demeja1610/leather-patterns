@@ -42,8 +42,6 @@ class CalculatePatternsAverageRating extends Command
 
         $q->chunkById(
             count: 100,
-            column: 'patterns.id',
-            alias: 'id',
             callback: function (Collection $patterns) use (&$i): void {
                 $case = 'CASE';
                 $ids = [];
@@ -63,6 +61,8 @@ class CalculatePatternsAverageRating extends Command
 
                 $i++;
             },
+            column: 'patterns.id',
+            alias: 'id',
         );
     }
 }

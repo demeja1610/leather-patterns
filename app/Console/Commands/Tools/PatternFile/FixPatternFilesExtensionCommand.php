@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools\PatternFile;
 
 use App\Enum\FileTypeEnum;
@@ -10,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 class FixPatternFilesExtensionCommand extends Command
 {
     protected $signature = 'tools:pattern-file:fix-extension {--id=}';
+
     protected $description = 'Fix pattern files extension';
 
     public function handle()
@@ -17,7 +20,7 @@ class FixPatternFilesExtensionCommand extends Command
         $id = $this->option('id');
 
         if ($id) {
-            $file = PatternFile::find($id);
+            $file = PatternFile::query()->find($id);
 
             if (!$file) {
                 $this->error("File not found");
@@ -108,7 +111,7 @@ class FixPatternFilesExtensionCommand extends Command
 
         $q->orderBy('id')->chunkById(
             count: 100,
-            callback: function (Collection $items) {
+            callback: function (Collection $items): void {
                 foreach ($items as $item) {
                     $this->fixFile($item);
                 }
@@ -128,7 +131,7 @@ class FixPatternFilesExtensionCommand extends Command
 
         $q->orderBy('id')->chunkById(
             count: 100,
-            callback: function (Collection $items) {
+            callback: function (Collection $items): void {
                 foreach ($items as $item) {
                     $this->fixFile($item);
                 }
@@ -148,7 +151,7 @@ class FixPatternFilesExtensionCommand extends Command
 
         $q->orderBy('id')->chunkById(
             count: 100,
-            callback: function (Collection $items) {
+            callback: function (Collection $items): void {
                 foreach ($items as $item) {
                     $this->fixFile($item);
                 }
@@ -168,7 +171,7 @@ class FixPatternFilesExtensionCommand extends Command
 
         $q->orderBy('id')->chunkById(
             count: 100,
-            callback: function (Collection $items) {
+            callback: function (Collection $items): void {
                 foreach ($items as $item) {
                     $this->fixFile($item);
                 }
@@ -188,7 +191,7 @@ class FixPatternFilesExtensionCommand extends Command
 
         $q->orderBy('id')->chunkById(
             count: 100,
-            callback: function (Collection $items) {
+            callback: function (Collection $items): void {
                 foreach ($items as $item) {
                     $this->fixFile($item);
                 }
@@ -208,7 +211,7 @@ class FixPatternFilesExtensionCommand extends Command
 
         $q->orderBy('id')->chunkById(
             count: 100,
-            callback: function (Collection $items) {
+            callback: function (Collection $items): void {
                 foreach ($items as $item) {
                     $this->fixFile($item);
                 }

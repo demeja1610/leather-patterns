@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools;
 
 use App\Models\Pattern;
@@ -10,9 +12,10 @@ use Illuminate\Console\Command;
 class TagsToAuthorsForPatternsCommand extends Command
 {
     protected $signature = 'tools:tags-to-authors-for-patterns';
+
     protected $description = 'Associate tags with authors for patterns';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Running Tags to Authors for Patterns Command...');
 
@@ -21,27 +24,39 @@ class TagsToAuthorsForPatternsCommand extends Command
         $createdAuthors = [];
 
         foreach ($data as $item) {
-            $tagNames = array_map('mb_strtolower', $item['tags']);
+            $tagNames = array_map(
+                callback: mb_strtolower(...),
+                array: $item['tags']
+            );
+
             $authorName = $item['author'];
 
-            $this->info("Processing tags for author: $authorName");
+            $this->info("Processing tags for author: {$authorName}");
 
-            $author = PatternAuthor::query()->where('name', $authorName)->first();
+            $author = PatternAuthor::query()
+                ->where('name', $authorName)
+                ->first();
 
             if (!$author) {
-                $author = PatternAuthor::create(['name' => $authorName]);
+                $author = PatternAuthor::query()
+                    ->create([
+                        'name' => $authorName
+                    ]);
 
                 $createdAuthors[] = $author;
             }
 
-            $tags = PatternTag::whereIn('name', $tagNames)->get();
+            $tags = PatternTag::query()
+                ->whereIn('name', $tagNames)
+                ->get();
 
             foreach ($tags as $tag) {
                 $this->info("Processing tag: {$tag->name}");
 
-                $patterns = Pattern::query()->whereHas('tags', function ($query) use ($tag) {
-                    $query->where('pattern_tags.id', $tag->id);
-                })->get();
+                $patterns = Pattern::query()
+                    ->whereHas('tags', function ($query) use ($tag): void {
+                        $query->where('pattern_tags.id', $tag->id);
+                    })->get();
 
                 /** @var Pattern $pattern */
                 foreach ($patterns as $pattern) {

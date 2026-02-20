@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools\PatternImage;
 
 use App\Console\Commands\Command;
@@ -10,9 +12,10 @@ use Illuminate\Support\Facades\Storage;
 class DeleteFullyAbsentPatternImagesCommand extends Command
 {
     protected $signature = 'tools:pattern-image:delete-fully-absent';
+
     protected $description = 'Delete fully absent pattern images';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Deleting fully absent pattern images...');
 
@@ -21,7 +24,7 @@ class DeleteFullyAbsentPatternImagesCommand extends Command
         DB::table('pattern_images')
             ->chunkById(
                 count: 500,
-                callback: function (Collection $images) use (&$deletedCount) {
+                callback: function (Collection $images) use (&$deletedCount): void {
                     $from = $images->first()->id;
                     $to = $images->last()->id;
                     $count = $images->count();

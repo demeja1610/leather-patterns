@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools\PatternFile;
 
 use App\Models\Pattern;
@@ -11,9 +13,10 @@ use Illuminate\Database\Eloquent\Collection;
 class MovePatternFilesToFoldersCommand extends Command
 {
     protected $signature = 'tools:pattern-file:move-to-folders';
+
     protected $description = 'Move individual patterns to folders with pattern ids';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Starting procedure...');
 
@@ -22,7 +25,7 @@ class MovePatternFilesToFoldersCommand extends Command
             ->with(['files'])
             ->chunk(
                 count: 250,
-                callback: function (Collection $chunk) {
+                callback: function (Collection $chunk): void {
                     $from = $chunk->first()->id;
                     $to = $chunk->last()->id;
                     $count = $chunk->count();
@@ -44,7 +47,7 @@ class MovePatternFilesToFoldersCommand extends Command
                         foreach ($pattern->files as $file) {
                             $ids[] = $file->id;
 
-                            if (str_contains(trim($file->path, '/'), trim($folderPath, '/'))) {
+                            if (str_contains(trim((string) $file->path, '/'), trim($folderPath, '/'))) {
                                 continue;
                             }
 

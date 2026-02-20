@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools;
 
 use App\Models\Pattern;
@@ -10,9 +12,10 @@ use Illuminate\Database\Eloquent\Collection;
 class ReplacePatternTagForPatternsCommand extends Command
 {
     protected $signature = 'tools:replace-pattern-tag-for-patterns {--from=} {--to=} {--id=}';
+
     protected $description = 'Replace specified pattern tag for another specified pattern tag for all patterns with that tag or for a specific pattern';
 
-    public function handle()
+    public function handle(): void
     {
         $from = $this->option('from');
         $to = $this->option('to');
@@ -57,7 +60,7 @@ class ReplacePatternTagForPatternsCommand extends Command
 
         $q->chunkById(
             count: 1,
-            callback: function (Collection $patterns) use (&$toTag, &$fromTag, &$result) {
+            callback: function (Collection $patterns) use (&$toTag, &$fromTag, &$result): void {
                 $pattern = $patterns->first();
 
                 $this->info("Detaching from tag: {$fromTag->name} from pattern ID: {$pattern->id}");

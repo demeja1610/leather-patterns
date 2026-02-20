@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools;
 
 use App\Models\Pattern;
@@ -10,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 class FixPatternsWithAuthorInTitleCommand extends Command
 {
     protected $signature = 'tools:pattern:fix-patterns-with-author-in-title {--id=}';
+
     protected $description = 'Fix patterns with author in title';
 
-    public function handle()
+    public function handle(): void
     {
         $now = now();
 
@@ -24,13 +27,14 @@ class FixPatternsWithAuthorInTitleCommand extends Command
 
         $replaceFilter = config('tag_to_author_swap_filter');
 
-        $q = Pattern::select(
-            'id',
-            'title',
-            'source',
-            DB::raw("REGEXP_SUBSTR(title, 'от {$regexp}') AS author_with_ot"),
-            DB::raw("REGEXP_SUBSTR(title, '{$regexp}') AS author_only")
-        )
+        $q = Pattern::query()
+            ->select(
+                'id',
+                'title',
+                'source',
+                DB::raw("REGEXP_SUBSTR(title, 'от {$regexp}') AS author_with_ot"),
+                DB::raw("REGEXP_SUBSTR(title, '{$regexp}') AS author_only")
+            )
             ->whereRaw("title REGEXP 'от {$regexp}'")
             ->whereNull('author_id');
 
@@ -38,7 +42,7 @@ class FixPatternsWithAuthorInTitleCommand extends Command
             $q->where('id', $id);
         }
 
-        $q->chunkById(100, function ($patterns) use (&$replaceFilter, &$regexp) {
+        $q->chunkById(100, function ($patterns) use (&$replaceFilter, &$regexp): void {
             foreach ($patterns as $pattern) {
                 $authorName = $pattern->author_only;
 
@@ -61,11 +65,14 @@ class FixPatternsWithAuthorInTitleCommand extends Command
                     $this->info("Author name changed from '{$authorName}' to '{$newAuthorName}'");
                 }
 
-                $author = PatternAuthor::firstOrCreate(['name' => $newAuthorName]);
+                $author = PatternAuthor::query()
+                    ->firstOrCreate([
+                        'name' => $newAuthorName
+                    ]);
 
                 $pattern->author()->associate($author);
 
-                $pattern->title = preg_replace("/от {$regexp}/", '', $pattern->title);
+                $pattern->title = preg_replace("/от {$regexp}/", '', (string) $pattern->title);
 
                 $pattern->save();
             }
@@ -73,8 +80,15 @@ class FixPatternsWithAuthorInTitleCommand extends Command
 
         $this->info('Successfully fixed patterns with author in title.');
 
-        $newAuthors = PatternAuthor::where('created_at', '>=', $now)->pluck('name')->toArray();
+        $newAuthors = PatternAuthor::query()
+            ->where('created_at', '>=', $now)
+            ->pluck('name')
+            ->toArray();
+
         $newAuthorsCount = count($newAuthors);
-        $this->info("Successfully fixed patterns with author in title. {$newAuthorsCount} new authors created: " . implode(', ', $newAuthors));
+
+        $this->info(
+            "Successfully fixed patterns with author in title. {$newAuthorsCount} new authors created: " . implode(', ', $newAuthors)
+        );
     }
 }

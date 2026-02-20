@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools\Pattern;
 
 use App\Models\Pattern;
@@ -11,9 +13,10 @@ use Illuminate\Database\Eloquent\Collection;
 class ReplaceMarkedPatternCategoriesForPatternsCommand extends Command
 {
     protected $signature = 'tools:pattern:replace-marked-pattern-categories-for-patterns';
+
     protected $description = 'Replace marked with `replace_id` in DB pattern category for all patterns with pattern category with specified ID in `replace_id`';
 
-    public function handle()
+    public function handle(): void
     {
         $q = Pattern::query()
             ->whereHas('categories', fn(Builder $query) => $query->whereNotNull('replace_id'))
@@ -27,7 +30,7 @@ class ReplaceMarkedPatternCategoriesForPatternsCommand extends Command
 
         $q->chunkById(
             count: 250,
-            callback: function (Collection $patterns) use (&$toCategory, &$fromCategory, &$result) {
+            callback: function (Collection $patterns) use (&$result): void {
                 $pattern = $patterns->first();
 
                 /**
@@ -35,7 +38,7 @@ class ReplaceMarkedPatternCategoriesForPatternsCommand extends Command
                  */
                 foreach ($patterns as $pattern) {
                     $categoriesForReplace = $pattern->categories
-                        ->filter(fn(PatternCategory $patternCategory) => $patternCategory->replace_id !== null);
+                        ->filter(fn(PatternCategory $patternCategory): bool => $patternCategory->replace_id !== null);
 
                     $categoriesForReplaceIds = $categoriesForReplace->pluck('id')->toArray();
                     $categoriesForReplaceNames = $categoriesForReplace->pluck('name')->implode('name', ', ');

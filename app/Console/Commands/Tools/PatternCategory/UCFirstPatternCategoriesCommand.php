@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools\PatternCategory;
 
 use App\Models\PatternCategory;
@@ -9,16 +11,17 @@ use Illuminate\Database\Eloquent\Collection;
 class UCFirstCategoriesCommand extends Command
 {
     protected $signature = 'tools:pattern-category:ucfirst';
+
     protected $description = 'Perform ucfirst on pattern categories';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Performing ucfirst on pattern categories...');
 
         PatternCategory::query()
             ->chunkById(
                 count: 500,
-                callback: function (Collection $categories) {
+                callback: function (Collection $categories): void {
                     foreach ($categories as $category) {
                         $this->info('Processing pattern category: ' . $category->name);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools\PatternMeta;
 
 use App\Models\Pattern;
@@ -10,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 class GeneratePatternMetasCommand extends Command
 {
     protected $signature = 'tools:pattern-meta:generate';
+
     protected $description = 'Generate pattern metas';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Generating pattern metas...');
 
@@ -26,24 +29,20 @@ class GeneratePatternMetasCommand extends Command
                 'images',
                 'reviews',
             ])
-            ->chunkById(500, function (Collection $patterns) use (&$created) {
+            ->chunkById(500, function (Collection $patterns) use (&$created): void {
                 $from = $patterns->first()->id;
                 $to = $patterns->last()->id;
                 $count = $patterns->count();
 
-                $this->info("Processing patterns from $from to $to (Total: $count)");
+                $this->info("Processing patterns from {$from} to {$to} (Total: {$count})");
 
                 $toInsert = [];
 
                 foreach ($patterns as $pattern) {
                     $meta = [
                         'pattern_id' => $pattern->id,
-                        'pattern_downloaded' => $pattern->files && $pattern->files->isNotEmpty()
-                            ? true
-                            : false,
-                        'images_downloaded' => $pattern->images && $pattern->images->isNotEmpty()
-                            ? true
-                            : false,
+                        'pattern_downloaded' => $pattern->files && $pattern->files->isNotEmpty(),
+                        'images_downloaded' => $pattern->images && $pattern->images->isNotEmpty(),
                         'reviews_updated_at' => $pattern->reviews && $pattern->reviews->isNotEmpty()
                             ? $pattern->updated_at
                             : null,

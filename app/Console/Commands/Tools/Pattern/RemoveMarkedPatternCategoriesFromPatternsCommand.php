@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools\Pattern;
 
 use App\Models\Pattern;
@@ -10,9 +12,10 @@ use Illuminate\Database\Eloquent\Collection;
 class RemoveMarkedPatternCategoriesFromPatternsCommand extends Command
 {
     protected $signature = 'tools:pattern:remove-marked-pattern-categories-from-patterns';
+
     protected $description = 'Remove marked as `remove_on_appear` in DB pattern category from all patterns with that category';
 
-    public function handle()
+    public function handle(): void
     {
 
         $q = Pattern::query()
@@ -27,13 +30,13 @@ class RemoveMarkedPatternCategoriesFromPatternsCommand extends Command
 
         $q->chunkById(
             count: 250,
-            callback: function (Collection $patterns) use (&$result) {
+            callback: function (Collection $patterns) use (&$result): void {
                 /**
                  * @var \App\Models\Pattern $pattern
                  */
                 foreach ($patterns as $pattern) {
                     $categoriesToRemove = $pattern->categories
-                        ->filter(fn(PatternCategory $patternCategory) => (bool) $patternCategory->remove_on_appear === true);
+                        ->filter(fn(PatternCategory $patternCategory): bool => (bool) $patternCategory->remove_on_appear);
 
                     $names = $categoriesToRemove->pluck('name')->implode('name', ', ');
                     $ids = $categoriesToRemove->pluck('id')->toArray();

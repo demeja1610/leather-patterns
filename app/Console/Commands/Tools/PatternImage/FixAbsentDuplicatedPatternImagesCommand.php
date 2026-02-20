@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Tools\PatternImage;
 
 use App\Console\Commands\Command;
@@ -10,9 +12,10 @@ use Illuminate\Support\Facades\Storage;
 class FixAbsentDuplicatedPatternImagesCommand extends Command
 {
     protected $signature = 'tools:pattern-image:fix-absent-duplicated';
+
     protected $description = 'Fix duplicated and absent pattern images';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Fixing duplicated and absent pattern images...');
 
@@ -25,7 +28,7 @@ class FixAbsentDuplicatedPatternImagesCommand extends Command
             ->orderBy('hash')
             ->chunk(
                 count: 100,
-                callback: function (Collection $chunk) use (&$restoredCount) {
+                callback: function (Collection $chunk) use (&$restoredCount): void {
                     $count = $chunk->count();
 
                     $this->info("Found {$count} duplicated pattern images:");
