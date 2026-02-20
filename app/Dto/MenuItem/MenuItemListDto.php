@@ -6,7 +6,8 @@ namespace App\Dto\MenuItem;
 
 use App\Dto\ListDto;
 
-class MenuItemListDto extends ListDto {
+class MenuItemListDto extends ListDto
+{
     public function __construct(MenuItemDto ...$items)
     {
         return parent::__construct(...$items);

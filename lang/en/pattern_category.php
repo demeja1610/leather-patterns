@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 return [
     'pattern_categories' => 'Pattern categories',
     'creation' => 'Create pattern category',

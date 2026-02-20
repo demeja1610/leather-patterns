@@ -23,7 +23,7 @@ class MovePatternImagesToFoldersCommand extends Command
         Pattern::query()
             ->orderBy('id')
             ->with([
-                'images'
+                'images',
             ])
             ->chunk(
                 count: 250,

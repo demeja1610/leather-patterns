@@ -19,7 +19,7 @@ class ParsePatternSourcesCommand extends Command
     protected $description = 'Parse pattern sources for patterns';
 
     public function __construct(
-        protected ParserServiceInterface $parserService
+        protected ParserServiceInterface $parserService,
     ) {
         parent::__construct();
     }
@@ -77,67 +77,67 @@ class ParsePatternSourcesCommand extends Command
         match ($patternSource) {
             PatternSourceEnum::NEOVIMA => (
                 new \App\Console\Commands\Parsers\SourceAdapters\NeovimaSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::V_POMOSH_KOZHEVNIKU => (
                 new \App\Console\Commands\Parsers\SourceAdapters\VPomoshKozhevnikuSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::MLEATHER => (
                 new \App\Console\Commands\Parsers\SourceAdapters\MLeatherSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::ABZALA => (
                 new \App\Console\Commands\Parsers\SourceAdapters\AbzalaSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::PATTERN_HUB => (
                 new \App\Console\Commands\Parsers\SourceAdapters\PatternHubSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::FORMULA_KOZHI => (
                 new \App\Console\Commands\Parsers\SourceAdapters\FormulaKozhiSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::PABLIK_KOZHEVNIKA => (
                 new \App\Console\Commands\Parsers\SourceAdapters\PablikKozhevnikaSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::MYETSY => (
                 new \App\Console\Commands\Parsers\SourceAdapters\MyEtsySourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::LASERBIZ => (
                 new \App\Console\Commands\Parsers\SourceAdapters\LaserbizSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::FIRST_KOZHA => (
                 new \App\Console\Commands\Parsers\SourceAdapters\FirstKozhaSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::SKINPAT => (
                 new \App\Console\Commands\Parsers\SourceAdapters\SkinpatSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::LEATHER_PATTERNS => (
                 new \App\Console\Commands\Parsers\SourceAdapters\LeatherPatternsSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             PatternSourceEnum::CUTME => (
                 new \App\Console\Commands\Parsers\SourceAdapters\CutmeSourceAdapter(
-                    parserService: $this->parserService
+                    parserService: $this->parserService,
                 ))->processSource(baseURL: $url),
 
             default => $this->processUnknownSource(source: $patternSource),

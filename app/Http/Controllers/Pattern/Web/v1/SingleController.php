@@ -20,7 +20,7 @@ class SingleController extends Controller
         }
 
         return view(view: 'pages.pattern.single', data: [
-            'pattern' => $pattern
+            'pattern' => $pattern,
         ]);
     }
 
@@ -36,7 +36,7 @@ class SingleController extends Controller
 
                     $sq->select([
                         "{$table}.id",
-                        "{$table}.name"
+                        "{$table}.name",
                     ]);
 
                     return $sq;

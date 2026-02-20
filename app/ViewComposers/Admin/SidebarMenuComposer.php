@@ -57,8 +57,8 @@ class SidebarMenuComposer
                     $hasActiveSubMenuItem = false;
 
                     if (
-                        $subMenu instanceof MenuItemListDto &&
-                        !$subMenu->isEmpty()
+                        $subMenu instanceof MenuItemListDto
+                        && !$subMenu->isEmpty()
                     ) {
                         $subMenu = $this->setActiveMenuItemsIfExists(
                             menu: $subMenu,
@@ -103,7 +103,7 @@ class SidebarMenuComposer
                     );
                 },
                 array: $menu->getItems(),
-            )
+            ),
         );
     }
 }

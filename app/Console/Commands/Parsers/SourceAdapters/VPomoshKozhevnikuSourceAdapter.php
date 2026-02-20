@@ -12,7 +12,7 @@ use App\Interfaces\Services\ParserServiceInterface;
 class VPomoshKozhevnikuSourceAdapter extends AbstractSourceAdapter
 {
     public function __construct(
-        protected ParserServiceInterface $parserService
+        protected ParserServiceInterface $parserService,
     ) {}
 
     public function processSource(string $baseURL): void
@@ -47,7 +47,7 @@ class VPomoshKozhevnikuSourceAdapter extends AbstractSourceAdapter
                 if ($patternLink instanceof DOMElement) {
                     $patterns[] = $this->preparePatternForCreation(
                         url: $patternLink->getAttribute(qualifiedName: 'href'),
-                        source: PatternSourceEnum::V_POMOSH_KOZHEVNIKU
+                        source: PatternSourceEnum::V_POMOSH_KOZHEVNIKU,
                     );
                 }
             }

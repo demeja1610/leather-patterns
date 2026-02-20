@@ -32,10 +32,10 @@ class ForgotPasswordActionController extends Controller
 
         return $status === Password::RESET_LINK_SENT
             ? back()->with(key: 'status', value: __(key: $status))->withInput(input: [
-                'email' => $data['email']
+                'email' => $data['email'],
             ])
             : back()->withErrors(provider: ['email' => __(key: $status)])->withInput(input: [
-                'email' => $data['email']
+                'email' => $data['email'],
             ]);
     }
 

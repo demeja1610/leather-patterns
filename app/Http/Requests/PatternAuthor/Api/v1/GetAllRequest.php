@@ -18,7 +18,7 @@ class GetAllRequest extends FormRequest
         return [
             'from' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
         ];
     }

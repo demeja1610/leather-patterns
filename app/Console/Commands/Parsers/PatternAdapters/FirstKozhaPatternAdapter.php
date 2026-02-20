@@ -20,7 +20,7 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage(),
             );
 
             return;
@@ -40,7 +40,7 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
 
         $reviews = $this->parse1KozhaPatternReviews(
             xpath: $xpath,
-            pattern: $pattern
+            pattern: $pattern,
         );
 
         $imageElements1 = $xpath->query(expression: "//*[contains(@itemprop, 'articleBody')]//img");
@@ -137,7 +137,7 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
 
             $patternImagesPaths = $this->downloadPatternImages(
                 pattern: $pattern,
-                imageUrls: $images
+                imageUrls: $images,
             );
 
             $videosToCreate = [];
@@ -145,7 +145,7 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             foreach ($videos as $video) {
                 $videosToCreate[] = $this->prepareVideoForCreation(
                     source: $video['source'],
-                    videoId: $video['video_id']
+                    videoId: $video['video_id'],
                 );
             }
 
@@ -154,7 +154,7 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             if ($reviews !== []) {
                 $reviewsToCreate = $this->filterExistingReviews(
                     pattern: $pattern,
-                    reviews: $reviews
+                    reviews: $reviews,
                 );
             }
 
@@ -162,13 +162,13 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
 
             $this->bindFiles(
                 pattern: $pattern,
-                filePaths: $patternFilePaths
+                filePaths: $patternFilePaths,
             );
 
             if ($patternImagesPaths !== []) {
                 $this->bindImages(
                     pattern: $pattern,
-                    imagePaths: $patternImagesPaths
+                    imagePaths: $patternImagesPaths,
                 );
             }
 
@@ -183,14 +183,14 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             if ($categories !== []) {
                 $this->bindCategories(
                     pattern: $pattern,
-                    categories: $categories
+                    categories: $categories,
                 );
             }
 
             if ($tags !== []) {
                 $this->bindTags(
                     pattern: $pattern,
-                    tags: $tags
+                    tags: $tags,
                 );
             }
 
@@ -198,7 +198,7 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
                 $videosToCreateCount = count(value: $videosToCreate);
 
                 $this->success(
-                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
+                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}",
                 );
 
                 $pattern->videos()->saveMany(models: $videosToCreate);
@@ -210,7 +210,7 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
                 $reviewsToCreateCount = count(value: $reviewsToCreate);
 
                 $this->success(
-                    message: "Created {$reviewsToCreateCount} reviews for pattern {$pattern->id}"
+                    message: "Created {$reviewsToCreateCount} reviews for pattern {$pattern->id}",
                 );
 
                 $pattern->reviews()->saveMany(models: $reviewsToCreate);
@@ -223,7 +223,7 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}",
             );
 
             $this->error(message: 'Reverting changes, deleting downloaded files if they exist...');

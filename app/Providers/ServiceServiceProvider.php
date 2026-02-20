@@ -12,12 +12,12 @@ class ServiceServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             abstract: \App\Interfaces\Services\ParserServiceInterface::class,
-            concrete: \App\Services\ParserService::class
+            concrete: \App\Services\ParserService::class,
         );
 
         $this->app->bind(
             abstract: \App\Interfaces\Services\Menu\MenuServiceInterface::class,
-            concrete: \App\Services\Menu\MenuService::class
+            concrete: \App\Services\Menu\MenuService::class,
         );
     }
 

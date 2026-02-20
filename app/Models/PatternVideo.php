@@ -39,7 +39,7 @@ class PatternVideo extends Model
                 VideoSourceEnum::YOUTUBE->value => "https://www.youtube.com/embed/{$attributes['source_identifier']}",
                 VideoSourceEnum::VK->value => $this->getVkEmbedUrl(attributes: $attributes),
                 default => null,
-            }
+            },
         );
     }
 

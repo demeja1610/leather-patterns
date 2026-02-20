@@ -62,10 +62,10 @@ class PatternCategory extends Model
             $this->loadCount(relations: 'replacementFor');
         }
 
-        return $this->remove_on_appear === false &&
-            $this->replace_id === null &&
-            $this->patterns_count === 0 &&
-            $this->replacement_for_count === 0;
+        return $this->remove_on_appear === false
+            && $this->replace_id === null
+            && $this->patterns_count === 0
+            && $this->replacement_for_count === 0;
     }
 
     protected function casts(): array

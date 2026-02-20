@@ -56,7 +56,7 @@ class ImportPatternVideosCommand extends Command
                     }
 
                     DB::table('pattern_videos')->insert(values: $toInsert);
-                }
+                },
             );
 
         $this->info(message: "All pattern videos imported successfully.");

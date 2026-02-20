@@ -17,7 +17,7 @@ class LaserbizPatternAdapter extends AbstractPatternAdapter
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage(),
             );
 
             return;
@@ -96,7 +96,7 @@ class LaserbizPatternAdapter extends AbstractPatternAdapter
 
             $patternImagesPaths = $this->downloadPatternImages(
                 pattern: $pattern,
-                imageUrls: $images
+                imageUrls: $images,
             );
 
             DB::beginTransaction();
@@ -104,14 +104,14 @@ class LaserbizPatternAdapter extends AbstractPatternAdapter
             $this->bindFiles(
                 pattern: $pattern,
                 filePaths: [
-                    $patternFilePath
-                ]
+                    $patternFilePath,
+                ],
             );
 
             if ($patternImagesPaths !== []) {
                 $this->bindImages(
                     pattern: $pattern,
-                    imagePaths: $patternImagesPaths
+                    imagePaths: $patternImagesPaths,
                 );
             }
 
@@ -126,7 +126,7 @@ class LaserbizPatternAdapter extends AbstractPatternAdapter
             if ($tags !== []) {
                 $this->bindTags(
                     pattern: $pattern,
-                    tags: $tags
+                    tags: $tags,
                 );
             }
 
@@ -135,7 +135,7 @@ class LaserbizPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}",
             );
 
             $this->error(message: 'Reverting changes, deleting downloaded files if they exist...');

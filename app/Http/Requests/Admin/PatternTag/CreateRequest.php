@@ -21,25 +21,25 @@ class CreateRequest extends FormRequest
                 'string',
                 'max:255',
                 'min:2',
-                'unique:pattern_tags,name'
+                'unique:pattern_tags,name',
             ],
             'replace_id' => [
                 'nullable',
                 'numeric',
-                'exists:pattern_tags,id'
+                'exists:pattern_tags,id',
             ],
             'replace_author_id' => [
                 'nullable',
                 'numeric',
-                'exists:pattern_authors,id'
+                'exists:pattern_authors,id',
             ],
             'remove_on_appear' => [
                 'nullable',
-                'in:on'
+                'in:on',
             ],
             'is_published' => [
                 'nullable',
-                'in:on'
+                'in:on',
             ],
         ];
     }

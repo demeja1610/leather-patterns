@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 return [
     'pattern_categories' => 'Категории выкроек',
     'creation' => 'Создание категории выкроек',

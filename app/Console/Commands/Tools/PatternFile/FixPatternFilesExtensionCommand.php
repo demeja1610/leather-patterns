@@ -79,7 +79,7 @@ class FixPatternFilesExtensionCommand extends Command
 
         rename(
             from: public_path(path: "storage/{$oldFilePath}"),
-            to: public_path(path: "storage/{$newFilePath}")
+            to: public_path(path: "storage/{$newFilePath}"),
         );
 
         $this->info(string: "Renamed: {$oldFilePath} to {$newFilePath}");
@@ -90,7 +90,7 @@ class FixPatternFilesExtensionCommand extends Command
             'extension' => $newExtension,
             'path' => $newFilePath,
             'hash' => $newHash,
-            'type' => FileTypeEnum::fromMimeType(mimeType: $file->mime_type)
+            'type' => FileTypeEnum::fromMimeType(mimeType: $file->mime_type),
         ]);
     }
 
@@ -115,7 +115,7 @@ class FixPatternFilesExtensionCommand extends Command
                 foreach ($items as $item) {
                     $this->fixFile(file: $item);
                 }
-            }
+            },
         );
     }
 
@@ -135,7 +135,7 @@ class FixPatternFilesExtensionCommand extends Command
                 foreach ($items as $item) {
                     $this->fixFile(file: $item);
                 }
-            }
+            },
         );
     }
 
@@ -155,7 +155,7 @@ class FixPatternFilesExtensionCommand extends Command
                 foreach ($items as $item) {
                     $this->fixFile(file: $item);
                 }
-            }
+            },
         );
     }
 
@@ -175,7 +175,7 @@ class FixPatternFilesExtensionCommand extends Command
                 foreach ($items as $item) {
                     $this->fixFile(file: $item);
                 }
-            }
+            },
         );
     }
 
@@ -195,7 +195,7 @@ class FixPatternFilesExtensionCommand extends Command
                 foreach ($items as $item) {
                     $this->fixFile(file: $item);
                 }
-            }
+            },
         );
     }
 
@@ -215,7 +215,7 @@ class FixPatternFilesExtensionCommand extends Command
                 foreach ($items as $item) {
                     $this->fixFile(file: $item);
                 }
-            }
+            },
         );
     }
 }

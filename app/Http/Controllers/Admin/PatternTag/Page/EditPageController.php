@@ -25,7 +25,7 @@ class EditPageController extends Controller
         $this->loadAuthorReplacement(tag: $tag);
 
         $tagReplacements = $this->getTagReplacements(
-            exceptId: $tag->id
+            exceptId: $tag->id,
         );
 
         $authorReplacements = $this->getAuthorReplacements();
@@ -33,7 +33,7 @@ class EditPageController extends Controller
         return view(view: 'pages.admin.pattern-tag.edit', data: [
             'tag' => $tag,
             'tagReplacements' => $tagReplacements,
-            'authorReplacements' => $authorReplacements
+            'authorReplacements' => $authorReplacements,
         ]);
     }
 

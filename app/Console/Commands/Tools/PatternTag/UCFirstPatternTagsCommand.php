@@ -29,7 +29,7 @@ class UCFirstPatternCategoriesCommand extends Command
 
                         $tag->save();
                     }
-                }
+                },
             );
     }
 }

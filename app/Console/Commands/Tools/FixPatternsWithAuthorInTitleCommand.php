@@ -33,7 +33,7 @@ class FixPatternsWithAuthorInTitleCommand extends Command
                 'title',
                 'source',
                 DB::raw("REGEXP_SUBSTR(title, 'от {$regexp}') AS author_with_ot"),
-                DB::raw("REGEXP_SUBSTR(title, '{$regexp}') AS author_only")
+                DB::raw("REGEXP_SUBSTR(title, '{$regexp}') AS author_only"),
             )
             ->whereRaw(sql: "title REGEXP 'от {$regexp}'")
             ->whereNull(columns: 'author_id');
@@ -67,7 +67,7 @@ class FixPatternsWithAuthorInTitleCommand extends Command
 
                 $author = PatternAuthor::query()
                     ->firstOrCreate(attributes: [
-                        'name' => $newAuthorName
+                        'name' => $newAuthorName,
                     ]);
 
                 $pattern->author()->associate($author);
@@ -88,7 +88,7 @@ class FixPatternsWithAuthorInTitleCommand extends Command
         $newAuthorsCount = count(value: $newAuthors);
 
         $this->info(
-            string: "Successfully fixed patterns with author in title. {$newAuthorsCount} new authors created: " . implode(separator: ', ', array: $newAuthors)
+            string: "Successfully fixed patterns with author in title. {$newAuthorsCount} new authors created: " . implode(separator: ', ', array: $newAuthors),
         );
     }
 }

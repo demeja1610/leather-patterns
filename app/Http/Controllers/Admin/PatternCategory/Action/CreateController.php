@@ -21,7 +21,7 @@ class CreateController extends Controller
             [
                 'remove_on_appear' => (bool) $request->get(key: 'remove_on_appear', default: false),
                 'is_published' => (bool) $request->get(key: 'is_published', default: false),
-            ]
+            ],
         );
 
         if ($data['remove_on_appear'] === true && $data['replace_id'] !== null) {
@@ -31,7 +31,7 @@ class CreateController extends Controller
                     new SessionNotificationDto(
                         text: __(key: 'pattern_category.admin.cannot_remove_and_replace_same_time'),
                         type: NotificationTypeEnum::ERROR,
-                    )
+                    ),
                 ),
             );
         }

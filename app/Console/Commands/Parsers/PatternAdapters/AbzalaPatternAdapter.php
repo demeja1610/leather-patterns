@@ -19,7 +19,7 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage(),
             );
 
             return;
@@ -123,7 +123,7 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
 
             $patternImagesPaths = $this->downloadPatternImages(
                 pattern: $pattern,
-                imageUrls: $images
+                imageUrls: $images,
             );
 
             $videosToCreate = [];
@@ -131,7 +131,7 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             foreach ($videos as $video) {
                 $videosToCreate[] = $this->prepareVideoForCreation(
                     source: $video['source'],
-                    videoId: $video['video_id']
+                    videoId: $video['video_id'],
                 );
             }
 
@@ -140,14 +140,14 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             $this->bindFiles(
                 pattern: $pattern,
                 filePaths: [
-                    $patternFilePath
-                ]
+                    $patternFilePath,
+                ],
             );
 
             if ($patternImagesPaths !== []) {
                 $this->bindImages(
                     pattern: $pattern,
-                    imagePaths: $patternImagesPaths
+                    imagePaths: $patternImagesPaths,
                 );
             }
 
@@ -162,7 +162,7 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             if ($categories !== []) {
                 $this->bindCategories(
                     pattern: $pattern,
-                    categories: $categories
+                    categories: $categories,
                 );
             }
 
@@ -181,7 +181,7 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}",
             );
 
             $this->error(message: 'Reverting changes, deleting downloaded files if they exist...');

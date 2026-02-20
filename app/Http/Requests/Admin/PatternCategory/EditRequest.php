@@ -26,15 +26,15 @@ class EditRequest extends FormRequest
             'replace_id' => [
                 'nullable',
                 'numeric',
-                'exists:pattern_categories,id'
+                'exists:pattern_categories,id',
             ],
             'remove_on_appear' => [
                 'nullable',
-                'in:on'
+                'in:on',
             ],
             'is_published' => [
                 'nullable',
-                'in:on'
+                'in:on',
             ],
         ];
     }

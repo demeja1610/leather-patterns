@@ -19,7 +19,7 @@ use App\Interfaces\Services\ParserServiceInterface;
 abstract class AbstractPatternAdapter extends AbstractAdapter
 {
     public function __construct(
-        protected ParserServiceInterface $parserService
+        protected ParserServiceInterface $parserService,
     ) {}
 
     protected function calculateFileHash(string $filePath): string
@@ -65,7 +65,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
             );
         } catch (Throwable $throwable) {
             $this->error(
-                message: "Failed to get direct Yandex disk file link for pattern {$url}: " . $throwable->getMessage()
+                message: "Failed to get direct Yandex disk file link for pattern {$url}: " . $throwable->getMessage(),
             );
 
             return null;
@@ -177,7 +177,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
                 VideoSourceEnum::YOUTUBE => "https://www.youtube.com/watch?v={$videoId}",
                 VideoSourceEnum::VK => "https://vkvideo.ru/video{$videoId}",
                 default => null,
-            }
+            },
         ]);
     }
 
@@ -185,7 +185,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
         ?string $comment = null,
         ?float $rating = null,
         ?string $reviewerName = null,
-        ?string $reviewedAt = null
+        ?string $reviewedAt = null,
     ): PatternReview {
         return new PatternReview(attributes: [
             'rating' => $rating ?? 0,
@@ -362,11 +362,11 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
             }
 
             $extension = $this->getFileExtension(
-                filePath: parse_url(url: $downloadUrl, component: PHP_URL_PATH)
+                filePath: parse_url(url: $downloadUrl, component: PHP_URL_PATH),
             ) ?: 'pdf';
 
             $encodedFileName = $this->generateFileName(
-                prefix: 'pattern_'
+                prefix: 'pattern_',
             );
 
             $savePath = "patterns/{$pattern->id}/{$encodedFileName}.{$extension}";
@@ -417,7 +417,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
                 rename(
                     from: public_path(path: "storage/{$savePath}"),
-                    to: $filePath
+                    to: $filePath,
                 );
 
                 $this->warn(message: "Renamed file for pattern {$pattern->id}: {$savePath} to {$filePath}");
@@ -430,7 +430,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
             return $filePath;
         } catch (GuzzleException $guzzleException) {
             $this->error(
-                message: "Failed to download pattern {$pattern->id}: " . $guzzleException->getMessage()
+                message: "Failed to download pattern {$pattern->id}: " . $guzzleException->getMessage(),
             );
 
             return null;
@@ -445,7 +445,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
         foreach ($imageUrls as $imageUrl) {
             $this->info(
-                message: "Downloading image for pattern {$pattern->id} from: {$imageUrl}"
+                message: "Downloading image for pattern {$pattern->id} from: {$imageUrl}",
             );
 
             try {

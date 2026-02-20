@@ -48,7 +48,7 @@ class ImportPatternCategoriesCommand extends Command
 
 
                     DB::table('pattern_categories')->insertOrIgnore(values: $toInsert);
-                }
+                },
             );
 
         DB::connection('mysql_import')->table(table: 'category_pattern')
@@ -80,7 +80,7 @@ class ImportPatternCategoriesCommand extends Command
                     }
 
                     DB::table('pattern_pattern_category')->insertOrIgnore(values: $toInsert);
-                }
+                },
             );
 
         $this->info(message: 'Pattern categories imported successfully.');

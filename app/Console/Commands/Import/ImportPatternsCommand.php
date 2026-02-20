@@ -55,7 +55,7 @@ class ImportPatternsCommand extends Command
                     }
 
                     DB::table('patterns')->insert(values: $toInsert);
-                }
+                },
             );
 
         $this->info(message: "All patterns imported successfully.");

@@ -17,7 +17,7 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage(),
             );
 
             return;
@@ -121,7 +121,7 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
 
             $patternImagesPaths = $this->downloadPatternImages(
                 pattern: $pattern,
-                imageUrls: $images
+                imageUrls: $images,
             );
 
             $videosToCreate = [];
@@ -129,7 +129,7 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             foreach ($videos as $video) {
                 $videosToCreate[] = $this->prepareVideoForCreation(
                     source: $video['source'],
-                    videoId: $video['video_id']
+                    videoId: $video['video_id'],
                 );
             }
 
@@ -138,14 +138,14 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             $this->bindFiles(
                 pattern: $pattern,
                 filePaths: [
-                    $patternFilePath
-                ]
+                    $patternFilePath,
+                ],
             );
 
             if ($patternImagesPaths !== []) {
                 $this->bindImages(
                     pattern: $pattern,
-                    imagePaths: $patternImagesPaths
+                    imagePaths: $patternImagesPaths,
                 );
             }
 
@@ -160,14 +160,14 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             if ($categories !== []) {
                 $this->bindCategories(
                     pattern: $pattern,
-                    categories: $categories
+                    categories: $categories,
                 );
             }
 
             if ($tags !== []) {
                 $this->bindTags(
                     pattern: $pattern,
-                    tags: $tags
+                    tags: $tags,
                 );
             }
 
@@ -175,7 +175,7 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
                 $videosToCreateCount = count(value: $videosToCreate);
 
                 $this->success(
-                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
+                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}",
                 );
 
                 $pattern->videos()->saveMany(models: $videosToCreate);
@@ -188,7 +188,7 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}",
             );
 
             $this->error(message: 'Reverting changes, deleting downloaded files if they exist...');

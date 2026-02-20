@@ -70,7 +70,7 @@ class ReplacePatternAuthorForPatternsCommand extends Command
                 $pattern->save();
 
                 $result++;
-            }
+            },
         );
 
         $this->info(string: 'Pattern author replaced successfully, ' . $result . ' records updated.');

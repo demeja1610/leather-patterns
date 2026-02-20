@@ -23,7 +23,7 @@ class PablikKozhevnikaSourceAdapter extends AbstractSourceAdapter
     ];
 
     public function __construct(
-        protected ParserServiceInterface $parserService
+        protected ParserServiceInterface $parserService,
     ) {}
 
     public function processSource(string $baseURL): void
@@ -73,14 +73,14 @@ class PablikKozhevnikaSourceAdapter extends AbstractSourceAdapter
 
                         $categories = array_map(
                             callback: trim(...),
-                            array: explode(separator: ',', string: $categoryText)
+                            array: explode(separator: ',', string: $categoryText),
                         );
                     }
 
                     $patterns[] = $this->preparePatternForCreation(
                         url: $patternLink->getAttribute(qualifiedName: 'href'),
                         source: PatternSourceEnum::PABLIK_KOZHEVNIKA,
-                        categories: $categories ?? []
+                        categories: $categories ?? [],
                     );
                 }
             }

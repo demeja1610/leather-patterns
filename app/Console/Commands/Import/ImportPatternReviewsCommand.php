@@ -53,7 +53,7 @@ class ImportPatternReviewsCommand extends Command
                     }
 
                     DB::table('pattern_reviews')->insert(values: $toInsert);
-                }
+                },
             );
 
         $this->info(message: "All pattern reviews imported successfully.");

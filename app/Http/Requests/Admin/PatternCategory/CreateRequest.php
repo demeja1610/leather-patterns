@@ -21,20 +21,20 @@ class CreateRequest extends FormRequest
                 'string',
                 'max:255',
                 'min:2',
-                'unique:pattern_categories,name'
+                'unique:pattern_categories,name',
             ],
             'replace_id' => [
                 'nullable',
                 'numeric',
-                'exists:pattern_categories,id'
+                'exists:pattern_categories,id',
             ],
             'remove_on_appear' => [
                 'nullable',
-                'in:on'
+                'in:on',
             ],
             'is_published' => [
                 'nullable',
-                'in:on'
+                'in:on',
             ],
         ];
     }

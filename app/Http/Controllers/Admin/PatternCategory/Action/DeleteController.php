@@ -33,7 +33,7 @@ class DeleteController extends Controller
                             'name' => $category->name,
                         ]),
                         type: NotificationTypeEnum::ERROR,
-                    )
+                    ),
                 ),
             );
         }
@@ -46,8 +46,7 @@ class DeleteController extends Controller
                         text: __(key: 'pattern_category.admin.single_delete_success', replace: ['name' => $category->name]),
                         type: NotificationTypeEnum::SUCCESS,
                     )
-                    :
-                    new SessionNotificationDto(
+                    : new SessionNotificationDto(
                         text: __(key: 'pattern_category.admin.single_failed_to_delete', replace: ['name' => $category->name]),
                         type: NotificationTypeEnum::ERROR,
                     ),

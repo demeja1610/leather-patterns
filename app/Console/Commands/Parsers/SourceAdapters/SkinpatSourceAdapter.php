@@ -12,7 +12,7 @@ use App\Interfaces\Services\ParserServiceInterface;
 class SkinpatSourceAdapter extends AbstractSourceAdapter
 {
     public function __construct(
-        protected ParserServiceInterface $parserService
+        protected ParserServiceInterface $parserService,
     ) {}
 
     public function processSource(string $baseURL): void

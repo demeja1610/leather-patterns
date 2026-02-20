@@ -44,7 +44,7 @@ class DeleteFullyAbsentPatternImagesCommand extends Command
                     $deleted = DB::table('pattern_images')->whereIn(column: 'id', values: $toDelete)->delete();
 
                     $deletedCount += $deleted;
-                }
+                },
             );
 
         $this->info(message: "Finished deleting fully absent pattern images.");

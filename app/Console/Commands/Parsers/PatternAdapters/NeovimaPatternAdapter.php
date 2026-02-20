@@ -18,7 +18,7 @@ class NeovimaPatternAdapter extends AbstractPatternAdapter
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage(),
             );
 
             return;
@@ -38,7 +38,7 @@ class NeovimaPatternAdapter extends AbstractPatternAdapter
 
         $reviews = $this->parseNeovimaPatternReviews(
             xpath: $xpath,
-            pattern: $pattern
+            pattern: $pattern,
         );
 
         $imageElements = $xpath->query(expression: "//*[contains(@class, 'woocommerce-product-gallery__wrapper')]//img");
@@ -114,7 +114,7 @@ class NeovimaPatternAdapter extends AbstractPatternAdapter
 
             $patternImagesPaths = $this->downloadPatternImages(
                 pattern: $pattern,
-                imageUrls: $images
+                imageUrls: $images,
             );
 
             $videosToCreate = [];
@@ -122,7 +122,7 @@ class NeovimaPatternAdapter extends AbstractPatternAdapter
             foreach ($videos as $video) {
                 $videosToCreate[] = $this->prepareVideoForCreation(
                     source: $video['source'],
-                    videoId: $video['video_id']
+                    videoId: $video['video_id'],
                 );
             }
 
@@ -131,7 +131,7 @@ class NeovimaPatternAdapter extends AbstractPatternAdapter
             if ($reviews !== []) {
                 $reviewsToCreate = $this->filterExistingReviews(
                     pattern: $pattern,
-                    reviews: $reviews
+                    reviews: $reviews,
                 );
             }
 
@@ -140,14 +140,14 @@ class NeovimaPatternAdapter extends AbstractPatternAdapter
             $this->bindFiles(
                 pattern: $pattern,
                 filePaths: [
-                    $patternFilePath
-                ]
+                    $patternFilePath,
+                ],
             );
 
             if ($patternImagesPaths !== []) {
                 $this->bindImages(
                     pattern: $pattern,
-                    imagePaths: $patternImagesPaths
+                    imagePaths: $patternImagesPaths,
                 );
             }
 
@@ -162,14 +162,14 @@ class NeovimaPatternAdapter extends AbstractPatternAdapter
             if ($categories !== []) {
                 $this->bindCategories(
                     pattern: $pattern,
-                    categories: $categories
+                    categories: $categories,
                 );
             }
 
             if ($tags !== []) {
                 $this->bindTags(
                     pattern: $pattern,
-                    tags: $tags
+                    tags: $tags,
                 );
             }
 
@@ -177,7 +177,7 @@ class NeovimaPatternAdapter extends AbstractPatternAdapter
                 $videosToCreateCount = count(value: $videosToCreate);
 
                 $this->success(
-                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
+                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}",
                 );
 
                 $pattern->videos()->saveMany(models: $videosToCreate);
@@ -189,7 +189,7 @@ class NeovimaPatternAdapter extends AbstractPatternAdapter
                 $reviewsToCreateCount = count(value: $reviewsToCreate);
 
                 $this->success(
-                    message: "Created {$reviewsToCreateCount} reviews for pattern {$pattern->id}"
+                    message: "Created {$reviewsToCreateCount} reviews for pattern {$pattern->id}",
                 );
 
                 $pattern->reviews()->saveMany(models: $reviewsToCreate);
@@ -202,7 +202,7 @@ class NeovimaPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}",
             );
 
             $this->error(message: 'Reverting changes, deleting downloaded files if they exist...');

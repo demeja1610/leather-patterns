@@ -29,7 +29,7 @@ class UCFirstCategoriesCommand extends Command
 
                         $category->save();
                     }
-                }
+                },
             );
     }
 }

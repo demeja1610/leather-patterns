@@ -18,16 +18,16 @@ class ResetPasswordRequest extends FormRequest
     {
         return [
             'token' => [
-                'required'
+                'required',
             ],
             'email' => [
                 'required',
-                'email'
+                'email',
             ],
             'password' => [
                 'required',
                 'confirmed',
-                Password::defaults()
+                Password::defaults(),
             ],
         ];
     }

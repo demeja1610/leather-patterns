@@ -1,7 +1,8 @@
 <?php
 
-use App\Enum\PatternSourceEnum;
+declare(strict_types=1);
 
+use App\Enum\PatternSourceEnum;
 
 return [
     PatternSourceEnum::NEOVIMA->value => 'https://neovima.com',

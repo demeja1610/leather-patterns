@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'index_page' => 'Index page',
 

@@ -40,7 +40,7 @@ class ImportPatternImagesCommand extends Command
                 'images.sha_256_hash as image_sha_256_hash',
                 'images.created_at as image_created_at',
                 'images.updated_at as image_updated_at',
-                'images.source_url as image_source_url'
+                'images.source_url as image_source_url',
             ])
             //     ->where('images.file_path', '=', null)
             //     ->pluck('image_id');
@@ -104,7 +104,7 @@ class ImportPatternImagesCommand extends Command
                     }
 
                     DB::table('pattern_images')->insert(values: $toInsert);
-                }
+                },
             );
 
         $this->info(message: "All pattern images imported successfully.");
@@ -149,7 +149,7 @@ class ImportPatternImagesCommand extends Command
             );
         } catch (GuzzleException $guzzleException) {
             $this->error(
-                message: "Failed to download image {$image->id}: " . $guzzleException->getMessage()
+                message: "Failed to download image {$image->id}: " . $guzzleException->getMessage(),
             );
 
             return null;

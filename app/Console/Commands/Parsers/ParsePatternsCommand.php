@@ -21,7 +21,7 @@ class ParsePatternsCommand extends Command
     protected $description = 'Parse patterns and files';
 
     public function __construct(
-        protected ParserServiceInterface $parserService
+        protected ParserServiceInterface $parserService,
     ) {
         parent::__construct();
     }
@@ -39,7 +39,7 @@ class ParsePatternsCommand extends Command
                 relation: 'meta',
                 callback: fn(Builder $query) => $query
                     ->where(column: 'pattern_downloaded', operator: false)
-                    ->where(column: 'is_download_url_wrong', operator: false)
+                    ->where(column: 'is_download_url_wrong', operator: false),
             );
 
         if ($id) {
@@ -58,7 +58,7 @@ class ParsePatternsCommand extends Command
 
                     $this->processPattern(pattern: $pattern);
                 });
-            }
+            },
         );
 
         $this->info(string: 'Finished parsing patterns.');

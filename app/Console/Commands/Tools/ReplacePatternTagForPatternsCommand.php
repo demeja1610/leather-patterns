@@ -83,7 +83,7 @@ class ReplacePatternTagForPatternsCommand extends Command
                 $pattern->tags()->attach(ids: $toTag);
 
                 $result++;
-            }
+            },
         );
 
         $this->info(string: 'Pattern tags replaced successfully, ' . $result . ' records updated.');

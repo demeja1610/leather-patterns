@@ -21,7 +21,7 @@ class EditController extends Controller
             [
                 'remove_on_appear' => (bool) $request->get(key: 'remove_on_appear', default: false),
                 'is_published' => (bool) $request->get(key: 'is_published', default: false),
-            ]
+            ],
         );
 
         if ($data['remove_on_appear'] === true && ($data['replace_id'] !== null || $data['replace_author_id'] !== null)) {
@@ -31,7 +31,7 @@ class EditController extends Controller
                     new SessionNotificationDto(
                         text: __(key: 'pattern_tag.admin.cannot_remove_and_replace_same_time'),
                         type: NotificationTypeEnum::ERROR,
-                    )
+                    ),
                 ),
             );
         }
@@ -43,7 +43,7 @@ class EditController extends Controller
                     new SessionNotificationDto(
                         text: __(key: 'pattern_tag.admin.cannot_replace_to_tag_and_author_same_time'),
                         type: NotificationTypeEnum::ERROR,
-                    )
+                    ),
                 ),
             );
         }
@@ -60,8 +60,7 @@ class EditController extends Controller
                         text: __(key: 'pattern_tag.admin.updated', replace: ['id' => $id]),
                         type: NotificationTypeEnum::SUCCESS,
                     )
-                    :
-                    new SessionNotificationDto(
+                    : new SessionNotificationDto(
                         text: __(key: 'pattern_tag.admin.failed_to_update', replace: ['id' => $id]),
                         type: NotificationTypeEnum::ERROR,
                     ),

@@ -19,53 +19,53 @@ class ImportPatternFilesCommand extends Command
     {
         $this->info(message: 'Importing pattern files...');
 
-       DB::connection('mysql_import')->table(table: 'file_pattern')
-            ->join(table: 'files', first: 'file_pattern.file_id', operator: '=', second: 'files.id')
-            ->join(table: 'patterns', first: 'file_pattern.pattern_id', operator: '=', second: 'patterns.id')
-            ->where(column: 'patterns.source', operator: '!=', value: PatternSourceEnum::SKINCUTS->value)
-            ->orderBy(column: 'file_pattern.file_id')
-            ->select(columns: [
-                'file_pattern.file_id as file_id',
-                'file_pattern.pattern_id as pattern_id',
-                'files.path as file_path',
-                'files.type as file_type',
-                'files.extension as file_extension',
-                'files.size as file_size',
-                'files.mime_type as file_mime_type',
-                'files.hash_algorithm as file_hash_algorithm',
-                'files.hash as file_hash',
-                'files.created_at as file_created_at',
-                'files.updated_at as file_updated_at',
-            ])
-            ->chunk(
-                count: 500,
-                callback: function (Collection $chunk): void {
-                    $from = $chunk->first()->file_id;
-                    $to = $chunk->last()->file_id;
-                    $count = $chunk->count();
+        DB::connection('mysql_import')->table(table: 'file_pattern')
+             ->join(table: 'files', first: 'file_pattern.file_id', operator: '=', second: 'files.id')
+             ->join(table: 'patterns', first: 'file_pattern.pattern_id', operator: '=', second: 'patterns.id')
+             ->where(column: 'patterns.source', operator: '!=', value: PatternSourceEnum::SKINCUTS->value)
+             ->orderBy(column: 'file_pattern.file_id')
+             ->select(columns: [
+                 'file_pattern.file_id as file_id',
+                 'file_pattern.pattern_id as pattern_id',
+                 'files.path as file_path',
+                 'files.type as file_type',
+                 'files.extension as file_extension',
+                 'files.size as file_size',
+                 'files.mime_type as file_mime_type',
+                 'files.hash_algorithm as file_hash_algorithm',
+                 'files.hash as file_hash',
+                 'files.created_at as file_created_at',
+                 'files.updated_at as file_updated_at',
+             ])
+             ->chunk(
+                 count: 500,
+                 callback: function (Collection $chunk): void {
+                     $from = $chunk->first()->file_id;
+                     $to = $chunk->last()->file_id;
+                     $count = $chunk->count();
 
-                    $this->info(message: "Importing pattern files from {$from} to {$to} ({$count} total)...");
+                     $this->info(message: "Importing pattern files from {$from} to {$to} ({$count} total)...");
 
-                    $toInsert = [];
+                     $toInsert = [];
 
-                    foreach ($chunk as $item) {
-                        $toInsert[] = [
-                            'pattern_id' => $item->pattern_id,
-                            'path' => $item->file_path,
-                            'type' => $item->file_type,
-                            'extension' => $item->file_extension,
-                            'size' => $item->file_size,
-                            'mime_type' => $item->file_mime_type,
-                            'hash_algorithm' => $item->file_hash_algorithm,
-                            'hash' => $item->file_hash,
-                            'created_at' => $item->file_created_at,
-                            'updated_at' => $item->file_updated_at,
-                        ];
-                    }
+                     foreach ($chunk as $item) {
+                         $toInsert[] = [
+                             'pattern_id' => $item->pattern_id,
+                             'path' => $item->file_path,
+                             'type' => $item->file_type,
+                             'extension' => $item->file_extension,
+                             'size' => $item->file_size,
+                             'mime_type' => $item->file_mime_type,
+                             'hash_algorithm' => $item->file_hash_algorithm,
+                             'hash' => $item->file_hash,
+                             'created_at' => $item->file_created_at,
+                             'updated_at' => $item->file_updated_at,
+                         ];
+                     }
 
-                    DB::table('pattern_files')->insert(values: $toInsert);
-                }
-            );
+                     DB::table('pattern_files')->insert(values: $toInsert);
+                 },
+             );
 
         $this->info(message: "All pattern files imported successfully.");
     }

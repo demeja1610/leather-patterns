@@ -48,7 +48,7 @@ class ImportPatternAuthorsCommand extends Command
 
 
                     DB::table('pattern_authors')->insertOrIgnore(values: $toInsert);
-                }
+                },
             );
 
         DB::connection('mysql_import')->table(table: 'author_pattern')
@@ -88,7 +88,7 @@ class ImportPatternAuthorsCommand extends Command
                         ]);
 
                     $this->info(message: "Updated {$updated} patterns with new author IDs.");
-                }
+                },
             );
 
         $this->info(message: "All pattern authors imported successfully.");

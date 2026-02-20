@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     [
         'tags' => [
@@ -118,7 +120,7 @@ return [
     [
         'tags' => [
             'v&p',
-            'vasileandpavel'
+            'vasileandpavel',
         ],
         'author' => 'Vasile and Pavel',
     ],

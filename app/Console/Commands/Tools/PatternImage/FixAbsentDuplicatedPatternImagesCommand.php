@@ -77,7 +77,7 @@ class FixAbsentDuplicatedPatternImagesCommand extends Command
                             $restoredCount++;
                         }
                     }
-                }
+                },
             );
 
         $this->info(message: 'Finished fixing duplicated and absent pattern images.');

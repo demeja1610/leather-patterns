@@ -10,7 +10,6 @@ use App\Enum\PatternSourceEnum;
 
 class PatternObserver
 {
-
     public function created(Pattern $pattern): void
     {
         $this->createPatternMeta(pattern: $pattern);

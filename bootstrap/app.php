@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,7 +17,7 @@ return Application::configure(basePath: dirname(path: __DIR__))
     )
     ->withMiddleware(callback: function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(
-            redirect: fn(Request $request): string => route(name: 'page.auth.login')
+            redirect: fn(Request $request): string => route(name: 'page.auth.login'),
         );
     })
     ->withExceptions(using: function (Exceptions $exceptions): void {})->create();

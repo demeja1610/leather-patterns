@@ -17,7 +17,7 @@ class LeatherPatternsPatternAdapter extends AbstractPatternAdapter
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage(),
             );
 
             return;
@@ -129,7 +129,7 @@ class LeatherPatternsPatternAdapter extends AbstractPatternAdapter
 
             $patternImagesPaths = $this->downloadPatternImages(
                 pattern: $pattern,
-                imageUrls: $images
+                imageUrls: $images,
             );
 
             $videosToCreate = [];
@@ -137,7 +137,7 @@ class LeatherPatternsPatternAdapter extends AbstractPatternAdapter
             foreach ($videos as $video) {
                 $videosToCreate[] = $this->prepareVideoForCreation(
                     source: $video['source'],
-                    videoId: $video['video_id']
+                    videoId: $video['video_id'],
                 );
             }
 
@@ -145,13 +145,13 @@ class LeatherPatternsPatternAdapter extends AbstractPatternAdapter
 
             $this->bindFiles(
                 pattern: $pattern,
-                filePaths: $patternFilePaths
+                filePaths: $patternFilePaths,
             );
 
             if ($patternImagesPaths !== []) {
                 $this->bindImages(
                     pattern: $pattern,
-                    imagePaths: $patternImagesPaths
+                    imagePaths: $patternImagesPaths,
                 );
             }
 
@@ -166,7 +166,7 @@ class LeatherPatternsPatternAdapter extends AbstractPatternAdapter
             if ($tags !== []) {
                 $this->bindTags(
                     pattern: $pattern,
-                    tags: $tags
+                    tags: $tags,
                 );
             }
 
@@ -174,7 +174,7 @@ class LeatherPatternsPatternAdapter extends AbstractPatternAdapter
                 $videosToCreateCount = count(value: $videosToCreate);
 
                 $this->success(
-                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
+                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}",
                 );
 
                 $pattern->videos()->saveMany(models: $videosToCreate);
@@ -187,11 +187,11 @@ class LeatherPatternsPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}",
             );
 
             $this->error(
-                message: 'Reverting changes, deleting downloaded files if they exist...'
+                message: 'Reverting changes, deleting downloaded files if they exist...',
             );
 
             foreach ($patternFilePaths as $patternFilePath) {

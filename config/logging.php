@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -89,7 +91,7 @@ return [
             'handler_with' => [
                 'host' => env(key: 'PAPERTRAIL_URL'),
                 'port' => env(key: 'PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env(key: 'PAPERTRAIL_URL').':'.env(key: 'PAPERTRAIL_PORT'),
+                'connectionString' => 'tls://' . env(key: 'PAPERTRAIL_URL') . ':' . env(key: 'PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],

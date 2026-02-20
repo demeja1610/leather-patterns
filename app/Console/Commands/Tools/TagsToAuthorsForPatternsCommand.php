@@ -26,7 +26,7 @@ class TagsToAuthorsForPatternsCommand extends Command
         foreach ($data as $item) {
             $tagNames = array_map(
                 callback: mb_strtolower(...),
-                array: $item['tags']
+                array: $item['tags'],
             );
 
             $authorName = $item['author'];
@@ -40,7 +40,7 @@ class TagsToAuthorsForPatternsCommand extends Command
             if (!$author) {
                 $author = PatternAuthor::query()
                     ->create(attributes: [
-                        'name' => $authorName
+                        'name' => $authorName,
                     ]);
 
                 $createdAuthors[] = $author;
@@ -82,9 +82,9 @@ class TagsToAuthorsForPatternsCommand extends Command
                 separator: ', ',
                 array: array_map(
                     callback: fn(PatternAuthor $author) => $author->name,
-                    array: $createdAuthors
-                )
-            )
+                    array: $createdAuthors,
+                ),
+            ),
         );
     }
 

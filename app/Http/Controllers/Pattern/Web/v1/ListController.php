@@ -64,7 +64,7 @@ class ListController extends Controller
 
         if ($showAllPatternCategories === false) {
             $patternCategories = $this->getSelectedPatternCategories(
-                request: $request
+                request: $request,
             );
 
             $patternCategoriesCount = $patternCategories->count();
@@ -86,7 +86,7 @@ class ListController extends Controller
             $patternCategories = Cache::remember(
                 key: 'all_pattern_categories',
                 ttl: $this->cacheTtl,
-                callback: fn(): Collection => $this->getPatternCategories()
+                callback: fn(): Collection => $this->getPatternCategories(),
             );
         }
 
@@ -99,7 +99,7 @@ class ListController extends Controller
 
         if ($showAllPatternTags === false) {
             $patternTags = $this->getSelectedPatternTags(
-                request: $request
+                request: $request,
             );
 
             $patternTagsCount = $patternTags->count();
@@ -121,7 +121,7 @@ class ListController extends Controller
             $patternTags = Cache::remember(
                 key: 'all_pattern_tags',
                 ttl: $this->cacheTtl,
-                callback: fn(): Collection => $this->getPatternTags()
+                callback: fn(): Collection => $this->getPatternTags(),
             );
         }
 
@@ -134,7 +134,7 @@ class ListController extends Controller
 
         if ($showAllPatternAuthors === false) {
             $patternAuthors = $this->getSelectedPatternAuthors(
-                request: $request
+                request: $request,
             );
 
             $patternAuthorsCount = $patternAuthors->count();
@@ -156,7 +156,7 @@ class ListController extends Controller
             $patternAuthors = Cache::remember(
                 key: 'all_pattern_authors',
                 ttl: $this->cacheTtl,
-                callback: fn(): Collection => $this->getPatternAuthors()
+                callback: fn(): Collection => $this->getPatternAuthors(),
             );
         }
 
@@ -180,7 +180,7 @@ class ListController extends Controller
 
                 $sq->select([
                     "{$table}.id",
-                    "{$table}.name"
+                    "{$table}.name",
                 ]);
             },
             'tags' => function (BelongsToMany $sq): void {
@@ -188,7 +188,7 @@ class ListController extends Controller
 
                 $sq->select([
                     "{$table}.id",
-                    "{$table}.name"
+                    "{$table}.name",
                 ]);
             },
             'author' => function (BelongsTo $sq): void {
@@ -196,7 +196,7 @@ class ListController extends Controller
 
                 $sq->select([
                     "{$table}.id",
-                    "{$table}.name"
+                    "{$table}.name",
                 ]);
             },
             'images' => function (HasMany $sq): void {
@@ -225,7 +225,7 @@ class ListController extends Controller
 
         return $q->cursorPaginate(
             perPage: 16,
-            cursor: $cursor
+            cursor: $cursor,
         );
     }
 
@@ -252,7 +252,7 @@ class ListController extends Controller
     {
         return [
             'id',
-            'name'
+            'name',
         ];
     }
 
@@ -263,7 +263,7 @@ class ListController extends Controller
     {
         return [
             'id',
-            'name'
+            'name',
         ];
     }
 
@@ -274,7 +274,7 @@ class ListController extends Controller
     {
         return [
             'id',
-            'name'
+            'name',
         ];
     }
 
@@ -284,7 +284,7 @@ class ListController extends Controller
         $idsCount = count(value: $ids);
 
         if ($idsCount === 0) {
-            return new Collection;
+            return new Collection();
         }
 
         $q = $this->getBasePatternCategoryQuery();
@@ -306,7 +306,7 @@ class ListController extends Controller
         $idsCount = count(value: $ids);
 
         if ($idsCount === 0) {
-            return new Collection;
+            return new Collection();
         }
 
         $q = $this->getBasePatternTagQuery();
@@ -328,7 +328,7 @@ class ListController extends Controller
         $idsCount = count(value: $ids);
 
         if ($idsCount === 0) {
-            return new Collection;
+            return new Collection();
         }
 
         $q = $this->getBasePatternAuthorQuery();

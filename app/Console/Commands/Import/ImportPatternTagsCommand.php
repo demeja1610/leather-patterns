@@ -48,7 +48,7 @@ class ImportPatternTagsCommand extends Command
 
 
                     DB::table('pattern_tags')->insertOrIgnore(values: $toInsert);
-                }
+                },
             );
 
         DB::connection('mysql_import')->table(table: 'pattern_tag')
@@ -80,7 +80,7 @@ class ImportPatternTagsCommand extends Command
                     }
 
                     DB::table('pattern_pattern_tag')->insertOrIgnore(values: $toInsert);
-                }
+                },
             );
 
         $this->info(message: 'Pattern tags imported successfully.');

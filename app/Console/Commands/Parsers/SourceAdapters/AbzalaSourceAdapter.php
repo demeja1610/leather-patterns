@@ -12,7 +12,7 @@ use App\Interfaces\Services\ParserServiceInterface;
 class AbzalaSourceAdapter extends AbstractSourceAdapter
 {
     public function __construct(
-        protected ParserServiceInterface $parserService
+        protected ParserServiceInterface $parserService,
     ) {}
 
     public function processSource(string $baseURL): void
@@ -114,7 +114,7 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
             $html = $this->parserService->parseUrl($url);
         } catch (Exception $exception) {
             $this->error(
-                message: "Error while getting parse urls from {$url}: " . $exception->getMessage()
+                message: "Error while getting parse urls from {$url}: " . $exception->getMessage(),
             );
 
             return null;

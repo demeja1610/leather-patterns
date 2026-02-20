@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'toggle_theme' => 'Toggle theme',
     'search_not_awailable_disabled_js' => "Search is not awailable, javascript is disabled",

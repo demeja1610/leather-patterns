@@ -73,7 +73,7 @@ class ReplaceMarkedPatternCategoriesForPatternsCommand extends Command
 
                     $result++;
                 }
-            }
+            },
         );
 
         $this->info(string: "Pattern categories replaced successfully, {$result} pattern records were affected.");

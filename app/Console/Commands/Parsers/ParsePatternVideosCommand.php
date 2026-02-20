@@ -19,7 +19,7 @@ class ParsePatternVideosCommand extends Command
     protected $description = 'Parse pattern videos';
 
     public function __construct(
-        protected ParserServiceInterface $parserService
+        protected ParserServiceInterface $parserService,
     ) {
         parent::__construct();
     }
@@ -83,7 +83,7 @@ class ParsePatternVideosCommand extends Command
                             VideoSourceEnum::YOUTUBE->value => "https://www.youtube.com/watch?v={$video['video_id']}",
                             VideoSourceEnum::VK->value => "https://vkvideo.ru/video{$video['video_id']}",
                             default => null,
-                        }
+                        },
                     ]);
                 }
 
@@ -105,12 +105,12 @@ class ParsePatternVideosCommand extends Command
                     DB::rollBack();
 
                     $this->error(
-                        message: "Error saving videos for pattern {$pattern->id}: {$exception->getMessage()}"
+                        message: "Error saving videos for pattern {$pattern->id}: {$exception->getMessage()}",
                     );
 
                     return;
                 }
-            }
+            },
         );
     }
 
@@ -123,7 +123,7 @@ class ParsePatternVideosCommand extends Command
                 ->getContents();
         } catch (Exception $exception) {
             $this->error(
-                message: "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}",
             );
 
             return null;
@@ -137,13 +137,13 @@ class ParsePatternVideosCommand extends Command
 
         if ($ytCount !== 0) {
             $this->info(
-                message: "Found {$ytCount} YouTube video(s) for pattern {$pattern->id}"
+                message: "Found {$ytCount} YouTube video(s) for pattern {$pattern->id}",
             );
         }
 
         if ($vkCount !== 0) {
             $this->info(
-                message: "Found {$vkCount} VK video(s) for pattern {$pattern->id}"
+                message: "Found {$vkCount} VK video(s) for pattern {$pattern->id}",
             );
         }
 

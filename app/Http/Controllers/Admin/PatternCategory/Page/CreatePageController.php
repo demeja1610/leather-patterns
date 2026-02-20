@@ -16,7 +16,7 @@ class CreatePageController extends Controller
         $categoryReplacements = $this->getCategoryReplacements();
 
         return view(view: 'pages.admin.pattern-category.create', data: [
-            'categoryReplacements' => $categoryReplacements
+            'categoryReplacements' => $categoryReplacements,
         ]);
     }
 

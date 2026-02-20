@@ -55,7 +55,7 @@ class ParserService implements ParserServiceInterface
             throw new Exception(
                 message: 'HTTP request failed: ' . $guzzleException->getMessage(),
                 code: $guzzleException->getCode(),
-                previous: $guzzleException
+                previous: $guzzleException,
             );
         }
     }
@@ -97,8 +97,8 @@ class ParserService implements ParserServiceInterface
         );
 
         if (
-            (isset($extMatches[1]) && $extMatches[1] !== []) &&
-            (isset($extMatches[2]) && $extMatches[2] !== [])
+            (isset($extMatches[1]) && $extMatches[1] !== [])
+            && (isset($extMatches[2]) && $extMatches[2] !== [])
         ) {
             foreach ($extMatches[1] as $key => $oid) {
                 $id = $extMatches[2][$key];

@@ -22,12 +22,12 @@ class EditPageController extends Controller
         $this->loadReplacement(category: $category);
 
         $categoryReplacements = $this->getCategoryReplacements(
-            exceptId: $category->id
+            exceptId: $category->id,
         );
 
         return view(view: 'pages.admin.pattern-category.edit', data: [
             'category' => $category,
-            'categoryReplacements' => $categoryReplacements
+            'categoryReplacements' => $categoryReplacements,
         ]);
     }
 

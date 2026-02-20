@@ -26,7 +26,7 @@ class ParseReviewsCommand extends Command
     ];
 
     public function __construct(
-        protected ParserServiceInterface $parserService
+        protected ParserServiceInterface $parserService,
     ) {
         parent::__construct();
     }
@@ -42,7 +42,7 @@ class ParseReviewsCommand extends Command
                 relation: 'meta',
                 callback: fn($query) => $query
                     ->where(column: 'reviews_updated_at', operator: '<', value: now()->subDays(14))
-                    ->orWhereNull('reviews_updated_at')
+                    ->orWhereNull('reviews_updated_at'),
             )
             ->whereIn('source', $this->sources)
             ->with([
@@ -112,7 +112,7 @@ class ParseReviewsCommand extends Command
                     DB::rollBack();
 
                     $this->error(
-                        string: 'Error inserting reviews: ' . $throwable->getMessage()
+                        string: 'Error inserting reviews: ' . $throwable->getMessage(),
                     );
                 }
             },
@@ -142,7 +142,7 @@ class ParseReviewsCommand extends Command
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Exception $exception) {
             $this->error(
-                string: "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
+                string: "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}",
             );
 
             return [];
@@ -196,7 +196,7 @@ class ParseReviewsCommand extends Command
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Exception $exception) {
             $this->error(
-                string: "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
+                string: "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}",
             );
 
             return [];

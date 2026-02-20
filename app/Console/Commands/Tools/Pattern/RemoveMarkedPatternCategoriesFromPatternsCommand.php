@@ -47,7 +47,7 @@ class RemoveMarkedPatternCategoriesFromPatternsCommand extends Command
 
                     $result++;
                 }
-            }
+            },
         );
 
         $this->info(string: "Pattern categories removed successfully, {$result} pattern records were affected.");

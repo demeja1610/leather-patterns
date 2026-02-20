@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'toggle_theme' => 'Переключить тему',
     'search_not_awailable_disabled_js' => "Поиск недоступен, javascript выключен",

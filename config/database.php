@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Str;
 
 return [
@@ -168,7 +170,7 @@ return [
 
         'options' => [
             'cluster' => env(key: 'REDIS_CLUSTER', default: 'redis'),
-            'prefix' => env(key: 'REDIS_PREFIX', default: Str::slug(title: (string) env(key: 'APP_NAME', default: 'laravel')).'-database-'),
+            'prefix' => env(key: 'REDIS_PREFIX', default: Str::slug(title: (string) env(key: 'APP_NAME', default: 'laravel')) . '-database-'),
             'persistent' => env(key: 'REDIS_PERSISTENT', default: false),
         ],
 

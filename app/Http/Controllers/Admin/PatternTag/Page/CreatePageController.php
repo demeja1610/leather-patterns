@@ -19,7 +19,7 @@ class CreatePageController extends Controller
 
         return view(view: 'pages.admin.pattern-tag.create', data: [
             'tagReplacements' => $tagReplacements,
-            'authorReplacements' => $authorReplacements
+            'authorReplacements' => $authorReplacements,
         ]);
     }
 

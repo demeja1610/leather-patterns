@@ -29,7 +29,7 @@ class UCFirstPatternAuthorsCommand extends Command
 
                         $author->save();
                     }
-                }
+                },
             );
     }
 }

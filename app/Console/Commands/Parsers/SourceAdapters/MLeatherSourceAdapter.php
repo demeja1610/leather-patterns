@@ -12,7 +12,7 @@ use App\Interfaces\Services\ParserServiceInterface;
 class MLeatherSourceAdapter extends AbstractSourceAdapter
 {
     public function __construct(
-        protected ParserServiceInterface $parserService
+        protected ParserServiceInterface $parserService,
     ) {}
 
     public function processSource(string $baseURL): void
@@ -49,7 +49,7 @@ class MLeatherSourceAdapter extends AbstractSourceAdapter
                 if ($patternLink instanceof DOMElement) {
                     $patterns[] = $this->preparePatternForCreation(
                         url: "{$baseURL}{$patternLink->getAttribute(qualifiedName: 'href')}",
-                        source: PatternSourceEnum::MLEATHER
+                        source: PatternSourceEnum::MLEATHER,
                     );
                 }
             }

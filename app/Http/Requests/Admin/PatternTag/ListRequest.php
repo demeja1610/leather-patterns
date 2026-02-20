@@ -18,15 +18,15 @@ class ListRequest extends FormRequest
         return [
             'id' => [
                 'nullable',
-                'numeric'
+                'numeric',
             ],
             'name' => [
                 'nullable',
-                'string'
+                'string',
             ],
             'created_at' => [
                 'nullable',
-                'date'
+                'date',
             ],
         ];
     }

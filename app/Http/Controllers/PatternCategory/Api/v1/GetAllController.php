@@ -34,7 +34,7 @@ class GetAllController extends Controller
 
         $q->select([
             'id',
-            'name'
+            'name',
         ]);
 
         return $q->orderBy('id', 'asc')->get();
