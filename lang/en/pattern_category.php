@@ -28,5 +28,6 @@ return [
         'category_is_replacement_for' => 'Category with name: `:name` cannot be deleted because it is replacement category for :count other categories',
         'confirm_delete_text' => 'Please confirm category delete',
         'cannot_remove_and_replace_same_time' => 'Category cannot be removed and replaced at the same time, please choose one of the options',
+        'category_isnt_deletable' => 'Category with name :name cannot be deleted',
     ],
 ];

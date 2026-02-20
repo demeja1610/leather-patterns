@@ -8,6 +8,7 @@ use App\Models\PatternCategory;
 use App\Enum\NotificationTypeEnum;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use App\Dto\SessionNotification\SessionNotificationDto;
 use App\Dto\SessionNotification\SessionNotificationListDto;
 
@@ -18,56 +19,24 @@ class DeleteController extends Controller
         $category = $this->getPatternCategory($id);
 
         if ($category === null) {
-            return redirect()->back();
+            return abort(Response::HTTP_NOT_FOUND);
         }
 
-        if ($category->remove_on_appear === true || $category->replace_id !== null) {
+        if ($category->isDeletable()) {
+            $deleted = $category->delete();
+        } else {
             return redirect()->back()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
-                        text: __('pattern_category.admin.category_needed_for_replace_or_remove', ['name' => $category->name]),
-                        type: NotificationTypeEnum::ERROR,
-                    )
-                ),
-            );
-        }
-
-        $category->loadCount('patterns');
-
-        if ($category->patterns_count !== 0) {
-            return redirect()->back()->with(
-                key: 'notifications',
-                value: new SessionNotificationListDto(
-                    new SessionNotificationDto(
-                        text: __('pattern_category.admin.patterns_not_empty', [
+                        text: __('pattern_category.admin.category_isnt_deletable', [
                             'name' => $category->name,
-                            'count' => $category->patterns_count
                         ]),
                         type: NotificationTypeEnum::ERROR,
                     )
                 ),
             );
         }
-
-        $category->loadCount('replacementFor');
-
-        if ($category->replacement_for_count !== 0) {
-            return redirect()->back()->with(
-                key: 'notifications',
-                value: new SessionNotificationListDto(
-                    new SessionNotificationDto(
-                        text: __('pattern_category.admin.category_is_replacement_for', [
-                            'name' => $category->name,
-                            'count' => $category->replacement_for_count
-                        ]),
-                        type: NotificationTypeEnum::ERROR,
-                    )
-                ),
-            );
-        }
-
-        $deleted = $category->delete();
 
         return redirect()->back()->with(
             key: 'notifications',
@@ -91,6 +60,11 @@ class DeleteController extends Controller
         $q =  PatternCategory::query();
 
         $q->where("id", $id);
+
+        $q->withCount([
+            'patterns',
+            'replacementFor',
+        ]); // optimization for isDeleted method
 
         return $q->first();
     }

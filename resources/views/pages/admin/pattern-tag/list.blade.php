@@ -301,7 +301,7 @@
                     @foreach ($tags as $tag)
                         <x-table.tr>
                             <x-table.td-actions>
-                                @if ($tag->patterns_count === 0 && $tag->remove_on_appear === false && $tag->replace_id === null && $tag->replace_author_id === null && $tag->replacement_for_count === 0)
+                                @if ($tag->isDeletable())
                                     <x-link.button-default
                                         :href="route('admin.pattern-tag.delete', ['id' => $tag->id])"
                                         x-on:click.prevent="() => {deleteUrl=$el.href}"

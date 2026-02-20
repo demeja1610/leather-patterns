@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Dto\SessionNotification\SessionNotificationDto;
 use App\Dto\SessionNotification\SessionNotificationListDto;
 use App\Models\PatternTag;
+use Symfony\Component\HttpFoundation\Response;
 
 class DeleteController extends Controller
 {
@@ -18,56 +19,24 @@ class DeleteController extends Controller
         $tag = $this->getPatternTag($id);
 
         if ($tag === null) {
-            return redirect()->back();
+            return abort(Response::HTTP_NOT_FOUND);
         }
 
-        if ($tag->remove_on_appear === true || $tag->replace_id !== null || $tag->replace_author_id !== null) {
+        if ($tag->isDeletable()) {
+            $deleted = $tag->delete();
+        } else {
             return redirect()->back()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
-                        text: __('pattern_tag.admin.tag_needed_for_replace_or_remove', ['name' => $tag->name]),
-                        type: NotificationTypeEnum::ERROR,
-                    )
-                ),
-            );
-        }
-
-        $tag->loadCount('patterns');
-
-        if ($tag->patterns_count !== 0) {
-            return redirect()->back()->with(
-                key: 'notifications',
-                value: new SessionNotificationListDto(
-                    new SessionNotificationDto(
-                        text: __('pattern_tag.admin.patterns_not_empty', [
+                        text: __('pattern_tag.admin.tag_isnt_deletable', [
                             'name' => $tag->name,
-                            'count' => $tag->patterns_count
                         ]),
                         type: NotificationTypeEnum::ERROR,
                     )
                 ),
             );
         }
-
-        $tag->loadCount('replacementFor');
-
-        if ($tag->replacement_for_count !== 0) {
-            return redirect()->back()->with(
-                key: 'notifications',
-                value: new SessionNotificationListDto(
-                    new SessionNotificationDto(
-                        text: __('pattern_tag.admin.tag_is_replacement_for', [
-                            'name' => $tag->name,
-                            'count' => $tag->replacement_for_count
-                        ]),
-                        type: NotificationTypeEnum::ERROR,
-                    )
-                ),
-            );
-        }
-
-        $deleted = $tag->delete();
 
         return redirect()->back()->with(
             key: 'notifications',
@@ -91,6 +60,11 @@ class DeleteController extends Controller
         $q =  PatternTag::query();
 
         $q->where("id", $id);
+
+        $q->withCount([
+            'patterns',
+            'replacementFor',
+        ]); // optimization for isDeleted method
 
         return $q->first();
     }

@@ -67,4 +67,21 @@ class PatternTag extends Model
             localKey: 'replace_author_id',
         );
     }
+
+    public function isDeletable(): bool
+    {
+        if ($this->patterns_count === null) {
+            $this->loadCount('patterns');
+        }
+
+        if ($this->replacement_for_count === null) {
+            $this->loadCount('replacementFor');
+        }
+
+        return $this->remove_on_appear === false &&
+            $this->replace_id === null &&
+            $this->replace_author_id === null &&
+            $this->patterns_count === 0 &&
+            $this->replacement_for_count === 0;
+    }
 }

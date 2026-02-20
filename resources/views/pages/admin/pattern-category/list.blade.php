@@ -263,7 +263,7 @@
                     @foreach ($categories as $category)
                         <x-table.tr>
                             <x-table.td-actions>
-                                @if ($category->patterns_count === 0 && $category->remove_on_appear === false && $category->replace_id === null && $category->replacement_for_count === 0)
+                                @if ($category->isDeletable() === true)
                                     <x-link.button-default
                                         :href="route('admin.pattern-category.delete', ['id' => $category->id])"
                                         x-on:click.prevent="() => {deleteUrl=$el.href}"

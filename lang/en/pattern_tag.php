@@ -30,6 +30,7 @@ return [
         'tag_is_replacement_for' => 'Tag with name: `:name` cannot be deleted because it is replacement tag for :count other tags',
         'confirm_delete_text' => 'Please confirm tag delete',
         'cannot_remove_and_replace_same_time' => 'Tag cannot be removed and replaced at the same time, please choose one of the options',
-        'cannot_replace_to_tag_and_author_same_time' => 'Tag cannot be replaced to other tag and author at the same time, please choose one of the options'
+        'cannot_replace_to_tag_and_author_same_time' => 'Tag cannot be replaced to other tag and author at the same time, please choose one of the options',
+        'tag_isnt_deletable' => 'Tag with name :name cannot be deleted',
     ],
 ];
