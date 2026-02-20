@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Parsers;
 
 use Exception;
@@ -13,6 +15,7 @@ use App\Interfaces\Services\ParserServiceInterface;
 class ParsePatternVideosCommand extends Command
 {
     protected $signature = 'tools:parse-pattern-videos {--id=}';
+
     protected $description = 'Parse pattern videos';
 
     public function __construct(
@@ -21,7 +24,7 @@ class ParsePatternVideosCommand extends Command
         parent::__construct();
     }
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Parsing patterns videos');
 
@@ -43,11 +46,11 @@ class ParsePatternVideosCommand extends Command
             return;
         }
 
-        $this->info("Found $count patterns to check for videos");
+        $this->info("Found {$count} patterns to check for videos");
 
         $q->chunkById(
             count: 1,
-            callback: function ($patterns) {
+            callback: function ($patterns): void {
                 $pattern = $patterns->first();
 
                 $this->info("Processing pattern: {$pattern->id}");
@@ -98,10 +101,12 @@ class ParsePatternVideosCommand extends Command
                     $pattern->meta->update(['is_video_checked' => true]);
 
                     DB::commit();
-                } catch (Exception $e) {
+                } catch (Exception $exception) {
                     DB::rollBack();
 
-                    $this->error("Error saving videos for pattern {$pattern->id}: {$e->getMessage()}");
+                    $this->error(
+                        "Error saving videos for pattern {$pattern->id}: {$exception->getMessage()}"
+                    );
 
                     return;
                 }
@@ -116,8 +121,10 @@ class ParsePatternVideosCommand extends Command
                 ->get($pattern->source_url)
                 ->getBody()
                 ->getContents();
-        } catch (Exception $e) {
-            $this->error("Error getting page content for pattern {$pattern->id}: {$e->getMessage()}");
+        } catch (Exception $exception) {
+            $this->error(
+                "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
+            );
 
             return null;
         }
@@ -128,12 +135,16 @@ class ParsePatternVideosCommand extends Command
         $ytCount = count($youtubeVideoIds);
         $vkCount = count($vkVideoIds);
 
-        if ($ytCount) {
-            $this->info("Found $ytCount YouTube video(s) for pattern {$pattern->id}");
+        if ($ytCount !== 0) {
+            $this->info(
+                "Found {$ytCount} YouTube video(s) for pattern {$pattern->id}"
+            );
         }
 
-        if ($vkCount) {
-            $this->info("Found $vkCount VK video(s) for pattern {$pattern->id}");
+        if ($vkCount !== 0) {
+            $this->info(
+                "Found {$vkCount} VK video(s) for pattern {$pattern->id}"
+            );
         }
 
         $videos = [];

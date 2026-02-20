@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Parsers;
 
 use App\Models\Pattern;
@@ -13,6 +15,7 @@ use App\Interfaces\Services\ParserServiceInterface;
 class ParsePatternSourcesCommand extends Command
 {
     protected $signature = 'parsers:parse-pattern-sources';
+
     protected $description = 'Parse pattern sources for patterns';
 
     public function __construct(
@@ -21,7 +24,7 @@ class ParsePatternSourcesCommand extends Command
         parent::__construct();
     }
 
-    public function handle()
+    public function handle(): void
     {
         $startedAt = now();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Parsers;
 
 use Exception;
@@ -15,7 +17,9 @@ use App\Interfaces\Services\ParserServiceInterface;
 class ParseReviewsCommand extends Command
 {
     protected $signature = 'parse:reviews {--id=}';
+
     protected $description = 'Parse pattern reviews';
+
     protected $sources = [
         PatternSourceEnum::NEOVIMA,
         PatternSourceEnum::MLEATHER,
@@ -27,7 +31,7 @@ class ParseReviewsCommand extends Command
         parent::__construct();
     }
 
-    public function handle()
+    public function handle(): int
     {
         $this->info('Parsing reviews...');
 
@@ -38,7 +42,7 @@ class ParseReviewsCommand extends Command
                 'meta',
                 fn($query) => $query
                     ->where('reviews_updated_at', '<', now()->subDays(14))
-                    ->orWhere('reviews_updated_at', null)
+                    ->orWhereNull('reviews_updated_at')
             )
             ->whereIn('source', $this->sources)
             ->with([
@@ -56,7 +60,7 @@ class ParseReviewsCommand extends Command
 
         $q->chunkById(
             count: 1,
-            callback: function (Collection $patterns) {
+            callback: function (Collection $patterns): void {
                 $pattern = $patterns->first();
                 $allPatternReviewsOnPage = $this->processPattern($pattern);
 
@@ -74,19 +78,17 @@ class ParseReviewsCommand extends Command
                 foreach ($allPatternReviewsOnPage as $review) {
                     $isAlreadyExists = array_filter(
                         array: $existingPatternReviews,
-                        callback: function ($patternReview) use ($review) {
-                            return $patternReview['comment'] === $review['comment'];
-                        },
+                        callback: fn(array $patternReview): bool => $patternReview['comment'] === $review['comment'],
                     );
 
-                    if (count($isAlreadyExists) > 0) {
+                    if ($isAlreadyExists !== []) {
                         continue;
                     }
 
                     $toCreate[] = new PatternReview($review);
                 }
 
-                if (empty($toCreate)) {
+                if ($toCreate === []) {
                     $this->info("No new reviews found for pattern: " . $pattern->id);
 
                     $pattern->meta->update(['reviews_updated_at' => now()]);
@@ -106,10 +108,12 @@ class ParseReviewsCommand extends Command
                     ]);
 
                     DB::commit();
-                } catch (Throwable $th) {
+                } catch (Throwable $throwable) {
                     DB::rollBack();
 
-                    $this->error('Error inserting reviews: ' . $th->getMessage());
+                    $this->error(
+                        'Error inserting reviews: ' . $throwable->getMessage()
+                    );
                 }
             },
         );
@@ -136,8 +140,10 @@ class ParseReviewsCommand extends Command
 
         try {
             $content = $this->parserService->parseUrl($pattern->source_url);
-        } catch (Exception $e) {
-            $this->error("Error getting page content for pattern {$pattern->id}: {$e->getMessage()}");
+        } catch (Exception $exception) {
+            $this->error(
+                "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
+            );
 
             return [];
         }
@@ -173,9 +179,9 @@ class ParseReviewsCommand extends Command
 
             $toReturn[] = [
                 'rating' => floatval($stars),
-                'reviewer_name' => trim($name),
-                'reviewed_at' => trim($date),
-                'comment' => trim($text),
+                'reviewer_name' => trim((string) $name),
+                'reviewed_at' => trim((string) $date),
+                'comment' => trim((string) $text),
             ];
         }
 
@@ -188,8 +194,10 @@ class ParseReviewsCommand extends Command
 
         try {
             $content = $this->parserService->parseUrl($pattern->source_url);
-        } catch (Exception $e) {
-            $this->error("Error getting page content for pattern {$pattern->id}: {$e->getMessage()}");
+        } catch (Exception $exception) {
+            $this->error(
+                "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
+            );
 
             return [];
         }
@@ -220,9 +228,9 @@ class ParseReviewsCommand extends Command
 
             $toReturn[] = [
                 'rating' => floatval($stars),
-                'reviewer_name' => trim($name),
-                'reviewed_at' => trim($date),
-                'comment' => trim($text),
+                'reviewer_name' => trim((string) $name),
+                'reviewed_at' => trim((string) $date),
+                'comment' => trim((string) $text),
             ];
         }
 
@@ -232,8 +240,6 @@ class ParseReviewsCommand extends Command
             $unique[$item['comment']] = $item;
         }
 
-        $toReturn = array_values($unique);
-
-        return $toReturn;
+        return array_values($unique);
     }
 }

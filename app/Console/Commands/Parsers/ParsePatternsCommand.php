@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Parsers;
 
 use App\Models\Pattern;
@@ -15,6 +17,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 class ParsePatternsCommand extends Command
 {
     protected $signature = 'parsers:parse-patterns {--id=}';
+
     protected $description = 'Parse patterns and files';
 
     public function __construct(
@@ -23,7 +26,7 @@ class ParsePatternsCommand extends Command
         parent::__construct();
     }
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Parsing patterns...');
 
@@ -49,8 +52,8 @@ class ParsePatternsCommand extends Command
 
         $q->chunkById(
             count: 1,
-            callback: function (Collection $patterns) {
-                $patterns->each(function (Pattern $pattern) {
+            callback: function (Collection $patterns): void {
+                $patterns->each(function (Pattern $pattern): void {
                     $this->info("Processing pattern: {$pattern->id}");
 
                     $this->processPattern($pattern);
