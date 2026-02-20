@@ -102,8 +102,8 @@ class FixPatternFilesExtensionCommand extends Command
     protected function fixPdf(): void
     {
         $q = PatternFile::query()
-            ->where(column: 'extension', operator: 'pdf')
-            ->where(column: 'mime_type', operator: '!=', value: 'application/pdf');
+            ->where('extension', 'pdf')
+            ->where('mime_type', '!=', 'application/pdf');
 
         $wrongPdfCount = $q->count();
 
@@ -122,8 +122,8 @@ class FixPatternFilesExtensionCommand extends Command
     protected function fixZip(): void
     {
         $q = PatternFile::query()
-            ->where(column: 'extension', operator: 'zip')
-            ->where(column: 'mime_type', operator: '!=', value: 'application/zip');
+            ->where('extension', 'zip')
+            ->where('mime_type', '!=', 'application/zip');
 
         $wrongZipCount = $q->count();
 
@@ -142,8 +142,8 @@ class FixPatternFilesExtensionCommand extends Command
     protected function fix7z(): void
     {
         $q = PatternFile::query()
-            ->where(column: 'extension', operator: '7z')
-            ->where(column: 'mime_type', operator: '!=', value: 'application/x-7z-compressed');
+            ->where('extension', '7z')
+            ->where('mime_type', '!=', 'application/x-7z-compressed');
 
         $wrong7zCount = $q->count();
 
@@ -162,8 +162,8 @@ class FixPatternFilesExtensionCommand extends Command
     protected function fixRar(): void
     {
         $q = PatternFile::query()
-            ->where(column: 'extension', operator: 'rar')
-            ->where(column: 'mime_type', operator: '!=', value: 'application/x-rar');
+            ->where('extension', 'rar')
+            ->where('mime_type', '!=', 'application/x-rar');
 
         $wrongRarCount = $q->count();
 
@@ -183,13 +183,13 @@ class FixPatternFilesExtensionCommand extends Command
     {
         $q = PatternFile::query()
             ->whereIn('extension', ['jpeg', 'jpg'])
-            ->where(column: 'mime_type', operator: '!=', value: 'image/jpeg');
+            ->where('mime_type', '!=', 'image/jpeg');
 
         $wrongJpegCount = $q->count();
 
         $this->info(string: "Number of wrong JPEG files: {$wrongJpegCount}");
 
-        $q->orderBy(column: 'id')->chunkById(
+        $q->orderBy('id')->chunkById(
             count: 100,
             callback: function (Collection $items): void {
                 foreach ($items as $item) {
@@ -202,8 +202,8 @@ class FixPatternFilesExtensionCommand extends Command
     protected function fixPng(): void
     {
         $q = PatternFile::query()
-            ->where(column: 'extension', operator: 'png')
-            ->where(column: 'mime_type', operator: '!=', value: 'image/png');
+            ->where('extension', 'png')
+            ->where('mime_type', '!=', 'image/png');
 
         $wrongPngCount = $q->count();
 

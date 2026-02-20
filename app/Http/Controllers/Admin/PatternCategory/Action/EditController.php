@@ -45,7 +45,7 @@ class EditController extends Controller
         }
 
         $updated = PatternCategory::query()
-            ->where(column: 'id', operator: $id)
+            ->where('id', $id)
             ->update(values: $data);
 
         return back()->with(

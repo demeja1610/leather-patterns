@@ -45,7 +45,7 @@ class GetAllController extends Controller
         $from = $request->input(key: 'from');
 
         if ($from !== null) {
-            $query->where(column: 'id', operator: '>', value: (int) $from);
+            $query->where('id', '>', (int) $from);
         }
     }
 }

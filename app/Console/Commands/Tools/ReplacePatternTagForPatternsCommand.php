@@ -30,8 +30,8 @@ class ReplacePatternTagForPatternsCommand extends Command
         $from = mb_strtolower(string: $from);
         $to = mb_strtolower(string: $to);
 
-        $fromTag = PatternTag::query()->where(column: 'name', operator: $from)->first();
-        $toTag = PatternTag::query()->where(column: 'name', operator: $to)->first();
+        $fromTag = PatternTag::query()->where('name', $from)->first();
+        $toTag = PatternTag::query()->where('name', $to)->first();
 
         if (!$fromTag || !$toTag) {
             $this->error(string: 'Both from and to tags must exist.');
@@ -43,13 +43,13 @@ class ReplacePatternTagForPatternsCommand extends Command
         $this->info(string: "To tag ID: {$toTag->id}");
 
         $q = Pattern::query()
-            ->whereHas(relation: 'tags', callback: fn($query) => $query->where(column: 'name', operator: $from))
+            ->whereHas(relation: 'tags', callback: fn($query) => $query->where('name', $from))
             ->with(relations: 'tags');
 
         if ($id) {
             $this->info(string: "Specific pattern ID: {$id}");
 
-            $q->where(column: 'id', operator: $id);
+            $q->where('id', $id);
         }
 
         $count = $q->count();
@@ -72,7 +72,7 @@ class ReplacePatternTagForPatternsCommand extends Command
                  */
                 $patternTags = $pattern->tags;
 
-                $alreadyHasTag = $patternTags->contains(key: 'name', operator: '=', value: $toTag->name);
+                $alreadyHasTag = $patternTags->contains('name', '=', value: $toTag->name);
 
                 if ($alreadyHasTag) {
                     $this->info(string: "Pattern ID {$pattern->id} already has tag: {$toTag->name}, no need to attach it again");

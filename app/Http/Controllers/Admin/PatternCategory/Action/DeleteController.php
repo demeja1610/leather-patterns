@@ -58,7 +58,7 @@ class DeleteController extends Controller
     {
         $q =  PatternCategory::query();
 
-        $q->where(column: "id", operator: $id);
+        $q->where("id", $id);
 
         $q->withCount(relations: [
             'patterns',

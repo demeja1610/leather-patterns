@@ -63,7 +63,6 @@ return RectorConfig::configure()
         StringToClassConstantRector::class => [
             __DIR__ . '/routes/auth.php',
         ],
-        SortCallLikeNamedArgsRector::class,
     ])
     // ->withSkipPath(__DIR__ . '/app/Console/Commands/*')
     ->withSkipPath(__DIR__ . '/bootstrap/cache/*')

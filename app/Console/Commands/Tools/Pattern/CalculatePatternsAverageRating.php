@@ -35,7 +35,7 @@ class CalculatePatternsAverageRating extends Command
             ->groupBy('patterns.id');
 
         if ($id) {
-            $q->where(column: 'patterns.id', operator: $id);
+            $q->where('patterns.id', $id);
         }
 
         $i = 1;

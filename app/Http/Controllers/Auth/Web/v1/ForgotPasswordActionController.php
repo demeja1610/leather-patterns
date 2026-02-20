@@ -42,7 +42,7 @@ class ForgotPasswordActionController extends Controller
     protected function getUser(string $email): ?User
     {
         return User::query()
-            ->where(column: 'email', operator: $email)
+            ->where('email', $email)
             ->first();
     }
 }

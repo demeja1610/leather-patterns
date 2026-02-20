@@ -38,12 +38,12 @@ class ParsePatternsCommand extends Command
             ->whereHas(
                 relation: 'meta',
                 callback: fn(Builder $query) => $query
-                    ->where(column: 'pattern_downloaded', operator: false)
-                    ->where(column: 'is_download_url_wrong', operator: false),
+                    ->where('pattern_downloaded', false)
+                    ->where('is_download_url_wrong', false),
             );
 
         if ($id) {
-            $q->where(column: 'id', operator: $id);
+            $q->where('id', $id);
         }
 
         $count = $q->count();

@@ -30,8 +30,8 @@ class ReplacePatternAuthorForPatternsCommand extends Command
         $from = mb_strtolower(string: $from);
         $to = mb_strtolower(string: $to);
 
-        $fromAuthor = PatternAuthor::query()->where(column: 'name', operator: $from)->first();
-        $toAuthor = PatternAuthor::query()->where(column: 'name', operator: $to)->first();
+        $fromAuthor = PatternAuthor::query()->where('name', $from)->first();
+        $toAuthor = PatternAuthor::query()->where('name', $to)->first();
 
         if (!$fromAuthor || !$toAuthor) {
             $this->error(string: 'Both from and to authors must exist.');
@@ -43,13 +43,13 @@ class ReplacePatternAuthorForPatternsCommand extends Command
         $this->info(string: "To author ID: {$toAuthor->id}");
 
         $q = Pattern::query()
-            ->whereHas(relation: 'author', callback: fn($query) => $query->where(column: 'name', operator: $from))
+            ->whereHas(relation: 'author', callback: fn($query) => $query->where('name', $from))
             ->with(relations: 'author');
 
         if ($id) {
             $this->info(string: "Specific pattern ID: {$id}");
 
-            $q->where(column: 'id', operator: $id);
+            $q->where('id', $id);
         }
 
         $count = $q->count();

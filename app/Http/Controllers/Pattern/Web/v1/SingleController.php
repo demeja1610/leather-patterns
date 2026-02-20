@@ -30,7 +30,7 @@ class SingleController extends Controller
     {
 
         $q = Pattern::query()
-            ->where(column: 'id', operator: $id)
+            ->where('id', $id)
             ->with(
                 relations: [
                     'categories' => function (BelongsToMany $sq): BelongsToMany {

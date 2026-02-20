@@ -31,11 +31,11 @@ class ParsePatternVideosCommand extends Command
         $id = $this->option(key: 'id');
 
         $q = Pattern::query()
-            ->whereHas(relation: 'meta', callback: fn($query) => $query->where(column: 'is_video_checked', operator: false))
+            ->whereHas(relation: 'meta', callback: fn($query) => $query->where('is_video_checked', false))
             ->with(relations: 'videos');
 
         if ($id) {
-            $q->where(column: 'id', operator: $id);
+            $q->where('id', $id);
         }
 
         $count = $q->count();

@@ -223,7 +223,7 @@ class ListController extends Controller
             ],
         );
 
-        $q->whereHas(relation: 'meta', callback: fn($query) => $query->select('pattern_downloaded')->where(column: 'pattern_downloaded', operator: true));
+        $q->whereHas(relation: 'meta', callback: fn($query) => $query->select('pattern_downloaded')->where('pattern_downloaded', true));
 
         $cursor = $request->input(key: 'cursor');
 
@@ -236,13 +236,13 @@ class ListController extends Controller
     protected function getBasePatternCategoryQuery(): Builder
     {
         return PatternCategory::query()
-            ->where(column: 'is_published', operator: true);
+            ->where('is_published', true);
     }
 
     protected function getBasePatternTagQuery(): Builder
     {
         return PatternTag::query()
-            ->where(column: 'is_published', operator: true);
+            ->where('is_published', true);
     }
 
     protected function getBasePatternAuthorQuery(): Builder
@@ -286,7 +286,7 @@ class ListController extends Controller
     protected function getSelectedPatternCategories(Request &$request): Collection
     {
         $ids = $request->input(key: 'category', default: []);
-        $idsCount = count(value: $ids);
+        $idsCount = count($ids);
 
         if ($idsCount === 0) {
             return new Collection();
@@ -296,7 +296,7 @@ class ListController extends Controller
 
         if ($ids !== []) {
             if ($idsCount === 1) {
-                $q->where(column: 'id', operator: reset(array: $ids));
+                $q->where('id', reset(array: $ids));
             } else {
                 $q->whereIn('id', $ids);
             }
@@ -308,7 +308,7 @@ class ListController extends Controller
     protected function getSelectedPatternTags(Request &$request): Collection
     {
         $ids = $request->input(key: 'tag', default: []);
-        $idsCount = count(value: $ids);
+        $idsCount = count($ids);
 
         if ($idsCount === 0) {
             return new Collection();
@@ -318,7 +318,7 @@ class ListController extends Controller
 
         if ($ids !== []) {
             if ($idsCount === 1) {
-                $q->where(column: 'id', operator: reset(array: $ids));
+                $q->where('id', reset(array: $ids));
             } else {
                 $q->whereIn('id', $ids);
             }
@@ -330,7 +330,7 @@ class ListController extends Controller
     protected function getSelectedPatternAuthors(Request &$request): Collection
     {
         $ids = $request->input(key: 'author', default: []);
-        $idsCount = count(value: $ids);
+        $idsCount = count($ids);
 
         if ($idsCount === 0) {
             return new Collection();
@@ -340,7 +340,7 @@ class ListController extends Controller
 
         if ($ids !== []) {
             if ($idsCount === 1) {
-                $q->where(column: 'id', operator: reset(array: $ids));
+                $q->where('id', reset(array: $ids));
             } else {
                 $q->whereIn('id', $ids);
             }
@@ -355,7 +355,7 @@ class ListController extends Controller
             ->orderBy('id');
 
         if ($limit !== null) {
-            $q->limit(value: $limit);
+            $q->limit($limit);
         }
 
         return $q->select(columns: $this->getRequiredPatternCategoryColumns())->get();
@@ -367,7 +367,7 @@ class ListController extends Controller
             ->orderBy('id');
 
         if ($limit !== null) {
-            $q->limit(value: $limit);
+            $q->limit($limit);
         }
 
         return $q->select(columns: $this->getRequiredPatternTagColumns())->get();
@@ -379,7 +379,7 @@ class ListController extends Controller
             ->orderBy('id');
 
         if ($limit !== null) {
-            $q->limit(value: $limit);
+            $q->limit($limit);
         }
 
         return $q->select(columns: $this->getRequiredPatternAuthorColumns())->get();
@@ -390,7 +390,7 @@ class ListController extends Controller
         $search = $request->input(key: 's');
 
         if ($search !== null && $search !== '') {
-            $query->where(column: 'title', operator: 'like', value: "%{$search}%");
+            $query->where('title', 'like', "%{$search}%");
         }
 
         $activeCategoriesIds = $request->input(key: 'category', default: []);
@@ -432,7 +432,7 @@ class ListController extends Controller
         $orderStr = $request->input(key: 'order');
 
         if ($orderStr !== null) {
-            $order = PatternOrderEnum::tryFrom(value: $orderStr);
+            $order = PatternOrderEnum::tryFrom($orderStr);
         }
 
         if (!empty($order)) {

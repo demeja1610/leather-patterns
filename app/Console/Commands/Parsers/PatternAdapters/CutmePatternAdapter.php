@@ -185,7 +185,7 @@ class CutmePatternAdapter extends AbstractPatternAdapter
                 );
             }
 
-            Pattern::query()->where(column: 'id', operator: $pattern->id)->update(values: [
+            Pattern::query()->where('id', $pattern->id)->update(values: [
                 'title' => $title,
             ]);
 

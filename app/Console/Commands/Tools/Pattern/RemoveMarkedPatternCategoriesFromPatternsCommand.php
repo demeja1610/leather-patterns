@@ -19,7 +19,7 @@ class RemoveMarkedPatternCategoriesFromPatternsCommand extends Command
     {
 
         $q = Pattern::query()
-            ->whereHas(relation: 'categories', callback: fn($query) => $query->where(column: 'remove_on_appear', operator: true))
+            ->whereHas(relation: 'categories', callback: fn($query) => $query->where('remove_on_appear', true))
             ->with(relations: 'categories');
 
         $count = $q->count();

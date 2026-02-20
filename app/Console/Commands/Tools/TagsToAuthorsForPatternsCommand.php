@@ -34,7 +34,7 @@ class TagsToAuthorsForPatternsCommand extends Command
             $this->info(string: "Processing tags for author: {$authorName}");
 
             $author = PatternAuthor::query()
-                ->where(column: 'name', operator: $authorName)
+                ->where('name', $authorName)
                 ->first();
 
             if (!$author) {
@@ -55,7 +55,7 @@ class TagsToAuthorsForPatternsCommand extends Command
 
                 $patterns = Pattern::query()
                     ->whereHas(relation: 'tags', callback: function ($query) use ($tag): void {
-                        $query->where(column: 'pattern_tags.id', operator: $tag->id);
+                        $query->where('pattern_tags.id', $tag->id);
                     })->get();
 
                 /** @var Pattern $pattern */

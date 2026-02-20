@@ -282,7 +282,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
     {
         $this->info(message: "Changing pattern meta for pattern: {$pattern->id}");
 
-        PatternMeta::query()->where(column: 'pattern_id', operator: $pattern->id)->update(values: [
+        PatternMeta::query()->where('pattern_id', $pattern->id)->update(values: [
             'pattern_downloaded' => true,
             'images_downloaded' => true,
         ]);
@@ -292,7 +292,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
     {
         $this->info(message: "Setting video checked for pattern: {$pattern->id}");
 
-        PatternMeta::query()->where(column: 'pattern_id', operator: $pattern->id)->update(values: [
+        PatternMeta::query()->where('pattern_id', $pattern->id)->update(values: [
             'is_video_checked' => true,
         ]);
     }
@@ -301,7 +301,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
     {
         $this->info(message: "Setting review checked for pattern: {$pattern->id}");
 
-        PatternMeta::query()->where(column: 'pattern_id', operator: $pattern->id)->update(values: [
+        PatternMeta::query()->where('pattern_id', $pattern->id)->update(values: [
             'reviews_updated_at' => now(),
         ]);
     }
@@ -310,7 +310,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
     {
         $this->warn(message: "Setting download URL wrong for pattern: {$pattern->id}");
 
-        PatternMeta::query()->where(column: 'pattern_id', operator: $pattern->id)->update(values: [
+        PatternMeta::query()->where('pattern_id', $pattern->id)->update(values: [
             'is_download_url_wrong' => true,
         ]);
     }

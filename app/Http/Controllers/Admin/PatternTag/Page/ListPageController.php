@@ -59,7 +59,7 @@ class ListPageController extends Controller
         if ($id !== null) {
             $this->activeFilters['id'] = $id;
 
-            $query->where(column: 'id', operator: $id);
+            $query->where('id', $id);
         }
 
         $name = $request->input(key: 'name');
@@ -67,7 +67,7 @@ class ListPageController extends Controller
         if ($name !== null) {
             $this->activeFilters['name'] = $name;
 
-            $query->where(column: 'name', operator: 'LIKE', value: "%{$name}%");
+            $query->where('name', 'LIKE', "%{$name}%");
         }
 
         $olderThanStr = $request->input(key: 'older_than');
@@ -77,7 +77,7 @@ class ListPageController extends Controller
 
             $this->activeFilters['older_than'] = $olderThan;
 
-            $query->where(column: 'created_at', operator: '<', value: $olderThan);
+            $query->where('created_at', '<', $olderThan);
         }
 
         $newerThanStr = $request->input(key: 'newer_than');
@@ -87,7 +87,7 @@ class ListPageController extends Controller
 
             $this->activeFilters['newer_than'] = $newerThan;
 
-            $query->where(column: 'created_at', operator: '>', value: $newerThan);
+            $query->where('created_at', '>', $newerThan);
         }
 
         $hasPatterns = $request->input(key: 'has_patterns');
@@ -108,9 +108,9 @@ class ListPageController extends Controller
             $this->activeFilters['is_published'] = (bool) $isPublished;
 
             if ((bool) $isPublished) {
-                $query->where(column: 'is_published', operator: true);
+                $query->where('is_published', true);
             } else {
-                $query->where(column: 'is_published', operator: false);
+                $query->where('is_published', false);
             }
         }
 
@@ -156,9 +156,9 @@ class ListPageController extends Controller
             $this->activeFilters['remove_on_appear'] = (bool) $removeOnAppear;
 
             if ((bool) $removeOnAppear) {
-                $query->where(column: 'remove_on_appear', operator: true);
+                $query->where('remove_on_appear', true);
             } else {
-                $query->where(column: 'remove_on_appear', operator: false);
+                $query->where('remove_on_appear', false);
             }
         }
     }

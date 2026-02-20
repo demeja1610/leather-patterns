@@ -57,7 +57,7 @@ class EditController extends Controller
         }
 
         $updated = PatternTag::query()
-            ->where(column: 'id', operator: $id)
+            ->where('id', $id)
             ->update(values: $data);
 
         return back()->with(

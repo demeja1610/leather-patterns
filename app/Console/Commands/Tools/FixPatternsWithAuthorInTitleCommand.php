@@ -39,7 +39,7 @@ class FixPatternsWithAuthorInTitleCommand extends Command
             ->whereNull(columns: 'author_id');
 
         if ($id) {
-            $q->where(column: 'id', operator: $id);
+            $q->where('id', $id);
         }
 
         $q->chunkById(count: 100, callback: function ($patterns) use (&$replaceFilter, &$regexp): void {

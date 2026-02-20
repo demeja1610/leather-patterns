@@ -25,7 +25,7 @@ class FixAbsentDuplicatedPatternImagesCommand extends Command
             ->select('hash', DB::raw('COUNT(*) as count'))
             ->groupBy('hash')
             ->havingRaw(sql: 'COUNT(*) > 1')
-            ->orderBy(column: 'hash')
+            ->orderBy('hash')
             ->chunk(
                 count: 100,
                 callback: function (Collection $chunk) use (&$restoredCount): void {
@@ -37,7 +37,7 @@ class FixAbsentDuplicatedPatternImagesCommand extends Command
                         $this->info(message: "Processing duplicated pattern image with hash: {$item->hash}");
 
                         $images = DB::table('pattern_images')
-                            ->where(column: 'hash', operator: $item->hash)
+                            ->where('hash', $item->hash)
                             ->get();
 
                         $existingImagePath = null;

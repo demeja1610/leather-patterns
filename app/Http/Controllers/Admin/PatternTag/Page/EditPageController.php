@@ -73,11 +73,11 @@ class EditPageController extends Controller
         return PatternTag::query()
             ->whereNull('replace_id')
             ->where('remove_on_appear', false)
-            ->where(column: 'id', operator: '!=', value: $exceptId)
+            ->where('id', '!=', $exceptId)
             ->select(columns: [
                 'id',
                 'name',
-            ])->orderBy(column: 'name')->get();
+            ])->orderBy('name')->get();
     }
 
     protected function getAuthorReplacements(): Collection
@@ -86,7 +86,7 @@ class EditPageController extends Controller
             ->select([
                 'id',
                 'name',
-            ])->orderBy(column: 'name')->get();
+            ])->orderBy('name')->get();
     }
 
     protected function getCategoryReplacements(): Collection
@@ -97,6 +97,6 @@ class EditPageController extends Controller
             ->select([
                 'id',
                 'name',
-            ])->orderBy(column: 'name')->get();
+            ])->orderBy('name')->get();
     }
 }

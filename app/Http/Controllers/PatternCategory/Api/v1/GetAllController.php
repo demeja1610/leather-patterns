@@ -43,7 +43,7 @@ class GetAllController extends Controller
     protected function getBasePatternCategoryQuery(): Builder
     {
         return PatternCategory::query()
-            ->where(column: 'is_published', operator: true);
+            ->where('is_published', true);
     }
 
     protected function applyFilters(Builder &$query, GetAllRequest &$request): void
@@ -51,7 +51,7 @@ class GetAllController extends Controller
         $from = $request->input(key: 'from');
 
         if ($from !== null) {
-            $query->where(column: 'id', operator: '>', value: (int) $from);
+            $query->where('id', '>', value: (int) $from);
         }
     }
 }
