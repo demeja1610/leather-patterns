@@ -23,7 +23,8 @@
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^11.5.3",
         "predis/predis": "^3.2",
-        "rector/rector": "^2.1"
+        "rector/rector": "^2.1",
+        "savinmikhail/add_named_arguments_rector": "^0.1.22"
     },
     "autoload": {
         "psr-4": {
