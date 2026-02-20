@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Observers;
 
 use App\Models\Pattern;
@@ -32,6 +34,6 @@ class PatternObserver
             $data['is_download_url_wrong'] = true;
         }
 
-        PatternMeta::create($data);
+        PatternMeta::query()->create($data);
     }
 }
