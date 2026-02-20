@@ -17,7 +17,7 @@ Route::prefix('categories')
 
         Route::group(['prefix' => '{id}'], function (): void {
             Route::prefix('edit')
-                ->group(function () {
+                ->group(function (): void {
                     Route::get('/', \App\Http\Controllers\Admin\PatternCategory\Page\EditPageController::class)
                         ->name('page.pattern-category.edit');
 

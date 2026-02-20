@@ -17,7 +17,7 @@ Route::prefix('tags')
 
         Route::group(['prefix' => '{id}'], function (): void {
             Route::prefix('edit')
-                ->group(function () {
+                ->group(function (): void {
                     Route::get('/', \App\Http\Controllers\Admin\PatternTag\Page\EditPageController::class)
                         ->name('page.pattern-tag.edit');
 

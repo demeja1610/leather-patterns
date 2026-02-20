@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('throttle:60,1')->group(function () {
+Route::middleware('throttle:60,1')->group(function (): void {
     require_once __DIR__ . '/auth.php';
 
     Route::get('/', \App\Http\Controllers\Pattern\Web\v1\ListController::class)
