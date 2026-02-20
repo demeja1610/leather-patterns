@@ -24,6 +24,7 @@ class CreatePageController extends Controller
     {
         return PatternCategory::query()
             ->whereNull('replace_id')
+            ->where('remove_on_appear', false)
             ->select(columns: [
                 'id',
                 'name',

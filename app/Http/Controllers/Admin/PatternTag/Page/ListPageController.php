@@ -138,6 +138,18 @@ class ListPageController extends Controller
             }
         }
 
+        $hasCategoryReplacement = $request->input(key: 'has_category_replacement');
+
+        if ($hasCategoryReplacement !== null) {
+            $this->activeFilters['has_category_replacement'] = (bool) $hasCategoryReplacement;
+
+            if ((bool) $hasCategoryReplacement) {
+                $query->whereNotNull('replace_category_id');
+            } else {
+                $query->whereNull('replace_category_id');
+            }
+        }
+
         $removeOnAppear = $request->input(key: 'remove_on_appear');
 
         if ($removeOnAppear !== null) {

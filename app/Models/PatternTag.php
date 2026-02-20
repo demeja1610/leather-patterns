@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $name
  * @property null|int $replace_id
  * @property null|int $replace_author_id
+ * @property null|int $replace_category_id
  * @property bool $remove_on_appear
  * @property bool $is_published
  *
@@ -27,6 +28,7 @@ class PatternTag extends Model
         'name',
         'replace_id',
         'replace_author_id',
+        'replace_category_id',
         'remove_on_appear',
         'is_published',
     ];
@@ -63,6 +65,15 @@ class PatternTag extends Model
         );
     }
 
+    public function categoryReplacement(): HasOne
+    {
+        return $this->hasOne(
+            related: PatternCategory::class,
+            foreignKey: 'id',
+            localKey: 'replace_category_id',
+        );
+    }
+
     public function isDeletable(): bool
     {
         if ($this->patterns_count === null) {
@@ -76,6 +87,7 @@ class PatternTag extends Model
         return $this->remove_on_appear === false
             && $this->replace_id === null
             && $this->replace_author_id === null
+            && $this->replace_category_id === null
             && $this->patterns_count === 0
             && $this->replacement_for_count === 0;
     }

@@ -208,6 +208,40 @@
     </x-select.wrapper>
 
     <x-select.wrapper>
+        <x-select.label for="has_category_replacement">
+            {{ __('pattern_tag.has_category_replacement') }}
+        </x-select.label>
+
+        <x-select.select
+            name="has_category_replacement"
+            id="has_category_replacement"
+            :title="__('pattern_tag.has_category_replacement')"
+        >
+            <x-select.option
+                value=""
+                :selected="!isset($activeFilters['has_category_replacement'])"
+            >
+                {{ __('filter.not_selected') }}
+            </x-select.option>
+
+            <x-select.option
+                value="1"
+                :selected="isset($activeFilters['has_category_replacement']) && $activeFilters['has_category_replacement'] === true"
+            >
+                {{ __('phrases.yes') }}
+            </x-select.option>
+
+            <x-select.option
+                value="0"
+                :selected="isset($activeFilters['has_category_replacement']) && $activeFilters['has_category_replacement'] === false"
+            >
+                {{ __('phrases.no') }}
+            </x-select.option>
+
+        </x-select.select>
+    </x-select.wrapper>
+
+    <x-select.wrapper>
         <x-select.label for="remove_on_appear">
             {{ __('pattern_tag.remove_on_appear') }}
         </x-select.label>
@@ -288,6 +322,10 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern_tag.category_replacement') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern_tag.remove_on_appear') }}
                         </x-table.th>
 
@@ -343,6 +381,10 @@
 
                             <x-table.td>
                                 {{ $tag->authorReplacement?->name }}
+                            </x-table.td>
+
+                            <x-table.td>
+                                {{ $tag->categoryReplacement?->name }}
                             </x-table.td>
 
                             <x-table.td-bool :value="$tag->remove_on_appear">

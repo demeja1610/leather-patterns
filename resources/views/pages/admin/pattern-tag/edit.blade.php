@@ -8,8 +8,10 @@
         x-data="{
             tagReplacements: {{ json_encode($tagReplacements, JSON_UNESCAPED_UNICODE) }},
             authorReplacements: {{ json_encode($authorReplacements, JSON_UNESCAPED_UNICODE) }},
+            categoryReplacements: {{ json_encode($categoryReplacements, JSON_UNESCAPED_UNICODE) }},
             selectedReplacementId: {{ old('replace_id', $tag->replacement?->id) ?? 'null' }},
             selectedAuthorReplacementId: {{ old('replace_author_id', $tag->authorReplacement?->id) ?? 'null' }},
+            selectedCategoryReplacementId: {{ old('replace_category_id', $tag->categoryReplacement?->id) ?? 'null' }},
         }"
     >
         @method('PATCH')
@@ -100,6 +102,35 @@
                         x-bind:value="authorReplacement.id"
                         x-text="authorReplacement.name"
                         x-bind:selected="authorReplacement.id === selectedAuthorReplacementId"
+                    >
+                    </x-select.option>
+                </template>
+            </x-select.select>
+        </x-select.wrapper>
+
+        <x-select.wrapper>
+            <x-select.label for="replace_category_id">
+                {{ __('pattern_tag.category_replacement') }}
+            </x-select.label>
+
+            <x-select.select
+                name="replace_category_id"
+                id="replace_category_id"
+                :title="__('pattern_tag.category_replacement')"
+                x-model.number="selectedCategoryReplacementId"
+            >
+                <x-select.option value="">
+                    {{ __('filter.not_selected') }}
+                </x-select.option>
+
+                <template
+                    x-for="categoryReplacement in categoryReplacements"
+                    :key="categoryReplacement.id"
+                >
+                    <x-select.option
+                        x-bind:value="categoryReplacement.id"
+                        x-text="categoryReplacement.name"
+                        x-bind:selected="categoryReplacement.id === selectedCategoryReplacementId"
                     >
                     </x-select.option>
                 </template>

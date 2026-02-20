@@ -47,6 +47,7 @@ class EditPageController extends Controller
     {
         return PatternCategory::query()
             ->whereNull('replace_id')
+            ->where('remove_on_appear', false)
             ->where(column: 'id', operator: '!=', value: $exceptId)
             ->select(columns: [
                 'id',

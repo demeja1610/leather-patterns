@@ -33,6 +33,11 @@ class CreateRequest extends FormRequest
                 'numeric',
                 'exists:pattern_authors,id',
             ],
+            'replace_category_id' => [
+                'nullable',
+                'numeric',
+                'exists:pattern_categories,id',
+            ],
             'remove_on_appear' => [
                 'nullable',
                 'in:on',

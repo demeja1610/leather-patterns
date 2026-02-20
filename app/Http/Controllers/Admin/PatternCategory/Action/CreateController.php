@@ -24,7 +24,15 @@ class CreateController extends Controller
             ],
         );
 
-        if ($data['remove_on_appear'] === true && $data['replace_id'] !== null) {
+        $replaceToCount = 0;
+
+        foreach ($data as $key => $value) {
+            if (str_starts_with(needle: 'replace_', haystack: $key) && $value !== null) {
+                $replaceToCount++;
+            }
+        }
+
+        if ($data['remove_on_appear'] === true &&  $replaceToCount !== 0) {
             return back()->withInput()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(

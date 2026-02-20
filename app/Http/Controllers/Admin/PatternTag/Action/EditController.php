@@ -24,7 +24,15 @@ class EditController extends Controller
             ],
         );
 
-        if ($data['remove_on_appear'] === true && ($data['replace_id'] !== null || $data['replace_author_id'] !== null)) {
+        $replaceToCount = 0;
+
+        foreach ($data as $key => $value) {
+            if (str_starts_with(needle: 'replace_', haystack: $key) && $value !== null) {
+                $replaceToCount++;
+            }
+        }
+
+        if ($data['remove_on_appear'] === true && $replaceToCount !== 0) {
             return back()->withInput()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
@@ -36,12 +44,12 @@ class EditController extends Controller
             );
         }
 
-        if ($data['replace_id'] !== null && $data['replace_author_id'] !== null) {
+        if ($replaceToCount > 1) {
             return back()->withInput()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
-                        text: __(key: 'pattern_tag.admin.cannot_replace_to_tag_and_author_same_time'),
+                        text: __(key: 'pattern_tag.admin.cannot_replace_to_multiple'),
                         type: NotificationTypeEnum::ERROR,
                     ),
                 ),

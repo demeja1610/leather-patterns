@@ -68,6 +68,15 @@ class PatternCategory extends Model
             && $this->replacement_for_count === 0;
     }
 
+    public function replacementForTags(): HasMany
+    {
+        return $this->hasMany(
+            related: PatternTag::class,
+            foreignKey: 'replace_category_id',
+            localKey: 'id',
+        );
+    }
+
     protected function casts(): array
     {
         return [

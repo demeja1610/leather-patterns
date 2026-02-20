@@ -13,12 +13,14 @@ return [
     'created_at' => 'Дата создания',
     'replacement' => 'Заменить на',
     'author_replacement' => 'Заменить на автора',
+    'category_replacement' => 'Заменить на категорию',
     'remove_on_appear' => 'Удалять из выкроек при появлении',
     'remove_on_appear_short' => 'Удалять при появлении',
     'is_published' => 'Опубликован',
     'has_patterns' => 'Используется в выкройках',
     'has_replacement' => 'Есть замена',
     'has_author_replacement' => 'Есть замена на автора',
+    'has_category_replacement' => 'Есть замена на категорию',
 
     'admin' => [
         'created' => 'Тег выкройки: `:name` успешно создан',
@@ -32,7 +34,7 @@ return [
         'tag_is_replacement_for' => 'Тег с названием: `:name` не может быть удален, потому что является заменой для :count других тегов',
         'confirm_delete_text' => 'Пожалуйста, подтвердите удаление тега',
         'cannot_remove_and_replace_same_time' => 'Тег не может быть удален и заменен одновременно, пожалуйста, выберите один из вариантов',
-        'cannot_replace_to_tag_and_author_same_time' => 'Тег не может быть заменен на другой тег и автора одновременно, выберите один из вариантов',
+        'cannot_replace_to_multiple' => 'Тег не может быть заменен несколько сущностей одновременно, выберите один из вариантов',
         'tag_isnt_deletable' => 'Тег с названием: `:name` не может быть удален',
     ],
 ];
