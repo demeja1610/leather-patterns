@@ -7,7 +7,9 @@ use RectorLaravel\Set\LaravelSetList;
 use RectorLaravel\Set\LaravelLevelSetList;
 use RectorLaravel\Rector\StaticCall\CarbonToDateFacadeRector;
 use Rector\Transform\Rector\String_\StringToClassConstantRector;
+use SavinMikhail\AddNamedArgumentsRector\AddNamedArgumentsRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
+use Rector\CodeQuality\Rector\FuncCall\SortCallLikeNamedArgsRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 
 return RectorConfig::configure()
@@ -52,6 +54,9 @@ return RectorConfig::configure()
         // // enable it when this rule will be fixed ot when we can exclude migrations (or other files) from this rule
         // LaravelSetList::LARAVEL_STATIC_TO_INJECTION,
     ])
+    ->withRules([
+        AddNamedArgumentsRector::class,
+    ])
     ->withSkip([
         PostIncDecToPreIncDecRector::class, // skip this rule because it inforces to use ++$i instead of $i++
         EncapsedStringsToSprintfRector::class, // skip this rule because it inforces to use sprintf instead of concatenation
@@ -62,6 +67,7 @@ return RectorConfig::configure()
         StringToClassConstantRector::class => [
             __DIR__ . '/routes/auth.php',
         ],
+        SortCallLikeNamedArgsRector::class,
     ])
     // ->withSkipPath(__DIR__ . '/app/Console/Commands/*')
     ->withSkipPath(__DIR__ . '/bootstrap/cache/*')
