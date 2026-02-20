@@ -72,7 +72,7 @@ class ReplaceMarkedPatternTagsToPatternCategoryForPatternsCommand extends Comman
                         continue;
                     }
 
-                    $this->info(string: "Attaching categories: `{$replacesNamesStr}` from pattern ID: {$pattern->id}");
+                    $this->info(string: "Attaching categories: `{$replacesNamesStr}` to pattern ID: {$pattern->id}");
 
                     $pattern->categories()->attach(ids: $replacesIds);
 

@@ -68,7 +68,7 @@ class ReplaceMarkedPatternTagsForPatternsCommand extends Command
                         continue;
                     }
 
-                    $this->info(string: "Attaching tags: `{$replacesNamesStr}` from pattern ID: {$pattern->id}");
+                    $this->info(string: "Attaching tags: `{$replacesNamesStr}` to pattern ID: {$pattern->id}");
 
                     $pattern->tags()->attach(ids: $replacesIds);
 
