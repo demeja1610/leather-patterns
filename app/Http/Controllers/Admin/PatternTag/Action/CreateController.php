@@ -27,7 +27,7 @@ class CreateController extends Controller
         $replaceToCount = 0;
 
         foreach ($data as $key => $value) {
-            if (str_starts_with(needle: 'replace_', haystack: $key) && $value !== null) {
+            if (str_starts_with(haystack: (string) $key, needle: 'replace_') && $value !== null) {
                 $replaceToCount++;
             }
         }
