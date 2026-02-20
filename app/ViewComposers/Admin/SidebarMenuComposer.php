@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\ViewComposers\Admin;
 
 use App\Dto\MenuItem\MenuItemDto;
@@ -14,7 +16,7 @@ class SidebarMenuComposer
         protected readonly MenuServiceInterface $menuService,
     ) {}
 
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $request = request();
         $menu = $this->getMenu($request);
@@ -45,15 +47,20 @@ class SidebarMenuComposer
         return new MenuItemListDto(
             ...array_map(
                 array: $menu->getItems(),
-                callback: function (MenuItemDto $menuItem) use (&$currentRouteName, &$request) {
-                    if ($menuItem->getRoute() !== $currentRouteName && $menuItem->getSubMenu() === null) {
+                callback: function (MenuItemDto $menuItem) use (&$currentRouteName, &$request): MenuItemDto {
+                    if (
+                        $menuItem->getRoute() !== $currentRouteName && !$menuItem->getSubMenu() instanceof MenuItemListDto
+                    ) {
                         return $menuItem;
                     }
 
                     $subMenu = $menuItem->getSubMenu();
                     $hasActiveSubMenuItem = false;
 
-                    if ($subMenu !== null && $subMenu->isEmpty() !== true) {
+                    if (
+                        $subMenu instanceof MenuItemListDto &&
+                        !$subMenu->isEmpty()
+                    ) {
                         $subMenu = $this->setActiveMenuItemsIfExists(
                             menu: $subMenu,
                             request: $request,
@@ -77,7 +84,7 @@ class SidebarMenuComposer
                         array: array_slice(
                             array: explode(
                                 separator: '.',
-                                string: $currentRouteName,
+                                string: (string) $currentRouteName,
                             ),
                             offset: 0,
                             length: -1,
@@ -92,10 +99,10 @@ class SidebarMenuComposer
                         text: $menuItem->getText(),
                         route: $menuItem->getRoute(),
                         icon: $menuItem->getIcon(),
-                        isActive: $menuItem->getRoute() === $currentRouteName || $hasActiveSubMenuItem || $currentRouteContainsMenuItemRoutePart,
                         subMenu: $subMenu,
+                        isActive: $menuItem->getRoute() === $currentRouteName || $hasActiveSubMenuItem || $currentRouteContainsMenuItemRoutePart,
                     );
-                }
+                },
             )
         );
     }
