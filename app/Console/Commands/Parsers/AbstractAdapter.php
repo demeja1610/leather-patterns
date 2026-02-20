@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Parsers;
 
 use App\Models\Pattern;
@@ -9,6 +11,7 @@ use App\Models\PatternCategory;
 abstract class AbstractAdapter
 {
     protected array $tagsFilter = [];
+
     protected array $categoriesFilter = [];
 
     protected function getCategoriesFilterData(): array
@@ -27,7 +30,7 @@ abstract class AbstractAdapter
         $result = [];
 
         foreach ($categories as $category) {
-            $loweredCategory = mb_strtolower($category);
+            $loweredCategory = mb_strtolower((string) $category);
 
             if (!array_key_exists($loweredCategory, $data)) {
                 $result[] = $category;
@@ -51,7 +54,7 @@ abstract class AbstractAdapter
 
     protected function bindCategories(Pattern $pattern, array $categories): void
     {
-        if (empty($categories)) {
+        if ($categories === []) {
             return;
         }
 
@@ -64,7 +67,7 @@ abstract class AbstractAdapter
         $filteredCategories = $this->filterCategories($categories);
 
         foreach ($filteredCategories as $category) {
-            if (trim($category) !== '') {
+            if (trim((string) $category) !== '') {
                 $_categories[] = PatternCategory::query()->createOrFirst([
                     'name' => mb_ucfirst($category),
                 ]);
@@ -90,7 +93,7 @@ abstract class AbstractAdapter
         $result = [];
 
         foreach ($tags as $tag) {
-            $loweredTag = mb_strtolower($tag);
+            $loweredTag = mb_strtolower((string) $tag);
 
             if (!array_key_exists($loweredTag, $data)) {
                 $result[] = $tag;
@@ -123,7 +126,7 @@ abstract class AbstractAdapter
         $filteredTags = $this->filterTags($tags);
 
         foreach ($filteredTags as $tag) {
-            if (trim($tag) !== '') {
+            if (trim((string) $tag) !== '') {
                 $_tags[] = PatternTag::query()->createOrFirst([
                     'name' => mb_ucfirst($tag),
                 ]);
@@ -133,22 +136,22 @@ abstract class AbstractAdapter
         $pattern->tags()->sync($_tags);
     }
 
-    public function info($message)
+    public function info($message): void
     {
         echo "\033[36m{$message}\033[0m" . PHP_EOL;
     }
 
-    public function error($message)
+    public function error($message): void
     {
         echo "\033[31m{$message}\033[0m" . PHP_EOL;
     }
 
-    public function warn($message)
+    public function warn($message): void
     {
         echo "\033[33m{$message}\033[0m" . PHP_EOL;
     }
 
-    public function success($message)
+    public function success($message): void
     {
         echo "\033[32m{$message}\033[0m" . PHP_EOL;
     }
