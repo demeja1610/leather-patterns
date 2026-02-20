@@ -28,7 +28,6 @@ return RectorConfig::configure()
         // naming: true, // disabled because it renaming methods argument names & variable names
         instanceOf: true,
         earlyReturn: true,
-        strictBooleans: true,
         // carbon: true, // disabled because it enforces Carbon\Carbon usage in DateTime related methods
         rectorPreset: true,
         phpunitCodeQuality: true,
