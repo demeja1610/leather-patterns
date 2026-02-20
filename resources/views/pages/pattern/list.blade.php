@@ -20,17 +20,23 @@
                 />
             @endif
 
-            <x-filter.filter-tag
-                :tags="$tags"
-                :selectedTags="$filters['tag'] ?? []"
-                :showAllTags="isset($filters['show_all_pattern_tags'])"
-            />
+            @if ($tags->isEmpty() === false)
+                <x-filter.filter-tag
+                    :tags="$tags"
+                    :selectedTags="$filters['tag'] ?? []"
+                    :showAllTags="isset($filters['show_all_pattern_tags'])"
+                    :tagsLimit="$tagsLimit"
+                />
+            @endif
 
-            <x-filter.filter-author
-                :authors="$authors"
-                :selectedAuthors="$filters['author'] ?? []"
-                :showAllAuthors="isset($filters['show_all_pattern_authors'])"
-            />
+            @if ($authors->isEmpty() === false)
+                <x-filter.filter-author
+                    :authors="$authors"
+                    :selectedAuthors="$filters['author'] ?? []"
+                    :showAllAuthors="isset($filters['show_all_pattern_authors'])"
+                    :authorsLimit="$authorsLimit"
+                />
+            @endif
 
             <x-filter.other-filters>
                 <x-checkbox.custom :label="__('filter.filter_with_video_title')">

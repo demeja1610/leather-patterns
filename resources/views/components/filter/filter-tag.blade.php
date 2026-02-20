@@ -1,5 +1,6 @@
 @props([
     'showAllTags' => false,
+    'tagsLimit' => 10,
     'selectedTags' => [],
     'tags' => [],
 ])
@@ -73,7 +74,7 @@
             </li>
         </template>
 
-        @if ($showAllTags === false)
+         @if ($showAllTags === false && count($tags) >= $tagsLimit)
             <li class="filter-item-tag__list-item">
                 <button
                     class="button-link filter-item-tag__load-more"

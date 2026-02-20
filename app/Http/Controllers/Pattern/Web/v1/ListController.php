@@ -52,7 +52,9 @@ class ListController extends Controller
             'categories' => $patternCategories,
             'categoriesLimit' => $this->patternCategoriesLimit,
             'tags' => $patternTags,
+            'tagsLimit' => $this->patternTagsLimit,
             'authors' => $patternAuthors,
+            'authorsLimit' => $this->patternAuthorsLimit,
             'patterns' => $patterns,
             'patternOrders' => PatternOrderEnum::cases(),
         ]);
@@ -237,7 +239,8 @@ class ListController extends Controller
 
     protected function getBasePatternTagQuery(): Builder
     {
-        return PatternTag::query();
+        return PatternTag::query()
+            ->where(column: 'is_published', operator: true);
     }
 
     protected function getBasePatternAuthorQuery(): Builder

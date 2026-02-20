@@ -1,5 +1,6 @@
 @props([
     'showAllAuthors' => false,
+    'authorsLimit' => 10,
     'selectedAuthors' => [],
     'authors' => [],
 ])
@@ -73,7 +74,7 @@
             </li>
         </template>
 
-        @if ($showAllAuthors === false)
+        @if ($showAllAuthors === false  && count($authors) >= $authorsLimit)
             <li class="filter-item-author__list-item">
                 <button
                     class="button-link filter-item-author__load-more"
