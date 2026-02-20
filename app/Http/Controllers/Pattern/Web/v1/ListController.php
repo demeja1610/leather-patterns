@@ -60,7 +60,7 @@ class ListController extends Controller
 
     protected function getPatternategoriesForFilter(Request &$request): Collection
     {
-        $showAllPatternCategories = $request->get(key: 'show_all_pattern_categories', default: false);
+        $showAllPatternCategories = $request->input(key: 'show_all_pattern_categories', default: false);
 
         if ($showAllPatternCategories === false) {
             $patternCategories = $this->getSelectedPatternCategories(
@@ -95,7 +95,7 @@ class ListController extends Controller
 
     protected function getPatternTagsForFilter(Request &$request): Collection
     {
-        $showAllPatternTags = $request->get(key: 'show_all_pattern_tags', default: false);
+        $showAllPatternTags = $request->input(key: 'show_all_pattern_tags', default: false);
 
         if ($showAllPatternTags === false) {
             $patternTags = $this->getSelectedPatternTags(
@@ -130,7 +130,7 @@ class ListController extends Controller
 
     protected function getPatternAuthorsForFilter(Request &$request): Collection
     {
-        $showAllPatternAuthors = $request->get(key: 'show_all_pattern_authors', default: false);
+        $showAllPatternAuthors = $request->input(key: 'show_all_pattern_authors', default: false);
 
         if ($showAllPatternAuthors === false) {
             $patternAuthors = $this->getSelectedPatternAuthors(
@@ -221,7 +221,7 @@ class ListController extends Controller
 
         $q->whereHas(relation: 'meta', callback: fn($query) => $query->select('pattern_downloaded')->where(column: 'pattern_downloaded', operator: true));
 
-        $cursor = $request->get(key: 'cursor');
+        $cursor = $request->input(key: 'cursor');
 
         return $q->cursorPaginate(
             perPage: 16,
@@ -280,7 +280,7 @@ class ListController extends Controller
 
     protected function getSelectedPatternCategories(Request &$request): Collection
     {
-        $ids = $request->get(key: 'category', default: []);
+        $ids = $request->input(key: 'category', default: []);
         $idsCount = count(value: $ids);
 
         if ($idsCount === 0) {
@@ -302,7 +302,7 @@ class ListController extends Controller
 
     protected function getSelectedPatternTags(Request &$request): Collection
     {
-        $ids = $request->get(key: 'tag', default: []);
+        $ids = $request->input(key: 'tag', default: []);
         $idsCount = count(value: $ids);
 
         if ($idsCount === 0) {
@@ -324,7 +324,7 @@ class ListController extends Controller
 
     protected function getSelectedPatternAuthors(Request &$request): Collection
     {
-        $ids = $request->get(key: 'author', default: []);
+        $ids = $request->input(key: 'author', default: []);
         $idsCount = count(value: $ids);
 
         if ($idsCount === 0) {
@@ -382,26 +382,26 @@ class ListController extends Controller
 
     protected function applyFilters(Builder &$query, Request &$request): void
     {
-        $search = $request->get(key: 's');
+        $search = $request->input(key: 's');
 
         if ($search !== null && $search !== '') {
             $query->where(column: 'title', operator: 'like', value: "%{$search}%");
         }
 
-        $activeCategoriesIds = $request->get(key: 'category', default: []);
+        $activeCategoriesIds = $request->input(key: 'category', default: []);
 
         if ($activeCategoriesIds !== []) {
             $query->whereHas(relation: 'categories', callback: fn($query) => $query->whereIn('pattern_categories.id', $activeCategoriesIds));
         }
 
-        $activeTagsIds = $request->get(key: 'tag', default: []);
+        $activeTagsIds = $request->input(key: 'tag', default: []);
 
         if ($activeTagsIds !== []) {
             $query->whereHas(relation: 'tags', callback: fn($query) => $query->whereIn('pattern_tags.id', $activeTagsIds));
         }
 
         $hasAuthor = $request->has(key: 'has_author');
-        $activeAuthorsIds = $request->get(key: 'author', default: []);
+        $activeAuthorsIds = $request->input(key: 'author', default: []);
 
         if ($hasAuthor === true && $activeAuthorsIds === []) {
             $query->whereNotNull('author_id');
@@ -423,7 +423,7 @@ class ListController extends Controller
             $query->whereHas(relation: 'reviews');
         }
 
-        $orderStr = $request->get(key: 'order');
+        $orderStr = $request->input(key: 'order');
 
         if ($orderStr !== null) {
             $order = PatternOrderEnum::tryFrom(value: $orderStr);

@@ -27,7 +27,7 @@ class ListPageController extends Controller
 
     protected function getCategories(ListRequest &$request)
     {
-        $cursor = $request->get(key: 'cursor');
+        $cursor = $request->input(key: 'cursor');
 
         $q = PatternCategory::query();
 
@@ -51,7 +51,7 @@ class ListPageController extends Controller
 
     protected function applyFilters(ListRequest &$request, Builder &$query): void
     {
-        $id = $request->get(key: 'id');
+        $id = $request->input(key: 'id');
 
         if ($id !== null) {
             $this->activeFilters['id'] = $id;
@@ -59,7 +59,7 @@ class ListPageController extends Controller
             $query->where(column: 'id', operator: $id);
         }
 
-        $name = $request->get(key: 'name');
+        $name = $request->input(key: 'name');
 
         if ($name !== null) {
             $this->activeFilters['name'] = $name;
@@ -67,7 +67,7 @@ class ListPageController extends Controller
             $query->where(column: 'name', operator: 'LIKE', value: "%{$name}%");
         }
 
-        $olderThanStr = $request->get(key: 'older_than');
+        $olderThanStr = $request->input(key: 'older_than');
 
         if ($olderThanStr !== null) {
             $olderThan = Carbon::parse(time: $olderThanStr);
@@ -77,7 +77,7 @@ class ListPageController extends Controller
             $query->where(column: 'created_at', operator: '<', value: $olderThan);
         }
 
-        $newerThanStr = $request->get(key: 'newer_than');
+        $newerThanStr = $request->input(key: 'newer_than');
 
         if ($newerThanStr !== null) {
             $newerThan = Carbon::parse(time: $newerThanStr);
@@ -87,7 +87,7 @@ class ListPageController extends Controller
             $query->where(column: 'created_at', operator: '>', value: $newerThan);
         }
 
-        $hasPatterns = $request->get(key: 'has_patterns');
+        $hasPatterns = $request->input(key: 'has_patterns');
 
         if ($hasPatterns !== null) {
             $this->activeFilters['has_patterns'] = (bool) $hasPatterns;
@@ -99,7 +99,7 @@ class ListPageController extends Controller
             }
         }
 
-        $isPublished = $request->get(key: 'is_published');
+        $isPublished = $request->input(key: 'is_published');
 
         if ($isPublished !== null) {
             $this->activeFilters['is_published'] = (bool) $isPublished;
@@ -111,7 +111,7 @@ class ListPageController extends Controller
             }
         }
 
-        $hasReplacement = $request->get(key: 'has_replacement');
+        $hasReplacement = $request->input(key: 'has_replacement');
 
         if ($hasReplacement !== null) {
             $this->activeFilters['has_replacement'] = (bool) $hasReplacement;
@@ -123,7 +123,7 @@ class ListPageController extends Controller
             }
         }
 
-        $removeOnAppear = $request->get(key: 'remove_on_appear');
+        $removeOnAppear = $request->input(key: 'remove_on_appear');
 
         if ($removeOnAppear !== null) {
             $this->activeFilters['remove_on_appear'] = (bool) $removeOnAppear;

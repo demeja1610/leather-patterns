@@ -19,8 +19,8 @@ class CreateController extends Controller
         $data = array_merge(
             $request->validated(),
             [
-                'remove_on_appear' => (bool) $request->get(key: 'remove_on_appear', default: false),
-                'is_published' => (bool) $request->get(key: 'is_published', default: false),
+                'remove_on_appear' => (bool) $request->input(key: 'remove_on_appear', default: false),
+                'is_published' => (bool) $request->input(key: 'is_published', default: false),
             ],
         );
 

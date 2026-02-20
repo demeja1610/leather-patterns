@@ -48,7 +48,7 @@ class GetAllController extends Controller
 
     protected function applyFilters(Builder &$query, GetAllRequest &$request): void
     {
-        $from = $request->get(key: 'from');
+        $from = $request->input(key: 'from');
 
         if ($from !== null) {
             $query->where(column: 'id', operator: '>', value: (int) $from);
