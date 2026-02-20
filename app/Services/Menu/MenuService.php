@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Menu;
 
 use App\Dto\MenuItem\MenuItemDto;

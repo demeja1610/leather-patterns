@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use DOMXPath;
 use Exception;
 use DOMDocument;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use App\Interfaces\Services\ParserServiceInterface;
 
 class ParserService implements ParserServiceInterface
@@ -48,8 +51,12 @@ class ParserService implements ParserServiceInterface
             ]);
 
             return $response->getBody()->getContents();
-        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-            throw new Exception('HTTP request failed: ' . $e->getMessage());
+        } catch (GuzzleException $guzzleException) {
+            throw new Exception(
+                'HTTP request failed: ' . $guzzleException->getMessage(),
+                $guzzleException->getCode(),
+                $guzzleException
+            );
         }
     }
 
@@ -89,7 +96,10 @@ class ParserService implements ParserServiceInterface
             $extMatches,
         );
 
-        if (!empty($extMatches[1]) && !empty($extMatches[2])) {
+        if (
+            (isset($extMatches[1]) && $extMatches[1] !== []) &&
+            (isset($extMatches[2]) && $extMatches[2] !== [])
+        ) {
             foreach ($extMatches[1] as $key => $oid) {
                 $id = $extMatches[2][$key];
 
