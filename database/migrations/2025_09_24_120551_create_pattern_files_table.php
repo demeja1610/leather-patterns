@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pattern_files', function (Blueprint $table) {
+        Schema::create('pattern_files', function (Blueprint $table): void {
             $table->id();
 
             $table->text('path');
@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('mime_type');
             $table->string('hash_algorithm');
             $table->string('hash');
-
             $table->unsignedBigInteger('pattern_id')->index();
+
             $table->foreign('pattern_id')
                 ->references('id')
                 ->on('patterns')

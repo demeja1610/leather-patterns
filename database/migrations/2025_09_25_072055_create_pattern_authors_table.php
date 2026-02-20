@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pattern_authors', function (Blueprint $table) {
+        Schema::create('pattern_authors', function (Blueprint $table): void {
             $table->id();
 
             $table->string('name')->unique();

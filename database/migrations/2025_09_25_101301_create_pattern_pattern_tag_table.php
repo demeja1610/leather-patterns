@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pattern_pattern_tag', function (Blueprint $table) {
+        Schema::create('pattern_pattern_tag', function (Blueprint $table): void {
             $table->id();
 
             $table->unsignedBigInteger('pattern_tag_id');

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('pattern_metas', function (Blueprint $table) {
+        Schema::table('pattern_metas', function (Blueprint $table): void {
             $table->boolean('is_download_url_wrong')->default(false)->after('reviews_updated_at');
         });
     }
@@ -18,7 +18,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pattern_metas', function (Blueprint $table) {
+        Schema::table('pattern_metas', function (Blueprint $table): void {
             $table->dropColumn('is_download_url_wrong');
         });
     }

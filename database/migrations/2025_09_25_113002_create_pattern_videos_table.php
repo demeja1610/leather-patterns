@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('pattern_videos', function (Blueprint $table) {
+        Schema::create('pattern_videos', function (Blueprint $table): void {
             $table->id();
 
             $table->text('url');

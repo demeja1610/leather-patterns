@@ -8,14 +8,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('patterns', function (Blueprint $table) {
+        Schema::table('patterns', function (Blueprint $table): void {
             $table->string('source_url')->unique()->change();
         });
     }
 
     public function down(): void
     {
-        Schema::table('patterns', function (Blueprint $table) {
+        Schema::table('patterns', function (Blueprint $table): void {
             $table->dropUnique(['source_url']);
         });
     }
