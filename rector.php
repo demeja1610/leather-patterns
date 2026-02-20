@@ -7,7 +7,6 @@ use RectorLaravel\Set\LaravelSetList;
 use RectorLaravel\Set\LaravelLevelSetList;
 use RectorLaravel\Rector\StaticCall\CarbonToDateFacadeRector;
 use Rector\Transform\Rector\String_\StringToClassConstantRector;
-use SavinMikhail\AddNamedArgumentsRector\AddNamedArgumentsRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 use Rector\CodeQuality\Rector\FuncCall\SortCallLikeNamedArgsRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
@@ -53,9 +52,6 @@ return RectorConfig::configure()
         // // disabled because it enforces to use DI in classes that doesnt support it (migrations)
         // // enable it when this rule will be fixed ot when we can exclude migrations (or other files) from this rule
         // LaravelSetList::LARAVEL_STATIC_TO_INJECTION,
-    ])
-    ->withRules([
-        AddNamedArgumentsRector::class,
     ])
     ->withSkip([
         PostIncDecToPreIncDecRector::class, // skip this rule because it inforces to use ++$i instead of $i++
