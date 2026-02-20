@@ -396,13 +396,23 @@ class ListController extends Controller
         $activeCategoriesIds = $request->input(key: 'category', default: []);
 
         if ($activeCategoriesIds !== []) {
-            $query->whereHas(relation: 'categories', callback: fn($query) => $query->whereIn('pattern_categories.id', $activeCategoriesIds));
+            $query->whereHas(
+                relation: 'categories',
+                callback: fn($query) => $query
+                    ->whereIn('pattern_categories.id', $activeCategoriesIds)
+                    ->where('is_published', true)
+            );
         }
 
         $activeTagsIds = $request->input(key: 'tag', default: []);
 
         if ($activeTagsIds !== []) {
-            $query->whereHas(relation: 'tags', callback: fn($query) => $query->whereIn('pattern_tags.id', $activeTagsIds));
+            $query->whereHas(
+                relation: 'tags',
+                callback: fn($query) => $query
+                    ->whereIn('pattern_tags.id', $activeTagsIds)
+                    ->where('is_published', true)
+            );
         }
 
         $hasAuthor = $request->has(key: 'has_author');
