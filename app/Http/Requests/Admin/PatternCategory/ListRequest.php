@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Admin\PatternCategory;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,9 +16,18 @@ class ListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'nullable|numeric',
-            'name' => 'nullable|string',
-            'created_at' => 'nullable|date',
+            'id' => [
+                'nullable',
+                'numeric'
+            ],
+            'name' => [
+                'nullable',
+                'string'
+            ],
+            'created_at' => [
+                'nullable',
+                'date'
+            ],
         ];
     }
 }

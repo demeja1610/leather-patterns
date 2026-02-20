@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\PatternTag\Api\v1;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,7 +16,10 @@ class GetAllRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'from' => 'nullable|numeric',
+            'from' => [
+                'nullable',
+                'numeric'
+            ],
         ];
     }
 }
