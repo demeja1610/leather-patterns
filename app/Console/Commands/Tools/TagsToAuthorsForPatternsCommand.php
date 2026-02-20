@@ -77,7 +77,15 @@ class TagsToAuthorsForPatternsCommand extends Command
 
         $this->info('Successfully associated tags with authors for patterns.');
 
-        $this->info(count($createdAuthors) . ' authors were created: ' . implode(', ', array_map(fn($author) => $author->name, $createdAuthors)));
+        $this->info(
+            count($createdAuthors) . ' authors were created: ' . implode(
+                separator: ', ',
+                array: array_map(
+                    callback: fn(PatternAuthor $author) => $author->name,
+                    array: $createdAuthors
+                )
+            )
+        );
     }
 
     protected function getData(): array

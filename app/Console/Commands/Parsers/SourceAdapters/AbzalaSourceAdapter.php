@@ -129,6 +129,7 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
             if (!$link instanceof DOMElement) {
                 continue;
             }
+
             if (trim($link->textContent) === 'Модели для 3D печати') {
                 continue;
             }
