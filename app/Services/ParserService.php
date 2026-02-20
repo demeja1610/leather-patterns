@@ -96,10 +96,7 @@ class ParserService implements ParserServiceInterface
             matches: $extMatches,
         );
 
-        if (
-            (isset($extMatches[1]) && $extMatches[1] !== [])
-            && (isset($extMatches[2]) && $extMatches[2] !== [])
-        ) {
+        if ($extMatches[1] !== [] && $extMatches[2] !== []) {
             foreach ($extMatches[1] as $key => $oid) {
                 $id = $extMatches[2][$key];
 

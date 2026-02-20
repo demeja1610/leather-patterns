@@ -54,10 +54,14 @@ class PatternCategory extends Model
 
     public function isDeletable(): bool
     {
+        // will be null if `count` method isn't called
+        // @phpstan-ignore identical.alwaysFalse
         if ($this->patterns_count === null) {
             $this->loadCount(relations: 'patterns');
         }
 
+        // will be null if `count` method isn't called
+        // @phpstan-ignore identical.alwaysFalse
         if ($this->replacement_for_count === null) {
             $this->loadCount(relations: 'replacementFor');
         }
