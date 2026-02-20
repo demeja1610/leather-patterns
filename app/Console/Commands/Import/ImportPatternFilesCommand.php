@@ -17,14 +17,14 @@ class ImportPatternFilesCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Importing pattern files...');
+        $this->info(message: 'Importing pattern files...');
 
-       DB::connection('mysql_import')->table('file_pattern')
-            ->join('files', 'file_pattern.file_id', '=', 'files.id')
-            ->join('patterns', 'file_pattern.pattern_id', '=', 'patterns.id')
-            ->where('patterns.source', '!=', PatternSourceEnum::SKINCUTS->value)
-            ->orderBy('file_pattern.file_id')
-            ->select([
+       DB::connection('mysql_import')->table(table: 'file_pattern')
+            ->join(table: 'files', first: 'file_pattern.file_id', operator: '=', second: 'files.id')
+            ->join(table: 'patterns', first: 'file_pattern.pattern_id', operator: '=', second: 'patterns.id')
+            ->where(column: 'patterns.source', operator: '!=', value: PatternSourceEnum::SKINCUTS->value)
+            ->orderBy(column: 'file_pattern.file_id')
+            ->select(columns: [
                 'file_pattern.file_id as file_id',
                 'file_pattern.pattern_id as pattern_id',
                 'files.path as file_path',
@@ -44,7 +44,7 @@ class ImportPatternFilesCommand extends Command
                     $to = $chunk->last()->file_id;
                     $count = $chunk->count();
 
-                    $this->info("Importing pattern files from {$from} to {$to} ({$count} total)...");
+                    $this->info(message: "Importing pattern files from {$from} to {$to} ({$count} total)...");
 
                     $toInsert = [];
 
@@ -63,10 +63,10 @@ class ImportPatternFilesCommand extends Command
                         ];
                     }
 
-                    DB::table('pattern_files')->insert($toInsert);
+                    DB::table('pattern_files')->insert(values: $toInsert);
                 }
             );
 
-        $this->info("All pattern files imported successfully.");
+        $this->info(message: "All pattern files imported successfully.");
     }
 }

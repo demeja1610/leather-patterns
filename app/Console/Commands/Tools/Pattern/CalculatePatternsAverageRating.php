@@ -16,9 +16,9 @@ class CalculatePatternsAverageRating extends Command
 
     public function handle(): void
     {
-        $this->info('Calculating patterns average rating...');
+        $this->info(message: 'Calculating patterns average rating...');
 
-        $id = $this->option('id');
+        $id = $this->option(key: 'id');
 
         $q = DB::table('patterns')
             ->join(
@@ -27,15 +27,15 @@ class CalculatePatternsAverageRating extends Command
                 operator: '=',
                 second: 'pattern_reviews.pattern_id',
             )
-            ->select([
+            ->select(columns: [
                 'patterns.id',
                 DB::raw('AVG(pattern_reviews.rating) as avg_rating'),
             ])
-            ->orderBy('patterns.id')
+            ->orderBy(column: 'patterns.id')
             ->groupBy('patterns.id');
 
         if ($id) {
-            $q->where('patterns.id', $id);
+            $q->where(column: 'patterns.id', operator: $id);
         }
 
         $i = 1;
@@ -46,7 +46,7 @@ class CalculatePatternsAverageRating extends Command
                 $case = 'CASE';
                 $ids = [];
 
-                $this->info("Processing chunk: {$i} containing: {$patterns->count()} patterns");
+                $this->info(message: "Processing chunk: {$i} containing: {$patterns->count()} patterns");
 
                 foreach ($patterns as $pattern) {
                     $case .= " WHEN id = {$pattern->id} THEN {$pattern->avg_rating}";
@@ -55,7 +55,7 @@ class CalculatePatternsAverageRating extends Command
 
                 $case .= ' ELSE avg_rating END';
 
-                DB::table('patterns')->whereIn('id', $ids)->update([
+                DB::table('patterns')->whereIn(column: 'id', values: $ids)->update(values: [
                     'avg_rating' => DB::raw($case),
                 ]);
 

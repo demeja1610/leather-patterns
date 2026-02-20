@@ -19,8 +19,8 @@ class CreateController extends Controller
         $data = array_merge(
             $request->validated(),
             [
-                'remove_on_appear' => (bool) $request->get('remove_on_appear', false),
-                'is_published' => (bool) $request->get('is_published', false),
+                'remove_on_appear' => (bool) $request->get(key: 'remove_on_appear', default: false),
+                'is_published' => (bool) $request->get(key: 'is_published', default: false),
             ]
         );
 
@@ -29,7 +29,7 @@ class CreateController extends Controller
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
-                        text: __('pattern_tag.admin.cannot_remove_and_replace_same_time'),
+                        text: __(key: 'pattern_tag.admin.cannot_remove_and_replace_same_time'),
                         type: NotificationTypeEnum::ERROR,
                     )
                 ),
@@ -41,20 +41,20 @@ class CreateController extends Controller
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
-                        text: __('pattern_tag.admin.cannot_replace_to_tag_and_author_same_time'),
+                        text: __(key: 'pattern_tag.admin.cannot_replace_to_tag_and_author_same_time'),
                         type: NotificationTypeEnum::ERROR,
                     )
                 ),
             );
         }
 
-        $tag = PatternTag::query()->create($data);
+        $tag = PatternTag::query()->create(attributes: $data);
 
-        return to_route('admin.page.pattern-tag.list')->with(
+        return to_route(route: 'admin.page.pattern-tag.list')->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
                 new SessionNotificationDto(
-                    text: __('pattern_tag.admin.created', ['name' => $tag->name]),
+                    text: __(key: 'pattern_tag.admin.created', replace: ['name' => $tag->name]),
                     type: NotificationTypeEnum::SUCCESS,
                 ),
             ),

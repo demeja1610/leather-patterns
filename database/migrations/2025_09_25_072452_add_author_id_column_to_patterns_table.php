@@ -9,11 +9,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('patterns', function (Blueprint $table): void {
-            $table->unsignedBigInteger('author_id')
+            $table->unsignedBigInteger(column: 'author_id')
                 ->nullable()
                 ->after('id');
 
-            $table->foreign('author_id')
+            $table->foreign(columns: 'author_id')
                 ->references('id')
                 ->on('pattern_authors')
                 ->nullOnDelete();
@@ -23,8 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('patterns', function (Blueprint $table): void {
-            $table->dropForeign(['author_id']);
-            $table->dropColumn('author_id');
+            $table->dropForeign(index: ['author_id']);
+            $table->dropColumn(columns: 'author_id');
         });
     }
 };

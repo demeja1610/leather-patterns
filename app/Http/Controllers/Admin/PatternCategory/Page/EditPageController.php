@@ -13,19 +13,19 @@ class EditPageController extends Controller
 {
     public function __invoke($id)
     {
-        $category = $this->getCategory($id);
+        $category = $this->getCategory(id: $id);
 
         if (!$category instanceof PatternCategory) {
-            return abort(Response::HTTP_NOT_FOUND);
+            return abort(code: Response::HTTP_NOT_FOUND);
         }
 
-        $this->loadReplacement($category);
+        $this->loadReplacement(category: $category);
 
         $categoryReplacements = $this->getCategoryReplacements(
             exceptId: $category->id
         );
 
-        return view('pages.admin.pattern-category.edit', [
+        return view(view: 'pages.admin.pattern-category.edit', data: [
             'category' => $category,
             'categoryReplacements' => $categoryReplacements
         ]);
@@ -33,13 +33,13 @@ class EditPageController extends Controller
 
     protected function getCategory($id): ?PatternCategory
     {
-        return PatternCategory::query()->find($id);
+        return PatternCategory::query()->find(id: $id);
     }
 
     protected function loadReplacement(PatternCategory &$category): void
     {
         if ($category->replace_id !== null) {
-            $category->load('replacement');
+            $category->load(relations: 'replacement');
         }
     }
 
@@ -47,10 +47,10 @@ class EditPageController extends Controller
     {
         return PatternCategory::query()
             ->whereNull('replace_id')
-            ->where('id', '!=', $exceptId)
-            ->select([
+            ->where(column: 'id', operator: '!=', value: $exceptId)
+            ->select(columns: [
                 'id',
                 'name',
-            ])->orderBy('name')->get();
+            ])->orderBy(column: 'name')->get();
     }
 }

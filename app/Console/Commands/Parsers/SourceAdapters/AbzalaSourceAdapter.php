@@ -17,10 +17,10 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
 
     public function processSource(string $baseURL): void
     {
-        $urls = $this->getParseUrls($baseURL);
+        $urls = $this->getParseUrls(baseURL: $baseURL);
 
         if ($urls === null) {
-            $this->error("Error getting parse urls for Abzala source");
+            $this->error(message: "Error getting parse urls for Abzala source");
 
             return;
         }
@@ -29,7 +29,7 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
             $start = 0;
 
             while ($start !== null) {
-                $this->info("Processing from: {$start}");
+                $this->info(message: "Processing from: {$start}");
 
                 $requestUrl = $start > 0
                     ? $url . '?start=' . $start
@@ -38,7 +38,7 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
                 try {
                     $html = $this->parserService->parseUrl($requestUrl);
                 } catch (Exception $e) {
-                    $this->error("Error processing from {$start}: " . $e->getMessage());
+                    $this->error(message: "Error processing from {$start}: " . $e->getMessage());
 
                     return;
                 }
@@ -46,44 +46,44 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
                 $dom = $this->parserService->parseDOM($html);
                 $xpath = $this->parserService->getDOMXPath($dom);
 
-                $patternLinks = $xpath->query("//*[contains(@class, 'page-header')]//a");
+                $patternLinks = $xpath->query(expression: "//*[contains(@class, 'page-header')]//a");
 
-                $this->info("Found {$patternLinks->length} patterns");
+                $this->info(message: "Found {$patternLinks->length} patterns");
 
                 $patterns = [];
 
                 foreach ($patternLinks as $patternLink) {
                     if ($patternLink instanceof DOMElement) {
                         $patterns[] = $this->preparePatternForCreation(
-                            url: "{$baseURL}/" . trim($patternLink->getAttribute('href'), '/'),
+                            url: "{$baseURL}/" . trim(string: $patternLink->getAttribute(qualifiedName: 'href'), characters: '/'),
                             source: PatternSourceEnum::ABZALA,
                         );
                     }
                 }
 
-                $patternsCount = count($patterns);
+                $patternsCount = count(value: $patterns);
 
-                $savedCount = $this->createNewPatterns($patterns);
+                $savedCount = $this->createNewPatterns(patterns: $patterns);
 
-                $this->success("Saved {$savedCount} patterns");
+                $this->success(message: "Saved {$savedCount} patterns");
 
                 if ($savedCount !== $patternsCount) {
-                    $this->success("The rest of the patterns are already exists, skipping to next source");
+                    $this->success(message: "The rest of the patterns are already exists, skipping to next source");
 
                     $start = null;
 
                     break;
                 }
 
-                $nextPageElement = $xpath->query("//a[contains(@aria-label, 'Перейти на следующую страницу')]");
+                $nextPageElement = $xpath->query(expression: "//a[contains(@aria-label, 'Перейти на следующую страницу')]");
 
                 if ($nextPageElement->length > 0) {
                     $nextPageItem = $nextPageElement->item(0);
 
                     if ($nextPageItem instanceof DOMElement) {
-                        $nextPageUrl = $nextPageItem->getAttribute('href');
+                        $nextPageUrl = $nextPageItem->getAttribute(qualifiedName: 'href');
 
-                        $nextPage = (int) explode('=', $nextPageUrl)[1];
+                        $nextPage = (int) explode(separator: '=', string: $nextPageUrl)[1];
                     } else {
                         $nextPage = false;
                     }
@@ -92,7 +92,7 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
                 }
 
                 if ($nextPage === false) {
-                    $this->success("Link to next page not found, skipping to next source");
+                    $this->success(message: "Link to next page not found, skipping to next source");
 
                     $start = null;
 
@@ -114,7 +114,7 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
             $html = $this->parserService->parseUrl($url);
         } catch (Exception $exception) {
             $this->error(
-                "Error while getting parse urls from {$url}: " . $exception->getMessage()
+                message: "Error while getting parse urls from {$url}: " . $exception->getMessage()
             );
 
             return null;
@@ -123,18 +123,18 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
         $dom = $this->parserService->parseDOM($html);
         $xpath = $this->parserService->getDOMXPath($dom);
 
-        $productLinks = $xpath->query("//*[contains(@class, 'com-content-categories__item-title')]//a");
+        $productLinks = $xpath->query(expression: "//*[contains(@class, 'com-content-categories__item-title')]//a");
 
         foreach ($productLinks as $link) {
             if (!$link instanceof DOMElement) {
                 continue;
             }
 
-            if (trim($link->textContent) === 'Модели для 3D печати') {
+            if (trim(string: $link->textContent) === 'Модели для 3D печати') {
                 continue;
             }
 
-            $urls[] = "{$baseURL}/" . trim($link->getAttribute('href'), '/');
+            $urls[] = "{$baseURL}/" . trim(string: $link->getAttribute(qualifiedName: 'href'), characters: '/');
         }
 
         return $urls;

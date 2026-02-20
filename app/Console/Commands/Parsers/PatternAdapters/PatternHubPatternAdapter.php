@@ -17,7 +17,7 @@ class PatternHubPatternAdapter extends AbstractPatternAdapter
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
             );
 
             return;
@@ -35,34 +35,34 @@ class PatternHubPatternAdapter extends AbstractPatternAdapter
             pattern: $pattern,
         );
 
-        $imageElements = $xpath->query("//*[contains(@class, 'wp-block-gallery')]//img");
+        $imageElements = $xpath->query(expression: "//*[contains(@class, 'wp-block-gallery')]//img");
 
         /** @var DOMElement $imageElement */
         foreach ($imageElements as $imageElement) {
-            $imageUrls = $imageElement->getAttribute('srcset');
+            $imageUrls = $imageElement->getAttribute(qualifiedName: 'srcset');
 
-            $imageUrl = $this->getImageUrlFromSrcset($imageUrls);
+            $imageUrl = $this->getImageUrlFromSrcset(srcset: $imageUrls);
 
             if ($imageUrl !== '' && $imageUrl !== '0') {
                 $images[] = $imageUrl;
             }
         }
 
-        $categoriesElements = $xpath->query("//*[contains(@class, 'taxonomy-category')]//a");
+        $categoriesElements = $xpath->query(expression: "//*[contains(@class, 'taxonomy-category')]//a");
 
         /** @var DOMElement $categoryElement */
         foreach ($categoriesElements as $categoryElement) {
             $categories[] = $categoryElement->textContent;
         }
 
-        $tagsElements = $xpath->query("//*[contains(@class, 'taxonomy-post_tag')]//a");
+        $tagsElements = $xpath->query(expression: "//*[contains(@class, 'taxonomy-post_tag')]//a");
 
         /** @var DOMElement $tagElement */
         foreach ($tagsElements as $tagElement) {
             $tags[] = $tagElement->textContent;
         }
 
-        $title = $xpath->query("//*[contains(@class, 'wp-block-post-title')]")->item(0)?->textContent;
+        $title = $xpath->query(expression: "//*[contains(@class, 'wp-block-post-title')]")->item(0)?->textContent;
 
         if (!$title) {
             $title = 'No title';
@@ -70,11 +70,11 @@ class PatternHubPatternAdapter extends AbstractPatternAdapter
 
         $downloadLinkElements = [];
         $downloadLinkElements[] = $xpath
-            ->query("//*[contains(@class, 'wp-block-post-content')]//a[contains(text(), 'Скачать выкройку')]");
+            ->query(expression: "//*[contains(@class, 'wp-block-post-content')]//a[contains(text(), 'Скачать выкройку')]");
         $downloadLinkElements[] = $xpath
-            ->query("//*[contains(@class, 'wp-block-post-content')]//strong[contains(text(), 'Скачать выкройку бесплатно')]/parent::a");
+            ->query(expression: "//*[contains(@class, 'wp-block-post-content')]//strong[contains(text(), 'Скачать выкройку бесплатно')]/parent::a");
         $downloadLinkElements[] = $xpath
-            ->query("//*[contains(@class, 'wp-block-post-content')]//mark[contains(text(), 'Скачать выкройку бесплатно')]/parent::strong/parent::a");
+            ->query(expression: "//*[contains(@class, 'wp-block-post-content')]//mark[contains(text(), 'Скачать выкройку бесплатно')]/parent::strong/parent::a");
 
         foreach ($downloadLinkElements as $_downloadLinkElement) {
             if ($_downloadLinkElement->length > 0) {
@@ -83,32 +83,32 @@ class PatternHubPatternAdapter extends AbstractPatternAdapter
                 break;
             }
 
-            if (is_array($downloadLinkElements)) {
+            if (is_array(value: $downloadLinkElements)) {
                 $downloadLinkElements = $downloadLinkElements[0];
             }
         }
 
         if ($downloadLinkElements->length === 0) {
-            $this->warn("No download URL found for pattern {$pattern->id}, skipping...");
+            $this->warn(message: "No download URL found for pattern {$pattern->id}, skipping...");
 
-            $this->setDownloadUrlWrong($pattern);
+            $this->setDownloadUrlWrong(pattern: $pattern);
 
             return;
         }
 
         /** @var DOMElement $element */
         $element = $downloadLinkElements->item(0);
-        $downloadUrl = $element->getAttribute('href');
+        $downloadUrl = $element->getAttribute(qualifiedName: 'href');
 
         if (!$downloadUrl) {
-            $this->warn("No download URL found for pattern {$pattern->id}, skipping...");
+            $this->warn(message: "No download URL found for pattern {$pattern->id}, skipping...");
 
-            $this->setDownloadUrlWrong($pattern);
+            $this->setDownloadUrlWrong(pattern: $pattern);
 
             return;
         }
 
-        $downloadUrl = explode('?url=', $downloadUrl);
+        $downloadUrl = explode(separator: '?url=', string: $downloadUrl);
 
         $patternFilePath = null;
         $patternImagesPaths = [];
@@ -116,10 +116,10 @@ class PatternHubPatternAdapter extends AbstractPatternAdapter
         try {
             $fileDownloadUrl = $downloadUrl[1] ?? $downloadUrl[0];
 
-            if (str_contains($fileDownloadUrl, 'youtu')) {
-                $this->warn("YouTube video detected, skipping file download...");
+            if (str_contains(haystack: $fileDownloadUrl, needle: 'youtu')) {
+                $this->warn(message: "YouTube video detected, skipping file download...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -130,9 +130,9 @@ class PatternHubPatternAdapter extends AbstractPatternAdapter
             );
 
             if ($patternFilePath === null) {
-                $this->error("Failed to download pattern file for pattern {$pattern->id}, skipping...");
+                $this->error(message: "Failed to download pattern file for pattern {$pattern->id}, skipping...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -167,7 +167,7 @@ class PatternHubPatternAdapter extends AbstractPatternAdapter
                 );
             }
 
-            Pattern::query()->where('id', $pattern->id)->update([
+            Pattern::query()->where(column: 'id', operator: $pattern->id)->update(values: [
                 'title' => $title,
             ]);
 
@@ -190,15 +190,15 @@ class PatternHubPatternAdapter extends AbstractPatternAdapter
             }
 
             if ($videosToCreate !== []) {
-                $videosToCreateCount = count($videosToCreate);
+                $videosToCreateCount = count(value: $videosToCreate);
 
                 $this->success(
-                    "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
+                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
                 );
 
-                $pattern->videos()->saveMany($videosToCreate);
+                $pattern->videos()->saveMany(models: $videosToCreate);
 
-                $this->setPatternVideoChecked($pattern);
+                $this->setPatternVideoChecked(pattern: $pattern);
             }
 
             DB::commit();
@@ -206,15 +206,15 @@ class PatternHubPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
             );
 
-            $this->error('Reverting changes, deleting downloaded files if they exist...');
+            $this->error(message: 'Reverting changes, deleting downloaded files if they exist...');
 
-            $this->deleteFileIfExists($patternFilePath);
+            $this->deleteFileIfExists(filePath: $patternFilePath);
 
             if ($patternImagesPaths !== []) {
-                $this->deleteImagesIfExists($patternImagesPaths);
+                $this->deleteImagesIfExists(imagePaths: $patternImagesPaths);
             }
         }
     }

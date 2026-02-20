@@ -16,7 +16,7 @@ class RegisterActionController extends Controller
 {
     public function __invoke(RegisterRequest $request): RedirectResponse
     {
-        $data =  $request->only(['name', 'email', 'password']);
+        $data =  $request->only(keys: ['name', 'email', 'password']);
         $password = Hash::make($data['password']);
 
         $user = $this->createUser(
@@ -26,7 +26,7 @@ class RegisterActionController extends Controller
         );
 
         // avoid extra query to DB
-        $genericUser = new GenericUser([
+        $genericUser = new GenericUser(attributes: [
             'id' => $user->id,
             'password' => $password,
         ]);
@@ -43,7 +43,7 @@ class RegisterActionController extends Controller
 
     protected function createUser(string $name, string $email, string $password): User
     {
-        return User::query()->create([
+        return User::query()->create(attributes: [
             'name' => $name,
             'email' => $email,
             'password' => $password,

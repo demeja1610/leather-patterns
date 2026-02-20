@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('patterns', function (Blueprint $table): void {
             $table->id();
 
-            $table->text('title')->nullable();
-            $table->string('source');
-            $table->text('source_url');
+            $table->text(column: 'title')->nullable();
+            $table->string(column: 'source');
+            $table->text(column: 'source_url');
 
             $table->timestamps();
         });

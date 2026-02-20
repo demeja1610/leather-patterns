@@ -10,21 +10,33 @@ abstract class Command extends BaseCommand
 {
     public function info($message, $verbosity = null): void
     {
-        parent::info("\033[36m{$message}\033[0m", $verbosity);
+        parent::info(
+            string: "\033[36m{$message}\033[0m",
+            verbosity: $verbosity,
+        );
     }
 
     public function error($message, $verbosity = null): void
     {
-        parent::info("\033[31m{$message}\033[0m", $verbosity);
+        parent::info(
+            string: "\033[31m{$message}\033[0m",
+            verbosity: $verbosity,
+        );
     }
 
     public function warn($message, $verbosity = null): void
     {
-        parent::info("\033[33m{$message}\033[0m", $verbosity);
+        parent::info(
+            string: "\033[33m{$message}\033[0m",
+            verbosity: $verbosity,
+        );
     }
 
     public function success($message, $verbosity = null): void
     {
-        parent::info("\033[32m{$message}\033[0m", $verbosity);
+        parent::info(
+            string: "\033[32m{$message}\033[0m",
+            verbosity: $verbosity,
+        );
     }
 }

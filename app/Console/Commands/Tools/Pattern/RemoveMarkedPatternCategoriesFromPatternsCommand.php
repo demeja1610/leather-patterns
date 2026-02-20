@@ -19,12 +19,12 @@ class RemoveMarkedPatternCategoriesFromPatternsCommand extends Command
     {
 
         $q = Pattern::query()
-            ->whereHas('categories', fn($query) => $query->where('remove_on_appear', true))
-            ->with('categories');
+            ->whereHas(relation: 'categories', callback: fn($query) => $query->where(column: 'remove_on_appear', operator: true))
+            ->with(relations: 'categories');
 
         $count = $q->count();
 
-        $this->info("Total patterns found: {$count} with category marked as `remove_on_appear` categories");
+        $this->info(string: "Total patterns found: {$count} with category marked as `remove_on_appear` categories");
 
         $result = 0;
 
@@ -41,15 +41,15 @@ class RemoveMarkedPatternCategoriesFromPatternsCommand extends Command
                     $names = $categoriesToRemove->pluck('name')->implode('name', ', ');
                     $ids = $categoriesToRemove->pluck('id')->toArray();
 
-                    $this->info("Removing categories with names: {$names} from pattern with id {$pattern->id}");
+                    $this->info(string: "Removing categories with names: {$names} from pattern with id {$pattern->id}");
 
-                    $pattern->categories()->detach($ids);
+                    $pattern->categories()->detach(ids: $ids);
 
                     $result++;
                 }
             }
         );
 
-        $this->info("Pattern categories removed successfully, {$result} pattern records were affected.");
+        $this->info(string: "Pattern categories removed successfully, {$result} pattern records were affected.");
     }
 }

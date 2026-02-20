@@ -33,15 +33,15 @@ class ParseReviewsCommand extends Command
 
     public function handle(): int
     {
-        $this->info('Parsing reviews...');
+        $this->info(string: 'Parsing reviews...');
 
-        $id = $this->option('id');
+        $id = $this->option(key: 'id');
 
         $q = Pattern::query()
             ->whereHas(
-                'meta',
-                fn($query) => $query
-                    ->where('reviews_updated_at', '<', now()->subDays(14))
+                relation: 'meta',
+                callback: fn($query) => $query
+                    ->where(column: 'reviews_updated_at', operator: '<', value: now()->subDays(14))
                     ->orWhereNull('reviews_updated_at')
             )
             ->whereIn('source', $this->sources)
@@ -56,16 +56,16 @@ class ParseReviewsCommand extends Command
 
         $count = $q->count();
 
-        $this->info("Found {$count} patterns to check for updates on reviews");
+        $this->info(string: "Found {$count} patterns to check for updates on reviews");
 
         $q->chunkById(
             count: 1,
             callback: function (Collection $patterns): void {
                 $pattern = $patterns->first();
-                $allPatternReviewsOnPage = $this->processPattern($pattern);
+                $allPatternReviewsOnPage = $this->processPattern(pattern: $pattern);
 
                 if ($allPatternReviewsOnPage === []) {
-                    $this->info("No reviews found for pattern: " . $pattern->id);
+                    $this->info(string: "No reviews found for pattern: " . $pattern->id);
 
                     $pattern->meta->update(['reviews_updated_at' => now()]);
 
@@ -85,11 +85,11 @@ class ParseReviewsCommand extends Command
                         continue;
                     }
 
-                    $toCreate[] = new PatternReview($review);
+                    $toCreate[] = new PatternReview(attributes: $review);
                 }
 
                 if ($toCreate === []) {
-                    $this->info("No new reviews found for pattern: " . $pattern->id);
+                    $this->info(string: "No new reviews found for pattern: " . $pattern->id);
 
                     $pattern->meta->update(['reviews_updated_at' => now()]);
 
@@ -103,7 +103,7 @@ class ParseReviewsCommand extends Command
 
                     $pattern->meta->update(['reviews_updated_at' => now()]);
 
-                    $this->call('tools:pattern:calculate-average-rating', [
+                    $this->call(command: 'tools:pattern:calculate-average-rating', arguments: [
                         '--id' => $pattern->id,
                     ]);
 
@@ -112,13 +112,13 @@ class ParseReviewsCommand extends Command
                     DB::rollBack();
 
                     $this->error(
-                        'Error inserting reviews: ' . $throwable->getMessage()
+                        string: 'Error inserting reviews: ' . $throwable->getMessage()
                     );
                 }
             },
         );
 
-        $this->info("Finish parsing reviews");
+        $this->info(string: "Finish parsing reviews");
 
         return Command::SUCCESS;
     }
@@ -126,9 +126,9 @@ class ParseReviewsCommand extends Command
     protected function processPattern(Pattern $pattern): array
     {
         return match ($pattern->source) {
-            PatternSourceEnum::NEOVIMA => $this->parseNeovimaPatternReviews($pattern),
+            PatternSourceEnum::NEOVIMA => $this->parseNeovimaPatternReviews(pattern: $pattern),
 
-            PatternSourceEnum::MLEATHER => $this->parseMLeatherPatternReviews($pattern),
+            PatternSourceEnum::MLEATHER => $this->parseMLeatherPatternReviews(pattern: $pattern),
 
             default => [],
         };
@@ -136,20 +136,20 @@ class ParseReviewsCommand extends Command
 
     protected function parseNeovimaPatternReviews(Pattern $pattern): array
     {
-        $this->info('Parsing reviews for pattern: ' . $pattern->id);
+        $this->info(string: 'Parsing reviews for pattern: ' . $pattern->id);
 
         try {
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Exception $exception) {
             $this->error(
-                "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
+                string: "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
             );
 
             return [];
         }
 
-        if (str_contains($content, 'Отзывов пока нет.')) {
-            $this->info('No reviews found for pattern: ' . $pattern->id);
+        if (str_contains(haystack: $content, needle: 'Отзывов пока нет.')) {
+            $this->info(string: 'No reviews found for pattern: ' . $pattern->id);
 
             return [];
         }
@@ -157,15 +157,15 @@ class ParseReviewsCommand extends Command
         $dom = $this->parserService->parseDOM($content);
         $xpath = $this->parserService->getDOMXPath($dom);
 
-        $reviews = $xpath->query("//*[contains(@id, 'comments')]//*[contains(@class, 'comment-text')]");
+        $reviews = $xpath->query(expression: "//*[contains(@id, 'comments')]//*[contains(@class, 'comment-text')]");
 
         $toReturn = [];
 
         foreach ($reviews as $review) {
-            $starsNodes = $xpath->query(".//strong[contains(@class, 'rating')]", $review);
-            $nameNodes = $xpath->query(".//*[contains(@class, 'woocommerce-review__author')]", $review);
-            $dateNodes = $xpath->query(".//*[contains(@class, 'woocommerce-review__published-date')]", $review);
-            $textNodes = $xpath->query(".//*[contains(@class, 'description')]", $review);
+            $starsNodes = $xpath->query(expression: ".//strong[contains(@class, 'rating')]", contextNode: $review);
+            $nameNodes = $xpath->query(expression: ".//*[contains(@class, 'woocommerce-review__author')]", contextNode: $review);
+            $dateNodes = $xpath->query(expression: ".//*[contains(@class, 'woocommerce-review__published-date')]", contextNode: $review);
+            $textNodes = $xpath->query(expression: ".//*[contains(@class, 'description')]", contextNode: $review);
 
             $stars = $starsNodes->item(0)?->textContent;
 
@@ -178,10 +178,10 @@ class ParseReviewsCommand extends Command
             $text = $textNodes->item(0)?->textContent;
 
             $toReturn[] = [
-                'rating' => floatval($stars),
-                'reviewer_name' => trim((string) $name),
-                'reviewed_at' => trim((string) $date),
-                'comment' => trim((string) $text),
+                'rating' => floatval(value: $stars),
+                'reviewer_name' => trim(string: (string) $name),
+                'reviewed_at' => trim(string: (string) $date),
+                'comment' => trim(string: (string) $text),
             ];
         }
 
@@ -190,20 +190,20 @@ class ParseReviewsCommand extends Command
 
     protected function parseMLeatherPatternReviews(Pattern $pattern): array
     {
-        $this->info('Parsing reviews for pattern: ' . $pattern->id);
+        $this->info(string: 'Parsing reviews for pattern: ' . $pattern->id);
 
         try {
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Exception $exception) {
             $this->error(
-                "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
+                string: "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
             );
 
             return [];
         }
 
-        if (str_contains($content, 'Отзывов еще никто не оставлял')) {
-            $this->info('No reviews found for pattern: ' . $pattern->id);
+        if (str_contains(haystack: $content, needle: 'Отзывов еще никто не оставлял')) {
+            $this->info(string: 'No reviews found for pattern: ' . $pattern->id);
 
             return [];
         }
@@ -211,14 +211,14 @@ class ParseReviewsCommand extends Command
         $dom = $this->parserService->parseDOM($content);
         $xpath = $this->parserService->getDOMXPath($dom);
 
-        $reviews = $xpath->query("//*[contains(@class, 'reviews')]//*[contains(@class, 'masonry-reviews-item')]");
+        $reviews = $xpath->query(expression: "//*[contains(@class, 'reviews')]//*[contains(@class, 'masonry-reviews-item')]");
 
         $toReturn = [];
 
         foreach ($reviews as $review) {
-            $nameNodes = $xpath->query(".//*[contains(@class, 'author')]", $review);
-            $dateNodes = $xpath->query(".//*[contains(@class, 'date')]", $review);
-            $textNodes = $xpath->query(".//*[contains(@class, 'review-content')]", $review);
+            $nameNodes = $xpath->query(expression: ".//*[contains(@class, 'author')]", contextNode: $review);
+            $dateNodes = $xpath->query(expression: ".//*[contains(@class, 'date')]", contextNode: $review);
+            $textNodes = $xpath->query(expression: ".//*[contains(@class, 'review-content')]", contextNode: $review);
 
             $stars = null;
 
@@ -227,10 +227,10 @@ class ParseReviewsCommand extends Command
             $text = $textNodes->item(0)?->textContent;
 
             $toReturn[] = [
-                'rating' => floatval($stars),
-                'reviewer_name' => trim((string) $name),
-                'reviewed_at' => trim((string) $date),
-                'comment' => trim((string) $text),
+                'rating' => floatval(value: $stars),
+                'reviewer_name' => trim(string: (string) $name),
+                'reviewed_at' => trim(string: (string) $date),
+                'comment' => trim(string: (string) $text),
             ];
         }
 
@@ -240,6 +240,6 @@ class ParseReviewsCommand extends Command
             $unique[$item['comment']] = $item;
         }
 
-        return array_values($unique);
+        return array_values(array: $unique);
     }
 }

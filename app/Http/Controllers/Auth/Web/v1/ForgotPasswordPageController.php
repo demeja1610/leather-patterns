@@ -11,6 +11,6 @@ class ForgotPasswordPageController extends Controller
 {
     public function __invoke(): View
     {
-        return view('pages.auth.forgot-password');
+        return view(view: 'pages.auth.forgot-password');
     }
 }

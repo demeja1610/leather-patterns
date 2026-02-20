@@ -35,6 +35,6 @@ class PatternImage extends Model
 
     public function pattern(): BelongsTo
     {
-        return $this->belongsTo(Pattern::class);
+        return $this->belongsTo(related: Pattern::class);
     }
 }

@@ -17,12 +17,12 @@ class GeneratePatternMetasCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Generating pattern metas...');
+        $this->info(message: 'Generating pattern metas...');
 
         $created = 0;
 
         Pattern::query()
-            ->whereDoesntHave('meta')
+            ->whereDoesntHave(relation: 'meta')
             ->orderBy('id')
             ->with([
                 'files',
@@ -34,7 +34,7 @@ class GeneratePatternMetasCommand extends Command
                 $to = $patterns->last()->id;
                 $count = $patterns->count();
 
-                $this->info("Processing patterns from {$from} to {$to} (Total: {$count})");
+                $this->info(message: "Processing patterns from {$from} to {$to} (Total: {$count})");
 
                 $toInsert = [];
 
@@ -52,11 +52,11 @@ class GeneratePatternMetasCommand extends Command
                 }
 
                 if ($toInsert !== []) {
-                    DB::table('pattern_metas')->insert($toInsert);
+                    DB::table('pattern_metas')->insert(values: $toInsert);
 
-                    $this->info("Inserted " . count($toInsert) . " pattern metas");
+                    $this->info(message: "Inserted " . count(value: $toInsert) . " pattern metas");
 
-                    $created += count($toInsert);
+                    $created += count(value: $toInsert);
                 }
             });
     }

@@ -19,8 +19,8 @@ class EditController extends Controller
         $data = array_merge(
             $request->validated(),
             [
-                'remove_on_appear' => (bool) $request->get('remove_on_appear', false),
-                'is_published' => (bool) $request->get('is_published', false),
+                'remove_on_appear' => (bool) $request->get(key: 'remove_on_appear', default: false),
+                'is_published' => (bool) $request->get(key: 'is_published', default: false),
             ]
         );
 
@@ -29,7 +29,7 @@ class EditController extends Controller
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
-                        text: __('pattern_category.admin.cannot_remove_and_replace_same_time'),
+                        text: __(key: 'pattern_category.admin.cannot_remove_and_replace_same_time'),
                         type: NotificationTypeEnum::ERROR,
                     )
                 ),
@@ -37,20 +37,20 @@ class EditController extends Controller
         }
 
         $updated = PatternCategory::query()
-            ->where('id', $id)
-            ->update($data);
+            ->where(column: 'id', operator: $id)
+            ->update(values: $data);
 
         return back()->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
                 $updated > 0
                     ? new SessionNotificationDto(
-                        text: __('pattern_category.admin.updated', ['id' => $id]),
+                        text: __(key: 'pattern_category.admin.updated', replace: ['id' => $id]),
                         type: NotificationTypeEnum::SUCCESS,
                     )
                     :
                     new SessionNotificationDto(
-                        text: __('pattern_category.admin.failed_to_update', ['id' => $id]),
+                        text: __(key: 'pattern_category.admin.failed_to_update', replace: ['id' => $id]),
                         type: NotificationTypeEnum::ERROR,
                     ),
             ),

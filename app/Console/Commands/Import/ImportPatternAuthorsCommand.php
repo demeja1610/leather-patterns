@@ -17,11 +17,11 @@ class ImportPatternAuthorsCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Importing pattern authors...');
+        $this->info(message: 'Importing pattern authors...');
 
-        DB::connection('mysql_import')->table('authors')
-            ->orderBy('authors.id')
-            ->select([
+        DB::connection('mysql_import')->table(table: 'authors')
+            ->orderBy(column: 'authors.id')
+            ->select(columns: [
                 'authors.id',
                 'authors.name as author_name',
                 'authors.created_at as author_created_at',
@@ -33,7 +33,7 @@ class ImportPatternAuthorsCommand extends Command
                     $to = $chunk->last()->id;
                     $count = $chunk->count();
 
-                    $this->info("Importing pattern authors from {$from} to {$to} ({$count} total)...");
+                    $this->info(message: "Importing pattern authors from {$from} to {$to} ({$count} total)...");
 
                     $toInsert = [];
 
@@ -47,16 +47,16 @@ class ImportPatternAuthorsCommand extends Command
                     }
 
 
-                    DB::table('pattern_authors')->insertOrIgnore($toInsert);
+                    DB::table('pattern_authors')->insertOrIgnore(values: $toInsert);
                 }
             );
 
-        DB::connection('mysql_import')->table('author_pattern')
-            ->join('authors', 'author_pattern.author_id', '=', 'authors.id')
-            ->join('patterns', 'author_pattern.pattern_id', '=', 'patterns.id')
-            ->where('patterns.source', '!=', PatternSourceEnum::SKINCUTS->value)
-            ->orderBy('author_pattern.author_id')
-            ->select([
+        DB::connection('mysql_import')->table(table: 'author_pattern')
+            ->join(table: 'authors', first: 'author_pattern.author_id', operator: '=', second: 'authors.id')
+            ->join(table: 'patterns', first: 'author_pattern.pattern_id', operator: '=', second: 'patterns.id')
+            ->where(column: 'patterns.source', operator: '!=', value: PatternSourceEnum::SKINCUTS->value)
+            ->orderBy(column: 'author_pattern.author_id')
+            ->select(columns: [
                 'author_pattern.author_id as author_id',
                 'author_pattern.pattern_id as pattern_id',
             ])
@@ -67,7 +67,7 @@ class ImportPatternAuthorsCommand extends Command
                     $to = $chunk->last()->author_id;
                     $count = $chunk->count();
 
-                    $this->info("Importing pattern authors from {$from} to {$to} ({$count} total)...");
+                    $this->info(message: "Importing pattern authors from {$from} to {$to} ({$count} total)...");
 
                     $case = "CASE";
                     $patternsIds = [];
@@ -82,15 +82,15 @@ class ImportPatternAuthorsCommand extends Command
                     $case .= " ELSE author_id END";
 
                     $updated = DB::table('patterns')
-                        ->whereIn('id', $patternsIds)
-                        ->update([
+                        ->whereIn(column: 'id', values: $patternsIds)
+                        ->update(values: [
                             'author_id' => DB::raw($case),
                         ]);
 
-                    $this->info("Updated {$updated} patterns with new author IDs.");
+                    $this->info(message: "Updated {$updated} patterns with new author IDs.");
                 }
             );
 
-        $this->info("All pattern authors imported successfully.");
+        $this->info(message: "All pattern authors imported successfully.");
     }
 }

@@ -17,11 +17,11 @@ class ImportPatternTagsCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Importing pattern tags...');
+        $this->info(message: 'Importing pattern tags...');
 
-        DB::connection('mysql_import')->table('tags')
-            ->orderBy('tags.id')
-            ->select([
+        DB::connection('mysql_import')->table(table: 'tags')
+            ->orderBy(column: 'tags.id')
+            ->select(columns: [
                 'tags.id',
                 'tags.name as tags_name',
                 'tags.created_at as tags_created_at',
@@ -33,7 +33,7 @@ class ImportPatternTagsCommand extends Command
                     $to = $chunk->last()->id;
                     $count = $chunk->count();
 
-                    $this->info("Importing pattern tags from {$from} to {$to} ({$count} total)...");
+                    $this->info(message: "Importing pattern tags from {$from} to {$to} ({$count} total)...");
 
                     $toInsert = [];
 
@@ -47,16 +47,16 @@ class ImportPatternTagsCommand extends Command
                     }
 
 
-                    DB::table('pattern_tags')->insertOrIgnore($toInsert);
+                    DB::table('pattern_tags')->insertOrIgnore(values: $toInsert);
                 }
             );
 
-        DB::connection('mysql_import')->table('pattern_tag')
-            ->join('tags', 'pattern_tag.tag_id', '=', 'tags.id')
-            ->join('patterns', 'pattern_tag.pattern_id', '=', 'patterns.id')
-            ->where('patterns.source', '!=', PatternSourceEnum::SKINCUTS->value)
-            ->orderBy('pattern_tag.tag_id')
-            ->select([
+        DB::connection('mysql_import')->table(table: 'pattern_tag')
+            ->join(table: 'tags', first: 'pattern_tag.tag_id', operator: '=', second: 'tags.id')
+            ->join(table: 'patterns', first: 'pattern_tag.pattern_id', operator: '=', second: 'patterns.id')
+            ->where(column: 'patterns.source', operator: '!=', value: PatternSourceEnum::SKINCUTS->value)
+            ->orderBy(column: 'pattern_tag.tag_id')
+            ->select(columns: [
                 'pattern_tag.tag_id as tag_id',
                 'pattern_tag.pattern_id as pattern_id',
             ])
@@ -67,7 +67,7 @@ class ImportPatternTagsCommand extends Command
                     $to = $chunk->last()->tag_id;
                     $count = $chunk->count();
 
-                    $this->info("Importing pattern tags from {$from} to {$to} ({$count} total)...");
+                    $this->info(message: "Importing pattern tags from {$from} to {$to} ({$count} total)...");
 
                     $toInsert = [];
 
@@ -79,10 +79,10 @@ class ImportPatternTagsCommand extends Command
                         ];
                     }
 
-                    DB::table('pattern_pattern_tag')->insertOrIgnore($toInsert);
+                    DB::table('pattern_pattern_tag')->insertOrIgnore(values: $toInsert);
                 }
             );
 
-        $this->info('Pattern tags imported successfully.');
+        $this->info(message: 'Pattern tags imported successfully.');
     }
 }

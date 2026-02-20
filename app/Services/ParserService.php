@@ -22,16 +22,16 @@ class ParserService implements ParserServiceInterface
 
     public function parseDOM(string $html): DOMDocument
     {
-        $dom = new DOMDocument('1.0', 'UTF-8');
+        $dom = new DOMDocument(encoding: 'UTF-8');
 
-        @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+        @$dom->loadHTML(source: mb_convert_encoding(string: $html, to_encoding: 'HTML-ENTITIES', from_encoding: 'UTF-8'));
 
         return $dom;
     }
 
     public function getDOMXPath(DOMDocument $dom): DOMXPath
     {
-        return new DOMXPath($dom);
+        return new DOMXPath(document: $dom);
     }
 
     public function getClient(): Client
@@ -45,7 +45,7 @@ class ParserService implements ParserServiceInterface
     public function parseUrl($url): string
     {
         try {
-            $response = $this->client->get($url, [
+            $response = $this->client->get(uri: $url, options: [
                 'headers' => $this->getRequiredHeaders(),
                 'allow_redirects' => true,
             ]);
@@ -53,9 +53,9 @@ class ParserService implements ParserServiceInterface
             return $response->getBody()->getContents();
         } catch (GuzzleException $guzzleException) {
             throw new Exception(
-                'HTTP request failed: ' . $guzzleException->getMessage(),
-                $guzzleException->getCode(),
-                $guzzleException
+                message: 'HTTP request failed: ' . $guzzleException->getMessage(),
+                code: $guzzleException->getCode(),
+                previous: $guzzleException
             );
         }
     }
@@ -70,30 +70,30 @@ class ParserService implements ParserServiceInterface
     public function getYoutubeVideoIdsFromString(string $string): array
     {
         preg_match_all(
-            '/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/|youtube-nocookie\.com\/embed\/)([a-zA-Z0-9_-]{11})/',
-            $string,
-            $matches,
+            pattern: '/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/|youtube-nocookie\.com\/embed\/)([a-zA-Z0-9_-]{11})/',
+            subject: $string,
+            matches: $matches,
         );
 
-        return array_unique($matches[1]);
+        return array_unique(array: $matches[1]);
     }
 
     public function getVkVideoIdsFromString(string $string): array
     {
-        $content = htmlspecialchars_decode($string);
+        $content = htmlspecialchars_decode(string: $string);
 
         preg_match_all(
-            '/video([-]?\d+_\d+)/',
-            $content,
-            $matches,
+            pattern: '/video([-]?\d+_\d+)/',
+            subject: $content,
+            matches: $matches,
         );
 
         $ids = $matches[1];
 
         preg_match_all(
-            '/[?&]oid=([-]?\d+)&id=(\d+)/',
-            $content,
-            $extMatches,
+            pattern: '/[?&]oid=([-]?\d+)&id=(\d+)/',
+            subject: $content,
+            matches: $extMatches,
         );
 
         if (
@@ -107,6 +107,6 @@ class ParserService implements ParserServiceInterface
             }
         }
 
-        return array_unique($ids);
+        return array_unique(array: $ids);
     }
 }

@@ -20,7 +20,7 @@ class GetAllController extends Controller
             request: $request,
         );
 
-        return PatternAuthorResource::collection($patternAuthors);
+        return PatternAuthorResource::collection(resource: $patternAuthors);
     }
 
     protected function getAllPatternAuthors(GetAllRequest &$request): Collection
@@ -42,10 +42,10 @@ class GetAllController extends Controller
 
     protected function applyFilters(Builder &$query, GetAllRequest &$request): void
     {
-        $from = $request->get('from');
+        $from = $request->get(key: 'from');
 
         if ($from !== null) {
-            $query->where('id', '>', (int) $from);
+            $query->where(column: 'id', operator: '>', value: (int) $from);
         }
     }
 }

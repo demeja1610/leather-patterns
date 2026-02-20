@@ -29,7 +29,7 @@ class PatternVideo extends Model
 
     public function pattern(): BelongsTo
     {
-        return $this->belongsTo(Pattern::class);
+        return $this->belongsTo(related: Pattern::class);
     }
 
     protected function embedUrl(): Attribute
@@ -37,7 +37,7 @@ class PatternVideo extends Model
         return new Attribute(
             get: fn($value, array $attributes): ?string => match ($attributes['source']) {
                 VideoSourceEnum::YOUTUBE->value => "https://www.youtube.com/embed/{$attributes['source_identifier']}",
-                VideoSourceEnum::VK->value => $this->getVkEmbedUrl($attributes),
+                VideoSourceEnum::VK->value => $this->getVkEmbedUrl(attributes: $attributes),
                 default => null,
             }
         );
@@ -45,7 +45,7 @@ class PatternVideo extends Model
 
     protected function getVkEmbedUrl(array $attributes): string
     {
-        $id = explode('_', (string) $attributes['source_identifier']);
+        $id = explode(separator: '_', string: (string) $attributes['source_identifier']);
 
         return "https://vkvideo.ru/video_ext.php?oid={$id[0]}&id={$id[1]}";
     }

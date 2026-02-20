@@ -14,13 +14,13 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
 {
     public function processPattern(Pattern $pattern): void
     {
-        $baseURL = parse_url($pattern->source_url, PHP_URL_SCHEME) . '://' . parse_url($pattern->source_url, PHP_URL_HOST);
+        $baseURL = parse_url(url: $pattern->source_url, component: PHP_URL_SCHEME) . '://' . parse_url(url: $pattern->source_url, component: PHP_URL_HOST);
 
         try {
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
             );
 
             return;
@@ -43,63 +43,63 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             pattern: $pattern
         );
 
-        $imageElements1 = $xpath->query("//*[contains(@itemprop, 'articleBody')]//img");
-        $imageElements2 = $xpath->query("//*[contains(@class, 'full-image')]//img");
+        $imageElements1 = $xpath->query(expression: "//*[contains(@itemprop, 'articleBody')]//img");
+        $imageElements2 = $xpath->query(expression: "//*[contains(@class, 'full-image')]//img");
 
         /** @var DOMElement $imageElement */
         foreach ($imageElements1 as $imageElement) {
-            $imageUrl = $imageElement->getAttribute('src');
+            $imageUrl = $imageElement->getAttribute(qualifiedName: 'src');
 
-            if ($imageUrl && !str_contains($imageUrl, '.gif')) {
-                $images[] = trim($baseURL, '') . '/' . trim($imageUrl, '/');
+            if ($imageUrl && !str_contains(haystack: $imageUrl, needle: '.gif')) {
+                $images[] = trim(string: $baseURL, characters: '') . '/' . trim(string: $imageUrl, characters: '/');
             }
         }
 
         /** @var DOMElement $imageElement */
         foreach ($imageElements2 as $imageElement) {
-            $imageUrl = $imageElement->getAttribute('src');
+            $imageUrl = $imageElement->getAttribute(qualifiedName: 'src');
 
-            if ($imageUrl && !str_contains($imageUrl, '.gif')) {
-                $images[] = trim($baseURL, '') . '/' . trim($imageUrl, '/');
+            if ($imageUrl && !str_contains(haystack: $imageUrl, needle: '.gif')) {
+                $images[] = trim(string: $baseURL, characters: '') . '/' . trim(string: $imageUrl, characters: '/');
             }
         }
 
-        $categoriesElements = $xpath->query("//*[contains(@class, 'category-name')]//a");
+        $categoriesElements = $xpath->query(expression: "//*[contains(@class, 'category-name')]//a");
 
         /** @var DOMElement $categoryElement */
         foreach ($categoriesElements as $categoryElement) {
             $categories[] = $categoryElement->textContent;
         }
 
-        $tagsElements = $xpath->query("//*[contains(@class, 'tags')]//a");
+        $tagsElements = $xpath->query(expression: "//*[contains(@class, 'tags')]//a");
 
         /** @var DOMElement $tagElement */
         foreach ($tagsElements as $tagElement) {
             $tags[] = $tagElement->textContent;
         }
 
-        $title = $xpath->query("//h1[contains(@itemprop, 'name')]")->item(0)?->textContent;
+        $title = $xpath->query(expression: "//h1[contains(@itemprop, 'name')]")->item(0)?->textContent;
 
         if (!$title) {
             $title = 'No title';
         }
 
-        $title = trim($title);
+        $title = trim(string: $title);
 
-        $downloadLinks = $xpath->query("//*[contains(@class, 'at_url')]");
+        $downloadLinks = $xpath->query(expression: "//*[contains(@class, 'at_url')]");
         $downloadUrls = [];
 
         if ($downloadLinks->length > 0) {
             /** @var DOMElement $downloadLink */
             foreach ($downloadLinks as $downloadLink) {
-                $downloadUrls[] = $downloadLink->getAttribute('href');
+                $downloadUrls[] = $downloadLink->getAttribute(qualifiedName: 'href');
             }
         }
 
         if ($downloadLinks->length === 0) {
-            $this->warn("No download URL found for pattern {$pattern->id}, skipping...");
+            $this->warn(message: "No download URL found for pattern {$pattern->id}, skipping...");
 
-            $this->setDownloadUrlWrong($pattern);
+            $this->setDownloadUrlWrong(pattern: $pattern);
 
             return;
         }
@@ -111,10 +111,10 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             $fileDownloadUrls = $downloadUrls;
 
             foreach ($fileDownloadUrls as $fileDownloadUrl) {
-                if (str_contains($fileDownloadUrl, 'youtu')) {
-                    $this->warn("YouTube video detected, skipping file download...");
+                if (str_contains(haystack: $fileDownloadUrl, needle: 'youtu')) {
+                    $this->warn(message: "YouTube video detected, skipping file download...");
 
-                    $this->setDownloadUrlWrong($pattern);
+                    $this->setDownloadUrlWrong(pattern: $pattern);
 
                     return;
                 }
@@ -125,12 +125,12 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
                 );
             }
 
-            $patternFilePaths = array_filter($patternFilePaths);
+            $patternFilePaths = array_filter(array: $patternFilePaths);
 
             if ($patternFilePaths === []) {
-                $this->error("Failed to download pattern file for pattern {$pattern->id}, skipping...");
+                $this->error(message: "Failed to download pattern file for pattern {$pattern->id}, skipping...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -172,7 +172,7 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
                 );
             }
 
-            Pattern::query()->where('id', $pattern->id)->update([
+            Pattern::query()->where(column: 'id', operator: $pattern->id)->update(values: [
                 'title' => $title,
             ]);
 
@@ -195,27 +195,27 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             }
 
             if ($videosToCreate !== []) {
-                $videosToCreateCount = count($videosToCreate);
+                $videosToCreateCount = count(value: $videosToCreate);
 
                 $this->success(
-                    "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
+                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
                 );
 
-                $pattern->videos()->saveMany($videosToCreate);
+                $pattern->videos()->saveMany(models: $videosToCreate);
 
-                $this->setPatternVideoChecked($pattern);
+                $this->setPatternVideoChecked(pattern: $pattern);
             }
 
             if ($reviewsToCreate !== []) {
-                $reviewsToCreateCount = count($reviewsToCreate);
+                $reviewsToCreateCount = count(value: $reviewsToCreate);
 
                 $this->success(
-                    "Created {$reviewsToCreateCount} reviews for pattern {$pattern->id}"
+                    message: "Created {$reviewsToCreateCount} reviews for pattern {$pattern->id}"
                 );
 
-                $pattern->reviews()->saveMany($reviewsToCreate);
+                $pattern->reviews()->saveMany(models: $reviewsToCreate);
 
-                $this->setPatternReviewChecked($pattern);
+                $this->setPatternReviewChecked(pattern: $pattern);
             }
 
             DB::commit();
@@ -223,17 +223,17 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
             );
 
-            $this->error('Reverting changes, deleting downloaded files if they exist...');
+            $this->error(message: 'Reverting changes, deleting downloaded files if they exist...');
 
             foreach ($patternFilePaths as $patternFilePath) {
-                $this->deleteFileIfExists($patternFilePath);
+                $this->deleteFileIfExists(filePath: $patternFilePath);
             }
 
             if ($patternImagesPaths !== []) {
-                $this->deleteImagesIfExists($patternImagesPaths);
+                $this->deleteImagesIfExists(imagePaths: $patternImagesPaths);
             }
         }
     }
@@ -243,16 +243,16 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
      */
     protected function parse1KozhaPatternReviews(DOMXPath $xpath, Pattern $pattern): array
     {
-        $this->info('Parsing reviews for pattern: ' . $pattern->id);
+        $this->info(message: 'Parsing reviews for pattern: ' . $pattern->id);
 
-        $reviews = $xpath->query("//*[contains(@id, 'jcm-comments')]//*[contains(@class, 'jcm-block')]");
+        $reviews = $xpath->query(expression: "//*[contains(@id, 'jcm-comments')]//*[contains(@class, 'jcm-block')]");
 
         $toReturn = [];
 
         foreach ($reviews as $review) {
-            $nameNodes = $xpath->query(".//*[contains(@class, 'jcm-user-cm')]//span", $review);
-            $dateNodes = $xpath->query(".//*[contains(@class, 'jcm-post-header')]//meta", $review);
-            $textNodes = $xpath->query(".//*[contains(@class, 'jcm-post-body')]", $review);
+            $nameNodes = $xpath->query(expression: ".//*[contains(@class, 'jcm-user-cm')]//span", contextNode: $review);
+            $dateNodes = $xpath->query(expression: ".//*[contains(@class, 'jcm-post-header')]//meta", contextNode: $review);
+            $textNodes = $xpath->query(expression: ".//*[contains(@class, 'jcm-post-body')]", contextNode: $review);
 
             $stars = null;
 
@@ -261,10 +261,10 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             $text = $textNodes->item(0)?->textContent;
 
             $toReturn[] = $this->prepareReviewForCreation(
-                comment: trim((string) $text),
-                rating: floatval($stars),
-                reviewerName: trim((string) $name),
-                reviewedAt: trim((string) $date),
+                comment: trim(string: (string) $text),
+                rating: floatval(value: $stars),
+                reviewerName: trim(string: (string) $name),
+                reviewedAt: trim(string: (string) $date),
             );
         }
 

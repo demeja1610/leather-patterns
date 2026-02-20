@@ -16,11 +16,11 @@ class ForgotPasswordActionController extends Controller
     {
         $data = $request->validated();
 
-        $user = $this->getUser($data['email']);
+        $user = $this->getUser(email: $data['email']);
 
         if (!$user instanceof User) {
-            throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+            throw ValidationException::withMessages(messages: [
+                'email' => __(key: 'auth.failed'),
             ]);
         }
 
@@ -31,10 +31,10 @@ class ForgotPasswordActionController extends Controller
         );
 
         return $status === Password::RESET_LINK_SENT
-            ? back()->with('status', __($status))->withInput([
+            ? back()->with(key: 'status', value: __(key: $status))->withInput(input: [
                 'email' => $data['email']
             ])
-            : back()->withErrors(['email' => __($status)])->withInput([
+            : back()->withErrors(provider: ['email' => __(key: $status)])->withInput(input: [
                 'email' => $data['email']
             ]);
     }
@@ -42,7 +42,7 @@ class ForgotPasswordActionController extends Controller
     protected function getUser(string $email): ?User
     {
         return User::query()
-            ->where('email', $email)
+            ->where(column: 'email', operator: $email)
             ->first();
     }
 }

@@ -31,7 +31,7 @@ class PatternCategory extends Model
 
     public function patterns(): BelongsToMany
     {
-        return $this->belongsToMany(Pattern::class);
+        return $this->belongsToMany(related: Pattern::class);
     }
 
     public function replacement(): HasOne
@@ -55,11 +55,11 @@ class PatternCategory extends Model
     public function isDeletable(): bool
     {
         if ($this->patterns_count === null) {
-            $this->loadCount('patterns');
+            $this->loadCount(relations: 'patterns');
         }
 
         if ($this->replacement_for_count === null) {
-            $this->loadCount('replacementFor');
+            $this->loadCount(relations: 'replacementFor');
         }
 
         return $this->remove_on_appear === false &&

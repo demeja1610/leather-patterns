@@ -19,10 +19,10 @@ class MyEtsySourceAdapter extends AbstractSourceAdapter
     {
         $page = 1;
 
-        $url = trim($baseURL, '/') . '/product-category/vykrojki-iz-kozhi/';
+        $url = trim(string: $baseURL, characters: '/') . '/product-category/vykrojki-iz-kozhi/';
 
         while ($page !== null) {
-            $this->info("Processing page: {$page}");
+            $this->info(message: "Processing page: {$page}");
 
             $requestUrl = $page > 1
                 ? $url . '/page/' . $page . '/'
@@ -31,7 +31,7 @@ class MyEtsySourceAdapter extends AbstractSourceAdapter
             try {
                 $html = $this->parserService->parseUrl($requestUrl);
             } catch (Exception $e) {
-                $this->error("Error processing page {$page}: " . $e->getMessage());
+                $this->error(message: "Error processing page {$page}: " . $e->getMessage());
 
                 return;
             }
@@ -39,39 +39,39 @@ class MyEtsySourceAdapter extends AbstractSourceAdapter
             $dom = $this->parserService->parseDOM($html);
             $xpath = $this->parserService->getDOMXPath($dom);
 
-            $patternLinks = $xpath->query("//a[contains(@class, 'woocommerce-loop-product__link')]");
+            $patternLinks = $xpath->query(expression: "//a[contains(@class, 'woocommerce-loop-product__link')]");
 
-            $this->info("Found {$patternLinks->length} patterns");
+            $this->info(message: "Found {$patternLinks->length} patterns");
 
             $patterns = [];
 
             foreach ($patternLinks as $patternLink) {
                 if ($patternLink instanceof DOMElement) {
                     $patterns[] = $this->preparePatternForCreation(
-                        url: $patternLink->getAttribute('href'),
+                        url: $patternLink->getAttribute(qualifiedName: 'href'),
                         source: PatternSourceEnum::MYETSY,
                     );
                 }
             }
 
-            $patternsCount = count($patterns);
+            $patternsCount = count(value: $patterns);
 
-            $savedCount = $this->createNewPatterns($patterns);
+            $savedCount = $this->createNewPatterns(patterns: $patterns);
 
-            $this->success("Saved {$savedCount} patterns");
+            $this->success(message: "Saved {$savedCount} patterns");
 
             if ($savedCount !== $patternsCount) {
-                $this->success("The rest of the patterns are already exists, skipping to next source");
+                $this->success(message: "The rest of the patterns are already exists, skipping to next source");
 
                 $page = null;
 
                 break;
             }
 
-            $nextPage = $xpath->query("//a[contains(@class, 'next')]");
+            $nextPage = $xpath->query(expression: "//a[contains(@class, 'next')]");
 
             if ($nextPage->length === 0) {
-                $this->success("Link to next page not found, skipping to next source");
+                $this->success(message: "Link to next page not found, skipping to next source");
 
                 $page = null;
 

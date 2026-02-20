@@ -31,7 +31,7 @@ class ListDto extends Dto implements IteratorAggregate
 
     public function getIterator(): Traversable
     {
-        return new ArrayIterator($this->items);
+        return new ArrayIterator(array: $this->items);
     }
 
     public function getItems(): array
@@ -46,6 +46,6 @@ class ListDto extends Dto implements IteratorAggregate
 
     public function count(): int
     {
-        return count($this->items);
+        return count(value: $this->items);
     }
 }

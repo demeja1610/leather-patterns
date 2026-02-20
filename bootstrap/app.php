@@ -5,7 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-return Application::configure(basePath: dirname(__DIR__))
+return Application::configure(basePath: dirname(path: __DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
         api: __DIR__ . '/../routes/api.php',
@@ -13,9 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         apiPrefix: 'api',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
+    ->withMiddleware(callback: function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(
-            fn(Request $request): string => route('page.auth.login')
+            redirect: fn(Request $request): string => route(name: 'page.auth.login')
         );
     })
-    ->withExceptions(function (Exceptions $exceptions): void {})->create();
+    ->withExceptions(using: function (Exceptions $exceptions): void {})->create();

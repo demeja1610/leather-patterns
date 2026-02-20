@@ -19,12 +19,12 @@ class ReplaceMarkedPatternCategoriesForPatternsCommand extends Command
     public function handle(): void
     {
         $q = Pattern::query()
-            ->whereHas('categories', fn(Builder $query) => $query->whereNotNull('replace_id'))
-            ->with('categories.replacement');
+            ->whereHas(relation: 'categories', callback: fn(Builder $query) => $query->whereNotNull('replace_id'))
+            ->with(relations: 'categories.replacement');
 
         $count = $q->count();
 
-        $this->info("Total patterns found: {$count}");
+        $this->info(string: "Total patterns found: {$count}");
 
         $result = 0;
 
@@ -51,31 +51,31 @@ class ReplaceMarkedPatternCategoriesForPatternsCommand extends Command
                             $replacesIds[] = $categoryForReplace->replacement->id;
                             $replacesNames[] = $categoryForReplace->replacement->name;
                         } else {
-                            $this->warn("Category with name: {$categoryForReplace->replacement->name} already attached to pattern");
+                            $this->warn(string: "Category with name: {$categoryForReplace->replacement->name} already attached to pattern");
                         }
                     }
 
-                    $replacesNamesStr = implode(', ', $replacesNames);
+                    $replacesNamesStr = implode(separator: ', ', array: $replacesNames);
 
-                    $this->info("Detaching categories: `{$categoriesForReplaceNames}` from pattern ID: {$pattern->id}");
+                    $this->info(string: "Detaching categories: `{$categoriesForReplaceNames}` from pattern ID: {$pattern->id}");
 
-                    $pattern->categories()->detach($categoriesForReplaceIds);
+                    $pattern->categories()->detach(ids: $categoriesForReplaceIds);
 
                     if ($replacesIds === []) {
-                        $this->warn("No categories to attach to pattern with ID: {$pattern->id}");
+                        $this->warn(string: "No categories to attach to pattern with ID: {$pattern->id}");
 
                         continue;
                     }
 
-                    $this->info("Attaching categories: `{$replacesNamesStr}` from pattern ID: {$pattern->id}");
+                    $this->info(string: "Attaching categories: `{$replacesNamesStr}` from pattern ID: {$pattern->id}");
 
-                    $pattern->categories()->attach($replacesIds);
+                    $pattern->categories()->attach(ids: $replacesIds);
 
                     $result++;
                 }
             }
         );
 
-        $this->info("Pattern categories replaced successfully, {$result} pattern records were affected.");
+        $this->info(string: "Pattern categories replaced successfully, {$result} pattern records were affected.");
     }
 }

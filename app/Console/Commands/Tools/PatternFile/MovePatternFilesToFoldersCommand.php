@@ -18,7 +18,7 @@ class MovePatternFilesToFoldersCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Starting procedure...');
+        $this->info(message: 'Starting procedure...');
 
         Pattern::query()
             ->orderBy('id')
@@ -30,7 +30,7 @@ class MovePatternFilesToFoldersCommand extends Command
                     $to = $chunk->last()->id;
                     $count = $chunk->count();
 
-                    $this->info("Processing patterns  from {$from} to {$to} ({$count} total)...");
+                    $this->info(message: "Processing patterns  from {$from} to {$to} ({$count} total)...");
 
                     $case = 'CASE';
                     $ids = [];
@@ -39,7 +39,7 @@ class MovePatternFilesToFoldersCommand extends Command
                         $folderPath = "/patterns/{$pattern->id}/";
 
                         if (!Storage::disk('public')->exists($folderPath)) {
-                            $this->info("Creating directory for pattern with ID: {$pattern->id}");
+                            $this->info(message: "Creating directory for pattern with ID: {$pattern->id}");
 
                             Storage::disk('public')->makeDirectory($folderPath);
                         }
@@ -47,19 +47,19 @@ class MovePatternFilesToFoldersCommand extends Command
                         foreach ($pattern->files as $file) {
                             $ids[] = $file->id;
 
-                            if (str_contains(trim((string) $file->path, '/'), trim($folderPath, '/'))) {
+                            if (str_contains(haystack: trim(string: (string) $file->path, characters: '/'), needle: trim(string: $folderPath, characters: '/'))) {
                                 continue;
                             }
 
                             $newPath = str_replace(
                                 search: 'patterns/',
-                                replace: trim($folderPath, '/') . '/',
+                                replace: trim(string: $folderPath, characters: '/') . '/',
                                 subject: $file->path,
                             );
 
                             $case .= " WHEN id = {$file->id} THEN '{$newPath}'";
 
-                            $this->info("Moving file from {$file->path} to {$newPath}");
+                            $this->info(message: "Moving file from {$file->path} to {$newPath}");
 
                             Storage::disk('public')
                                 ->move(
@@ -70,14 +70,14 @@ class MovePatternFilesToFoldersCommand extends Command
                     }
 
                     if ($case === 'CASE') {
-                        $this->info('Nothing to move, skipping chunk...');
+                        $this->info(message: 'Nothing to move, skipping chunk...');
 
                         return;
                     }
 
                     $case .= ' ELSE path END';
 
-                    DB::table('pattern_files')->whereIn('id', $ids)->update([
+                    DB::table('pattern_files')->whereIn(column: 'id', values: $ids)->update(values: [
                         'path' => DB::raw($case),
                     ]);
                 },

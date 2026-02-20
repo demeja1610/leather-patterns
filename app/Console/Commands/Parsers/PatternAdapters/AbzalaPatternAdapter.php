@@ -13,13 +13,13 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
 {
     public function processPattern(Pattern $pattern): void
     {
-        $baseURL = parse_url($pattern->source_url, PHP_URL_SCHEME) . '://' . parse_url($pattern->source_url, PHP_URL_HOST);
+        $baseURL = parse_url(url: $pattern->source_url, component: PHP_URL_SCHEME) . '://' . parse_url(url: $pattern->source_url, component: PHP_URL_HOST);
 
         try {
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
             );
 
             return;
@@ -36,25 +36,25 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             pattern: $pattern,
         );
 
-        $imageElements = $xpath->query("//*[contains(@class, 'com-content-article__body')]//img");
+        $imageElements = $xpath->query(expression: "//*[contains(@class, 'com-content-article__body')]//img");
 
         /** @var DOMElement $imageElement */
         foreach ($imageElements as $imageElement) {
-            $imageUrl = $imageElement->getAttribute('src');
+            $imageUrl = $imageElement->getAttribute(qualifiedName: 'src');
 
             if ($imageUrl) {
-                $images[] = $baseURL . '/' . trim($imageUrl, '/');
+                $images[] = $baseURL . '/' . trim(string: $imageUrl, characters: '/');
             }
         }
 
-        $categoriesElements = $xpath->query("//*[contains(@class, 'category-name')]//a");
+        $categoriesElements = $xpath->query(expression: "//*[contains(@class, 'category-name')]//a");
 
         /** @var DOMElement $categoryElement */
         foreach ($categoriesElements as $categoryElement) {
             $categories[] = $categoryElement->textContent;
         }
 
-        $title = $xpath->query("//*[contains(@class, 'page-header')]//h1")->item(0)?->textContent;
+        $title = $xpath->query(expression: "//*[contains(@class, 'page-header')]//h1")->item(0)?->textContent;
 
         if (!$title) {
             $title = 'No title';
@@ -62,12 +62,12 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
 
         $downloadLinkElements = [];
 
-        $downloadLinkElements[] = $xpath->query("//*[contains(@class, 'com-content-article__body')]//a[contains(text(), 'Скачать')]");
-        $downloadLinkElements[] = $xpath->query("//*[contains(@class, 'com-content-article__body')]//a[contains(text(), 'скачать')]");
-        $downloadLinkElements[] = $xpath->query("//*[contains(@class, 'com-content-article__body')]//a[contains(text(), 'СКАЧАТЬ')]");
-        $downloadLinkElements[] = $xpath->query("//*[contains(@class, 'com-content-article__body')]//strong[contains(text(), 'СКАЧАТЬ')]/parent::a");
-        $downloadLinkElements[] = $xpath->query("//*[contains(@class, 'com-content-article__body')]//strong[contains(text(), 'скачать')]/parent::a");
-        $downloadLinkElements[] = $xpath->query("//*[contains(@class, 'com-content-article__body')]//strong[contains(text(), 'Скачать')]/parent::a");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'com-content-article__body')]//a[contains(text(), 'Скачать')]");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'com-content-article__body')]//a[contains(text(), 'скачать')]");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'com-content-article__body')]//a[contains(text(), 'СКАЧАТЬ')]");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'com-content-article__body')]//strong[contains(text(), 'СКАЧАТЬ')]/parent::a");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'com-content-article__body')]//strong[contains(text(), 'скачать')]/parent::a");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'com-content-article__body')]//strong[contains(text(), 'Скачать')]/parent::a");
 
         foreach ($downloadLinkElements as $downloadLinkElement) {
             if ($downloadLinkElement->length > 0) {
@@ -76,23 +76,23 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
                 break;
             }
 
-            if (is_array($downloadLinkElements)) {
+            if (is_array(value: $downloadLinkElements)) {
                 $downloadLinkElements = $downloadLinkElements[0];
             }
         }
 
         if ($downloadLinkElements->length === 0) {
-            $this->warn("No download URL found for pattern {$pattern->id}, skipping...");
+            $this->warn(message: "No download URL found for pattern {$pattern->id}, skipping...");
 
-            $this->setDownloadUrlWrong($pattern);
+            $this->setDownloadUrlWrong(pattern: $pattern);
 
             return;
         }
 
         /** @var DOMElement $element */
         $element = $downloadLinkElements->item(0);
-        $downloadUrl = $element->getAttribute('href');
-        $downloadUrl = $baseURL . '/' . trim($downloadUrl, '/');
+        $downloadUrl = $element->getAttribute(qualifiedName: 'href');
+        $downloadUrl = $baseURL . '/' . trim(string: $downloadUrl, characters: '/');
 
         $patternFilePath = null;
         $patternImagesPaths = [];
@@ -100,10 +100,10 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
         try {
             $fileDownloadUrl = $downloadUrl;
 
-            if (str_contains($fileDownloadUrl, 'youtu')) {
-                $this->warn("YouTube video detected, skipping file download...");
+            if (str_contains(haystack: $fileDownloadUrl, needle: 'youtu')) {
+                $this->warn(message: "YouTube video detected, skipping file download...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -114,9 +114,9 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             );
 
             if ($patternFilePath === null) {
-                $this->error("Failed to download pattern file for pattern {$pattern->id}, skipping...");
+                $this->error(message: "Failed to download pattern file for pattern {$pattern->id}, skipping...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -151,7 +151,7 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
                 );
             }
 
-            Pattern::query()->where('id', $pattern->id)->update([
+            Pattern::query()->where(column: 'id', operator: $pattern->id)->update(values: [
                 'title' => $title,
             ]);
 
@@ -167,13 +167,13 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             }
 
             if ($videosToCreate !== []) {
-                $videosToCreateCount = count($videosToCreate);
+                $videosToCreateCount = count(value: $videosToCreate);
 
-                $this->success("Created {$videosToCreateCount} videos for pattern {$pattern->id}");
+                $this->success(message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}");
 
-                $pattern->videos()->saveMany($videosToCreate);
+                $pattern->videos()->saveMany(models: $videosToCreate);
 
-                $this->setPatternVideoChecked($pattern);
+                $this->setPatternVideoChecked(pattern: $pattern);
             }
 
             DB::commit();
@@ -181,15 +181,15 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
             );
 
-            $this->error('Reverting changes, deleting downloaded files if they exist...');
+            $this->error(message: 'Reverting changes, deleting downloaded files if they exist...');
 
-            $this->deleteFileIfExists($patternFilePath);
+            $this->deleteFileIfExists(filePath: $patternFilePath);
 
             if ($patternImagesPaths !== []) {
-                $this->deleteImagesIfExists($patternImagesPaths);
+                $this->deleteImagesIfExists(imagePaths: $patternImagesPaths);
             }
         }
     }

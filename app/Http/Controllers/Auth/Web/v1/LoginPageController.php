@@ -11,6 +11,6 @@ class LoginPageController extends Controller
 {
     public function __invoke(): View
     {
-        return view('pages.auth.login');
+        return view(view: 'pages.auth.login');
     }
 }

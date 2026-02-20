@@ -18,7 +18,7 @@ class CutmePatternAdapter extends AbstractPatternAdapter
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
             );
 
             return;
@@ -41,74 +41,74 @@ class CutmePatternAdapter extends AbstractPatternAdapter
             pattern: $pattern
         );
 
-        $imageElements = $xpath->query("//*[contains(@class, 'woocommerce-product-gallery__wrapper')]//img");
+        $imageElements = $xpath->query(expression: "//*[contains(@class, 'woocommerce-product-gallery__wrapper')]//img");
 
         /** @var DOMElement $imageElement */
         foreach ($imageElements as $imageElement) {
-            $imageUrl = $imageElement->getAttribute('src');
+            $imageUrl = $imageElement->getAttribute(qualifiedName: 'src');
 
             if ($imageUrl) {
                 $images[] = $imageUrl;
             }
         }
 
-        $categoriesElements = $xpath->query("//*[contains(@class, 'posted_in')]//a");
+        $categoriesElements = $xpath->query(expression: "//*[contains(@class, 'posted_in')]//a");
 
         /** @var DOMElement $categoryElement */
         foreach ($categoriesElements as $categoryElement) {
             $categories[] = $categoryElement->textContent;
         }
 
-        $tagsElements = $xpath->query("//*[contains(@class, 'tagged_as')]//a");
+        $tagsElements = $xpath->query(expression: "//*[contains(@class, 'tagged_as')]//a");
 
         /** @var DOMElement $tagElement */
         foreach ($tagsElements as $tagElement) {
             $tags[] = $tagElement->textContent;
         }
 
-        $title = $xpath->query("//*[contains(@class, 'product_title')]")->item(0)?->textContent;
+        $title = $xpath->query(expression: "//*[contains(@class, 'product_title')]")->item(0)?->textContent;
 
         if (!$title) {
             $title = 'No title';
         }
 
-        $form = $xpath->query("//*[contains(@class, 'somdn-download-form')]")->item(0);
+        $form = $xpath->query(expression: "//*[contains(@class, 'somdn-download-form')]")->item(0);
 
         if (!$form) {
-            $this->warn("No download form found for pattern {$pattern->id}, skipping...");
+            $this->warn(message: "No download form found for pattern {$pattern->id}, skipping...");
 
-            $this->setDownloadUrlWrong($pattern);
+            $this->setDownloadUrlWrong(pattern: $pattern);
 
             return;
         }
 
         /** @var DOMElement $form */
-        $downloadUrl = $form->getAttribute('action');
+        $downloadUrl = $form->getAttribute(qualifiedName: 'action');
 
-        $downloadKeyEl = $xpath->query("//*[contains(@name, 'somdn_download_key')]")->item(0);
-        $productIdEl = $xpath->query("//*[contains(@name, 'somdn_product')]")->item(0);
+        $downloadKeyEl = $xpath->query(expression: "//*[contains(@name, 'somdn_download_key')]")->item(0);
+        $productIdEl = $xpath->query(expression: "//*[contains(@name, 'somdn_product')]")->item(0);
 
         if (!$productIdEl) {
-            $this->warn("No product ID found for pattern {$pattern->id}, skipping...");
+            $this->warn(message: "No product ID found for pattern {$pattern->id}, skipping...");
 
-            $this->setDownloadUrlWrong($pattern);
+            $this->setDownloadUrlWrong(pattern: $pattern);
 
             return;
         }
 
         if (!$downloadKeyEl) {
-            $this->warn("No download key found for pattern {$pattern->id}, skipping...");
+            $this->warn(message: "No download key found for pattern {$pattern->id}, skipping...");
 
-            $this->setDownloadUrlWrong($pattern);
+            $this->setDownloadUrlWrong(pattern: $pattern);
 
             return;
         }
 
         /** @var DOMElement $downloadKeyEl */
-        $downloadKey = $downloadKeyEl->getAttribute('value');
+        $downloadKey = $downloadKeyEl->getAttribute(qualifiedName: 'value');
 
         /** @var DOMElement $productIdEl */
-        $productId = $productIdEl->getAttribute('value');
+        $productId = $productIdEl->getAttribute(qualifiedName: 'value');
 
         $action = 'somdn_download_single';
 
@@ -118,10 +118,10 @@ class CutmePatternAdapter extends AbstractPatternAdapter
         try {
             $fileDownloadUrl = $downloadUrl;
 
-            if (str_contains($fileDownloadUrl, 'youtu')) {
-                $this->warn("YouTube video detected, skipping file download...");
+            if (str_contains(haystack: $fileDownloadUrl, needle: 'youtu')) {
+                $this->warn(message: "YouTube video detected, skipping file download...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -139,9 +139,9 @@ class CutmePatternAdapter extends AbstractPatternAdapter
             );
 
             if ($patternFilePath === null) {
-                $this->error("Failed to download pattern file for pattern {$pattern->id}, skipping...");
+                $this->error(message: "Failed to download pattern file for pattern {$pattern->id}, skipping...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -185,7 +185,7 @@ class CutmePatternAdapter extends AbstractPatternAdapter
                 );
             }
 
-            Pattern::query()->where('id', $pattern->id)->update([
+            Pattern::query()->where(column: 'id', operator: $pattern->id)->update(values: [
                 'title' => $title,
             ]);
 
@@ -208,27 +208,27 @@ class CutmePatternAdapter extends AbstractPatternAdapter
             }
 
             if ($videosToCreate !== []) {
-                $videosToCreateCount = count($videosToCreate);
+                $videosToCreateCount = count(value: $videosToCreate);
 
                 $this->success(
-                    "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
+                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
                 );
 
-                $pattern->videos()->saveMany($videosToCreate);
+                $pattern->videos()->saveMany(models: $videosToCreate);
 
-                $this->setPatternVideoChecked($pattern);
+                $this->setPatternVideoChecked(pattern: $pattern);
             }
 
             if ($reviewsToCreate !== []) {
-                $reviewsToCreateCount = count($reviewsToCreate);
+                $reviewsToCreateCount = count(value: $reviewsToCreate);
 
                 $this->success(
-                    "Created {$reviewsToCreateCount} reviews for pattern {$pattern->id}"
+                    message: "Created {$reviewsToCreateCount} reviews for pattern {$pattern->id}"
                 );
 
-                $pattern->reviews()->saveMany($reviewsToCreate);
+                $pattern->reviews()->saveMany(models: $reviewsToCreate);
 
-                $this->setPatternReviewChecked($pattern);
+                $this->setPatternReviewChecked(pattern: $pattern);
             }
 
             DB::commit();
@@ -236,17 +236,17 @@ class CutmePatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
             );
 
             $this->error(
-                'Reverting changes, deleting downloaded files if they exist...'
+                message: 'Reverting changes, deleting downloaded files if they exist...'
             );
 
-            $this->deleteFileIfExists($patternFilePath);
+            $this->deleteFileIfExists(filePath: $patternFilePath);
 
             if ($patternImagesPaths !== []) {
-                $this->deleteImagesIfExists($patternImagesPaths);
+                $this->deleteImagesIfExists(imagePaths: $patternImagesPaths);
             }
         }
     }
@@ -256,17 +256,17 @@ class CutmePatternAdapter extends AbstractPatternAdapter
      */
     protected function parseCutmePatternReviews(DOMXPath $xpath, Pattern $pattern): array
     {
-        $this->info('Parsing reviews for pattern: ' . $pattern->id);
+        $this->info(message: 'Parsing reviews for pattern: ' . $pattern->id);
 
-        $reviews = $xpath->query("//*[contains(@id, 'comments')]//*[contains(@class, 'comment-text')]");
+        $reviews = $xpath->query(expression: "//*[contains(@id, 'comments')]//*[contains(@class, 'comment-text')]");
 
         $toReturn = [];
 
         foreach ($reviews as $review) {
-            $starsNodes = $xpath->query(".//strong[contains(@class, 'rating')]", $review);
-            $nameNodes = $xpath->query(".//*[contains(@class, 'woocommerce-review__author')]", $review);
-            $dateNodes = $xpath->query(".//*[contains(@class, 'woocommerce-review__published-date')]", $review);
-            $textNodes = $xpath->query(".//*[contains(@class, 'description')]", $review);
+            $starsNodes = $xpath->query(expression: ".//strong[contains(@class, 'rating')]", contextNode: $review);
+            $nameNodes = $xpath->query(expression: ".//*[contains(@class, 'woocommerce-review__author')]", contextNode: $review);
+            $dateNodes = $xpath->query(expression: ".//*[contains(@class, 'woocommerce-review__published-date')]", contextNode: $review);
+            $textNodes = $xpath->query(expression: ".//*[contains(@class, 'description')]", contextNode: $review);
 
             $stars = $starsNodes->item(0)?->textContent;
 
@@ -279,10 +279,10 @@ class CutmePatternAdapter extends AbstractPatternAdapter
             $text = $textNodes->item(0)?->textContent;
 
             $toReturn[] = $this->prepareReviewForCreation(
-                comment: trim((string) $text),
-                rating: floatval($stars),
-                reviewerName: trim((string) $name),
-                reviewedAt: trim((string) $date),
+                comment: trim(string: (string) $text),
+                rating: floatval(value: $stars),
+                reviewerName: trim(string: (string) $name),
+                reviewedAt: trim(string: (string) $date),
             );
         }
 

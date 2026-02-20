@@ -19,13 +19,13 @@ class FixPatternsWithAuthorInTitleCommand extends Command
     {
         $now = now();
 
-        $this->info('Fixing patterns with author in title...');
+        $this->info(string: 'Fixing patterns with author in title...');
 
-        $id = $this->option('id');
+        $id = $this->option(key: 'id');
 
         $regexp = '[А-Яа-яA-Za-z]+$';
 
-        $replaceFilter = config('tag_to_author_swap_filter');
+        $replaceFilter = config(key: 'tag_to_author_swap_filter');
 
         $q = Pattern::query()
             ->select(
@@ -35,26 +35,26 @@ class FixPatternsWithAuthorInTitleCommand extends Command
                 DB::raw("REGEXP_SUBSTR(title, 'от {$regexp}') AS author_with_ot"),
                 DB::raw("REGEXP_SUBSTR(title, '{$regexp}') AS author_only")
             )
-            ->whereRaw("title REGEXP 'от {$regexp}'")
-            ->whereNull('author_id');
+            ->whereRaw(sql: "title REGEXP 'от {$regexp}'")
+            ->whereNull(columns: 'author_id');
 
         if ($id) {
-            $q->where('id', $id);
+            $q->where(column: 'id', operator: $id);
         }
 
-        $q->chunkById(100, function ($patterns) use (&$replaceFilter, &$regexp): void {
+        $q->chunkById(count: 100, callback: function ($patterns) use (&$replaceFilter, &$regexp): void {
             foreach ($patterns as $pattern) {
                 $authorName = $pattern->author_only;
 
-                $this->info("Found author in pattern: {$authorName}");
+                $this->info(string: "Found author in pattern: {$authorName}");
 
-                $loweredAuthorName = mb_strtolower($authorName);
+                $loweredAuthorName = mb_strtolower(string: $authorName);
                 $newAuthorName = $authorName;
 
-                $this->info("Trying to find if author name '{$authorName}' is in the replace filter...");
+                $this->info(string: "Trying to find if author name '{$authorName}' is in the replace filter...");
 
                 foreach ($replaceFilter as $replaceFilterItem) {
-                    if (in_array($loweredAuthorName, $replaceFilterItem['tags'])) {
+                    if (in_array(needle: $loweredAuthorName, haystack: $replaceFilterItem['tags'])) {
                         $newAuthorName = $replaceFilterItem['author'];
 
                         break;
@@ -62,33 +62,33 @@ class FixPatternsWithAuthorInTitleCommand extends Command
                 }
 
                 if ($newAuthorName !== $authorName) {
-                    $this->info("Author name changed from '{$authorName}' to '{$newAuthorName}'");
+                    $this->info(string: "Author name changed from '{$authorName}' to '{$newAuthorName}'");
                 }
 
                 $author = PatternAuthor::query()
-                    ->firstOrCreate([
+                    ->firstOrCreate(attributes: [
                         'name' => $newAuthorName
                     ]);
 
                 $pattern->author()->associate($author);
 
-                $pattern->title = preg_replace("/от {$regexp}/", '', (string) $pattern->title);
+                $pattern->title = preg_replace(pattern: "/от {$regexp}/", replacement: '', subject: (string) $pattern->title);
 
                 $pattern->save();
             }
         });
 
-        $this->info('Successfully fixed patterns with author in title.');
+        $this->info(string: 'Successfully fixed patterns with author in title.');
 
         $newAuthors = PatternAuthor::query()
-            ->where('created_at', '>=', $now)
-            ->pluck('name')
+            ->where(column: 'created_at', operator: '>=', value: $now)
+            ->pluck(column: 'name')
             ->toArray();
 
-        $newAuthorsCount = count($newAuthors);
+        $newAuthorsCount = count(value: $newAuthors);
 
         $this->info(
-            "Successfully fixed patterns with author in title. {$newAuthorsCount} new authors created: " . implode(', ', $newAuthors)
+            string: "Successfully fixed patterns with author in title. {$newAuthorsCount} new authors created: " . implode(separator: ', ', array: $newAuthors)
         );
     }
 }

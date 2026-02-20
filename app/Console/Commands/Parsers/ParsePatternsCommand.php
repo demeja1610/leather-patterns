@@ -28,126 +28,126 @@ class ParsePatternsCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Parsing patterns...');
+        $this->info(string: 'Parsing patterns...');
 
-        $id = $this->option('id');
+        $id = $this->option(key: 'id');
 
         $startedAt = now();
 
         $q = Pattern::query()
             ->whereHas(
-                'meta',
-                fn(Builder $query) => $query
-                    ->where('pattern_downloaded', false)
-                    ->where('is_download_url_wrong', false)
+                relation: 'meta',
+                callback: fn(Builder $query) => $query
+                    ->where(column: 'pattern_downloaded', operator: false)
+                    ->where(column: 'is_download_url_wrong', operator: false)
             );
 
         if ($id) {
-            $q->where('id', $id);
+            $q->where(column: 'id', operator: $id);
         }
 
         $count = $q->count();
 
-        $this->info("Found {$count} patterns to process.");
+        $this->info(string: "Found {$count} patterns to process.");
 
         $q->chunkById(
             count: 1,
             callback: function (Collection $patterns): void {
-                $patterns->each(function (Pattern $pattern): void {
-                    $this->info("Processing pattern: {$pattern->id}");
+                $patterns->each(callback: function (Pattern $pattern): void {
+                    $this->info(string: "Processing pattern: {$pattern->id}");
 
-                    $this->processPattern($pattern);
+                    $this->processPattern(pattern: $pattern);
                 });
             }
         );
 
-        $this->info('Finished parsing patterns.');
+        $this->info(string: 'Finished parsing patterns.');
 
-        $this->call('tools:tags-to-authors-for-patterns');
+        $this->call(command: 'tools:tags-to-authors-for-patterns');
 
-        $newCategories = PatternCategory::query()->where('created_at', '>=', $startedAt)->get();
-        $newTags = PatternTag::query()->where('created_at', '>=', $startedAt)->get();
-        $newAuthors = PatternAuthor::query()->where('created_at', '>=', $startedAt)->get();
+        $newCategories = PatternCategory::query()->where(column: 'created_at', operator: '>=', value: $startedAt)->get();
+        $newTags = PatternTag::query()->where(column: 'created_at', operator: '>=', value: $startedAt)->get();
+        $newAuthors = PatternAuthor::query()->where(column: 'created_at', operator: '>=', value: $startedAt)->get();
 
         if ($newCategories->isNotEmpty()) {
-            $this->info("New categories found: {$newCategories->pluck('name')->implode(', ')}");
+            $this->info(string: "New categories found: {$newCategories->pluck(value: 'name')->implode(value: ', ')}");
         }
 
         if ($newTags->isNotEmpty()) {
-            $this->info("New tags found: {$newTags->pluck('name')->implode(', ')}");
+            $this->info(string: "New tags found: {$newTags->pluck(value: 'name')->implode(value: ', ')}");
         }
 
         if ($newAuthors->isNotEmpty()) {
-            $this->info("New authors found: {$newAuthors->pluck('name')->implode(', ')}");
+            $this->info(string: "New authors found: {$newAuthors->pluck(value: 'name')->implode(value: ', ')}");
         }
     }
 
     protected function processPattern(Pattern $pattern): void
     {
-        $this->info("Pattern source: {$pattern->source->value}");
+        $this->info(string: "Pattern source: {$pattern->source->value}");
 
         match ($pattern->source) {
             PatternSourceEnum::NEOVIMA => (
-                new \App\Console\Commands\Parsers\PatternAdapters\NeovimaPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\NeovimaPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::V_POMOSH_KOZHEVNIKU => (
-                new \App\Console\Commands\Parsers\PatternAdapters\VPomoshKozhevnikuPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\VPomoshKozhevnikuPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::ABZALA => (
-                new \App\Console\Commands\Parsers\PatternAdapters\AbzalaPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\AbzalaPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::PATTERN_HUB => (
-                new \App\Console\Commands\Parsers\PatternAdapters\PatternHubPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\PatternHubPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::FORMULA_KOZHI => (
-                new \App\Console\Commands\Parsers\PatternAdapters\FormulaKozhiPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\FormulaKozhiPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::PABLIK_KOZHEVNIKA => (
-                new \App\Console\Commands\Parsers\PatternAdapters\PablikKozhevnikaPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\PablikKozhevnikaPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::MYETSY => (
-                new \App\Console\Commands\Parsers\PatternAdapters\MyEtsyPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\MyEtsyPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::LASERBIZ => (
-                new \App\Console\Commands\Parsers\PatternAdapters\LaserbizPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\LaserbizPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::FIRST_KOZHA => (
-                new \App\Console\Commands\Parsers\PatternAdapters\FirstKozhaPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\FirstKozhaPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::SKINPAT => (
-                new \App\Console\Commands\Parsers\PatternAdapters\SkinpatPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\SkinpatPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::LEATHER_PATTERNS => (
-                new \App\Console\Commands\Parsers\PatternAdapters\LeatherPatternsPatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\LeatherPatternsPatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
             PatternSourceEnum::CUTME => (
-                new \App\Console\Commands\Parsers\PatternAdapters\CutmePatternAdapter($this->parserService)
+                new \App\Console\Commands\Parsers\PatternAdapters\CutmePatternAdapter(parserService: $this->parserService)
             )
-                ->processPattern($pattern),
+                ->processPattern(pattern: $pattern),
 
-            default => $this->processUnknownPattern($pattern),
+            default => $this->processUnknownPattern(pattern: $pattern),
         };
     }
 
@@ -195,6 +195,6 @@ class ParsePatternsCommand extends Command
 
     protected function processUnknownPattern(Pattern $pattern): void
     {
-        $this->info("Unknown pattern source: {$pattern->source->value}, skipping...");
+        $this->info(string: "Unknown pattern source: {$pattern->source->value}, skipping...");
     }
 }

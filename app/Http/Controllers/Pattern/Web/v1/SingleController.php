@@ -13,13 +13,13 @@ class SingleController extends Controller
 {
     public function __invoke(int $id): View
     {
-        $pattern = $this->getPattern($id);
+        $pattern = $this->getPattern(id: $id);
 
         if (!$pattern instanceof Pattern) {
-            abort(404);
+            abort(code: 404);
         }
 
-        return view('pages.pattern.single', [
+        return view(view: 'pages.pattern.single', data: [
             'pattern' => $pattern
         ]);
     }
@@ -27,8 +27,8 @@ class SingleController extends Controller
     protected function getPattern(int $id): ?Pattern
     {
         $q = Pattern::query()
-            ->where('id', $id)
-            ->with([
+            ->where(column: 'id', operator: $id)
+            ->with(relations: [
                 'categories' => function (BelongsToMany $sq): BelongsToMany {
                     $table = $sq->getRelated()->getTable();
 

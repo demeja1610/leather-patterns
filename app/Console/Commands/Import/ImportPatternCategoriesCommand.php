@@ -17,11 +17,11 @@ class ImportPatternCategoriesCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Importing pattern categories...');
+        $this->info(message: 'Importing pattern categories...');
 
-        DB::connection('mysql_import')->table('categories')
-            ->orderBy('categories.id')
-            ->select([
+        DB::connection('mysql_import')->table(table: 'categories')
+            ->orderBy(column: 'categories.id')
+            ->select(columns: [
                 'categories.id',
                 'categories.name as categories_name',
                 'categories.created_at as categories_created_at',
@@ -33,7 +33,7 @@ class ImportPatternCategoriesCommand extends Command
                     $to = $chunk->last()->id;
                     $count = $chunk->count();
 
-                    $this->info("Importing pattern categories from {$from} to {$to} ({$count} total)...");
+                    $this->info(message: "Importing pattern categories from {$from} to {$to} ({$count} total)...");
 
                     $toInsert = [];
 
@@ -47,16 +47,16 @@ class ImportPatternCategoriesCommand extends Command
                     }
 
 
-                    DB::table('pattern_categories')->insertOrIgnore($toInsert);
+                    DB::table('pattern_categories')->insertOrIgnore(values: $toInsert);
                 }
             );
 
-        DB::connection('mysql_import')->table('category_pattern')
-            ->join('categories', 'category_pattern.category_id', '=', 'categories.id')
-            ->join('patterns', 'category_pattern.pattern_id', '=', 'patterns.id')
-            ->where('patterns.source', '!=', PatternSourceEnum::SKINCUTS->value)
-            ->orderBy('category_pattern.category_id')
-            ->select([
+        DB::connection('mysql_import')->table(table: 'category_pattern')
+            ->join(table: 'categories', first: 'category_pattern.category_id', operator: '=', second: 'categories.id')
+            ->join(table: 'patterns', first: 'category_pattern.pattern_id', operator: '=', second: 'patterns.id')
+            ->where(column: 'patterns.source', operator: '!=', value: PatternSourceEnum::SKINCUTS->value)
+            ->orderBy(column: 'category_pattern.category_id')
+            ->select(columns: [
                 'category_pattern.category_id as category_id',
                 'category_pattern.pattern_id as pattern_id',
             ])
@@ -67,7 +67,7 @@ class ImportPatternCategoriesCommand extends Command
                     $to = $chunk->last()->category_id;
                     $count = $chunk->count();
 
-                    $this->info("Importing pattern categories from {$from} to {$to} ({$count} total)...");
+                    $this->info(message: "Importing pattern categories from {$from} to {$to} ({$count} total)...");
 
                     $toInsert = [];
 
@@ -79,10 +79,10 @@ class ImportPatternCategoriesCommand extends Command
                         ];
                     }
 
-                    DB::table('pattern_pattern_category')->insertOrIgnore($toInsert);
+                    DB::table('pattern_pattern_category')->insertOrIgnore(values: $toInsert);
                 }
             );
 
-        $this->info('Pattern categories imported successfully.');
+        $this->info(message: 'Pattern categories imported successfully.');
     }
 }

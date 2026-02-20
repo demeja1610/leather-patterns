@@ -17,7 +17,7 @@ class TagsToAuthorsForPatternsCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Running Tags to Authors for Patterns Command...');
+        $this->info(string: 'Running Tags to Authors for Patterns Command...');
 
         $data = $this->getData();
 
@@ -31,15 +31,15 @@ class TagsToAuthorsForPatternsCommand extends Command
 
             $authorName = $item['author'];
 
-            $this->info("Processing tags for author: {$authorName}");
+            $this->info(string: "Processing tags for author: {$authorName}");
 
             $author = PatternAuthor::query()
-                ->where('name', $authorName)
+                ->where(column: 'name', operator: $authorName)
                 ->first();
 
             if (!$author) {
                 $author = PatternAuthor::query()
-                    ->create([
+                    ->create(attributes: [
                         'name' => $authorName
                     ]);
 
@@ -51,34 +51,34 @@ class TagsToAuthorsForPatternsCommand extends Command
                 ->get();
 
             foreach ($tags as $tag) {
-                $this->info("Processing tag: {$tag->name}");
+                $this->info(string: "Processing tag: {$tag->name}");
 
                 $patterns = Pattern::query()
-                    ->whereHas('tags', function ($query) use ($tag): void {
-                        $query->where('pattern_tags.id', $tag->id);
+                    ->whereHas(relation: 'tags', callback: function ($query) use ($tag): void {
+                        $query->where(column: 'pattern_tags.id', operator: $tag->id);
                     })->get();
 
                 /** @var Pattern $pattern */
                 foreach ($patterns as $pattern) {
-                    $this->info("Processing pattern: {$pattern->id}");
+                    $this->info(string: "Processing pattern: {$pattern->id}");
 
-                    $this->info("Associating author: {$author->name} to pattern: {$pattern->id}");
+                    $this->info(string: "Associating author: {$author->name} to pattern: {$pattern->id}");
 
-                    $pattern->author()->associate($author);
+                    $pattern->author()->associate(model: $author);
 
                     $pattern->save();
 
-                    $this->info("Detaching tag: {$tag->name} from pattern: {$pattern->id}");
+                    $this->info(string: "Detaching tag: {$tag->name} from pattern: {$pattern->id}");
 
-                    $pattern->tags()->detach($tag);
+                    $pattern->tags()->detach(ids: $tag);
                 }
             }
         }
 
-        $this->info('Successfully associated tags with authors for patterns.');
+        $this->info(string: 'Successfully associated tags with authors for patterns.');
 
         $this->info(
-            count($createdAuthors) . ' authors were created: ' . implode(
+            string: count(value: $createdAuthors) . ' authors were created: ' . implode(
                 separator: ', ',
                 array: array_map(
                     callback: fn(PatternAuthor $author) => $author->name,
@@ -90,6 +90,6 @@ class TagsToAuthorsForPatternsCommand extends Command
 
     protected function getData(): array
     {
-        return config('tag_to_author_swap_filter');
+        return config(key: 'tag_to_author_swap_filter');
     }
 }

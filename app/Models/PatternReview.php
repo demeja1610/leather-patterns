@@ -35,12 +35,12 @@ class PatternReview extends Model
 
     public function pattern(): BelongsTo
     {
-        return $this->belongsTo(Pattern::class);
+        return $this->belongsTo(related: Pattern::class);
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(related: User::class);
     }
 
     protected function casts(): array

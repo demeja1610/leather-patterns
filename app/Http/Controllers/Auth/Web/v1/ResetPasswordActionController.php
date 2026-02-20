@@ -19,14 +19,14 @@ class ResetPasswordActionController extends Controller
         $status = Password::reset(
             $data,
             function (User $user) use (&$data): void {
-                $user->forceFill([
+                $user->forceFill(attributes: [
                     'password' => Hash::make($data['password']),
                 ])->save();
             },
         );
 
         return $status === Password::PASSWORD_RESET
-            ? to_route('page.auth.login')->with('status', __($status))
-            : back()->withErrors(['password' => __($status)]);
+            ? to_route(route: 'page.auth.login')->with(key: 'status', value: __(key: $status))
+            : back()->withErrors(provider: ['password' => __(key: $status)]);
     }
 }

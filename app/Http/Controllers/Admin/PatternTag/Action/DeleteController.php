@@ -16,10 +16,10 @@ class DeleteController extends Controller
 {
     public function __invoke($id): RedirectResponse
     {
-        $tag = $this->getPatternTag($id);
+        $tag = $this->getPatternTag(id: $id);
 
         if (!$tag instanceof PatternTag) {
-            return abort(Response::HTTP_NOT_FOUND);
+            return abort(code: Response::HTTP_NOT_FOUND);
         }
 
         if ($tag->isDeletable()) {
@@ -29,7 +29,7 @@ class DeleteController extends Controller
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
-                        text: __('pattern_tag.admin.tag_isnt_deletable', [
+                        text: __(key: 'pattern_tag.admin.tag_isnt_deletable', replace: [
                             'name' => $tag->name,
                         ]),
                         type: NotificationTypeEnum::ERROR,
@@ -43,12 +43,12 @@ class DeleteController extends Controller
             value: new SessionNotificationListDto(
                 $deleted > 0
                     ? new SessionNotificationDto(
-                        text: __('pattern_tag.admin.single_delete_success', ['name' => $tag->name]),
+                        text: __(key: 'pattern_tag.admin.single_delete_success', replace: ['name' => $tag->name]),
                         type: NotificationTypeEnum::SUCCESS,
                     )
                     :
                     new SessionNotificationDto(
-                        text: __('pattern_tag.admin.single_failed_to_delete', ['name' => $tag->name]),
+                        text: __(key: 'pattern_tag.admin.single_failed_to_delete', replace: ['name' => $tag->name]),
                         type: NotificationTypeEnum::ERROR,
                     ),
             ),
@@ -59,9 +59,9 @@ class DeleteController extends Controller
     {
         $q =  PatternTag::query();
 
-        $q->where("id", $id);
+        $q->where(column: "id", operator: $id);
 
-        $q->withCount([
+        $q->withCount(relations: [
             'patterns',
             'replacementFor',
         ]); // optimization for isDeleted method

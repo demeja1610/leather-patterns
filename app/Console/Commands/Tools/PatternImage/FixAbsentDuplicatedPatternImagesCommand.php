@@ -17,34 +17,34 @@ class FixAbsentDuplicatedPatternImagesCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Fixing duplicated and absent pattern images...');
+        $this->info(message: 'Fixing duplicated and absent pattern images...');
 
         $restoredCount = 0;
 
         DB::table('pattern_images')
             ->select('hash', DB::raw('COUNT(*) as count'))
             ->groupBy('hash')
-            ->havingRaw('COUNT(*) > 1')
-            ->orderBy('hash')
+            ->havingRaw(sql: 'COUNT(*) > 1')
+            ->orderBy(column: 'hash')
             ->chunk(
                 count: 100,
                 callback: function (Collection $chunk) use (&$restoredCount): void {
                     $count = $chunk->count();
 
-                    $this->info("Found {$count} duplicated pattern images:");
+                    $this->info(message: "Found {$count} duplicated pattern images:");
 
                     foreach ($chunk as $item) {
-                        $this->info("Processing duplicated pattern image with hash: {$item->hash}");
+                        $this->info(message: "Processing duplicated pattern image with hash: {$item->hash}");
 
                         $images = DB::table('pattern_images')
-                            ->where('hash', $item->hash)
+                            ->where(column: 'hash', operator: $item->hash)
                             ->get();
 
                         $existingImagePath = null;
                         $notExistingImagePaths = [];
 
                         foreach ($images as $image) {
-                            $this->info("Checking existence of pattern image with path: {$image->path}");
+                            $this->info(message: "Checking existence of pattern image with path: {$image->path}");
 
                             if (Storage::disk('public')->exists($image->path)) {
                                 $existingImagePath = $image->path;
@@ -54,23 +54,23 @@ class FixAbsentDuplicatedPatternImagesCommand extends Command
                         }
 
                         if ($notExistingImagePaths === []) {
-                            $this->info("All pattern images with hash {$item->hash} exist.");
+                            $this->info(message: "All pattern images with hash {$item->hash} exist.");
 
                             continue;
                         }
 
-                        $notExistingImagePathsCount = count($notExistingImagePaths);
+                        $notExistingImagePathsCount = count(value: $notExistingImagePaths);
 
-                        $this->info("Found {$notExistingImagePathsCount} absent pattern images with hash {$item->hash}:");
+                        $this->info(message: "Found {$notExistingImagePathsCount} absent pattern images with hash {$item->hash}:");
 
                         if ($existingImagePath === null) {
-                            $this->error("No existing pattern image found for hash {$item->hash}, cannot proceed with restoration.");
+                            $this->error(message: "No existing pattern image found for hash {$item->hash}, cannot proceed with restoration.");
 
                             continue;
                         }
 
                         foreach ($notExistingImagePaths as $absentPath) {
-                            $this->info("Restoring absent pattern image with path: {$absentPath}");
+                            $this->info(message: "Restoring absent pattern image with path: {$absentPath}");
 
                             Storage::disk('public')->copy($existingImagePath, $absentPath);
 
@@ -80,8 +80,8 @@ class FixAbsentDuplicatedPatternImagesCommand extends Command
                 }
             );
 
-        $this->info('Finished fixing duplicated and absent pattern images.');
+        $this->info(message: 'Finished fixing duplicated and absent pattern images.');
 
-        $this->info("Total restored pattern images: {$restoredCount}");
+        $this->info(message: "Total restored pattern images: {$restoredCount}");
     }
 }

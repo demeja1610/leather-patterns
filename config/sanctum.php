@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'stateful' => explode(',', (string) env('SANCTUM_STATEFUL_DOMAINS', sprintf(
+    'stateful' => explode(separator: ',', string: (string) env(key: 'SANCTUM_STATEFUL_DOMAINS', default: sprintf(
         '%s%s',
         'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
         Sanctum::currentApplicationUrlWithPort(),
@@ -62,7 +62,7 @@ return [
     |
     */
 
-    'token_prefix' => env('SANCTUM_TOKEN_PREFIX', ''),
+    'token_prefix' => env(key: 'SANCTUM_TOKEN_PREFIX', default: ''),
 
     /*
     |--------------------------------------------------------------------------

@@ -11,12 +11,12 @@ return new class extends Migration
         Schema::create('pattern_metas', function (Blueprint $table): void {
             $table->id();
 
-            $table->boolean('pattern_downloaded')->default(false);
-            $table->boolean('images_downloaded')->default(false);
-            $table->timestamp('reviews_updated_at')->nullable();
+            $table->boolean(column: 'pattern_downloaded')->default(false);
+            $table->boolean(column: 'images_downloaded')->default(false);
+            $table->timestamp(column: 'reviews_updated_at')->nullable();
 
-            $table->unsignedBigInteger('pattern_id')->unique();
-            $table->foreign('pattern_id')
+            $table->unsignedBigInteger(column: 'pattern_id')->unique();
+            $table->foreign(columns: 'pattern_id')
                 ->references('id')
                 ->on('patterns')
                 ->onDelete('cascade');

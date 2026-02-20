@@ -24,23 +24,23 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
     protected function calculateFileHash(string $filePath): string
     {
-        return hash_file('sha256', $filePath);
+        return hash_file(algo: 'sha256', filename: $filePath);
     }
 
     protected function getFileExtension(string $filePath): ?string
     {
-        return pathinfo($filePath, PATHINFO_EXTENSION);
+        return pathinfo(path: $filePath, flags: PATHINFO_EXTENSION);
     }
 
     protected function generateFileName(?string $prefix = null): string
     {
-        return uniqid($prefix ?: 'pattern_', true);
+        return uniqid(prefix: $prefix ?: 'pattern_', more_entropy: true);
     }
 
     protected function deleteFileIfExists(string $filePath): void
     {
         if (Storage::disk('public')->exists($filePath)) {
-            $this->warn("Deleting file: {$filePath}");
+            $this->warn(message: "Deleting file: {$filePath}");
 
             Storage::disk('public')->delete($filePath);
         }
@@ -50,7 +50,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
     {
         foreach ($imagePaths as $imagePath) {
             if (Storage::disk('public')->exists($imagePath)) {
-                $this->warn("Deleting image: {$imagePath}");
+                $this->warn(message: "Deleting image: {$imagePath}");
 
                 Storage::disk('public')->delete($imagePath);
             }
@@ -61,11 +61,11 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
     {
         try {
             $response = $this->parserService->getClient()->get(
-                "https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key={$url}",
+                uri: "https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key={$url}",
             );
         } catch (Throwable $throwable) {
             $this->error(
-                "Failed to get direct Yandex disk file link for pattern {$url}: " . $throwable->getMessage()
+                message: "Failed to get direct Yandex disk file link for pattern {$url}: " . $throwable->getMessage()
             );
 
             return null;
@@ -73,10 +73,10 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
         $body = $response->getBody()->getContents();
 
-        $json = json_decode($body, true);
+        $json = json_decode(json: $body, associative: true);
 
         if (!isset($json['href'])) {
-            $this->error("Failed to get direct Yandex disk file link for pattern {$url}");
+            $this->error(message: "Failed to get direct Yandex disk file link for pattern {$url}");
 
             return null;
         }
@@ -88,7 +88,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
     {
         $fileId = null;
 
-        preg_match('/\/d\/([a-zA-Z0-9_-]+)/', $url, $matches);
+        preg_match(pattern: '/\/d\/([a-zA-Z0-9_-]+)/', subject: $url, matches: $matches);
 
         if (isset($matches[1])) {
             $fileId = $matches[1];
@@ -101,11 +101,11 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
     protected function getFileMimeType(string $filePath): ?string
     {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $finfo = finfo_open(flags: FILEINFO_MIME_TYPE);
 
-        $mimeType = finfo_file($finfo, $filePath);
+        $mimeType = finfo_file(finfo: $finfo, filename: $filePath);
 
-        finfo_close($finfo);
+        finfo_close(finfo: $finfo);
 
         return $mimeType;
     }
@@ -115,15 +115,15 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
         $youtubeVideoIds = $this->parserService->getYoutubeVideoIdsFromString($content);
         $vkVideoIds = $this->parserService->getVkVideoIdsFromString($content);
 
-        $ytCount = count($youtubeVideoIds);
-        $vkCount = count($vkVideoIds);
+        $ytCount = count(value: $youtubeVideoIds);
+        $vkCount = count(value: $vkVideoIds);
 
         if ($ytCount !== 0) {
-            $this->info("Found {$ytCount} YouTube video(s) for pattern {$pattern->id}");
+            $this->info(message: "Found {$ytCount} YouTube video(s) for pattern {$pattern->id}");
         }
 
         if ($vkCount !== 0) {
-            $this->info("Found {$vkCount} VK video(s) for pattern {$pattern->id}");
+            $this->info(message: "Found {$vkCount} VK video(s) for pattern {$pattern->id}");
         }
 
         $videos = [];
@@ -147,16 +147,16 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
     protected function getImageUrlFromSrcset(string $srcset): string
     {
-        $srcsetPairs = array_filter(explode(',', $srcset));
+        $srcsetPairs = array_filter(array: explode(separator: ',', string: $srcset));
         $maxWidth = 0;
         $imageUrl = '';
 
         foreach ($srcsetPairs as $pair) {
-            $parts = explode(' ', trim($pair));
+            $parts = explode(separator: ' ', string: trim(string: $pair));
 
-            if (count($parts) === 2) {
+            if (count(value: $parts) === 2) {
                 $url = $parts[0];
-                $width = (int) str_replace('w', '', $parts[1]);
+                $width = (int) str_replace(search: 'w', replace: '', subject: $parts[1]);
 
                 if ($width > $maxWidth) {
                     $maxWidth = $width;
@@ -170,7 +170,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
     protected function prepareVideoForCreation(VideoSourceEnum $source, string $videoId): PatternVideo
     {
-        return new PatternVideo([
+        return new PatternVideo(attributes: [
             'source' => $source,
             'source_identifier' => $videoId,
             'url' => match ($source) {
@@ -187,7 +187,7 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
         ?string $reviewerName = null,
         ?string $reviewedAt = null
     ): PatternReview {
-        return new PatternReview([
+        return new PatternReview(attributes: [
             'rating' => $rating ?? 0,
             'reviewer_name' => $reviewerName ?? 'Unknown',
             'reviewed_at' => $reviewedAt ?? now(),
@@ -202,8 +202,8 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
     {
         $reviewsToCreate = [];
 
-        if (!$pattern->relationLoaded('reviews')) {
-            $pattern->load('reviews');
+        if (!$pattern->relationLoaded(key: 'reviews')) {
+            $pattern->load(relations: 'reviews');
         }
 
         $existingPatternReviews = $pattern->reviews->toArray();
@@ -226,19 +226,19 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
     protected function bindFiles(Pattern $pattern, array $filePaths): void
     {
-        $filePathsStr = implode(', ', $filePaths);
+        $filePathsStr = implode(separator: ', ', array: $filePaths);
 
-        $this->info("Binding files ({$filePathsStr}) for pattern: {$pattern->id}");
+        $this->info(message: "Binding files ({$filePathsStr}) for pattern: {$pattern->id}");
 
         foreach ($filePaths as $filePath) {
-            $publicPath = public_path("storage/{$filePath}");
-            $ext = pathinfo((string) $filePath, PATHINFO_EXTENSION);
-            $size = filesize($publicPath);
-            $mime = $this->getFileMimeType($publicPath);
-            $type = FileTypeEnum::fromMimeType($mime);
-            $hash = $this->calculateFileHash($publicPath);
+            $publicPath = public_path(path: "storage/{$filePath}");
+            $ext = pathinfo(path: (string) $filePath, flags: PATHINFO_EXTENSION);
+            $size = filesize(filename: $publicPath);
+            $mime = $this->getFileMimeType(filePath: $publicPath);
+            $type = FileTypeEnum::fromMimeType(mimeType: $mime);
+            $hash = $this->calculateFileHash(filePath: $publicPath);
 
-            $pattern->files()->create([
+            $pattern->files()->create(attributes: [
                 'path' => $filePath,
                 'extension' => $ext,
                 'size' => $size,
@@ -252,18 +252,18 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
     protected function bindImages(Pattern $pattern, array $imagePaths): void
     {
-        $imagePathsStr = implode(', ', $imagePaths);
+        $imagePathsStr = implode(separator: ', ', array: $imagePaths);
 
-        $this->info("Binding images ({$imagePathsStr}) for pattern: {$pattern->id}");
+        $this->info(message: "Binding images ({$imagePathsStr}) for pattern: {$pattern->id}");
 
         $images = [];
 
         foreach ($imagePaths as $imagePath) {
-            $publicPath = public_path("storage/{$imagePath}");
-            $ext = pathinfo((string) $imagePath, PATHINFO_EXTENSION);
-            $size = filesize($publicPath);
-            $mime = $this->getFileMimeType($publicPath);
-            $hash = $this->calculateFileHash($publicPath);
+            $publicPath = public_path(path: "storage/{$imagePath}");
+            $ext = pathinfo(path: (string) $imagePath, flags: PATHINFO_EXTENSION);
+            $size = filesize(filename: $publicPath);
+            $mime = $this->getFileMimeType(filePath: $publicPath);
+            $hash = $this->calculateFileHash(filePath: $publicPath);
 
             $images[] = [
                 'path' => $imagePath,
@@ -275,14 +275,14 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
             ];
         }
 
-        $pattern->images()->createMany($images);
+        $pattern->images()->createMany(records: $images);
     }
 
     protected function changePatternMeta(Pattern $pattern): void
     {
-        $this->info("Changing pattern meta for pattern: {$pattern->id}");
+        $this->info(message: "Changing pattern meta for pattern: {$pattern->id}");
 
-        PatternMeta::query()->where('pattern_id', $pattern->id)->update([
+        PatternMeta::query()->where(column: 'pattern_id', operator: $pattern->id)->update(values: [
             'pattern_downloaded' => true,
             'images_downloaded' => true,
         ]);
@@ -290,53 +290,53 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
     protected function setPatternVideoChecked(Pattern $pattern): void
     {
-        $this->info("Setting video checked for pattern: {$pattern->id}");
+        $this->info(message: "Setting video checked for pattern: {$pattern->id}");
 
-        PatternMeta::query()->where('pattern_id', $pattern->id)->update([
+        PatternMeta::query()->where(column: 'pattern_id', operator: $pattern->id)->update(values: [
             'is_video_checked' => true,
         ]);
     }
 
     protected function setPatternReviewChecked(Pattern $pattern): void
     {
-        $this->info("Setting review checked for pattern: {$pattern->id}");
+        $this->info(message: "Setting review checked for pattern: {$pattern->id}");
 
-        PatternMeta::query()->where('pattern_id', $pattern->id)->update([
+        PatternMeta::query()->where(column: 'pattern_id', operator: $pattern->id)->update(values: [
             'reviews_updated_at' => now(),
         ]);
     }
 
     protected function setDownloadUrlWrong(Pattern $pattern): void
     {
-        $this->warn("Setting download URL wrong for pattern: {$pattern->id}");
+        $this->warn(message: "Setting download URL wrong for pattern: {$pattern->id}");
 
-        PatternMeta::query()->where('pattern_id', $pattern->id)->update([
+        PatternMeta::query()->where(column: 'pattern_id', operator: $pattern->id)->update(values: [
             'is_download_url_wrong' => true,
         ]);
     }
 
     protected function downloadPatternFile(Pattern $pattern, string $url, array $extraHeaders = [], $postParams = []): ?string
     {
-        $this->info("Downloading pattern file from: {$url}");
+        $this->info(message: "Downloading pattern file from: {$url}");
 
         $downloadUrl = $url;
 
-        if (str_contains($url, 'yadi.sk') || str_contains($url, 'disk.yandex')) {
-            $this->info("Getting direct Yandex disk file link");
-            $downloadUrl = $this->getDirectYandexDiskFileLink($url);
+        if (str_contains(haystack: $url, needle: 'yadi.sk') || str_contains(haystack: $url, needle: 'disk.yandex')) {
+            $this->info(message: "Getting direct Yandex disk file link");
+            $downloadUrl = $this->getDirectYandexDiskFileLink(url: $url);
             if (!$downloadUrl) {
-                $this->error("Failed to get direct Yandex disk file link for pattern {$url}");
+                $this->error(message: "Failed to get direct Yandex disk file link for pattern {$url}");
 
                 return null;
             }
-        } elseif (str_contains($url, 'vk.com')) {
-            $this->warn("Currently unable to download pattern from vk.com. Skipping...");
+        } elseif (str_contains(haystack: $url, needle: 'vk.com')) {
+            $this->warn(message: "Currently unable to download pattern from vk.com. Skipping...");
             return null;
-        } elseif (str_contains($url, 'drive.google.com')) {
-            $this->info("Getting direct Google Drive file link");
-            $downloadUrl = $this->getDirectGoogleDriveFileLink($url);
+        } elseif (str_contains(haystack: $url, needle: 'drive.google.com')) {
+            $this->info(message: "Getting direct Google Drive file link");
+            $downloadUrl = $this->getDirectGoogleDriveFileLink(url: $url);
             if (!$downloadUrl) {
-                $this->error("Failed to get direct Google Drive file link for pattern {$url}");
+                $this->error(message: "Failed to get direct Google Drive file link for pattern {$url}");
 
                 return null;
             }
@@ -356,13 +356,13 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
             }
 
             if (!empty($postParams)) {
-                $response = $this->parserService->getClient()->post($downloadUrl, $params);
+                $response = $this->parserService->getClient()->post(uri: $downloadUrl, options: $params);
             } else {
-                $response = $this->parserService->getClient()->get($downloadUrl, $params);
+                $response = $this->parserService->getClient()->get(uri: $downloadUrl, options: $params);
             }
 
             $extension = $this->getFileExtension(
-                filePath: parse_url($downloadUrl, PHP_URL_PATH)
+                filePath: parse_url(url: $downloadUrl, component: PHP_URL_PATH)
             ) ?: 'pdf';
 
             $encodedFileName = $this->generateFileName(
@@ -376,14 +376,14 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
                 $response->getBody()->getContents(),
             );
 
-            $this->info("Checking file extension for pattern {$pattern->id}, original extension: {$extension}");
+            $this->info(message: "Checking file extension for pattern {$pattern->id}, original extension: {$extension}");
 
-            $mimeType = $this->getFileMimeType(public_path("storage/{$savePath}"));
+            $mimeType = $this->getFileMimeType(filePath: public_path(path: "storage/{$savePath}"));
 
-            if (str_contains((string) $mimeType, 'video')) {
-                $this->warn("Video file detected for pattern {$pattern->id}, skipping and deleting this file...");
+            if (str_contains(haystack: (string) $mimeType, needle: 'video')) {
+                $this->warn(message: "Video file detected for pattern {$pattern->id}, skipping and deleting this file...");
 
-                $this->deleteFileIfExists($savePath);
+                $this->deleteFileIfExists(filePath: $savePath);
 
                 return null;
             }
@@ -409,34 +409,34 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
             $filePath = $savePath;
 
             if ($ext !== $extension) {
-                $this->warn("Original file extension for pattern {$pattern->id}: {$extension} is wrong, renaming to: {$ext}");
+                $this->warn(message: "Original file extension for pattern {$pattern->id}: {$extension} is wrong, renaming to: {$ext}");
 
-                $newFileName = str_replace(".{$extension}", ".{$ext}", $savePath);
+                $newFileName = str_replace(search: ".{$extension}", replace: ".{$ext}", subject: $savePath);
 
-                $filePath = public_path("storage/{$newFileName}");
+                $filePath = public_path(path: "storage/{$newFileName}");
 
                 rename(
-                    from: public_path("storage/{$savePath}"),
+                    from: public_path(path: "storage/{$savePath}"),
                     to: $filePath
                 );
 
-                $this->warn("Renamed file for pattern {$pattern->id}: {$savePath} to {$filePath}");
+                $this->warn(message: "Renamed file for pattern {$pattern->id}: {$savePath} to {$filePath}");
 
                 $filePath = $newFileName;
             } else {
-                $this->info("File extension for pattern {$pattern->id} is correct: {$extension}");
+                $this->info(message: "File extension for pattern {$pattern->id} is correct: {$extension}");
             }
 
             return $filePath;
         } catch (GuzzleException $guzzleException) {
             $this->error(
-                "Failed to download pattern {$pattern->id}: " . $guzzleException->getMessage()
+                message: "Failed to download pattern {$pattern->id}: " . $guzzleException->getMessage()
             );
 
             return null;
         }
 
-        $this->success("Downloaded pattern {$pattern->id}");
+        $this->success(message: "Downloaded pattern {$pattern->id}");
     }
 
     protected function downloadPatternImages(Pattern $pattern, array $imageUrls): array
@@ -445,15 +445,15 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
         foreach ($imageUrls as $imageUrl) {
             $this->info(
-                "Downloading image for pattern {$pattern->id} from: {$imageUrl}"
+                message: "Downloading image for pattern {$pattern->id} from: {$imageUrl}"
             );
 
             try {
-                $response = $this->parserService->getClient()->get($imageUrl, [
+                $response = $this->parserService->getClient()->get(uri: $imageUrl, options: [
                     'allow_redirects' => true,
                 ]);
 
-                $extension = pathinfo(parse_url((string) $imageUrl, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
+                $extension = pathinfo(path: parse_url(url: (string) $imageUrl, component: PHP_URL_PATH), flags: PATHINFO_EXTENSION) ?: 'jpg';
                 $encodedFileName = $this->generateFileName(prefix: 'image_');
                 $fileName = "images/patterns/{$pattern->id}/{$encodedFileName}.{$extension}";
 
@@ -464,11 +464,11 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
                 $imagePaths[] = $fileName;
             } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-                $this->error("Failed to download image for pattern {$pattern->id} from: {$imageUrl}: " . $e->getMessage());
+                $this->error(message: "Failed to download image for pattern {$pattern->id} from: {$imageUrl}: " . $e->getMessage());
             }
         }
 
-        $this->success("Downloaded images for pattern {$pattern->id}");
+        $this->success(message: "Downloaded images for pattern {$pattern->id}");
 
         return $imagePaths;
     }

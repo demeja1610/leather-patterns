@@ -28,51 +28,51 @@ class ParsePatternSourcesCommand extends Command
     {
         $startedAt = now();
 
-        $this->info('Begin parsing pattern sources...');
+        $this->info(message: 'Begin parsing pattern sources...');
 
-        $sources = config('parse_sources');
+        $sources = config(key: 'parse_sources');
 
         if ($sources === []) {
-            $this->error('No pattern sources to parse');
+            $this->error(message: 'No pattern sources to parse');
 
             return;
         }
 
-        $this->info('Found ' . count($sources) . ' pattern sources to parse.');
+        $this->info(message: 'Found ' . count(value: $sources) . ' pattern sources to parse.');
 
-        $this->info('List of pattern sources: ' . implode(', ', array_keys($sources)));
+        $this->info(message: 'List of pattern sources: ' . implode(separator: ', ', array: array_keys(array: $sources)));
 
         foreach ($sources as $patternSource => $url) {
-            $source = PatternSourceEnum::from($patternSource);
+            $source = PatternSourceEnum::from(value: $patternSource);
 
-            $this->processSource($source, $url);
+            $this->processSource(patternSource: $source, url: $url);
         }
 
-        $this->success('Pattern sources parsed successfully.');
+        $this->success(message: 'Pattern sources parsed successfully.');
 
-        $newPatternsCount = Pattern::query()->where('created_at', '>=', $startedAt)->count();
-        $newCategories = PatternCategory::query()->where('created_at', '>=', $startedAt)->get();
-        $newTags = PatternTag::query()->where('created_at', '>=', $startedAt)->get();
-        $newAuthors = PatternAuthor::query()->where('created_at', '>=', $startedAt)->get();
+        $newPatternsCount = Pattern::query()->where(column: 'created_at', operator: '>=', value: $startedAt)->count();
+        $newCategories = PatternCategory::query()->where(column: 'created_at', operator: '>=', value: $startedAt)->get();
+        $newTags = PatternTag::query()->where(column: 'created_at', operator: '>=', value: $startedAt)->get();
+        $newAuthors = PatternAuthor::query()->where(column: 'created_at', operator: '>=', value: $startedAt)->get();
 
-        $this->info("{$newPatternsCount} new patterns links created.");
+        $this->info(message: "{$newPatternsCount} new patterns links created.");
 
         if ($newCategories->isNotEmpty()) {
-            $this->info("New categories found: {$newCategories->pluck('name')->implode(', ')}");
+            $this->info(message: "New categories found: {$newCategories->pluck(value: 'name')->implode(value: ', ')}");
         }
 
         if ($newTags->isNotEmpty()) {
-            $this->info("New tags found: {$newTags->pluck('name')->implode(', ')}");
+            $this->info(message: "New tags found: {$newTags->pluck(value: 'name')->implode(value: ', ')}");
         }
 
         if ($newAuthors->isNotEmpty()) {
-            $this->info("New authors found: {$newAuthors->pluck('name')->implode(', ')}");
+            $this->info(message: "New authors found: {$newAuthors->pluck(value: 'name')->implode(value: ', ')}");
         }
     }
 
     protected function processSource(PatternSourceEnum $patternSource, string $url): void
     {
-        $this->info("Processing source: {$patternSource->value}");
+        $this->info(message: "Processing source: {$patternSource->value}");
 
         match ($patternSource) {
             PatternSourceEnum::NEOVIMA => (
@@ -140,12 +140,12 @@ class ParsePatternSourcesCommand extends Command
                     parserService: $this->parserService
                 ))->processSource(baseURL: $url),
 
-            default => $this->processUnknownSource($patternSource),
+            default => $this->processUnknownSource(source: $patternSource),
         };
     }
 
     protected function processUnknownSource(PatternSourceEnum $source): void
     {
-        $this->warn("Unknown pattern source: {$source->value}, skipping...");
+        $this->warn(message: "Unknown pattern source: {$source->value}, skipping...");
     }
 }

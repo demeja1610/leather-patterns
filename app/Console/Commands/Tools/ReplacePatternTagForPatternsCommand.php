@@ -17,44 +17,44 @@ class ReplacePatternTagForPatternsCommand extends Command
 
     public function handle(): void
     {
-        $from = $this->option('from');
-        $to = $this->option('to');
-        $id = $this->option('id');
+        $from = $this->option(key: 'from');
+        $to = $this->option(key: 'to');
+        $id = $this->option(key: 'id');
 
         if (!$from || !$to) {
-            $this->error('Both --from and --to options are required.');
+            $this->error(string: 'Both --from and --to options are required.');
 
             return;
         }
 
-        $from = mb_strtolower($from);
-        $to = mb_strtolower($to);
+        $from = mb_strtolower(string: $from);
+        $to = mb_strtolower(string: $to);
 
-        $fromTag = PatternTag::query()->where('name', $from)->first();
-        $toTag = PatternTag::query()->where('name', $to)->first();
+        $fromTag = PatternTag::query()->where(column: 'name', operator: $from)->first();
+        $toTag = PatternTag::query()->where(column: 'name', operator: $to)->first();
 
         if (!$fromTag || !$toTag) {
-            $this->error('Both from and to tags must exist.');
+            $this->error(string: 'Both from and to tags must exist.');
 
             return;
         }
 
-        $this->info("From tag ID: {$fromTag->id}");
-        $this->info("To tag ID: {$toTag->id}");
+        $this->info(string: "From tag ID: {$fromTag->id}");
+        $this->info(string: "To tag ID: {$toTag->id}");
 
         $q = Pattern::query()
-            ->whereHas('tags', fn($query) => $query->where('name', $from))
-            ->with('tags');
+            ->whereHas(relation: 'tags', callback: fn($query) => $query->where(column: 'name', operator: $from))
+            ->with(relations: 'tags');
 
         if ($id) {
-            $this->info("Specific pattern ID: {$id}");
+            $this->info(string: "Specific pattern ID: {$id}");
 
-            $q->where('id', $id);
+            $q->where(column: 'id', operator: $id);
         }
 
         $count = $q->count();
 
-        $this->info("Total patterns found: {$count} with tag: {$from}");
+        $this->info(string: "Total patterns found: {$count} with tag: {$from}");
 
         $result = 0;
 
@@ -63,29 +63,29 @@ class ReplacePatternTagForPatternsCommand extends Command
             callback: function (Collection $patterns) use (&$toTag, &$fromTag, &$result): void {
                 $pattern = $patterns->first();
 
-                $this->info("Detaching from tag: {$fromTag->name} from pattern ID: {$pattern->id}");
+                $this->info(string: "Detaching from tag: {$fromTag->name} from pattern ID: {$pattern->id}");
 
-                $pattern->tags()->detach($fromTag);
+                $pattern->tags()->detach(ids: $fromTag);
 
                 /**
                  * @var \Illuminate\Database\Eloquent\Collection $patternTags
                  */
                 $patternTags = $pattern->tags;
 
-                $alreadyHasTag = $patternTags->contains('name', '=', $toTag->name);
+                $alreadyHasTag = $patternTags->contains(key: 'name', operator: '=', value: $toTag->name);
 
                 if ($alreadyHasTag) {
-                    $this->info("Pattern ID {$pattern->id} already has tag: {$toTag->name}, no need to attach it again");
+                    $this->info(string: "Pattern ID {$pattern->id} already has tag: {$toTag->name}, no need to attach it again");
 
                     return;
                 }
 
-                $pattern->tags()->attach($toTag);
+                $pattern->tags()->attach(ids: $toTag);
 
                 $result++;
             }
         );
 
-        $this->info('Pattern tags replaced successfully, ' . $result . ' records updated.');
+        $this->info(string: 'Pattern tags replaced successfully, ' . $result . ' records updated.');
     }
 }

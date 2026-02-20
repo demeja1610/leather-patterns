@@ -12,11 +12,11 @@ abstract class AbstractSourceAdapter extends AbstractAdapter
 {
     public function createNewPatterns(array $patterns): int
     {
-        $urls = array_column($patterns, 'source_url');
+        $urls = array_column(array: $patterns, column_key: 'source_url');
 
         $existingPatterns = Pattern::query()->whereIn('source_url', $urls)->get();
 
-        $existingLinks = $existingPatterns->pluck('source_url')->toArray();
+        $existingLinks = $existingPatterns->pluck(value: 'source_url')->toArray();
 
         $toCreate = $existingPatterns->count() === 0
             ? $patterns
@@ -28,7 +28,7 @@ abstract class AbstractSourceAdapter extends AbstractAdapter
                 ),
             );
 
-        $this->info("To create: " . count($toCreate));
+        $this->info(message: "To create: " . count(value: $toCreate));
 
         $createdCount = 0;
 
@@ -37,13 +37,13 @@ abstract class AbstractSourceAdapter extends AbstractAdapter
 
             unset($pattern['categories']);
 
-            $createdPattern = Pattern::query()->create($pattern);
+            $createdPattern = Pattern::query()->create(attributes: $pattern);
 
             if ($createdPattern->id !== null) {
                 $createdCount++;
 
                 if (!empty($categories)) {
-                    $this->bindCategories($createdPattern, $categories);
+                    $this->bindCategories(pattern: $createdPattern, categories: $categories);
                 }
             }
         }

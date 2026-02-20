@@ -9,16 +9,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pattern_categories', function (Blueprint $table): void {
-            $table->boolean('is_published')->default(false)->after('remove_on_appear')->index();
+            $table->boolean(column: 'is_published')->default(false)->after('remove_on_appear')->index();
         });
     }
 
     public function down(): void
     {
         Schema::table('pattern_categories', function (Blueprint $table): void {
-            $table->dropIndex(['is_published']);
+            $table->dropIndex(index: ['is_published']);
 
-            $table->dropColumn('is_published');
+            $table->dropColumn(columns: 'is_published');
         });
     }
 };

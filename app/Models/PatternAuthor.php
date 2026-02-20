@@ -15,7 +15,7 @@ class PatternAuthor extends Model
 
     public function patterns(): HasMany
     {
-        return $this->hasMany(Pattern::class, 'author_id');
+        return $this->hasMany(related: Pattern::class, foreignKey: 'author_id');
     }
 
     public function replacementForTags(): HasMany

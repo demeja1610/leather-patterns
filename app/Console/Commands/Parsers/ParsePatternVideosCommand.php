@@ -26,49 +26,49 @@ class ParsePatternVideosCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Parsing patterns videos');
+        $this->info(message: 'Parsing patterns videos');
 
-        $id = $this->option('id');
+        $id = $this->option(key: 'id');
 
         $q = Pattern::query()
-            ->whereHas('meta', fn($query) => $query->where('is_video_checked', false))
-            ->with('videos');
+            ->whereHas(relation: 'meta', callback: fn($query) => $query->where(column: 'is_video_checked', operator: false))
+            ->with(relations: 'videos');
 
         if ($id) {
-            $q->where('id', $id);
+            $q->where(column: 'id', operator: $id);
         }
 
         $count = $q->count();
 
         if ($count === 0) {
-            $this->warn("No patterns found to check for videos");
+            $this->warn(message: "No patterns found to check for videos");
 
             return;
         }
 
-        $this->info("Found {$count} patterns to check for videos");
+        $this->info(message: "Found {$count} patterns to check for videos");
 
         $q->chunkById(
             count: 1,
             callback: function ($patterns): void {
                 $pattern = $patterns->first();
 
-                $this->info("Processing pattern: {$pattern->id}");
+                $this->info(message: "Processing pattern: {$pattern->id}");
 
                 if ($pattern->videos->isNotEmpty()) {
-                    $this->info("Pattern {$pattern->id} has videos, skipping...");
+                    $this->info(message: "Pattern {$pattern->id} has videos, skipping...");
 
                     $pattern->meta->update(['is_video_checked' => true]);
 
                     return;
                 }
 
-                $this->info("Pattern {$pattern->id} has no videos, parsing...");
+                $this->info(message: "Pattern {$pattern->id} has no videos, parsing...");
 
-                $videos = $this->parsePatternVideo($pattern);
+                $videos = $this->parsePatternVideo(pattern: $pattern);
 
                 if ($videos === null) {
-                    $this->error("An error happened while parsing videos for pattern {$pattern->id}, skipping...");
+                    $this->error(message: "An error happened while parsing videos for pattern {$pattern->id}, skipping...");
 
                     return;
                 }
@@ -76,7 +76,7 @@ class ParsePatternVideosCommand extends Command
                 $videosToCreate = [];
 
                 foreach ($videos as $video) {
-                    $videosToCreate[] = new PatternVideo([
+                    $videosToCreate[] = new PatternVideo(attributes: [
                         'source' => $video['source'],
                         'source_identifier' => $video['video_id'],
                         'url' => match ($video['source']) {
@@ -91,11 +91,11 @@ class ParsePatternVideosCommand extends Command
                     DB::beginTransaction();
 
                     if ($videosToCreate !== []) {
-                        $videosToCreateCount = count($videosToCreate);
+                        $videosToCreateCount = count(value: $videosToCreate);
 
-                        $pattern->videos()->saveMany($videosToCreate);
+                        $pattern->videos()->saveMany(models: $videosToCreate);
 
-                        $this->success("Created {$videosToCreateCount} videos for pattern {$pattern->id}");
+                        $this->success(message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}");
                     }
 
                     $pattern->meta->update(['is_video_checked' => true]);
@@ -105,7 +105,7 @@ class ParsePatternVideosCommand extends Command
                     DB::rollBack();
 
                     $this->error(
-                        "Error saving videos for pattern {$pattern->id}: {$exception->getMessage()}"
+                        message: "Error saving videos for pattern {$pattern->id}: {$exception->getMessage()}"
                     );
 
                     return;
@@ -118,12 +118,12 @@ class ParsePatternVideosCommand extends Command
     {
         try {
             $content = $this->parserService->getClient()
-                ->get($pattern->source_url)
+                ->get(uri: $pattern->source_url)
                 ->getBody()
                 ->getContents();
         } catch (Exception $exception) {
             $this->error(
-                "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Error getting page content for pattern {$pattern->id}: {$exception->getMessage()}"
             );
 
             return null;
@@ -132,18 +132,18 @@ class ParsePatternVideosCommand extends Command
         $youtubeVideoIds = $this->parserService->getYoutubeVideoIdsFromString($content);
         $vkVideoIds = $this->parserService->getVkVideoIdsFromString($content);
 
-        $ytCount = count($youtubeVideoIds);
-        $vkCount = count($vkVideoIds);
+        $ytCount = count(value: $youtubeVideoIds);
+        $vkCount = count(value: $vkVideoIds);
 
         if ($ytCount !== 0) {
             $this->info(
-                "Found {$ytCount} YouTube video(s) for pattern {$pattern->id}"
+                message: "Found {$ytCount} YouTube video(s) for pattern {$pattern->id}"
             );
         }
 
         if ($vkCount !== 0) {
             $this->info(
-                "Found {$vkCount} VK video(s) for pattern {$pattern->id}"
+                message: "Found {$vkCount} VK video(s) for pattern {$pattern->id}"
             );
         }
 

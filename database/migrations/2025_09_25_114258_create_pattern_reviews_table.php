@@ -11,20 +11,20 @@ return new class extends Migration
         Schema::create('pattern_reviews', function (Blueprint $table): void {
             $table->id();
 
-            $table->string('reviewer_name');
-            $table->smallInteger('rating')->unsigned();
-            $table->text('comment')->nullable();
-            $table->timestamp('reviewed_at');
-            $table->boolean('is_approved')->default(false);
+            $table->string(column: 'reviewer_name');
+            $table->smallInteger(column: 'rating')->unsigned();
+            $table->text(column: 'comment')->nullable();
+            $table->timestamp(column: 'reviewed_at');
+            $table->boolean(column: 'is_approved')->default(false);
 
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')
+            $table->unsignedBigInteger(column: 'user_id')->nullable();
+            $table->foreign(columns: 'user_id')
                 ->references('id')
                 ->on('users')
                 ->nullOnDelete();
 
-            $table->unsignedBigInteger('pattern_id');
-            $table->foreign('pattern_id')
+            $table->unsignedBigInteger(column: 'pattern_id');
+            $table->foreign(columns: 'pattern_id')
                 ->references('id')
                 ->on('patterns')
                 ->onDelete('cascade');

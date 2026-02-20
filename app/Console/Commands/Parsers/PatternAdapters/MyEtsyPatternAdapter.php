@@ -17,7 +17,7 @@ class MyEtsyPatternAdapter extends AbstractPatternAdapter
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
             );
 
             return;
@@ -34,37 +34,37 @@ class MyEtsyPatternAdapter extends AbstractPatternAdapter
             pattern: $pattern,
         );
 
-        $imageElements = $xpath->query("//*[contains(@class, 'woocommerce-product-gallery__wrapper')]//a");
+        $imageElements = $xpath->query(expression: "//*[contains(@class, 'woocommerce-product-gallery__wrapper')]//a");
 
         /** @var DOMElement $imageElement */
         foreach ($imageElements as $imageElement) {
-            $imageUrl = $imageElement->getAttribute('href');
+            $imageUrl = $imageElement->getAttribute(qualifiedName: 'href');
 
             if ($imageUrl) {
                 $images[] = $imageUrl;
             }
         }
 
-        $categoriesElements = $xpath->query("//*[contains(@class, 'posted_in')]//a");
+        $categoriesElements = $xpath->query(expression: "//*[contains(@class, 'posted_in')]//a");
 
         /** @var DOMElement $categoryElement */
         foreach ($categoriesElements as $categoryElement) {
             $categories[] = $categoryElement->textContent;
         }
 
-        $title = $xpath->query("//*[contains(@class, 'product_title')]")->item(0)?->textContent;
+        $title = $xpath->query(expression: "//*[contains(@class, 'product_title')]")->item(0)?->textContent;
 
         if (!$title) {
             $title = 'No title';
         }
 
-        $addToCartButton = $xpath->query("//*[contains(@class, 'cart')]")->item(0);
-        $addToCartUrl = $addToCartButton instanceof DOMElement ? $addToCartButton->getAttribute('action') : null;
+        $addToCartButton = $xpath->query(expression: "//*[contains(@class, 'cart')]")->item(0);
+        $addToCartUrl = $addToCartButton instanceof DOMElement ? $addToCartButton->getAttribute(qualifiedName: 'action') : null;
 
         if (!$addToCartUrl) {
-            $this->warn("No add to cart URL found for pattern {$pattern->id}, skipping...");
+            $this->warn(message: "No add to cart URL found for pattern {$pattern->id}, skipping...");
 
-            $this->setDownloadUrlWrong($pattern);
+            $this->setDownloadUrlWrong(pattern: $pattern);
 
             return;
         }
@@ -77,10 +77,10 @@ class MyEtsyPatternAdapter extends AbstractPatternAdapter
         try {
             $fileDownloadUrl = $downloadUrl;
 
-            if (str_contains($fileDownloadUrl, 'youtu')) {
-                $this->warn("YouTube video detected, skipping file download...");
+            if (str_contains(haystack: $fileDownloadUrl, needle: 'youtu')) {
+                $this->warn(message: "YouTube video detected, skipping file download...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -91,9 +91,9 @@ class MyEtsyPatternAdapter extends AbstractPatternAdapter
             );
 
             if ($patternFilePath === null) {
-                $this->error("Failed to download pattern file for pattern {$pattern->id}, skipping...");
+                $this->error(message: "Failed to download pattern file for pattern {$pattern->id}, skipping...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -128,7 +128,7 @@ class MyEtsyPatternAdapter extends AbstractPatternAdapter
                 );
             }
 
-            Pattern::query()->where('id', $pattern->id)->update([
+            Pattern::query()->where(column: 'id', operator: $pattern->id)->update(values: [
                 'title' => $title,
             ]);
 
@@ -144,15 +144,15 @@ class MyEtsyPatternAdapter extends AbstractPatternAdapter
             }
 
             if ($videosToCreate !== []) {
-                $videosToCreateCount = count($videosToCreate);
+                $videosToCreateCount = count(value: $videosToCreate);
 
                 $this->success(
-                    "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
+                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
                 );
 
-                $pattern->videos()->saveMany($videosToCreate);
+                $pattern->videos()->saveMany(models: $videosToCreate);
 
-                $this->setPatternVideoChecked($pattern);
+                $this->setPatternVideoChecked(pattern: $pattern);
             }
 
             DB::commit();
@@ -160,15 +160,15 @@ class MyEtsyPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
             );
 
-            $this->error('Reverting changes, deleting downloaded files if they exist...');
+            $this->error(message: 'Reverting changes, deleting downloaded files if they exist...');
 
-            $this->deleteFileIfExists($patternFilePath);
+            $this->deleteFileIfExists(filePath: $patternFilePath);
 
             if ($patternImagesPaths !== []) {
-                $this->deleteImagesIfExists($patternImagesPaths);
+                $this->deleteImagesIfExists(imagePaths: $patternImagesPaths);
             }
         }
     }

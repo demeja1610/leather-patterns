@@ -24,8 +24,8 @@ class LoginActionController extends Controller
             );
         }
 
-        return back()->withErrors([
-            'email' => __('auth.failed'),
+        return back()->withErrors(provider: [
+            'email' => __(key: 'auth.failed'),
         ])->onlyInput('email');
     }
 }

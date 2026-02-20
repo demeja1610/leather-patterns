@@ -11,9 +11,9 @@ Route::prefix('admin')
         'throttle:60,1',
         // EnsureUserCanAccessAdminPanel::class,
     ])
-    ->group(function (): void {
+    ->group(callback: function (): void {
         Route::get('/', \App\Http\Controllers\Admin\IndexController::class)
-            ->name('page.index.dashboard');
+            ->name(name: 'page.index.dashboard');
 
         require_once __DIR__ . '/admin/pattern-category.php';
 

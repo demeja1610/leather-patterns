@@ -13,7 +13,7 @@ class PatternObserver
 
     public function created(Pattern $pattern): void
     {
-        $this->createPatternMeta($pattern);
+        $this->createPatternMeta(pattern: $pattern);
     }
 
     public function updated(Pattern $pattern): void {}
@@ -34,6 +34,6 @@ class PatternObserver
             $data['is_download_url_wrong'] = true;
         }
 
-        PatternMeta::query()->create($data);
+        PatternMeta::query()->create(attributes: $data);
     }
 }

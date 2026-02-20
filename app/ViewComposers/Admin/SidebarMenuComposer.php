@@ -19,9 +19,9 @@ class SidebarMenuComposer
     public function compose(View $view): void
     {
         $request = request();
-        $menu = $this->getMenu($request);
+        $menu = $this->getMenu(request: $request);
 
-        $view->with([
+        $view->with(key: [
             'menu' => $menu,
         ]);
     }
@@ -90,7 +90,7 @@ class SidebarMenuComposer
                         ),
                     );
 
-                    if ($menuItem->getRoute() !== null && str_contains($menuItem->getRoute(), $itemRoutePart)) {
+                    if ($menuItem->getRoute() !== null && str_contains(haystack: $menuItem->getRoute(), needle: $itemRoutePart)) {
                         $currentRouteContainsMenuItemRoutePart = true;
                     }
 

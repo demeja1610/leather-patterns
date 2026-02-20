@@ -17,44 +17,44 @@ class ReplacePatternAuthorForPatternsCommand extends Command
 
     public function handle(): void
     {
-        $from = $this->option('from');
-        $to = $this->option('to');
-        $id = $this->option('id');
+        $from = $this->option(key: 'from');
+        $to = $this->option(key: 'to');
+        $id = $this->option(key: 'id');
 
         if (!$from || !$to) {
-            $this->error('Both --from and --to options are required.');
+            $this->error(string: 'Both --from and --to options are required.');
 
             return;
         }
 
-        $from = mb_strtolower($from);
-        $to = mb_strtolower($to);
+        $from = mb_strtolower(string: $from);
+        $to = mb_strtolower(string: $to);
 
-        $fromAuthor = PatternAuthor::query()->where('name', $from)->first();
-        $toAuthor = PatternAuthor::query()->where('name', $to)->first();
+        $fromAuthor = PatternAuthor::query()->where(column: 'name', operator: $from)->first();
+        $toAuthor = PatternAuthor::query()->where(column: 'name', operator: $to)->first();
 
         if (!$fromAuthor || !$toAuthor) {
-            $this->error('Both from and to authors must exist.');
+            $this->error(string: 'Both from and to authors must exist.');
 
             return;
         }
 
-        $this->info("From author ID: {$fromAuthor->id}");
-        $this->info("To author ID: {$toAuthor->id}");
+        $this->info(string: "From author ID: {$fromAuthor->id}");
+        $this->info(string: "To author ID: {$toAuthor->id}");
 
         $q = Pattern::query()
-            ->whereHas('author', fn($query) => $query->where('name', $from))
-            ->with('author');
+            ->whereHas(relation: 'author', callback: fn($query) => $query->where(column: 'name', operator: $from))
+            ->with(relations: 'author');
 
         if ($id) {
-            $this->info("Specific pattern ID: {$id}");
+            $this->info(string: "Specific pattern ID: {$id}");
 
-            $q->where('id', $id);
+            $q->where(column: 'id', operator: $id);
         }
 
         $count = $q->count();
 
-        $this->info("Total patterns found: {$count} with author: {$from}");
+        $this->info(string: "Total patterns found: {$count} with author: {$from}");
 
         $result = 0;
 
@@ -63,9 +63,9 @@ class ReplacePatternAuthorForPatternsCommand extends Command
             callback: function (Collection $patterns) use (&$toAuthor, &$fromAuthor, &$result): void {
                 $pattern = $patterns->first();
 
-                $this->info("Detaching from author: {$fromAuthor->name} from pattern ID: {$pattern->id}");
+                $this->info(string: "Detaching from author: {$fromAuthor->name} from pattern ID: {$pattern->id}");
 
-                $pattern->author()->associate($toAuthor);
+                $pattern->author()->associate(model: $toAuthor);
 
                 $pattern->save();
 
@@ -73,6 +73,6 @@ class ReplacePatternAuthorForPatternsCommand extends Command
             }
         );
 
-        $this->info('Pattern author replaced successfully, ' . $result . ' records updated.');
+        $this->info(string: 'Pattern author replaced successfully, ' . $result . ' records updated.');
     }
 }

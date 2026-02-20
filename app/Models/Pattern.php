@@ -33,42 +33,42 @@ class Pattern extends Model
 
     public function images(): HasMany
     {
-        return $this->hasMany(PatternImage::class);
+        return $this->hasMany(related: PatternImage::class);
     }
 
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(PatternCategory::class);
+        return $this->belongsToMany(related: PatternCategory::class);
     }
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(PatternTag::class);
+        return $this->belongsToMany(related: PatternTag::class);
     }
 
     public function videos(): HasMany
     {
-        return $this->hasMany(PatternVideo::class);
+        return $this->hasMany(related: PatternVideo::class);
     }
 
     public function reviews(): HasMany
     {
-        return $this->hasMany(PatternReview::class);
+        return $this->hasMany(related: PatternReview::class);
     }
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(PatternAuthor::class);
+        return $this->belongsTo(related: PatternAuthor::class);
     }
 
     public function files(): HasMany
     {
-        return $this->hasMany(PatternFile::class);
+        return $this->hasMany(related: PatternFile::class);
     }
 
     public function meta(): HasOne
     {
-        return $this->hasOne(PatternMeta::class);
+        return $this->hasOne(related: PatternMeta::class);
     }
 
     protected function casts(): array

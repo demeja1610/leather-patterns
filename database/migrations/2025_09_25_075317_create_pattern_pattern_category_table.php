@@ -11,11 +11,11 @@ return new class extends Migration
         Schema::create('pattern_pattern_category', function (Blueprint $table): void {
             $table->id();
 
-            $table->unsignedBigInteger('pattern_category_id');
-            $table->unsignedBigInteger('pattern_id');
+            $table->unsignedBigInteger(column: 'pattern_category_id');
+            $table->unsignedBigInteger(column: 'pattern_id');
 
-            $table->foreign('pattern_category_id')->references('id')->on('pattern_categories')->onDelete('cascade');
-            $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade');
+            $table->foreign(columns: 'pattern_category_id')->references('id')->on('pattern_categories')->onDelete('cascade');
+            $table->foreign(columns: 'pattern_id')->references('id')->on('patterns')->onDelete('cascade');
         });
     }
 

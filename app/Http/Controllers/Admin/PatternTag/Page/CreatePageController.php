@@ -17,7 +17,7 @@ class CreatePageController extends Controller
         $tagReplacements = $this->getTagReplacements();
         $authorReplacements = $this->getAuthorReplacements();
 
-        return view('pages.admin.pattern-tag.create', [
+        return view(view: 'pages.admin.pattern-tag.create', data: [
             'tagReplacements' => $tagReplacements,
             'authorReplacements' => $authorReplacements
         ]);
@@ -27,10 +27,10 @@ class CreatePageController extends Controller
     {
         return PatternTag::query()
             ->whereNull('replace_id')
-            ->select([
+            ->select(columns: [
                 'id',
                 'name',
-            ])->orderBy('name')->get();
+            ])->orderBy(column: 'name')->get();
     }
 
     protected function getAuthorReplacements(): Collection
@@ -39,6 +39,6 @@ class CreatePageController extends Controller
             ->select([
                 'id',
                 'name',
-            ])->orderBy('name')->get();
+            ])->orderBy(column: 'name')->get();
     }
 }

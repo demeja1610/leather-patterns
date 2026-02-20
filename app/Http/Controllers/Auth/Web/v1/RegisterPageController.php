@@ -11,6 +11,6 @@ class RegisterPageController extends Controller
 {
     public function __invoke(): View
     {
-        return view('pages.auth.register');
+        return view(view: 'pages.auth.register');
     }
 }

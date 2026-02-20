@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('pattern_authors', function (Blueprint $table): void {
             $table->id();
 
-            $table->string('name')->unique();
+            $table->string(column: 'name')->unique();
 
             $table->timestamps();
         });

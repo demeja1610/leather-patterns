@@ -12,6 +12,6 @@ class ModelObserverServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        \App\Models\Pattern::observe(\App\Observers\PatternObserver::class);
+        \App\Models\Pattern::observe(classes: \App\Observers\PatternObserver::class);
     }
 }

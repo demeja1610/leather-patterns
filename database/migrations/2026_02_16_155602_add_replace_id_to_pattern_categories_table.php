@@ -9,11 +9,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pattern_categories', function (Blueprint $table): void {
-            $table->unsignedBigInteger('replace_id')
+            $table->unsignedBigInteger(column: 'replace_id')
                 ->nullable()
                 ->after('name');
 
-            $table->foreign('replace_id')
+            $table->foreign(columns: 'replace_id')
                 ->references('id')
                 ->on('pattern_categories');
         });
@@ -22,9 +22,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('pattern_categories', function (Blueprint $table): void {
-            $table->dropForeign(['replace_id']);
+            $table->dropForeign(index: ['replace_id']);
 
-            $table->dropColumn('replace_id');
+            $table->dropColumn(columns: 'replace_id');
         });
     }
 };

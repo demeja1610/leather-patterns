@@ -15,7 +15,7 @@ class CreatePageController extends Controller
     {
         $categoryReplacements = $this->getCategoryReplacements();
 
-        return view('pages.admin.pattern-category.create', [
+        return view(view: 'pages.admin.pattern-category.create', data: [
             'categoryReplacements' => $categoryReplacements
         ]);
     }
@@ -24,9 +24,9 @@ class CreatePageController extends Controller
     {
         return PatternCategory::query()
             ->whereNull('replace_id')
-            ->select([
+            ->select(columns: [
                 'id',
                 'name',
-            ])->orderBy('name')->get();
+            ])->orderBy(column: 'name')->get();
     }
 }

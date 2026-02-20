@@ -12,9 +12,9 @@ class ResetPasswordPageController extends Controller
 {
     public function __invoke(string $token, Request $request): View
     {
-        return view('pages.auth.reset-password', [
+        return view(view: 'pages.auth.reset-password', data: [
             'token' => $token,
-            'email' => $request->get('email'),
+            'email' => $request->get(key: 'email'),
         ]);
     }
 }

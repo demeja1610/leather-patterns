@@ -17,7 +17,7 @@ abstract class AbstractAdapter
     protected function getCategoriesFilterData(): array
     {
         if ($this->categoriesFilter === []) {
-            $this->categoriesFilter = config('categories_swap_filter', []);
+            $this->categoriesFilter = config(key: 'categories_swap_filter', default: []);
         }
 
         return $this->categoriesFilter;
@@ -30,21 +30,21 @@ abstract class AbstractAdapter
         $result = [];
 
         foreach ($categories as $category) {
-            $loweredCategory = mb_strtolower((string) $category);
+            $loweredCategory = mb_strtolower(string: (string) $category);
 
-            if (!array_key_exists($loweredCategory, $data)) {
+            if (!array_key_exists(key: $loweredCategory, array: $data)) {
                 $result[] = $category;
 
                 continue;
             }
 
             if ($data[$loweredCategory] === null) {
-                $this->warn("Category '{$category}' is filtered out.");
+                $this->warn(message: "Category '{$category}' is filtered out.");
 
                 continue;
             }
 
-            $this->warn("Category '{$category}' is replaced with '{$data[$loweredCategory]}'.");
+            $this->warn(message: "Category '{$category}' is replaced with '{$data[$loweredCategory]}'.");
 
             $result[] = $data[$loweredCategory];
         }
@@ -58,29 +58,29 @@ abstract class AbstractAdapter
             return;
         }
 
-        $categoriesStr = implode(', ', $categories);
+        $categoriesStr = implode(separator: ', ', array: $categories);
 
-        $this->info("Binding categories ({$categoriesStr}) for pattern: {$pattern->id}");
+        $this->info(message: "Binding categories ({$categoriesStr}) for pattern: {$pattern->id}");
 
         $_categories = [];
 
-        $filteredCategories = $this->filterCategories($categories);
+        $filteredCategories = $this->filterCategories(categories: $categories);
 
         foreach ($filteredCategories as $category) {
-            if (trim((string) $category) !== '') {
-                $_categories[] = PatternCategory::query()->createOrFirst([
-                    'name' => mb_ucfirst($category),
+            if (trim(string: (string) $category) !== '') {
+                $_categories[] = PatternCategory::query()->createOrFirst(attributes: [
+                    'name' => mb_ucfirst(string: $category),
                 ]);
             }
         }
 
-        $pattern->categories()->sync($_categories);
+        $pattern->categories()->sync(ids: $_categories);
     }
 
     protected function getTagsFilterData(): array
     {
         if ($this->tagsFilter === []) {
-            $this->tagsFilter = config('tags_swap_filter', []);
+            $this->tagsFilter = config(key: 'tags_swap_filter', default: []);
         }
 
         return $this->tagsFilter;
@@ -93,21 +93,21 @@ abstract class AbstractAdapter
         $result = [];
 
         foreach ($tags as $tag) {
-            $loweredTag = mb_strtolower((string) $tag);
+            $loweredTag = mb_strtolower(string: (string) $tag);
 
-            if (!array_key_exists($loweredTag, $data)) {
+            if (!array_key_exists(key: $loweredTag, array: $data)) {
                 $result[] = $tag;
 
                 continue;
             }
 
             if ($data[$loweredTag] === null) {
-                $this->warn("Tag '{$tag}' is filtered out.");
+                $this->warn(message: "Tag '{$tag}' is filtered out.");
 
                 continue;
             }
 
-            $this->warn("Tag '{$tag}' is replaced with '{$data[$loweredTag]}'.");
+            $this->warn(message: "Tag '{$tag}' is replaced with '{$data[$loweredTag]}'.");
 
             $result[] = $data[$loweredTag];
         }
@@ -117,23 +117,23 @@ abstract class AbstractAdapter
 
     protected function bindTags(Pattern $pattern, array $tags): void
     {
-        $tagsStr = implode(', ', $tags);
+        $tagsStr = implode(separator: ', ', array: $tags);
 
-        $this->info("Binding tags ({$tagsStr}) for pattern: {$pattern->id}");
+        $this->info(message: "Binding tags ({$tagsStr}) for pattern: {$pattern->id}");
 
         $_tags = [];
 
-        $filteredTags = $this->filterTags($tags);
+        $filteredTags = $this->filterTags(tags: $tags);
 
         foreach ($filteredTags as $tag) {
-            if (trim((string) $tag) !== '') {
-                $_tags[] = PatternTag::query()->createOrFirst([
-                    'name' => mb_ucfirst($tag),
+            if (trim(string: (string) $tag) !== '') {
+                $_tags[] = PatternTag::query()->createOrFirst(attributes: [
+                    'name' => mb_ucfirst(string: $tag),
                 ]);
             }
         }
 
-        $pattern->tags()->sync($_tags);
+        $pattern->tags()->sync(ids: $_tags);
     }
 
     public function info($message): void

@@ -25,7 +25,7 @@ class MenuItemDto extends Dto
             icon: $data['icon'],
             subMenu: $data['sub_menu'] === null
                 ? null
-                : MenuItemListDto::fromArray($data['sub_menu']),
+                : MenuItemListDto::fromArray(data: $data['sub_menu']),
             isActive: $data['is_active'],
             directUrl: $data['direct_url'],
         );

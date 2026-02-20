@@ -16,16 +16,16 @@ class UCFirstPatternCategoriesCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Performing ucfirst on pattern tags...');
+        $this->info(string: 'Performing ucfirst on pattern tags...');
 
         PatternTag::query()
             ->chunkById(
                 count: 500,
                 callback: function (Collection $tags): void {
                     foreach ($tags as $tag) {
-                        $this->info('Processing pattern tag: ' . $tag->name);
+                        $this->info(string: 'Processing pattern tag: ' . $tag->name);
 
-                        $tag->name = mb_ucfirst($tag->name);
+                        $tag->name = mb_ucfirst(string: $tag->name);
 
                         $tag->save();
                     }

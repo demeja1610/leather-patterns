@@ -11,16 +11,16 @@ return new class extends Migration
         Schema::create('pattern_files', function (Blueprint $table): void {
             $table->id();
 
-            $table->text('path');
-            $table->string('type');
-            $table->string('extension');
-            $table->integer('size');
-            $table->string('mime_type');
-            $table->string('hash_algorithm');
-            $table->string('hash');
-            $table->unsignedBigInteger('pattern_id')->index();
+            $table->text(column: 'path');
+            $table->string(column: 'type');
+            $table->string(column: 'extension');
+            $table->integer(column: 'size');
+            $table->string(column: 'mime_type');
+            $table->string(column: 'hash_algorithm');
+            $table->string(column: 'hash');
+            $table->unsignedBigInteger(column: 'pattern_id')->index();
 
-            $table->foreign('pattern_id')
+            $table->foreign(columns: 'pattern_id')
                 ->references('id')
                 ->on('patterns')
                 ->onDelete('cascade');

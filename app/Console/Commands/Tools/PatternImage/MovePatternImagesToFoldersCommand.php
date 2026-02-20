@@ -18,7 +18,7 @@ class MovePatternImagesToFoldersCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Starting procedure...');
+        $this->info(message: 'Starting procedure...');
 
         Pattern::query()
             ->orderBy('id')
@@ -32,7 +32,7 @@ class MovePatternImagesToFoldersCommand extends Command
                     $to = $chunk->last()->id;
                     $count = $chunk->count();
 
-                    $this->info("Processing patterns  from {$from} to {$to} ({$count} total)...");
+                    $this->info(message: "Processing patterns  from {$from} to {$to} ({$count} total)...");
 
                     $case = 'CASE';
                     $ids = [];
@@ -41,7 +41,7 @@ class MovePatternImagesToFoldersCommand extends Command
                         $folderPath = "/images/patterns/{$pattern->id}/";
 
                         if (!Storage::disk('public')->exists($folderPath)) {
-                            $this->info("Creating image directory for pattern with ID: {$pattern->id}");
+                            $this->info(message: "Creating image directory for pattern with ID: {$pattern->id}");
 
                             Storage::disk('public')->makeDirectory($folderPath);
                         }
@@ -49,13 +49,13 @@ class MovePatternImagesToFoldersCommand extends Command
                         foreach ($pattern->images as $image) {
                             $ids[] = $image->id;
 
-                            if (str_contains(trim((string) $image->path, '/'), trim($folderPath, '/'))) {
+                            if (str_contains(haystack: trim(string: (string) $image->path, characters: '/'), needle: trim(string: $folderPath, characters: '/'))) {
                                 continue;
                             }
 
                             $newImagePath = str_replace(
                                 search: 'images/',
-                                replace: trim($folderPath, '/') . '/',
+                                replace: trim(string: $folderPath, characters: '/') . '/',
                                 subject: $image->path,
                             );
 
@@ -70,14 +70,14 @@ class MovePatternImagesToFoldersCommand extends Command
                     }
 
                     if ($case === 'CASE') {
-                        $this->info('Nothing to move, skipping chunk...');
+                        $this->info(message: 'Nothing to move, skipping chunk...');
 
                         return;
                     }
 
                     $case .= ' ELSE path END';
 
-                    DB::table('pattern_images')->whereIn('id', $ids)->update([
+                    DB::table('pattern_images')->whereIn(column: 'id', values: $ids)->update(values: [
                         'path' => DB::raw($case),
                     ]);
                 },

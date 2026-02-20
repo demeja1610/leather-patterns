@@ -11,6 +11,6 @@ class IndexController extends Controller
 {
     public function __invoke(): View
     {
-        return view('pages.admin.index');
+        return view(view: 'pages.admin.index');
     }
 }

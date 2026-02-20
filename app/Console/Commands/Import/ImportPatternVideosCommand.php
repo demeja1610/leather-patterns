@@ -17,14 +17,14 @@ class ImportPatternVideosCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Importing pattern videos...');
+        $this->info(message: 'Importing pattern videos...');
 
-        DB::connection('mysql_import')->table('pattern_video')
-            ->join('videos', 'pattern_video.video_id', '=', 'videos.id')
-            ->join('patterns', 'pattern_video.pattern_id', '=', 'patterns.id')
-            ->where('patterns.source', '!=', PatternSourceEnum::SKINCUTS->value)
-            ->orderBy('pattern_video.video_id')
-            ->select([
+        DB::connection('mysql_import')->table(table: 'pattern_video')
+            ->join(table: 'videos', first: 'pattern_video.video_id', operator: '=', second: 'videos.id')
+            ->join(table: 'patterns', first: 'pattern_video.pattern_id', operator: '=', second: 'patterns.id')
+            ->where(column: 'patterns.source', operator: '!=', value: PatternSourceEnum::SKINCUTS->value)
+            ->orderBy(column: 'pattern_video.video_id')
+            ->select(columns: [
                 'pattern_video.video_id as video_id',
                 'pattern_video.pattern_id as pattern_id',
                 'videos.url as video_url',
@@ -40,7 +40,7 @@ class ImportPatternVideosCommand extends Command
                     $to = $chunk->last()->video_id;
                     $count = $chunk->count();
 
-                    $this->info("Importing pattern videos from {$from} to {$to} ({$count} total)...");
+                    $this->info(message: "Importing pattern videos from {$from} to {$to} ({$count} total)...");
 
                     $toInsert = [];
 
@@ -55,10 +55,10 @@ class ImportPatternVideosCommand extends Command
                         ];
                     }
 
-                    DB::table('pattern_videos')->insert($toInsert);
+                    DB::table('pattern_videos')->insert(values: $toInsert);
                 }
             );
 
-        $this->info("All pattern videos imported successfully.");
+        $this->info(message: "All pattern videos imported successfully.");
     }
 }

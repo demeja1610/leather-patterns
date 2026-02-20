@@ -18,7 +18,7 @@ class SessionNotificationDto extends Dto
     {
         return new static(
             text: $data['text'],
-            type: NotificationTypeEnum::from($data['type']),
+            type: NotificationTypeEnum::from(value: $data['type']),
         );
     }
 

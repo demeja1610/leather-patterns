@@ -30,10 +30,10 @@ class PablikKozhevnikaSourceAdapter extends AbstractSourceAdapter
     {
         $page = 1;
 
-        $url = trim($baseURL, '/');
+        $url = trim(string: $baseURL, characters: '/');
 
         while ($page !== null) {
-            $this->info("Processing page: {$page}");
+            $this->info(message: "Processing page: {$page}");
 
             $requestUrl = $page > 1
                 ? $url . '/page/' . $page . '/'
@@ -42,7 +42,7 @@ class PablikKozhevnikaSourceAdapter extends AbstractSourceAdapter
             try {
                 $html = $this->parserService->parseUrl($requestUrl);
             } catch (Exception $e) {
-                $this->error("Error processing page {$page}: " . $e->getMessage());
+                $this->error(message: "Error processing page {$page}: " . $e->getMessage());
 
                 return;
             }
@@ -50,59 +50,59 @@ class PablikKozhevnikaSourceAdapter extends AbstractSourceAdapter
             $dom = $this->parserService->parseDOM($html);
             $xpath = $this->parserService->getDOMXPath($dom);
 
-            $patternsElements = $xpath->query("//*[contains(@class, 'post-card__thumbnail')]");
+            $patternsElements = $xpath->query(expression: "//*[contains(@class, 'post-card__thumbnail')]");
 
-            $this->info("Found {$patternsElements->length} patterns");
+            $this->info(message: "Found {$patternsElements->length} patterns");
 
             $patterns = [];
 
             foreach ($patternsElements as $patternsElement) {
-                $patternLink = $xpath->query(".//a", $patternsElement)->item(0);
+                $patternLink = $xpath->query(expression: ".//a", contextNode: $patternsElement)->item(0);
 
                 if ($patternLink instanceof DOMElement) {
-                    $patternCategory = $xpath->query(".//span[contains(@class, 'post-card__category')]//span", $patternsElement)->item(0);
+                    $patternCategory = $xpath->query(expression: ".//span[contains(@class, 'post-card__category')]//span", contextNode: $patternsElement)->item(0);
 
                     if ($patternCategory instanceof DOMElement) {
                         $categoryText = $patternCategory->textContent;
 
-                        if (in_array(mb_strtolower(trim($categoryText)), $this->blacklistCategories)) {
-                            $this->warn("Category '{$categoryText}' is blacklisted.");
+                        if (in_array(needle: mb_strtolower(string: trim(string: $categoryText)), haystack: $this->blacklistCategories)) {
+                            $this->warn(message: "Category '{$categoryText}' is blacklisted.");
 
                             continue;
                         }
 
                         $categories = array_map(
                             callback: trim(...),
-                            array: explode(',', $categoryText)
+                            array: explode(separator: ',', string: $categoryText)
                         );
                     }
 
                     $patterns[] = $this->preparePatternForCreation(
-                        url: $patternLink->getAttribute('href'),
+                        url: $patternLink->getAttribute(qualifiedName: 'href'),
                         source: PatternSourceEnum::PABLIK_KOZHEVNIKA,
                         categories: $categories ?? []
                     );
                 }
             }
 
-            $patternsCount = count($patterns);
+            $patternsCount = count(value: $patterns);
 
-            $savedCount = $this->createNewPatterns($patterns);
+            $savedCount = $this->createNewPatterns(patterns: $patterns);
 
-            $this->success("Saved {$savedCount} patterns");
+            $this->success(message: "Saved {$savedCount} patterns");
 
             if ($savedCount !== $patternsCount) {
-                $this->success("The rest of the patterns are already exists, skipping to next source");
+                $this->success(message: "The rest of the patterns are already exists, skipping to next source");
 
                 $page = null;
 
                 break;
             }
 
-            $nextPage = $xpath->query("//a[contains(@class, 'next')]");
+            $nextPage = $xpath->query(expression: "//a[contains(@class, 'next')]");
 
             if ($nextPage->length === 0) {
-                $this->success("Link to next page not found, skipping to next source");
+                $this->success(message: "Link to next page not found, skipping to next source");
 
                 $page = null;
 

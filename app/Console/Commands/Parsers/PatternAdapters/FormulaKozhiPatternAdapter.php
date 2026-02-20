@@ -17,7 +17,7 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             $content = $this->parserService->parseUrl($pattern->source_url);
         } catch (Throwable $throwable) {
             $this->error(
-                "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+                message: "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
             );
 
             return;
@@ -35,13 +35,13 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             pattern: $pattern,
         );
 
-        $imageElements = $xpath->query("//*[contains(@class, 'bam-single-post')]//img");
+        $imageElements = $xpath->query(expression: "//*[contains(@class, 'bam-single-post')]//img");
 
         /** @var DOMElement $imageElement */
         foreach ($imageElements as $imageElement) {
-            $imageUrl = $imageElement->getAttribute('src');
+            $imageUrl = $imageElement->getAttribute(qualifiedName: 'src');
 
-            if (str_contains($imageUrl, 'lazy_placeholder')) {
+            if (str_contains(haystack: $imageUrl, needle: 'lazy_placeholder')) {
                 continue;
             }
 
@@ -50,44 +50,44 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             }
         }
 
-        $categoriesElements = $xpath->query("//*[contains(@class, 'cat-links')]//a");
+        $categoriesElements = $xpath->query(expression: "//*[contains(@class, 'cat-links')]//a");
 
         /** @var DOMElement $categoryElement */
         foreach ($categoriesElements as $categoryElement) {
             $categories[] = $categoryElement->textContent;
         }
 
-        $tagsElements = $xpath->query("//*[contains(@class, 'tags-links')]//a");
+        $tagsElements = $xpath->query(expression: "//*[contains(@class, 'tags-links')]//a");
 
         /** @var DOMElement $tagElement */
         foreach ($tagsElements as $tagElement) {
             $tags[] = $tagElement->textContent;
         }
 
-        $title = $xpath->query("//*[contains(@class, 'entry-title')]")->item(0)?->textContent;
+        $title = $xpath->query(expression: "//*[contains(@class, 'entry-title')]")->item(0)?->textContent;
 
         if (!$title) {
             $title = 'No title';
         }
 
-        $downloadLinkElement = $xpath->query("//*[contains(@class, 'gde-text')]//a");
+        $downloadLinkElement = $xpath->query(expression: "//*[contains(@class, 'gde-text')]//a");
 
         if ($downloadLinkElement->length === 0) {
-            $this->warn("No download URL found for pattern {$pattern->id}, skipping...");
+            $this->warn(message: "No download URL found for pattern {$pattern->id}, skipping...");
 
-            $this->setDownloadUrlWrong($pattern);
+            $this->setDownloadUrlWrong(pattern: $pattern);
 
             return;
         }
 
         /** @var DOMElement $element */
         $element = $downloadLinkElement->item(0);
-        $downloadUrl = $element->getAttribute('href');
+        $downloadUrl = $element->getAttribute(qualifiedName: 'href');
 
         if (!$downloadUrl) {
-            $this->warn("No download URL found for pattern {$pattern->id}, skipping...");
+            $this->warn(message: "No download URL found for pattern {$pattern->id}, skipping...");
 
-            $this->setDownloadUrlWrong($pattern);
+            $this->setDownloadUrlWrong(pattern: $pattern);
 
             return;
         }
@@ -98,10 +98,10 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
         try {
             $fileDownloadUrl = $downloadUrl;
 
-            if (str_contains($fileDownloadUrl, 'youtu')) {
-                $this->warn("YouTube video detected, skipping file download...");
+            if (str_contains(haystack: $fileDownloadUrl, needle: 'youtu')) {
+                $this->warn(message: "YouTube video detected, skipping file download...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -112,9 +112,9 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             );
 
             if ($patternFilePath === null) {
-                $this->error("Failed to download pattern file for pattern {$pattern->id}, skipping...");
+                $this->error(message: "Failed to download pattern file for pattern {$pattern->id}, skipping...");
 
-                $this->setDownloadUrlWrong($pattern);
+                $this->setDownloadUrlWrong(pattern: $pattern);
 
                 return;
             }
@@ -149,7 +149,7 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
                 );
             }
 
-            Pattern::query()->where('id', $pattern->id)->update([
+            Pattern::query()->where(column: 'id', operator: $pattern->id)->update(values: [
                 'title' => $title,
             ]);
 
@@ -172,15 +172,15 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             }
 
             if ($videosToCreate !== []) {
-                $videosToCreateCount = count($videosToCreate);
+                $videosToCreateCount = count(value: $videosToCreate);
 
                 $this->success(
-                    "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
+                    message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
                 );
 
-                $pattern->videos()->saveMany($videosToCreate);
+                $pattern->videos()->saveMany(models: $videosToCreate);
 
-                $this->setPatternVideoChecked($pattern);
+                $this->setPatternVideoChecked(pattern: $pattern);
             }
 
             DB::commit();
@@ -188,15 +188,15 @@ class FormulaKozhiPatternAdapter extends AbstractPatternAdapter
             DB::rollBack();
 
             $this->error(
-                "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+                message: "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
             );
 
-            $this->error('Reverting changes, deleting downloaded files if they exist...');
+            $this->error(message: 'Reverting changes, deleting downloaded files if they exist...');
 
-            $this->deleteFileIfExists($patternFilePath);
+            $this->deleteFileIfExists(filePath: $patternFilePath);
 
             if ($patternImagesPaths !== []) {
-                $this->deleteImagesIfExists($patternImagesPaths);
+                $this->deleteImagesIfExists(imagePaths: $patternImagesPaths);
             }
         }
     }

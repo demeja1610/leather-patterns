@@ -15,10 +15,10 @@ class ImportPatternReviewsCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Importing pattern reviews...');
+        $this->info(message: 'Importing pattern reviews...');
 
-        DB::connection('mysql_import')->table('pattern_reviews')
-            ->select([
+        DB::connection('mysql_import')->table(table: 'pattern_reviews')
+            ->select(columns: [
                 'pattern_reviews.id',
                 'pattern_reviews.reviewer_name',
                 'pattern_reviews.rating',
@@ -28,7 +28,7 @@ class ImportPatternReviewsCommand extends Command
                 'pattern_reviews.user_id',
                 'pattern_reviews.pattern_id',
             ])
-            ->orderBy('pattern_reviews.id')
+            ->orderBy(column: 'pattern_reviews.id')
             ->chunk(
                 count: 500,
                 callback: function ($chunk): void {
@@ -36,7 +36,7 @@ class ImportPatternReviewsCommand extends Command
                     $to = $chunk->last()->id;
                     $count = $chunk->count();
 
-                    $this->info("Importing {$count} pattern reviews from {$from} to {$to}.");
+                    $this->info(message: "Importing {$count} pattern reviews from {$from} to {$to}.");
 
                     $toInsert = [];
 
@@ -52,10 +52,10 @@ class ImportPatternReviewsCommand extends Command
                         ];
                     }
 
-                    DB::table('pattern_reviews')->insert($toInsert);
+                    DB::table('pattern_reviews')->insert(values: $toInsert);
                 }
             );
 
-        $this->info("All pattern reviews imported successfully.");
+        $this->info(message: "All pattern reviews imported successfully.");
     }
 }

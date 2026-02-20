@@ -17,12 +17,12 @@ class ImportPatternsCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Importing patterns...');
+        $this->info(message: 'Importing patterns...');
 
         DB::connection('mysql_import')
-            ->table('patterns')
-            ->orderBy('id')
-            ->select([
+            ->table(table: 'patterns')
+            ->orderBy(column: 'id')
+            ->select(columns: [
                 'id',
                 'title',
                 'source',
@@ -37,7 +37,7 @@ class ImportPatternsCommand extends Command
                     $to = $patterns->last()->id;
                     $count = $patterns->count();
 
-                    $this->info("Imported patterns from {$from} to {$to} ({$count} total)");
+                    $this->info(message: "Imported patterns from {$from} to {$to} ({$count} total)");
 
                     $toInsert = [];
 
@@ -54,10 +54,10 @@ class ImportPatternsCommand extends Command
                         }
                     }
 
-                    DB::table('patterns')->insert($toInsert);
+                    DB::table('patterns')->insert(values: $toInsert);
                 }
             );
 
-        $this->info("All patterns imported successfully.");
+        $this->info(message: "All patterns imported successfully.");
     }
 }

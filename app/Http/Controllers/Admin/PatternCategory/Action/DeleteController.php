@@ -16,10 +16,10 @@ class DeleteController extends Controller
 {
     public function __invoke($id): RedirectResponse
     {
-        $category = $this->getPatternCategory($id);
+        $category = $this->getPatternCategory(id: $id);
 
         if (!$category instanceof PatternCategory) {
-            return abort(Response::HTTP_NOT_FOUND);
+            return abort(code: Response::HTTP_NOT_FOUND);
         }
 
         if ($category->isDeletable()) {
@@ -29,7 +29,7 @@ class DeleteController extends Controller
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
-                        text: __('pattern_category.admin.category_isnt_deletable', [
+                        text: __(key: 'pattern_category.admin.category_isnt_deletable', replace: [
                             'name' => $category->name,
                         ]),
                         type: NotificationTypeEnum::ERROR,
@@ -43,12 +43,12 @@ class DeleteController extends Controller
             value: new SessionNotificationListDto(
                 $deleted > 0
                     ? new SessionNotificationDto(
-                        text: __('pattern_category.admin.single_delete_success', ['name' => $category->name]),
+                        text: __(key: 'pattern_category.admin.single_delete_success', replace: ['name' => $category->name]),
                         type: NotificationTypeEnum::SUCCESS,
                     )
                     :
                     new SessionNotificationDto(
-                        text: __('pattern_category.admin.single_failed_to_delete', ['name' => $category->name]),
+                        text: __(key: 'pattern_category.admin.single_failed_to_delete', replace: ['name' => $category->name]),
                         type: NotificationTypeEnum::ERROR,
                     ),
             ),
@@ -59,9 +59,9 @@ class DeleteController extends Controller
     {
         $q =  PatternCategory::query();
 
-        $q->where("id", $id);
+        $q->where(column: "id", operator: $id);
 
-        $q->withCount([
+        $q->withCount(relations: [
             'patterns',
             'replacementFor',
         ]); // optimization for isDeleted method

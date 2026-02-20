@@ -20,7 +20,7 @@ class GetAllController extends Controller
             request: $request,
         );
 
-        return PatternCategoryResource::collection($patternCategories);
+        return PatternCategoryResource::collection(resource: $patternCategories);
     }
 
     protected function getAllPatternCategories(GetAllRequest &$request): Collection
@@ -43,15 +43,15 @@ class GetAllController extends Controller
     protected function getBasePatternCategoryQuery(): Builder
     {
         return PatternCategory::query()
-            ->where('is_published', true);
+            ->where(column: 'is_published', operator: true);
     }
 
     protected function applyFilters(Builder &$query, GetAllRequest &$request): void
     {
-        $from = $request->get('from');
+        $from = $request->get(key: 'from');
 
         if ($from !== null) {
-            $query->where('id', '>', (int) $from);
+            $query->where(column: 'id', operator: '>', value: (int) $from);
         }
     }
 }

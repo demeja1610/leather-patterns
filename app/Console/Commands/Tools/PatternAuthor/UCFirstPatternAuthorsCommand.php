@@ -16,16 +16,16 @@ class UCFirstPatternAuthorsCommand extends Command
 
     public function handle(): void
     {
-        $this->info('Performing ucfirst on pattern author...');
+        $this->info(string: 'Performing ucfirst on pattern author...');
 
         PatternAuthor::query()
             ->chunkById(
                 count: 500,
                 callback: function (Collection $authors): void {
                     foreach ($authors as $author) {
-                        $this->info('Processing pattern author: ' . $author->name);
+                        $this->info(string: 'Processing pattern author: ' . $author->name);
 
-                        $author->name = mb_ucfirst($author->name);
+                        $author->name = mb_ucfirst(string: $author->name);
 
                         $author->save();
                     }

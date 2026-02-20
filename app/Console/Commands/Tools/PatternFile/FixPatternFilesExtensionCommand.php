@@ -17,13 +17,13 @@ class FixPatternFilesExtensionCommand extends Command
 
     public function handle()
     {
-        $id = $this->option('id');
+        $id = $this->option(key: 'id');
 
         if ($id) {
-            $file = PatternFile::query()->find($id);
+            $file = PatternFile::query()->find(id: $id);
 
             if (!$file) {
-                $this->error("File not found");
+                $this->error(string: "File not found");
 
                 return static::FAILURE;
             }
@@ -69,51 +69,51 @@ class FixPatternFilesExtensionCommand extends Command
         $newExtension = $mimes[$file->mime_type] ?? null;
 
         if (!$newExtension) {
-            $this->error("Unknown MIME type: {$file->mime_type}");
+            $this->error(string: "Unknown MIME type: {$file->mime_type}");
 
             return;
         }
 
         $oldFilePath = $file->path;
-        $newFilePath = str_replace(".{$file->extension}", ".{$newExtension}", $oldFilePath);
+        $newFilePath = str_replace(search: ".{$file->extension}", replace: ".{$newExtension}", subject: $oldFilePath);
 
         rename(
-            from: public_path("storage/{$oldFilePath}"),
-            to: public_path("storage/{$newFilePath}")
+            from: public_path(path: "storage/{$oldFilePath}"),
+            to: public_path(path: "storage/{$newFilePath}")
         );
 
-        $this->info("Renamed: {$oldFilePath} to {$newFilePath}");
+        $this->info(string: "Renamed: {$oldFilePath} to {$newFilePath}");
 
-        $newHash = $this->calculateFileHash($newFilePath);
+        $newHash = $this->calculateFileHash(filePath: $newFilePath);
 
-        $file->update([
+        $file->update(attributes: [
             'extension' => $newExtension,
             'path' => $newFilePath,
             'hash' => $newHash,
-            'type' => FileTypeEnum::fromMimeType($file->mime_type)
+            'type' => FileTypeEnum::fromMimeType(mimeType: $file->mime_type)
         ]);
     }
 
     protected function calculateFileHash(string $filePath): string
     {
-        return hash_file('sha256', public_path("storage/{$filePath}"));
+        return hash_file(algo: 'sha256', filename: public_path(path: "storage/{$filePath}"));
     }
 
     protected function fixPdf(): void
     {
         $q = PatternFile::query()
-            ->where('extension', 'pdf')
-            ->where('mime_type', '!=', 'application/pdf');
+            ->where(column: 'extension', operator: 'pdf')
+            ->where(column: 'mime_type', operator: '!=', value: 'application/pdf');
 
         $wrongPdfCount = $q->count();
 
-        $this->info("Number of wrong PDF files: {$wrongPdfCount}");
+        $this->info(string: "Number of wrong PDF files: {$wrongPdfCount}");
 
         $q->orderBy('id')->chunkById(
             count: 100,
             callback: function (Collection $items): void {
                 foreach ($items as $item) {
-                    $this->fixFile($item);
+                    $this->fixFile(file: $item);
                 }
             }
         );
@@ -122,18 +122,18 @@ class FixPatternFilesExtensionCommand extends Command
     protected function fixZip(): void
     {
         $q = PatternFile::query()
-            ->where('extension', 'zip')
-            ->where('mime_type', '!=', 'application/zip');
+            ->where(column: 'extension', operator: 'zip')
+            ->where(column: 'mime_type', operator: '!=', value: 'application/zip');
 
         $wrongZipCount = $q->count();
 
-        $this->info("Number of wrong ZIP files: {$wrongZipCount}");
+        $this->info(string: "Number of wrong ZIP files: {$wrongZipCount}");
 
         $q->orderBy('id')->chunkById(
             count: 100,
             callback: function (Collection $items): void {
                 foreach ($items as $item) {
-                    $this->fixFile($item);
+                    $this->fixFile(file: $item);
                 }
             }
         );
@@ -142,18 +142,18 @@ class FixPatternFilesExtensionCommand extends Command
     protected function fix7z(): void
     {
         $q = PatternFile::query()
-            ->where('extension', '7z')
-            ->where('mime_type', '!=', 'application/x-7z-compressed');
+            ->where(column: 'extension', operator: '7z')
+            ->where(column: 'mime_type', operator: '!=', value: 'application/x-7z-compressed');
 
         $wrong7zCount = $q->count();
 
-        $this->info("Number of wrong 7z files: {$wrong7zCount}");
+        $this->info(string: "Number of wrong 7z files: {$wrong7zCount}");
 
         $q->orderBy('id')->chunkById(
             count: 100,
             callback: function (Collection $items): void {
                 foreach ($items as $item) {
-                    $this->fixFile($item);
+                    $this->fixFile(file: $item);
                 }
             }
         );
@@ -162,18 +162,18 @@ class FixPatternFilesExtensionCommand extends Command
     protected function fixRar(): void
     {
         $q = PatternFile::query()
-            ->where('extension', 'rar')
-            ->where('mime_type', '!=', 'application/x-rar');
+            ->where(column: 'extension', operator: 'rar')
+            ->where(column: 'mime_type', operator: '!=', value: 'application/x-rar');
 
         $wrongRarCount = $q->count();
 
-        $this->info("Number of wrong RAR files: {$wrongRarCount}");
+        $this->info(string: "Number of wrong RAR files: {$wrongRarCount}");
 
         $q->orderBy('id')->chunkById(
             count: 100,
             callback: function (Collection $items): void {
                 foreach ($items as $item) {
-                    $this->fixFile($item);
+                    $this->fixFile(file: $item);
                 }
             }
         );
@@ -183,17 +183,17 @@ class FixPatternFilesExtensionCommand extends Command
     {
         $q = PatternFile::query()
             ->whereIn('extension', ['jpeg', 'jpg'])
-            ->where('mime_type', '!=', 'image/jpeg');
+            ->where(column: 'mime_type', operator: '!=', value: 'image/jpeg');
 
         $wrongJpegCount = $q->count();
 
-        $this->info("Number of wrong JPEG files: {$wrongJpegCount}");
+        $this->info(string: "Number of wrong JPEG files: {$wrongJpegCount}");
 
-        $q->orderBy('id')->chunkById(
+        $q->orderBy(column: 'id')->chunkById(
             count: 100,
             callback: function (Collection $items): void {
                 foreach ($items as $item) {
-                    $this->fixFile($item);
+                    $this->fixFile(file: $item);
                 }
             }
         );
@@ -202,18 +202,18 @@ class FixPatternFilesExtensionCommand extends Command
     protected function fixPng(): void
     {
         $q = PatternFile::query()
-            ->where('extension', 'png')
-            ->where('mime_type', '!=', 'image/png');
+            ->where(column: 'extension', operator: 'png')
+            ->where(column: 'mime_type', operator: '!=', value: 'image/png');
 
         $wrongPngCount = $q->count();
 
-        $this->info("Number of wrong PNG files: {$wrongPngCount}");
+        $this->info(string: "Number of wrong PNG files: {$wrongPngCount}");
 
         $q->orderBy('id')->chunkById(
             count: 100,
             callback: function (Collection $items): void {
                 foreach ($items as $item) {
-                    $this->fixFile($item);
+                    $this->fixFile(file: $item);
                 }
             }
         );

@@ -11,12 +11,12 @@ return new class extends Migration
         Schema::create('pattern_videos', function (Blueprint $table): void {
             $table->id();
 
-            $table->text('url');
-            $table->string('source');
-            $table->string('source_identifier')->nullable();
+            $table->text(column: 'url');
+            $table->string(column: 'source');
+            $table->string(column: 'source_identifier')->nullable();
 
-            $table->unsignedBigInteger('pattern_id');
-            $table->foreign('pattern_id')
+            $table->unsignedBigInteger(column: 'pattern_id');
+            $table->foreign(columns: 'pattern_id')
                 ->references('id')
                 ->on('patterns')
                 ->onDelete('cascade');

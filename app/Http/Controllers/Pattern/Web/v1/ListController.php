@@ -48,7 +48,7 @@ class ListController extends Controller
             request: $request,
         )->appends($request->query());
 
-        return view('pages.pattern.list', [
+        return view(view: 'pages.pattern.list', data: [
             'categories' => $patternCategories,
             'categoriesLimit' => $this->patternCategoriesLimit,
             'tags' => $patternTags,
@@ -60,7 +60,7 @@ class ListController extends Controller
 
     protected function getPatternategoriesForFilter(Request &$request): Collection
     {
-        $showAllPatternCategories = $request->get('show_all_pattern_categories', false);
+        $showAllPatternCategories = $request->get(key: 'show_all_pattern_categories', default: false);
 
         if ($showAllPatternCategories === false) {
             $patternCategories = $this->getSelectedPatternCategories(
@@ -80,7 +80,7 @@ class ListController extends Controller
                     ),
                 );
 
-                $patternCategories = $patternCategories->merge($extraCategories);
+                $patternCategories = $patternCategories->merge(items: $extraCategories);
             }
         } else {
             $patternCategories = Cache::remember(
@@ -95,7 +95,7 @@ class ListController extends Controller
 
     protected function getPatternTagsForFilter(Request &$request): Collection
     {
-        $showAllPatternTags = $request->get('show_all_pattern_tags', false);
+        $showAllPatternTags = $request->get(key: 'show_all_pattern_tags', default: false);
 
         if ($showAllPatternTags === false) {
             $patternTags = $this->getSelectedPatternTags(
@@ -115,7 +115,7 @@ class ListController extends Controller
                     ),
                 );
 
-                $patternTags = $patternTags->merge($extraTags);
+                $patternTags = $patternTags->merge(items: $extraTags);
             }
         } else {
             $patternTags = Cache::remember(
@@ -130,7 +130,7 @@ class ListController extends Controller
 
     protected function getPatternAuthorsForFilter(Request &$request): Collection
     {
-        $showAllPatternAuthors = $request->get('show_all_pattern_authors', false);
+        $showAllPatternAuthors = $request->get(key: 'show_all_pattern_authors', default: false);
 
         if ($showAllPatternAuthors === false) {
             $patternAuthors = $this->getSelectedPatternAuthors(
@@ -150,7 +150,7 @@ class ListController extends Controller
                     ),
                 );
 
-                $patternAuthors = $patternAuthors->merge($extraAuthors);
+                $patternAuthors = $patternAuthors->merge(items: $extraAuthors);
             }
         } else {
             $patternAuthors = Cache::remember(
@@ -172,7 +172,7 @@ class ListController extends Controller
             request: $request,
         );
 
-        $q->with([
+        $q->with(relations: [
             'categories' => function (BelongsToMany $sq): void {
                 $table = $sq->getRelated()->getTable();
 
@@ -219,9 +219,9 @@ class ListController extends Controller
             },
         ]);
 
-        $q->whereHas('meta', fn($query) => $query->select('pattern_downloaded')->where('pattern_downloaded', true));
+        $q->whereHas(relation: 'meta', callback: fn($query) => $query->select('pattern_downloaded')->where(column: 'pattern_downloaded', operator: true));
 
-        $cursor = $request->get('cursor');
+        $cursor = $request->get(key: 'cursor');
 
         return $q->cursorPaginate(
             perPage: 16,
@@ -232,7 +232,7 @@ class ListController extends Controller
     protected function getBasePatternCategoryQuery(): Builder
     {
         return PatternCategory::query()
-            ->where('is_published', true);
+            ->where(column: 'is_published', operator: true);
     }
 
     protected function getBasePatternTagQuery(): Builder
@@ -280,8 +280,8 @@ class ListController extends Controller
 
     protected function getSelectedPatternCategories(Request &$request): Collection
     {
-        $ids = $request->get('category', []);
-        $idsCount = count($ids);
+        $ids = $request->get(key: 'category', default: []);
+        $idsCount = count(value: $ids);
 
         if ($idsCount === 0) {
             return new Collection;
@@ -291,7 +291,7 @@ class ListController extends Controller
 
         if ($ids !== []) {
             if ($idsCount === 1) {
-                $q->where('id', reset($ids));
+                $q->where(column: 'id', operator: reset(array: $ids));
             } else {
                 $q->whereIn('id', $ids);
             }
@@ -302,8 +302,8 @@ class ListController extends Controller
 
     protected function getSelectedPatternTags(Request &$request): Collection
     {
-        $ids = $request->get('tag', []);
-        $idsCount = count($ids);
+        $ids = $request->get(key: 'tag', default: []);
+        $idsCount = count(value: $ids);
 
         if ($idsCount === 0) {
             return new Collection;
@@ -313,7 +313,7 @@ class ListController extends Controller
 
         if ($ids !== []) {
             if ($idsCount === 1) {
-                $q->where('id', reset($ids));
+                $q->where(column: 'id', operator: reset(array: $ids));
             } else {
                 $q->whereIn('id', $ids);
             }
@@ -324,8 +324,8 @@ class ListController extends Controller
 
     protected function getSelectedPatternAuthors(Request &$request): Collection
     {
-        $ids = $request->get('author', []);
-        $idsCount = count($ids);
+        $ids = $request->get(key: 'author', default: []);
+        $idsCount = count(value: $ids);
 
         if ($idsCount === 0) {
             return new Collection;
@@ -335,7 +335,7 @@ class ListController extends Controller
 
         if ($ids !== []) {
             if ($idsCount === 1) {
-                $q->where('id', reset($ids));
+                $q->where(column: 'id', operator: reset(array: $ids));
             } else {
                 $q->whereIn('id', $ids);
             }
@@ -350,10 +350,10 @@ class ListController extends Controller
             ->orderBy('id');
 
         if ($limit !== null) {
-            $q->limit($limit);
+            $q->limit(value: $limit);
         }
 
-        return $q->select($this->getRequiredPatternCategoryColumns())->get();
+        return $q->select(columns: $this->getRequiredPatternCategoryColumns())->get();
     }
 
     protected function getPatternTags(?int $limit = null): Collection
@@ -362,10 +362,10 @@ class ListController extends Controller
             ->orderBy('id');
 
         if ($limit !== null) {
-            $q->limit($limit);
+            $q->limit(value: $limit);
         }
 
-        return $q->select($this->getRequiredPatternTagColumns())->get();
+        return $q->select(columns: $this->getRequiredPatternTagColumns())->get();
     }
 
     protected function getPatternAuthors(?int $limit = null): Collection
@@ -374,34 +374,34 @@ class ListController extends Controller
             ->orderBy('id');
 
         if ($limit !== null) {
-            $q->limit($limit);
+            $q->limit(value: $limit);
         }
 
-        return $q->select($this->getRequiredPatternAuthorColumns())->get();
+        return $q->select(columns: $this->getRequiredPatternAuthorColumns())->get();
     }
 
     protected function applyFilters(Builder &$query, Request &$request): void
     {
-        $search = $request->get('s');
+        $search = $request->get(key: 's');
 
         if ($search !== null && $search !== '') {
-            $query->where('title', 'like', "%{$search}%");
+            $query->where(column: 'title', operator: 'like', value: "%{$search}%");
         }
 
-        $activeCategoriesIds = $request->get('category', []);
+        $activeCategoriesIds = $request->get(key: 'category', default: []);
 
         if ($activeCategoriesIds !== []) {
-            $query->whereHas('categories', fn($query) => $query->whereIn('pattern_categories.id', $activeCategoriesIds));
+            $query->whereHas(relation: 'categories', callback: fn($query) => $query->whereIn('pattern_categories.id', $activeCategoriesIds));
         }
 
-        $activeTagsIds = $request->get('tag', []);
+        $activeTagsIds = $request->get(key: 'tag', default: []);
 
         if ($activeTagsIds !== []) {
-            $query->whereHas('tags', fn($query) => $query->whereIn('pattern_tags.id', $activeTagsIds));
+            $query->whereHas(relation: 'tags', callback: fn($query) => $query->whereIn('pattern_tags.id', $activeTagsIds));
         }
 
-        $hasAuthor = $request->has('has_author');
-        $activeAuthorsIds = $request->get('author', []);
+        $hasAuthor = $request->has(key: 'has_author');
+        $activeAuthorsIds = $request->get(key: 'author', default: []);
 
         if ($hasAuthor === true && $activeAuthorsIds === []) {
             $query->whereNotNull('author_id');
@@ -411,22 +411,22 @@ class ListController extends Controller
             $query->whereIn('author_id', $activeAuthorsIds);
         }
 
-        $hasVideo = $request->has('has_video');
+        $hasVideo = $request->has(key: 'has_video');
 
         if ($hasVideo === true) {
-            $query->whereHas('videos');
+            $query->whereHas(relation: 'videos');
         }
 
-        $hasReview = $request->has('has_review');
+        $hasReview = $request->has(key: 'has_review');
 
         if ($hasReview === true) {
-            $query->whereHas('reviews');
+            $query->whereHas(relation: 'reviews');
         }
 
-        $orderStr = $request->get('order');
+        $orderStr = $request->get(key: 'order');
 
         if ($orderStr !== null) {
-            $order = PatternOrderEnum::tryFrom($orderStr);
+            $order = PatternOrderEnum::tryFrom(value: $orderStr);
         }
 
         if (!empty($order)) {
