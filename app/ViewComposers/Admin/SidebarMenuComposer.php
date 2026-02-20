@@ -46,7 +46,6 @@ class SidebarMenuComposer
 
         return new MenuItemListDto(
             ...array_map(
-                array: $menu->getItems(),
                 callback: function (MenuItemDto $menuItem) use (&$currentRouteName, &$request): MenuItemDto {
                     if (
                         $menuItem->getRoute() !== $currentRouteName && !$menuItem->getSubMenu() instanceof MenuItemListDto
@@ -103,6 +102,7 @@ class SidebarMenuComposer
                         isActive: $menuItem->getRoute() === $currentRouteName || $hasActiveSubMenuItem || $currentRouteContainsMenuItemRoutePart,
                     );
                 },
+                array: $menu->getItems(),
             )
         );
     }
