@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Parsers\PatternAdapters;
 
 use Throwable;
@@ -15,8 +17,10 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
 
         try {
             $content = $this->parserService->parseUrl($pattern->source_url);
-        } catch (Throwable $th) {
-            $this->error("Failed to parse pattern {$pattern->id}: " . $th->getMessage());
+        } catch (Throwable $throwable) {
+            $this->error(
+                "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+            );
 
             return;
         }
@@ -165,7 +169,7 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             if ($videosToCreate !== []) {
                 $videosToCreateCount = count($videosToCreate);
 
-                $this->success("Created $videosToCreateCount videos for pattern {$pattern->id}");
+                $this->success("Created {$videosToCreateCount} videos for pattern {$pattern->id}");
 
                 $pattern->videos()->saveMany($videosToCreate);
 
@@ -173,16 +177,16 @@ class AbzalaPatternAdapter extends AbstractPatternAdapter
             }
 
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             DB::rollBack();
 
-            $this->error("Failed to download pattern file for pattern {$pattern->id}: {$e->getMessage()}");
+            $this->error(
+                "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+            );
 
             $this->error('Reverting changes, deleting downloaded files if they exist...');
 
-            if ($patternFilePath !== null) {
-                $this->deleteFileIfExists($patternFilePath);
-            }
+            $this->deleteFileIfExists($patternFilePath);
 
             if ($patternImagesPaths !== []) {
                 $this->deleteImagesIfExists($patternImagesPaths);

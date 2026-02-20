@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Parsers\SourceAdapters;
 
 use Exception;
@@ -110,8 +112,10 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
 
         try {
             $html = $this->parserService->parseUrl($url);
-        } catch (Exception $e) {
-            $this->error("Error while getting parse urls from {$url}: " . $e->getMessage());
+        } catch (Exception $exception) {
+            $this->error(
+                "Error while getting parse urls from {$url}: " . $exception->getMessage()
+            );
 
             return null;
         }
@@ -122,11 +126,14 @@ class AbzalaSourceAdapter extends AbstractSourceAdapter
         $productLinks = $xpath->query("//*[contains(@class, 'com-content-categories__item-title')]//a");
 
         foreach ($productLinks as $link) {
-            if ($link instanceof DOMElement) {
-                if (trim($link->textContent) !== 'Модели для 3D печати') {
-                    $urls[] = "$baseURL/" . trim($link->getAttribute('href'), '/');
-                }
+            if (!$link instanceof DOMElement) {
+                continue;
             }
+            if (trim($link->textContent) === 'Модели для 3D печати') {
+                continue;
+            }
+
+            $urls[] = "{$baseURL}/" . trim($link->getAttribute('href'), '/');
         }
 
         return $urls;

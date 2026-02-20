@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Parsers\PatternAdapters;
 
 use DOMXPath;
@@ -16,8 +18,10 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
 
         try {
             $content = $this->parserService->parseUrl($pattern->source_url);
-        } catch (Throwable $th) {
-            $this->error("Failed to parse pattern {$pattern->id}: " . $th->getMessage());
+        } catch (Throwable $throwable) {
+            $this->error(
+                "Failed to parse pattern {$pattern->id}: " . $throwable->getMessage()
+            );
 
             return;
         }
@@ -193,7 +197,9 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             if ($videosToCreate !== []) {
                 $videosToCreateCount = count($videosToCreate);
 
-                $this->success("Created $videosToCreateCount videos for pattern {$pattern->id}");
+                $this->success(
+                    "Created {$videosToCreateCount} videos for pattern {$pattern->id}"
+                );
 
                 $pattern->videos()->saveMany($videosToCreate);
 
@@ -203,7 +209,9 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             if ($reviewsToCreate !== []) {
                 $reviewsToCreateCount = count($reviewsToCreate);
 
-                $this->success("Created $reviewsToCreateCount reviews for pattern {$pattern->id}");
+                $this->success(
+                    "Created {$reviewsToCreateCount} reviews for pattern {$pattern->id}"
+                );
 
                 $pattern->reviews()->saveMany($reviewsToCreate);
 
@@ -211,17 +219,17 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             }
 
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             DB::rollBack();
 
-            $this->error("Failed to download pattern file for pattern {$pattern->id}: {$e->getMessage()}");
+            $this->error(
+                "Failed to download pattern file for pattern {$pattern->id}: {$exception->getMessage()}"
+            );
 
             $this->error('Reverting changes, deleting downloaded files if they exist...');
 
-            if ($patternFilePaths !== []) {
-                foreach ($patternFilePaths as $patternFilePath) {
-                    $this->deleteFileIfExists($patternFilePath);
-                }
+            foreach ($patternFilePaths as $patternFilePath) {
+                $this->deleteFileIfExists($patternFilePath);
             }
 
             if ($patternImagesPaths !== []) {
@@ -253,10 +261,10 @@ class FirstKozhaPatternAdapter extends AbstractPatternAdapter
             $text = $textNodes->item(0)?->textContent;
 
             $toReturn[] = $this->prepareReviewForCreation(
+                comment: trim((string) $text),
                 rating: floatval($stars),
-                reviewerName: trim($name),
-                reviewedAt: trim($date),
-                comment: trim($text),
+                reviewerName: trim((string) $name),
+                reviewedAt: trim((string) $date),
             );
         }
 

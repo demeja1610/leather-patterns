@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Parsers\SourceAdapters;
 
 use Exception;
@@ -69,7 +71,10 @@ class LeatherPatternsSourceAdapter extends AbstractSourceAdapter
                             continue;
                         }
 
-                        $categories = array_map('trim', explode(',', $categoryText));
+                        $categories = array_map(
+                            callback: trim(...),
+                            array: explode(',', $categoryText)
+                        );
                     }
 
                     $patterns[] = $this->preparePatternForCreation(
