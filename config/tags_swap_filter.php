@@ -3,14 +3,6 @@
 declare(strict_types=1);
 
 return [
-    'pattern' => null,
-    'Новичкам' => null,
-    'кожанный' => null,
-    'кожа' => null,
-    'работ' => null,
-    'Деревянные игрушки' => null,
-    'Телефонная будка' => null,
-    'ф' => null,
     'под' => null,
     'орел' => null,
     'pattern wallet' => null,
