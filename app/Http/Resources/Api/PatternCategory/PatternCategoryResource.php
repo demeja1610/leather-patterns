@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources\Api\PatternCategory;
 
 use Illuminate\Http\Request;
