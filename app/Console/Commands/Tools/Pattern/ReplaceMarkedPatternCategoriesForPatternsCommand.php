@@ -46,6 +46,7 @@ class ReplaceMarkedPatternCategoriesForPatternsCommand extends Command
                     $replacesIds = [];
                     $replacesNames = [];
 
+
                     foreach ($categoriesForReplace as $categoryForReplace) {
                         if (!$pattern->categories->contains('id', '=', $categoryForReplace->replacement->id)) {
                             $replacesIds[] = $categoryForReplace->replacement->id;

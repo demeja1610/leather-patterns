@@ -175,8 +175,6 @@ class ListController extends Controller
         );
 
         $q->with(
-            // phpstan cannot resolve magic
-            // @phpstan-ignore argument.type
             relations: [
                 'categories' => function (BelongsToMany $sq): void {
                     $table = $sq->getRelated()->getTable();
@@ -413,7 +411,7 @@ class ListController extends Controller
 
         if ($hasAuthor === true && $activeAuthorsIds === []) {
             $query->whereNotNull('author_id');
-        } elseif ($hasAuthor === true && $activeAuthorsIds !== []) { // @phpstan-ignore notIdentical.alwaysTrue
+        } elseif ($hasAuthor === true && $activeAuthorsIds !== []) {
             $query->whereIn('author_id', $activeAuthorsIds);
         } elseif ($hasAuthor === false && $activeAuthorsIds !== []) {
             $query->whereIn('author_id', $activeAuthorsIds);
