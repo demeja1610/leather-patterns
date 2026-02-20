@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enum\FileTypeEnum;
@@ -34,12 +36,15 @@ class PatternFile extends Model
         'pattern_id',
     ];
 
-    protected $casts = [
-        'type' => FileTypeEnum::class,
-    ];
-
     public function pattern(): BelongsTo
     {
         return $this->belongsTo(Pattern::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'type' => FileTypeEnum::class,
+        ];
     }
 }

@@ -33,10 +33,6 @@ class PatternReview extends Model
         'pattern_id',
     ];
 
-    protected $casts = [
-        'reviewed_at' => 'datetime',
-    ];
-
     public function pattern(): BelongsTo
     {
         return $this->belongsTo(Pattern::class);
@@ -45,5 +41,12 @@ class PatternReview extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'reviewed_at' => 'datetime',
+        ];
     }
 }

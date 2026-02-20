@@ -31,10 +31,6 @@ class Pattern extends Model
         'source_url',
     ];
 
-    protected $casts = [
-        'source' => PatternSourceEnum::class,
-    ];
-
     public function images(): HasMany
     {
         return $this->hasMany(PatternImage::class);
@@ -73,5 +69,12 @@ class Pattern extends Model
     public function meta(): HasOne
     {
         return $this->hasOne(PatternMeta::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'source' => PatternSourceEnum::class,
+        ];
     }
 }

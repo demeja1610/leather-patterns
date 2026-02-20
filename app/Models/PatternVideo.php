@@ -27,32 +27,33 @@ class PatternVideo extends Model
         'source_identifier',
     ];
 
-    protected $casts = [
-        'source' => VideoSourceEnum::class,
-    ];
-
     public function pattern(): BelongsTo
     {
         return $this->belongsTo(Pattern::class);
     }
 
-    public function embedUrl(): Attribute
+    protected function embedUrl(): Attribute
     {
         return new Attribute(
-            get: function ($value, array $attributes) {
-                return match ($attributes['source']) {
-                    VideoSourceEnum::YOUTUBE->value => "https://www.youtube.com/embed/{$attributes['source_identifier']}",
-                    VideoSourceEnum::VK->value => $this->getVkEmbedUrl($attributes),
-                    default => null,
-                };
+            get: fn($value, array $attributes): ?string => match ($attributes['source']) {
+                VideoSourceEnum::YOUTUBE->value => "https://www.youtube.com/embed/{$attributes['source_identifier']}",
+                VideoSourceEnum::VK->value => $this->getVkEmbedUrl($attributes),
+                default => null,
             }
         );
     }
 
     protected function getVkEmbedUrl(array $attributes): string
     {
-        $id = explode('_', $attributes['source_identifier']);
+        $id = explode('_', (string) $attributes['source_identifier']);
 
         return "https://vkvideo.ru/video_ext.php?oid={$id[0]}&id={$id[1]}";
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'source' => VideoSourceEnum::class,
+        ];
     }
 }

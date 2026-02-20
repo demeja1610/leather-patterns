@@ -31,11 +31,6 @@ class PatternTag extends Model
         'is_published',
     ];
 
-    protected $casts = [
-        'remove_on_appear' => 'boolean',
-        'is_published' => 'boolean',
-    ];
-
     public function patterns(): BelongsToMany
     {
         return $this->belongsToMany(Pattern::class);
@@ -83,5 +78,13 @@ class PatternTag extends Model
             $this->replace_author_id === null &&
             $this->patterns_count === 0 &&
             $this->replacement_for_count === 0;
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'remove_on_appear' => 'boolean',
+            'is_published' => 'boolean',
+        ];
     }
 }
