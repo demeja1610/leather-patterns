@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Import;
 
 use App\Enum\PatternSourceEnum;
@@ -10,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 class ImportPatternAuthorsCommand extends Command
 {
     protected $signature = 'import:pattern-authors';
+
     protected $description = 'Import pattern authors';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Importing pattern authors...');
 
@@ -25,7 +28,7 @@ class ImportPatternAuthorsCommand extends Command
                 'authors.updated_at as author_updated_at',
             ])->chunk(
                 count: 500,
-                callback: function (Collection $chunk) {
+                callback: function (Collection $chunk): void {
                     $from = $chunk->first()->id;
                     $to = $chunk->last()->id;
                     $count = $chunk->count();
@@ -59,7 +62,7 @@ class ImportPatternAuthorsCommand extends Command
             ])
             ->chunk(
                 count: 500,
-                callback: function (Collection $chunk) {
+                callback: function (Collection $chunk): void {
                     $from = $chunk->first()->author_id;
                     $to = $chunk->last()->author_id;
                     $count = $chunk->count();

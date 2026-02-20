@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Import;
 
 use App\Enum\PatternSourceEnum;
@@ -10,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 class ImportPatternCategoriesCommand extends Command
 {
     protected $signature = 'import:pattern-categories';
+
     protected $description = 'Import pattern categories';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Importing pattern categories...');
 
@@ -25,7 +28,7 @@ class ImportPatternCategoriesCommand extends Command
                 'categories.updated_at as categories_updated_at',
             ])->chunk(
                 count: 500,
-                callback: function (Collection $chunk) {
+                callback: function (Collection $chunk): void {
                     $from = $chunk->first()->id;
                     $to = $chunk->last()->id;
                     $count = $chunk->count();
@@ -59,7 +62,7 @@ class ImportPatternCategoriesCommand extends Command
             ])
             ->chunk(
                 count: 500,
-                callback: function (Collection $chunk) {
+                callback: function (Collection $chunk): void {
                     $from = $chunk->first()->category_id;
                     $to = $chunk->last()->category_id;
                     $count = $chunk->count();

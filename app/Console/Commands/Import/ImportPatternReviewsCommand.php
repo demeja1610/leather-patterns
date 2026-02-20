@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Import;
 
 use App\Console\Commands\Command;
@@ -8,9 +10,10 @@ use Illuminate\Support\Facades\DB;
 class ImportPatternReviewsCommand extends Command
 {
     protected $signature = 'import:pattern-reviews';
+
     protected $description = 'Import pattern reviews';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Importing pattern reviews...');
 
@@ -28,7 +31,7 @@ class ImportPatternReviewsCommand extends Command
             ->orderBy('pattern_reviews.id')
             ->chunk(
                 count: 500,
-                callback: function ($chunk) {
+                callback: function ($chunk): void {
                     $from = $chunk->first()->id;
                     $to = $chunk->last()->id;
                     $count = $chunk->count();

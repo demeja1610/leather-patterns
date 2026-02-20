@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Import;
 
 use App\Enum\PatternSourceEnum;
@@ -10,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 class ImportPatternsCommand extends Command
 {
     protected $signature = 'import:patterns';
+
     protected $description = 'Import patterns';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Importing patterns...');
 
@@ -29,12 +32,12 @@ class ImportPatternsCommand extends Command
             ])
             ->chunkById(
                 count: 500,
-                callback: function (Collection $patterns) {
+                callback: function (Collection $patterns): void {
                     $from = $patterns->first()->id;
                     $to = $patterns->last()->id;
                     $count = $patterns->count();
 
-                    $this->info("Imported patterns from $from to $to ($count total)");
+                    $this->info("Imported patterns from {$from} to {$to} ({$count} total)");
 
                     $toInsert = [];
 

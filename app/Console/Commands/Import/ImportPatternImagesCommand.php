@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Import;
 
+use GuzzleHttp\Client;
 use App\Models\PatternImage;
 use App\Enum\PatternSourceEnum;
 use App\Console\Commands\Command;
@@ -9,19 +12,23 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use GuzzleHttp\Exception\GuzzleException;
 
 class ImportPatternImagesCommand extends Command
 {
     protected $signature = 'import:pattern-images';
+
     protected $description = 'Import pattern images';
+
     protected ?\GuzzleHttp\Client $client = null;
+
     protected ?string $userAgent = null;
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Importing pattern images...');
 
-        $count = DB::connection('mysql_import')->table('image_pattern')
+        DB::connection('mysql_import')->table('image_pattern')
             ->join('images', 'image_pattern.image_id', '=', 'images.id')
             ->join('patterns', 'image_pattern.pattern_id', '=', 'patterns.id')
             ->where('patterns.source', '!=', PatternSourceEnum::SKINCUTS->value)
@@ -41,7 +48,7 @@ class ImportPatternImagesCommand extends Command
             // $this->info("Total pattern images to import: {$count}");
             ->chunk(
                 count: 500,
-                callback: function (Collection $chunk) {
+                callback: function (Collection $chunk): void {
                     $from = $chunk->first()->image_id;
                     $to = $chunk->last()->image_id;
                     $count = $chunk->count();
@@ -58,7 +65,7 @@ class ImportPatternImagesCommand extends Command
 
                             $image = $this->downloadImage($item->image_source_url);
 
-                            if ($image) {
+                            if ($image instanceof PatternImage) {
                                 $this->info("Successfully downloaded image for ID: {$item->image_id}");
 
                                 $item->image_file_path = $image->path;
@@ -107,7 +114,7 @@ class ImportPatternImagesCommand extends Command
     {
         $this->info("Downloading image from URL: {$url}");
 
-        if (!$this->client) {
+        if (!$this->client instanceof Client) {
             $this->client = new \GuzzleHttp\Client();
         }
 
@@ -140,8 +147,10 @@ class ImportPatternImagesCommand extends Command
                 $fileName,
                 $response->getBody()->getContents(),
             );
-        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-            $this->error("Failed to download image {$image->id}: " . $e->getMessage());
+        } catch (GuzzleException $guzzleException) {
+            $this->error(
+                "Failed to download image {$image->id}: " . $guzzleException->getMessage()
+            );
 
             return null;
         }

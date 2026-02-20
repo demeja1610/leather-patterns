@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Import;
 
 use App\Enum\PatternSourceEnum;
@@ -10,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 class ImportPatternTagsCommand extends Command
 {
     protected $signature = 'import:pattern-tags';
+
     protected $description = 'Import pattern tags';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Importing pattern tags...');
 
@@ -25,7 +28,7 @@ class ImportPatternTagsCommand extends Command
                 'tags.updated_at as tags_updated_at',
             ])->chunk(
                 count: 500,
-                callback: function (Collection $chunk) {
+                callback: function (Collection $chunk): void {
                     $from = $chunk->first()->id;
                     $to = $chunk->last()->id;
                     $count = $chunk->count();
@@ -59,7 +62,7 @@ class ImportPatternTagsCommand extends Command
             ])
             ->chunk(
                 count: 500,
-                callback: function (Collection $chunk) {
+                callback: function (Collection $chunk): void {
                     $from = $chunk->first()->tag_id;
                     $to = $chunk->last()->tag_id;
                     $count = $chunk->count();

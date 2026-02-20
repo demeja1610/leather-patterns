@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Import;
 
 use App\Enum\PatternSourceEnum;
@@ -10,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 class ImportPatternFilesCommand extends Command
 {
     protected $signature = 'import:pattern-files';
+
     protected $description = 'Import pattern files';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Importing pattern files...');
 
@@ -36,7 +39,7 @@ class ImportPatternFilesCommand extends Command
             ])
             ->chunk(
                 count: 500,
-                callback: function (Collection $chunk) {
+                callback: function (Collection $chunk): void {
                     $from = $chunk->first()->file_id;
                     $to = $chunk->last()->file_id;
                     $count = $chunk->count();

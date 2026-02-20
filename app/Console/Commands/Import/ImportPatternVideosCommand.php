@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands\Import;
 
 use App\Enum\PatternSourceEnum;
@@ -10,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 class ImportPatternVideosCommand extends Command
 {
     protected $signature = 'import:pattern-videos';
+
     protected $description = 'Import pattern videos';
 
-    public function handle()
+    public function handle(): void
     {
         $this->info('Importing pattern videos...');
 
@@ -32,7 +35,7 @@ class ImportPatternVideosCommand extends Command
             ])
             ->chunk(
                 count: 500,
-                callback: function (Collection $chunk) {
+                callback: function (Collection $chunk): void {
                     $from = $chunk->first()->video_id;
                     $to = $chunk->last()->video_id;
                     $count = $chunk->count();

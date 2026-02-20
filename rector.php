@@ -63,6 +63,6 @@ return RectorConfig::configure()
             __DIR__ . '/routes/auth.php',
         ],
     ])
-    ->withSkipPath(__DIR__ . '/app/Console/Commands/*')
+    // ->withSkipPath(__DIR__ . '/app/Console/Commands/*')
     ->withSkipPath(__DIR__ . '/bootstrap/cache/*')
 ;
