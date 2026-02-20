@@ -25,7 +25,7 @@ class EditController extends Controller
         );
 
         if ($data['remove_on_appear'] === true && ($data['replace_id'] !== null || $data['replace_author_id'] !== null)) {
-            return redirect()->back()->withInput()->with(
+            return back()->withInput()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
@@ -37,7 +37,7 @@ class EditController extends Controller
         }
 
         if ($data['replace_id'] !== null && $data['replace_author_id'] !== null) {
-            return redirect()->back()->withInput()->with(
+            return back()->withInput()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
@@ -52,7 +52,7 @@ class EditController extends Controller
             ->where('id', $id)
             ->update($data);
 
-        return redirect()->back()->with(
+        return back()->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
                 $updated > 0

@@ -12,8 +12,6 @@ use App\Http\Requests\Auth\LoginRequest;
 
 class LoginActionController extends Controller
 {
-    public function __construct() {}
-
     public function __invoke(LoginRequest $request): RedirectResponse
     {
         $data = $request->validated();

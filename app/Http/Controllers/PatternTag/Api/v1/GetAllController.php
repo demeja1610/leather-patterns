@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\PatternTag\Api\v1;
 
 use App\Models\PatternTag;

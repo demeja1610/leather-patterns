@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dto;
 
 use Traversable;
@@ -39,7 +41,7 @@ class ListDto extends Dto implements IteratorAggregate
 
     public function isEmpty(): bool
     {
-        return empty($this->items);
+        return $this->items === [];
     }
 
     public function count(): int

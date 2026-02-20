@@ -5,24 +5,25 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin\PatternCategory\Page;
 
 use App\Models\PatternCategory;
+use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Collection;
 
 class CreatePageController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): View
     {
         $categoryReplacements = $this->getCategoryReplacements();
 
-        return view('pages.admin.pattern-category.create', compact([
-            'categoryReplacements',
-        ]));
+        return view('pages.admin.pattern-category.create', [
+            'categoryReplacements' => $categoryReplacements
+        ]);
     }
 
     protected function getCategoryReplacements(): Collection
     {
         return PatternCategory::query()
-            ->where('replace_id', null)
+            ->whereNull('replace_id')
             ->select([
                 'id',
                 'name',

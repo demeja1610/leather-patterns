@@ -4,28 +4,29 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\PatternTag\Page;
 
-use App\Http\Controllers\Controller;
-use App\Models\PatternAuthor;
 use App\Models\PatternTag;
+use App\Models\PatternAuthor;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Collection;
 
 class CreatePageController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): View
     {
         $tagReplacements = $this->getTagReplacements();
         $authorReplacements = $this->getAuthorReplacements();
 
-        return view('pages.admin.pattern-tag.create', compact([
-            'tagReplacements',
-            'authorReplacements',
-        ]));
+        return view('pages.admin.pattern-tag.create', [
+            'tagReplacements' => $tagReplacements,
+            'authorReplacements' => $authorReplacements
+        ]);
     }
 
     protected function getTagReplacements(): Collection
     {
         return PatternTag::query()
-            ->where('replace_id', null)
+            ->whereNull('replace_id')
             ->select([
                 'id',
                 'name',

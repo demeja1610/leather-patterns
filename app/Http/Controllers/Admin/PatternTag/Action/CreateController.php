@@ -25,7 +25,7 @@ class CreateController extends Controller
         );
 
         if ($data['remove_on_appear'] === true && ($data['replace_id'] !== null || $data['replace_author_id'] !== null)) {
-            return redirect()->back()->withInput()->with(
+            return back()->withInput()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
@@ -37,7 +37,7 @@ class CreateController extends Controller
         }
 
         if ($data['replace_id'] !== null && $data['replace_author_id'] !== null) {
-            return redirect()->back()->withInput()->with(
+            return back()->withInput()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
@@ -48,9 +48,9 @@ class CreateController extends Controller
             );
         }
 
-        $tag = PatternTag::create($data);
+        $tag = PatternTag::query()->create($data);
 
-        return redirect()->route('admin.page.pattern-tag.list')->with(
+        return to_route('admin.page.pattern-tag.list')->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
                 new SessionNotificationDto(

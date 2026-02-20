@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\PatternTag\Action;
 
+use App\Models\PatternTag;
 use App\Enum\NotificationTypeEnum;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use App\Dto\SessionNotification\SessionNotificationDto;
 use App\Dto\SessionNotification\SessionNotificationListDto;
-use App\Models\PatternTag;
-use Symfony\Component\HttpFoundation\Response;
 
 class DeleteController extends Controller
 {
@@ -18,14 +18,14 @@ class DeleteController extends Controller
     {
         $tag = $this->getPatternTag($id);
 
-        if ($tag === null) {
+        if (!$tag instanceof PatternTag) {
             return abort(Response::HTTP_NOT_FOUND);
         }
 
         if ($tag->isDeletable()) {
             $deleted = $tag->delete();
         } else {
-            return redirect()->back()->with(
+            return back()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
@@ -38,7 +38,7 @@ class DeleteController extends Controller
             );
         }
 
-        return redirect()->back()->with(
+        return back()->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
                 $deleted > 0

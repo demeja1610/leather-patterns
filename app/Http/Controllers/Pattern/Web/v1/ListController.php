@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Pattern\Web\v1;
 
 use App\Models\Pattern;
@@ -8,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\PatternAuthor;
 use App\Enum\PatternOrderEnum;
 use App\Models\PatternCategory;
+use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,11 +23,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class ListController extends Controller
 {
     protected int $patternCategoriesLimit = 10;
+
     protected int $patternTagsLimit = 10;
+
     protected int $patternAuthorsLimit = 10;
+
     protected int $cacheTtl = 300;
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): View
     {
         $patternCategories = $this->getPatternategoriesForFilter(
             request: $request,
@@ -69,7 +75,7 @@ class ListController extends Controller
                 $extraCategories = Cache::remember(
                     key: "patterns_page:filter_category:first_{$patternCategoriesLimit}_categories",
                     ttl: $this->cacheTtl,
-                    callback: fn() => $this->getPatternCategories(
+                    callback: fn(): Collection => $this->getPatternCategories(
                         limit: $patternCategoriesLimit,
                     ),
                 );
@@ -80,7 +86,7 @@ class ListController extends Controller
             $patternCategories = Cache::remember(
                 key: 'all_pattern_categories',
                 ttl: $this->cacheTtl,
-                callback: fn() => $this->getPatternCategories()
+                callback: fn(): Collection => $this->getPatternCategories()
             );
         }
 
@@ -104,7 +110,7 @@ class ListController extends Controller
                 $extraTags = Cache::remember(
                     key: "patterns_page:filter_tag:first_{$patternTagsLimit}_tags",
                     ttl: $this->cacheTtl,
-                    callback: fn() =>  $this->getPatternTags(
+                    callback: fn(): Collection =>  $this->getPatternTags(
                         limit: $patternTagsLimit,
                     ),
                 );
@@ -115,7 +121,7 @@ class ListController extends Controller
             $patternTags = Cache::remember(
                 key: 'all_pattern_tags',
                 ttl: $this->cacheTtl,
-                callback: fn() => $this->getPatternTags()
+                callback: fn(): Collection => $this->getPatternTags()
             );
         }
 
@@ -139,7 +145,7 @@ class ListController extends Controller
                 $extraAuthors = Cache::remember(
                     key: "patterns_page:filter_author:first_{$patternAuthorsLimit}_authors",
                     ttl: $this->cacheTtl,
-                    callback: fn() => $this->getPatternAuthors(
+                    callback: fn(): Collection => $this->getPatternAuthors(
                         limit: $patternAuthorsLimit,
                     ),
                 );
@@ -150,7 +156,7 @@ class ListController extends Controller
             $patternAuthors = Cache::remember(
                 key: 'all_pattern_authors',
                 ttl: $this->cacheTtl,
-                callback: fn() => $this->getPatternAuthors()
+                callback: fn(): Collection => $this->getPatternAuthors()
             );
         }
 
@@ -167,7 +173,7 @@ class ListController extends Controller
         );
 
         $q->with([
-            'categories' => function (BelongsToMany $sq) {
+            'categories' => function (BelongsToMany $sq): void {
                 $table = $sq->getRelated()->getTable();
 
                 $sq->where('is_published', true);
@@ -177,7 +183,7 @@ class ListController extends Controller
                     "{$table}.name"
                 ]);
             },
-            'tags' => function (BelongsToMany $sq) {
+            'tags' => function (BelongsToMany $sq): void {
                 $table = $sq->getRelated()->getTable();
 
                 $sq->select([
@@ -185,7 +191,7 @@ class ListController extends Controller
                     "{$table}.name"
                 ]);
             },
-            'author' => function (BelongsTo $sq) {
+            'author' => function (BelongsTo $sq): void {
                 $table = $sq->getRelated()->getTable();
 
                 $sq->select([
@@ -193,7 +199,7 @@ class ListController extends Controller
                     "{$table}.name"
                 ]);
             },
-            'images' => function (HasMany $sq) {
+            'images' => function (HasMany $sq): void {
                 $table = $sq->getRelated()->getTable();
 
                 $sq->select([
@@ -201,7 +207,7 @@ class ListController extends Controller
                     "{$table}.pattern_id",
                 ]);
             },
-            'files' => function (HasMany $sq) {
+            'files' => function (HasMany $sq): void {
                 $table = $sq->getRelated()->getTable();
 
                 $sq->select([
@@ -215,7 +221,7 @@ class ListController extends Controller
 
         $q->whereHas('meta', fn($query) => $query->select('pattern_downloaded')->where('pattern_downloaded', true));
 
-        $cursor = $request->get('cursor', null);
+        $cursor = $request->get('cursor');
 
         return $q->cursorPaginate(
             perPage: 16,
@@ -376,10 +382,10 @@ class ListController extends Controller
 
     protected function applyFilters(Builder &$query, Request &$request): void
     {
-        $search = $request->get('s', null);
+        $search = $request->get('s');
 
         if ($search !== null && $search !== '') {
-            $query->where('title', 'like', "%$search%");
+            $query->where('title', 'like', "%{$search}%");
         }
 
         $activeCategoriesIds = $request->get('category', []);
@@ -399,9 +405,9 @@ class ListController extends Controller
 
         if ($hasAuthor === true && $activeAuthorsIds === []) {
             $query->whereNotNull('author_id');
-        } else if ($hasAuthor === true && $activeAuthorsIds !== []) {
+        } elseif ($hasAuthor === true && $activeAuthorsIds !== []) {
             $query->whereIn('author_id', $activeAuthorsIds);
-        } else if ($hasAuthor === false && $activeAuthorsIds !== []) {
+        } elseif ($hasAuthor === false && $activeAuthorsIds !== []) {
             $query->whereIn('author_id', $activeAuthorsIds);
         }
 
@@ -417,7 +423,7 @@ class ListController extends Controller
             $query->whereHas('reviews');
         }
 
-        $orderStr = $request->get('order', null);
+        $orderStr = $request->get('order');
 
         if ($orderStr !== null) {
             $order = PatternOrderEnum::tryFrom($orderStr);

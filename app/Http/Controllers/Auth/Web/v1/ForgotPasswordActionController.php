@@ -18,7 +18,7 @@ class ForgotPasswordActionController extends Controller
 
         $user = $this->getUser($data['email']);
 
-        if ($user === null) {
+        if (!$user instanceof User) {
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin\PatternTag\Page;
 
 use Carbon\Carbon;
 use App\Models\PatternTag;
+use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\Admin\PatternTag\ListRequest;
@@ -14,7 +15,7 @@ class ListPageController extends Controller
 {
     protected array $activeFilters = [];
 
-    public function __invoke(ListRequest $request)
+    public function __invoke(ListRequest $request): View
     {
         $tags = $this->getTags($request);
 
@@ -26,7 +27,7 @@ class ListPageController extends Controller
 
     protected function getTags(ListRequest &$request)
     {
-        $cursor = $request->get('cursor', null);
+        $cursor = $request->get('cursor');
 
         $q = PatternTag::query();
 
@@ -48,7 +49,7 @@ class ListPageController extends Controller
         return $q->orderBy('id', 'desc')->cursorPaginate(
             perPage: 30,
             cursor: $cursor,
-        );
+        )->withQueryString();
     }
 
     protected function applyFilters(ListRequest &$request, Builder &$query): void
@@ -94,7 +95,7 @@ class ListPageController extends Controller
         if ($hasPatterns !== null) {
             $this->activeFilters['has_patterns'] = (bool) $hasPatterns;
 
-            if ((bool) $hasPatterns === true) {
+            if ((bool) $hasPatterns) {
                 $query->whereHas('patterns');
             } else {
                 $query->whereDoesntHave('patterns');
@@ -106,7 +107,7 @@ class ListPageController extends Controller
         if ($isPublished !== null) {
             $this->activeFilters['is_published'] = (bool) $isPublished;
 
-            if ((bool) $isPublished === true) {
+            if ((bool) $isPublished) {
                 $query->where('is_published', true);
             } else {
                 $query->where('is_published', false);
@@ -118,7 +119,7 @@ class ListPageController extends Controller
         if ($hasReplacement !== null) {
             $this->activeFilters['has_replacement'] = (bool) $hasReplacement;
 
-            if ((bool) $hasReplacement === true) {
+            if ((bool) $hasReplacement) {
                 $query->whereNotNull('replace_id');
             } else {
                 $query->whereNull('replace_id');
@@ -130,7 +131,7 @@ class ListPageController extends Controller
         if ($hasAuthorReplacement !== null) {
             $this->activeFilters['has_author_replacement'] = (bool) $hasAuthorReplacement;
 
-            if ((bool) $hasAuthorReplacement === true) {
+            if ((bool) $hasAuthorReplacement) {
                 $query->whereNotNull('replace_author_id');
             } else {
                 $query->whereNull('replace_author_id');
@@ -142,7 +143,7 @@ class ListPageController extends Controller
         if ($removeOnAppear !== null) {
             $this->activeFilters['remove_on_appear'] = (bool) $removeOnAppear;
 
-            if ((bool) $removeOnAppear === true) {
+            if ((bool) $removeOnAppear) {
                 $query->where('remove_on_appear', true);
             } else {
                 $query->where('remove_on_appear', false);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use RectorLaravel\Set\LaravelSetList;
 use RectorLaravel\Set\LaravelLevelSetList;
+use RectorLaravel\Rector\StaticCall\CarbonToDateFacadeRector;
 use Rector\Transform\Rector\String_\StringToClassConstantRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
@@ -54,11 +55,12 @@ return RectorConfig::configure()
     ->withSkip([
         PostIncDecToPreIncDecRector::class, // skip this rule because it inforces to use ++$i instead of $i++
         EncapsedStringsToSprintfRector::class, // skip this rule because it inforces to use sprintf instead of concatenation
+        CarbonToDateFacadeRector::class, // prevents replacing \Carbon\Carbon to Illuminate\Support\Facades\Date
         LaravelSetList::LARAVEL_STATIC_TO_INJECTION => [
             __DIR__ . '/database/migrations/*',
         ],
         StringToClassConstantRector::class => [
-            __DIR__ . '/app/Enum/RouteNamesEnum.php',
+            __DIR__ . '/routes/auth.php',
         ],
     ])
     ->withSkipPath(__DIR__ . '/app/Console/Commands/*')

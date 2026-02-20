@@ -25,7 +25,7 @@ class CreateController extends Controller
         );
 
         if ($data['remove_on_appear'] === true && $data['replace_id'] !== null) {
-            return redirect()->back()->withInput()->with(
+            return back()->withInput()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
@@ -36,9 +36,9 @@ class CreateController extends Controller
             );
         }
 
-        $category = PatternCategory::create($data);
+        $category = PatternCategory::query()->create($data);
 
-        return redirect()->route('admin.page.pattern-category.list')->with(
+        return to_route('admin.page.pattern-category.list')->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
                 new SessionNotificationDto(

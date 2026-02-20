@@ -15,7 +15,7 @@ class EditPageController extends Controller
     {
         $category = $this->getCategory($id);
 
-        if (!$category) {
+        if (!$category instanceof PatternCategory) {
             return abort(Response::HTTP_NOT_FOUND);
         }
 
@@ -25,15 +25,15 @@ class EditPageController extends Controller
             exceptId: $category->id
         );
 
-        return view('pages.admin.pattern-category.edit', compact([
-            'category',
-            'categoryReplacements',
-        ]));
+        return view('pages.admin.pattern-category.edit', [
+            'category' => $category,
+            'categoryReplacements' => $categoryReplacements
+        ]);
     }
 
     protected function getCategory($id): ?PatternCategory
     {
-        return PatternCategory::find($id);
+        return PatternCategory::query()->find($id);
     }
 
     protected function loadReplacement(PatternCategory &$category): void
@@ -46,7 +46,7 @@ class EditPageController extends Controller
     protected function getCategoryReplacements(int $exceptId): Collection
     {
         return PatternCategory::query()
-            ->where('replace_id', null)
+            ->whereNull('replace_id')
             ->where('id', '!=', $exceptId)
             ->select([
                 'id',

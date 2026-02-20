@@ -18,14 +18,14 @@ class DeleteController extends Controller
     {
         $category = $this->getPatternCategory($id);
 
-        if ($category === null) {
+        if (!$category instanceof PatternCategory) {
             return abort(Response::HTTP_NOT_FOUND);
         }
 
         if ($category->isDeletable()) {
             $deleted = $category->delete();
         } else {
-            return redirect()->back()->with(
+            return back()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(
                     new SessionNotificationDto(
@@ -38,7 +38,7 @@ class DeleteController extends Controller
             );
         }
 
-        return redirect()->back()->with(
+        return back()->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
                 $deleted > 0

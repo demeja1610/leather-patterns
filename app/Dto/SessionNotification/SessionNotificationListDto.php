@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dto\SessionNotification;
 
 use App\Dto\ListDto;
@@ -15,8 +17,8 @@ class SessionNotificationListDto extends ListDto
     {
         return new static(
             ...array_map(
+                callback: SessionNotificationDto::fromArray(...),
                 array: $data['items'],
-                callback: fn(array $item) => SessionNotificationDto::fromArray($item),
             ),
         );
     }
@@ -25,8 +27,8 @@ class SessionNotificationListDto extends ListDto
     {
         return [
             'items' => array_map(
+                callback: fn(SessionNotificationDto $item): array => $item->toArray(),
                 array: $this->items,
-                callback: fn(SessionNotificationDto $item) => $item->toArray(),
             ),
         ];
     }

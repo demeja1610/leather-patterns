@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin\PatternTag\Page;
 
 use App\Models\PatternTag;
-use App\Http\Controllers\Controller;
 use App\Models\PatternAuthor;
+use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,7 +16,7 @@ class EditPageController extends Controller
     {
         $tag = $this->getTag($id);
 
-        if (!$tag) {
+        if (!$tag instanceof PatternTag) {
             return abort(Response::HTTP_NOT_FOUND);
         }
 
@@ -30,16 +30,16 @@ class EditPageController extends Controller
 
         $authorReplacements = $this->getAuthorReplacements();
 
-        return view('pages.admin.pattern-tag.edit', compact([
-            'tag',
-            'tagReplacements',
-            'authorReplacements',
-        ]));
+        return view('pages.admin.pattern-tag.edit', [
+            'tag' => $tag,
+            'tagReplacements' => $tagReplacements,
+            'authorReplacements' => $authorReplacements
+        ]);
     }
 
     protected function getTag($id): ?PatternTag
     {
-        return PatternTag::find($id);
+        return PatternTag::query()->find($id);
     }
 
     protected function loadReplacement(PatternTag &$tag): void
@@ -59,7 +59,7 @@ class EditPageController extends Controller
     protected function getTagReplacements(int $exceptId): Collection
     {
         return PatternTag::query()
-            ->where('replace_id', null)
+            ->whereNull('replace_id')
             ->where('id', '!=', $exceptId)
             ->select([
                 'id',

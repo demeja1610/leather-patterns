@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Dto\MenuItem;
 
 use App\Dto\ListDto;
@@ -14,8 +16,8 @@ class MenuItemListDto extends ListDto {
     {
         return new static(
             ...array_map(
+                callback: MenuItemDto::fromArray(...),
                 array: $data['items'],
-                callback: fn(array $item) => MenuItemDto::fromArray($item),
             ),
         );
     }
@@ -24,8 +26,8 @@ class MenuItemListDto extends ListDto {
     {
         return [
             'items' => array_map(
+                callback: fn(MenuItemDto $item): array => $item->toArray(),
                 array: $this->items,
-                callback: fn(MenuItemDto $item) => $item->toArray(),
             ),
         ];
     }

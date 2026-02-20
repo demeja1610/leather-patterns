@@ -26,7 +26,7 @@ class ResetPasswordActionController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('page.auth.login')->with('status', __($status))
+            ? to_route('page.auth.login')->with('status', __($status))
             : back()->withErrors(['password' => __($status)]);
     }
 }
