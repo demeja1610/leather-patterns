@@ -20,7 +20,7 @@ class CreateRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                'min:2',
+                'min:1',
                 'unique:pattern_tags,name',
             ],
             'replace_id' => [
