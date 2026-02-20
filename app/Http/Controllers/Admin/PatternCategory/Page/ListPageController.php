@@ -39,6 +39,7 @@ class ListPageController extends Controller
         $q->withCount(relations: [
             'patterns',
             'replacementFor',
+            'replacementForTags'
         ]);
 
         $q->with(relations: 'replacement');

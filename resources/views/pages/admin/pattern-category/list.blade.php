@@ -296,7 +296,7 @@
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $category->replacement_for_count }}
+                                {{ $category->replacement_for_count + $category->replacement_for_tags_count }}
                             </x-table.td>
 
                             <x-table.td>

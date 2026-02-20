@@ -52,6 +52,15 @@ class PatternCategory extends Model
         );
     }
 
+    public function replacementForTags(): HasMany
+    {
+        return $this->hasMany(
+            related: PatternTag::class,
+            foreignKey: 'replace_category_id',
+            localKey: 'id',
+        );
+    }
+
     public function isDeletable(): bool
     {
         if ($this->patterns_count === null) {
@@ -62,20 +71,18 @@ class PatternCategory extends Model
             $this->loadCount(relations: 'replacementFor');
         }
 
+        if ($this->replacement_for_tags_count === null) {
+            $this->loadCount(relations: 'replacementForTags');
+        }
+
         return $this->remove_on_appear === false
             && $this->replace_id === null
             && $this->patterns_count === 0
-            && $this->replacement_for_count === 0;
+            && $this->replacement_for_count === 0
+            && $this->replacement_for_tags_count === 0;
     }
 
-    public function replacementForTags(): HasMany
-    {
-        return $this->hasMany(
-            related: PatternTag::class,
-            foreignKey: 'replace_category_id',
-            localKey: 'id',
-        );
-    }
+
 
     protected function casts(): array
     {
