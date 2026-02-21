@@ -19,36 +19,7 @@ Route::prefix('admin')
 
         require_once __DIR__ . '/admin/pattern-tag.php';
 
-        // Route::prefix('authors')
-        //     ->group(function (): void {
-        //         Route::get('/', \App\Http\Controllers\App\Admin\Author\ListPageController::class)
-        //             ->name('page.admin.author.list');
-
-        //         Route::group(['prefix' => 'create'], function (): void {
-        //             Route::get('/', \App\Http\Controllers\App\Admin\Author\CreatePageController::class)
-        //                 ->name('page.admin.author.create');
-
-        //             Route::post('/', \App\Http\Controllers\App\Admin\Author\CreateController::class)
-        //                 ->name('admin.author.create');
-        //         });
-
-        //         Route::post('/mass-action', \App\Http\Controllers\App\Admin\Author\MassActionController::class)
-        //             ->name('admin.author.mass-action');
-
-        //         Route::get('/search', \App\Http\Controllers\App\Admin\Author\SearchController::class)
-        //             ->name('admin.author.search');
-
-        //         Route::group(['prefix' => '{id}'], function (): void {
-        //             Route::get('/', \App\Http\Controllers\App\Admin\Author\EditPageController::class)
-        //                 ->name('page.admin.author.edit');
-
-        //             Route::patch('/', \App\Http\Controllers\App\Admin\Author\EditController::class)
-        //                 ->name('admin.author.update');
-
-        //             Route::delete('/', \App\Http\Controllers\App\Admin\Author\DeleteController::class)
-        //                 ->name('admin.author.delete');
-        //         });
-        //     });
+        require_once __DIR__ . '/admin/pattern-author.php';
 
         // Route::prefix('pattern')
         //     ->group(function (): void {

@@ -14,4 +14,9 @@ return [
         'pattern_tags' => 'Теги выкроек',
         'add_new' => 'Добавить запись',
     ],
+
+    'pattern_author' => [
+        'pattern_authors' => 'Авторы выкроек',
+        'add_new' => 'Добавить запись',
+    ],
 ];

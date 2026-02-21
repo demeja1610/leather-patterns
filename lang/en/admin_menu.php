@@ -14,4 +14,9 @@ return [
         'pattern_tags' => 'Pattern Tags',
         'add_new' => 'Add new',
     ],
+
+    'pattern_author' => [
+        'pattern_authors' => 'Pattern Authors',
+        'add_new' => 'Add new',
+    ],
 ];
