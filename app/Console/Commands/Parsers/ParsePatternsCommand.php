@@ -63,8 +63,6 @@ class ParsePatternsCommand extends Command
 
         $this->info(string: 'Finished parsing patterns.');
 
-        $this->call(command: 'tools:tags-to-authors-for-patterns');
-
         $newCategories = PatternCategory::query()->where(column: 'created_at', operator: '>=', value: $startedAt)->get();
         $newTags = PatternTag::query()->where(column: 'created_at', operator: '>=', value: $startedAt)->get();
         $newAuthors = PatternAuthor::query()->where(column: 'created_at', operator: '>=', value: $startedAt)->get();
