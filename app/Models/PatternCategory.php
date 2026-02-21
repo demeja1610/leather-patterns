@@ -82,8 +82,6 @@ class PatternCategory extends Model
             && $this->replacement_for_tags_count === 0;
     }
 
-
-
     protected function casts(): array
     {
         return [
