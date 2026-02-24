@@ -95,7 +95,7 @@ class SingleController extends Controller
                     'reviews'  => function (HasMany $sq): HasMany {
                         $table = $sq->getRelated()->getTable();
 
-                        // $sq->where('is_approved', true);
+                        $sq->where('is_approved', true);
 
                         $sq->select([
                             "{$table}.id",

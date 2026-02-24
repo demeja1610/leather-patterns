@@ -227,7 +227,12 @@ class ListController extends Controller
             ],
         );
 
-        $q->whereHas(relation: 'meta', callback: fn($query) => $query->select('pattern_downloaded')->where('pattern_downloaded', true));
+        $q->whereHas(
+            relation: 'meta',
+            callback: fn($query) => $query
+                ->select('pattern_downloaded')
+                ->where('pattern_downloaded', true)
+        );
 
         $cursor = $request->input(key: 'cursor');
 
@@ -441,7 +446,7 @@ class ListController extends Controller
         $hasReview = $request->has(key: 'has_review');
 
         if ($hasReview === true) {
-            $query->whereHas(relation: 'reviews');
+            $query->whereHas(relation: 'reviews', callback: fn(Builder $sq) => $sq->where('is_approved', true));
         }
 
         $orderStr = $request->input(key: 'order');
