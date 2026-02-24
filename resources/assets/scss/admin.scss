@@ -9,7 +9,7 @@
 @use '@styles/components/input/text.scss' as input-text;
 @use '@styles/components/input/image.scss' as input-image;
 @use '@styles/components/select/select.scss' as select;
-@use '@styles/components/select/fetch.scss' as select-fetch;
+@use '@styles/components/fetch-select/single.scss' as single-fetch-select;
 @use '@styles/components/textarea/textarea.scss' as textarea;
 
 @use '@styles/components/button/button.scss' as button;

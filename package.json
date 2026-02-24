@@ -13,6 +13,7 @@
         "vite": "^7.0.4"
     },
     "dependencies": {
+        "@alpinejs/focus": "^3.15.8",
         "alpinejs": "^3.15.0",
         "fslightbox": "^3.7.4"
     }

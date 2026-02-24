@@ -1,0 +1,50 @@
+@use '@styles/components/input/text.scss';
+
+.fetch-select {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    position: relative;
+
+    &__input {
+        width: 100%;
+    }
+
+    &__label {
+        @extend .input-text__label;
+    }
+
+    &__options {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 100%;
+        list-style: none;
+        border: 1px solid var(--gray-soft);
+        box-shadow: var(--shadow-1);
+        border-radius: 0.5rem;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background-color: var(--bg-elv);
+        transform: translate(0, calc(100% + 0.5rem));
+        z-index: 1;
+        color: var(--text-1);
+    }
+
+    &__option {
+        width: 100%;
+        padding: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        outline-color: var(--gray-soft);
+
+        &:hover,
+        &:focus {
+            background-color: var(--bg-alt);
+        }
+    }
+}
