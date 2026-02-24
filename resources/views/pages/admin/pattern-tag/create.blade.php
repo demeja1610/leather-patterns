@@ -26,7 +26,7 @@
                 id="name"
                 name="name"
                 type="text"
-                required
+                :required="true"
                 :value="old('name')"
                 title="{{ __('pattern_tag.name') }}e"
             />

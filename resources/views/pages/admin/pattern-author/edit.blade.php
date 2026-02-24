@@ -40,7 +40,7 @@
                 name="name"
                 :value="old('name') ?? $author->name"
                 title="{{ __('pattern_author.name') }}"
-                required
+                :required="true"
             />
 
             <x-input-text.input-errors :messages="$errors->get('name')" />

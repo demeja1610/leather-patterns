@@ -44,7 +44,7 @@
                 name="name"
                 :value="old('name') ?? $tag->name"
                 title="{{ __('pattern_tag.name') }}"
-                required
+                :required="true"
             />
 
             <x-input-text.input-errors :messages="$errors->get('name')" />

@@ -73,7 +73,7 @@
                 name="reviewer_name"
                 :value="old('reviewer_name') ?? $review->reviewer_name"
                 title="{{ __('pattern_review.reviewer_name') }}"
-                required
+                :required="true"
             />
 
             <x-input-text.input-errors :messages="$errors->get('reviewer_name')" />

@@ -40,7 +40,7 @@
                 name="name"
                 :value="old('name') ?? $category->name"
                 title="{{ __('pattern_category.name') }}"
-                required
+                :required="true"
             />
 
             <x-input-text.input-errors :messages="$errors->get('name')" />
