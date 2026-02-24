@@ -3,13 +3,7 @@
 ])
 
 @section('page')
-    <x-admin.form.create
-        :action="route('admin.page.pattern-author.create')"
-        x-data="{
-            authorReplacements: {{ json_encode($authorReplacements, JSON_UNESCAPED_UNICODE) }},
-            selectedReplacementId: {{ old('replace_id') ?? 'null' }}
-        }"
-    >
+    <x-admin.form.create :action="route('admin.page.pattern-author.create')">
         <x-input-text.input-text>
             <x-input-text.label
                 for="name"
@@ -24,40 +18,19 @@
                 type="text"
                 :required="true"
                 :value="old('name')"
-                title="{{ __('pattern_author.name') }}e"
+                title="{{ __('pattern_author.name') }}"
             />
 
             <x-input-text.input-errors :messages="$errors->get('name')" />
         </x-input-text.input-text>
 
-        <x-select.wrapper>
-            <x-select.label for="replace_id">
-                {{ __('pattern_author.replacement') }}
-            </x-select.label>
-
-            <x-select.select
-                name="replace_id"
-                id="replace_id"
-                :title="__('pattern_author.replacement')"
-                x-model.number="selectedReplacementId"
-            >
-                <x-select.option value="">
-                    {{ __('filter.not_selected') }}
-                </x-select.option>
-
-                <template
-                    x-for="authorReplacement in authorReplacements"
-                    :key="authorReplacement.id"
-                >
-                    <x-select.option
-                        x-bind:value="authorReplacement.id"
-                        x-text="authorReplacement.name"
-                        x-bind:selected="authorReplacement.id === selectedReplacementId"
-                    >
-                    </x-select.option>
-                </template>
-            </x-select.select>
-        </x-select.wrapper>
+        <x-fetch-select.single
+            :url="route('api.admin.v1.pattern-author.search-replace')"
+            id="replace_id"
+            name="replace_id"
+            :label="__('pattern_author.replacement')"
+            :placeholder="__('phrases.search')"
+        />
 
         <x-checkbox.custom :label="__('pattern_author.remove_on_appear')">
             <input

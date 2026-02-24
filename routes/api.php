@@ -9,3 +9,10 @@ Route::middleware('throttle:60,1')
     ->group(callback: function (): void {
         require_once __DIR__ . '/api/v1/v1.php';
     });
+
+Route::middleware('throttle:60,1')
+    ->prefix('admin')
+    ->name('api.admin.')
+    ->group(callback: function (): void {
+        require_once __DIR__ . '/api/admin/v1/v1.php';
+    });

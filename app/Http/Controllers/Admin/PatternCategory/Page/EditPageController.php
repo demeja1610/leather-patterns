@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin\PatternCategory\Page;
 
 use App\Models\PatternCategory;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
 class EditPageController extends Controller
@@ -21,13 +20,8 @@ class EditPageController extends Controller
 
         $this->loadReplacement(category: $category);
 
-        $categoryReplacements = $this->getCategoryReplacements(
-            exceptId: $category->id,
-        );
-
         return view(view: 'pages.admin.pattern-category.edit', data: [
             'category' => $category,
-            'categoryReplacements' => $categoryReplacements,
         ]);
     }
 
@@ -41,17 +35,5 @@ class EditPageController extends Controller
         if ($category->replace_id !== null) {
             $category->load(relations: 'replacement');
         }
-    }
-
-    protected function getCategoryReplacements(int $exceptId): Collection
-    {
-        return PatternCategory::query()
-            ->whereNull('replace_id')
-            ->where('remove_on_appear', false)
-            ->where(column: 'id', operator: '!=', value: $exceptId)
-            ->select(columns: [
-                'id',
-                'name',
-            ])->orderBy(column: 'name')->get();
     }
 }

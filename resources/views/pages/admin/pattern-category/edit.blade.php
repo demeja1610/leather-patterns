@@ -3,13 +3,7 @@
 ])
 
 @section('page')
-    <x-admin.form.edit
-        :action="route('admin.pattern-category.update', ['id' => $category->id])"
-        x-data="{
-            categoryReplacements: {{ json_encode($categoryReplacements, JSON_UNESCAPED_UNICODE) }},
-            selectedReplacementId: {{ old('replace_id', $category->replacement?->id) ?? 'null' }}
-        }"
-    >
+    <x-admin.form.edit :action="route('admin.pattern-category.update', ['id' => $category->id])">
         @method('PATCH')
 
         <x-input-text.input-text>
@@ -46,34 +40,15 @@
             <x-input-text.input-errors :messages="$errors->get('name')" />
         </x-input-text.input-text>
 
-        <x-select.wrapper>
-            <x-select.label for="replace_id">
-                {{ __('pattern_category.replacement') }}
-            </x-select.label>
-
-            <x-select.select
-                name="replace_id"
-                id="replace_id"
-                :title="__('pattern_category.replacement')"
-                x-model.number="selectedReplacementId"
-            >
-                <x-select.option value="">
-                    {{ __('filter.not_selected') }}
-                </x-select.option>
-
-                <template
-                    x-for="categoryReplacement in categoryReplacements"
-                    :key="categoryReplacement.id"
-                >
-                    <x-select.option
-                        x-bind:value="categoryReplacement.id"
-                        x-text="categoryReplacement.name"
-                        x-bind:selected="categoryReplacement.id === selectedReplacementId"
-                    >
-                    </x-select.option>
-                </template>
-            </x-select.select>
-        </x-select.wrapper>
+        <x-fetch-select.single
+            :url="route('api.admin.v1.pattern-category.search-replace')"
+            id="replace_id"
+            name="replace_id"
+            :label="__('pattern_category.replacement')"
+            :placeholder="__('phrases.search')"
+            :selectedKey="$category->replacement?->id"
+            :selectedValue="$category->replacement?->name"
+        />
 
         <x-checkbox.custom :label="__('pattern_category.remove_on_appear')">
             <input

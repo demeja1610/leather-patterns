@@ -3,17 +3,7 @@
 ])
 
 @section('page')
-    <x-admin.form.edit
-        :action="route('admin.pattern-tag.update', ['id' => $tag->id])"
-        x-data="{
-            tagReplacements: {{ json_encode($tagReplacements, JSON_UNESCAPED_UNICODE) }},
-            authorReplacements: {{ json_encode($authorReplacements, JSON_UNESCAPED_UNICODE) }},
-            categoryReplacements: {{ json_encode($categoryReplacements, JSON_UNESCAPED_UNICODE) }},
-            selectedReplacementId: {{ old('replace_id', $tag->replacement?->id) ?? 'null' }},
-            selectedAuthorReplacementId: {{ old('replace_author_id', $tag->authorReplacement?->id) ?? 'null' }},
-            selectedCategoryReplacementId: {{ old('replace_category_id', $tag->categoryReplacement?->id) ?? 'null' }},
-        }"
-    >
+    <x-admin.form.edit :action="route('admin.pattern-tag.update', ['id' => $tag->id])">
         @method('PATCH')
 
         <x-input-text.input-text>
@@ -50,92 +40,35 @@
             <x-input-text.input-errors :messages="$errors->get('name')" />
         </x-input-text.input-text>
 
-        <x-select.wrapper>
-            <x-select.label for="replace_id">
-                {{ __('pattern_tag.replacement') }}
-            </x-select.label>
+        <x-fetch-select.single
+            :url="route('api.admin.v1.pattern-tag.search-replace')"
+            id="replace_id"
+            name="replace_id"
+            :label="__('pattern_tag.replacement')"
+            :placeholder="__('phrases.search')"
+            :selectedKey="$tag->replacement?->id"
+            :selectedValue="$tag->replacement?->name"
+        />
 
-            <x-select.select
-                name="replace_id"
-                id="replace_id"
-                :title="__('pattern_tag.replacement')"
-                x-model.number="selectedReplacementId"
-            >
-                <x-select.option value="">
-                    {{ __('filter.not_selected') }}
-                </x-select.option>
+        <x-fetch-select.single
+            :url="route('api.admin.v1.pattern-author.search-replace')"
+            id="replace_author_id"
+            name="replace_author_id"
+            :label="__('pattern_tag.author_replacement')"
+            :placeholder="__('phrases.search')"
+            :selectedKey="$tag->authorReplacement?->id"
+            :selectedValue="$tag->authorReplacement?->name"
+        />
 
-                <template
-                    x-for="tagReplacement in tagReplacements"
-                    :key="tagReplacement.id"
-                >
-                    <x-select.option
-                        x-bind:value="tagReplacement.id"
-                        x-text="tagReplacement.name"
-                        x-bind:selected="tagReplacement.id === selectedReplacementId"
-                    >
-                    </x-select.option>
-                </template>
-            </x-select.select>
-        </x-select.wrapper>
-
-        <x-select.wrapper>
-            <x-select.label for="replace_author_id">
-                {{ __('pattern_tag.author_replacement') }}
-            </x-select.label>
-
-            <x-select.select
-                name="replace_author_id"
-                id="replace_author_id"
-                :title="__('pattern_tag.author_replacement')"
-                x-model.number="selectedAuthorReplacementId"
-            >
-                <x-select.option value="">
-                    {{ __('filter.not_selected') }}
-                </x-select.option>
-
-                <template
-                    x-for="authorReplacement in authorReplacements"
-                    :key="authorReplacement.id"
-                >
-                    <x-select.option
-                        x-bind:value="authorReplacement.id"
-                        x-text="authorReplacement.name"
-                        x-bind:selected="authorReplacement.id === selectedAuthorReplacementId"
-                    >
-                    </x-select.option>
-                </template>
-            </x-select.select>
-        </x-select.wrapper>
-
-        <x-select.wrapper>
-            <x-select.label for="replace_category_id">
-                {{ __('pattern_tag.category_replacement') }}
-            </x-select.label>
-
-            <x-select.select
-                name="replace_category_id"
-                id="replace_category_id"
-                :title="__('pattern_tag.category_replacement')"
-                x-model.number="selectedCategoryReplacementId"
-            >
-                <x-select.option value="">
-                    {{ __('filter.not_selected') }}
-                </x-select.option>
-
-                <template
-                    x-for="categoryReplacement in categoryReplacements"
-                    :key="categoryReplacement.id"
-                >
-                    <x-select.option
-                        x-bind:value="categoryReplacement.id"
-                        x-text="categoryReplacement.name"
-                        x-bind:selected="categoryReplacement.id === selectedCategoryReplacementId"
-                    >
-                    </x-select.option>
-                </template>
-            </x-select.select>
-        </x-select.wrapper>
+        <x-fetch-select.single
+            :url="route('api.admin.v1.pattern-category.search-replace')"
+            id="replace_category_id"
+            name="replace_category_id"
+            :label="__('pattern_tag.category_replacement')"
+            :placeholder="__('phrases.search')"
+            :selectedKey="$tag->categoryReplacement?->id"
+            :selectedValue="$tag->categoryReplacement?->name"
+        />
 
         <x-checkbox.custom :label="__('pattern_tag.remove_on_appear')">
             <input

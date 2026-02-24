@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin\PatternAuthor\Page;
 
 use App\Models\PatternAuthor;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
 class EditPageController extends Controller
@@ -21,13 +20,8 @@ class EditPageController extends Controller
 
         $this->loadReplacement(author: $author);
 
-        $authorReplacements = $this->getAuthorReplacements(
-            exceptId: $author->id,
-        );
-
         return view(view: 'pages.admin.pattern-author.edit', data: [
             'author' => $author,
-            'authorReplacements' => $authorReplacements,
         ]);
     }
 
@@ -41,17 +35,5 @@ class EditPageController extends Controller
         if ($author->replace_id !== null) {
             $author->load(relations: 'replacement');
         }
-    }
-
-    protected function getAuthorReplacements(int $exceptId): Collection
-    {
-        return PatternAuthor::query()
-            ->whereNull('replace_id')
-            ->where('remove_on_appear', false)
-            ->where(column: 'id', operator: '!=', value: $exceptId)
-            ->select(columns: [
-                'id',
-                'name',
-            ])->orderBy(column: 'name')->get();
     }
 }

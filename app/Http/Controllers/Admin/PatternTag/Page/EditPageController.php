@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin\PatternTag\Page;
 
 use App\Models\PatternTag;
-use App\Models\PatternAuthor;
-use App\Models\PatternCategory;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpFoundation\Response;
 
 class EditPageController extends Controller
@@ -27,18 +24,8 @@ class EditPageController extends Controller
 
         $this->loadCategoryReplacement(tag: $tag);
 
-        $tagReplacements = $this->getTagReplacements(
-            exceptId: $tag->id,
-        );
-
-        $authorReplacements = $this->getAuthorReplacements();
-        $categoryReplacements = $this->getCategoryReplacements();
-
-        return view(view: 'pages.admin.pattern-tag.edit', data: [
+        return view('pages.admin.pattern-tag.edit', [
             'tag' => $tag,
-            'tagReplacements' => $tagReplacements,
-            'authorReplacements' => $authorReplacements,
-            'categoryReplacements' => $categoryReplacements,
         ]);
     }
 
@@ -66,37 +53,5 @@ class EditPageController extends Controller
         if ($tag->replace_category_id !== null) {
             $tag->load(relations: 'categoryReplacement');
         }
-    }
-
-    protected function getTagReplacements(int $exceptId): Collection
-    {
-        return PatternTag::query()
-            ->whereNull('replace_id')
-            ->where('remove_on_appear', false)
-            ->where('id', '!=', $exceptId)
-            ->select(columns: [
-                'id',
-                'name',
-            ])->orderBy('name')->get();
-    }
-
-    protected function getAuthorReplacements(): Collection
-    {
-        return PatternAuthor::query()
-            ->select([
-                'id',
-                'name',
-            ])->orderBy('name')->get();
-    }
-
-    protected function getCategoryReplacements(): Collection
-    {
-        return PatternCategory::query()
-            ->whereNull('replace_id')
-            ->where('remove_on_appear', false)
-            ->select([
-                'id',
-                'name',
-            ])->orderBy('name')->get();
     }
 }
