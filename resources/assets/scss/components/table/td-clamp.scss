@@ -2,7 +2,8 @@
 
 .table-data-clamp {
     @extend .table-data;
-    min-width: 290px;
+    min-width: 150px;
+    max-width: 450px;
 
     &__text {
         display: -webkit-box;
