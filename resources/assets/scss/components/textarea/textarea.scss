@@ -1,0 +1,21 @@
+@use '@styles/components/input/text.scss';
+
+.textarea {
+    @extend .input-text;
+
+    &__label {
+        @extend .input-text__label;
+    }
+
+    &__input {
+        @extend .input-text__input;
+    }
+
+    &__errors {
+        @extend .input-text__errors;
+    }
+
+    &__error {
+        @extend .input-text__error;
+    }
+}

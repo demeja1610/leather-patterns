@@ -6,12 +6,20 @@
     &__label {
         font-size: 0.875rem;
         color: var(--text-2);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5em;
 
         &.required {
             &::after {
                 content: "*";
                 color: var(--red-2);
             }
+        }
+
+        .icon {
+            width: 1em;
+            height: 1em;
         }
     }
 
