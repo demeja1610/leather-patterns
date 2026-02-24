@@ -13,4 +13,5 @@ return [
     'yes' => 'Yes',
     'no' => 'No',
     'nothing_found' => 'Nothing found',
+    'search' => 'Search',
 ];
