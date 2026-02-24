@@ -19,4 +19,8 @@ return [
         'pattern_authors' => 'Pattern Authors',
         'add_new' => 'Add new',
     ],
+
+    'pattern_review' => [
+        'pattern_reviews' => 'Pattern Reviews',
+    ],
 ];

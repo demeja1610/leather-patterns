@@ -40,4 +40,9 @@ class PatternReview extends Model
     {
         return $this->belongsTo(related: User::class);
     }
+
+    public function isDeletable(): bool
+    {
+        return true;
+    }
 }

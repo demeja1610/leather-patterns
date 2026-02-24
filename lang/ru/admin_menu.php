@@ -19,4 +19,8 @@ return [
         'pattern_authors' => 'Авторы выкроек',
         'add_new' => 'Добавить запись',
     ],
+
+    'pattern_review' => [
+        'pattern_reviews' => 'Отзывы на выкройки',
+    ],
 ];

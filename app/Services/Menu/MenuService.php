@@ -69,6 +69,11 @@ class MenuService implements MenuServiceInterface
                     ),
                 ),
             ),
+            new MenuItemDto(
+                text: __(key: 'admin_menu.pattern_review.pattern_reviews'),
+                route: 'admin.page.pattern-review.list',
+                icon: 'star',
+            ),
         );
     }
 }
