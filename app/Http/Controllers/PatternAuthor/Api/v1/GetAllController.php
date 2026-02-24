@@ -25,7 +25,7 @@ class GetAllController extends Controller
 
     protected function getAllPatternAuthors(GetAllRequest &$request): Collection
     {
-        $q = PatternAuthor::query();
+        $q = $this->getBasePatternAuthorQuery();
 
         $this->applyFilters(
             query: $q,
@@ -37,7 +37,13 @@ class GetAllController extends Controller
             'name',
         ]);
 
-        return $q->orderBy('id', 'asc')->get();
+        return $q->orderBy('name', 'asc')->get();
+    }
+
+    protected function getBasePatternAuthorQuery(): Builder
+    {
+        return PatternAuthor::query()
+            ->where('is_published', true);
     }
 
     protected function applyFilters(Builder &$query, GetAllRequest &$request): void
@@ -45,7 +51,7 @@ class GetAllController extends Controller
         $from = $request->input(key: 'from');
 
         if ($from !== null) {
-            $query->where('id', '>', (int) $from);
+            $query->where('id', '>', value: (int) $from);
         }
     }
 }
