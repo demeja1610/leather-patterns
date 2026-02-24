@@ -1,0 +1,12 @@
+@use '@styles/components/table/td.scss';
+
+.table-data-clamp {
+    @extend .table-data;
+    min-width: 290px;
+
+    &__text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
