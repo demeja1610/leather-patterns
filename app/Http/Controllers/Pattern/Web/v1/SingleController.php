@@ -103,6 +103,7 @@ class SingleController extends Controller
                             "{$table}.rating",
                             "{$table}.comment",
                             "{$table}.pattern_id",
+                            "{$table}.created_at",
                         ]);
 
                         return $sq;
