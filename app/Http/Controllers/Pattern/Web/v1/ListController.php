@@ -189,6 +189,8 @@ class ListController extends Controller
                 'tags' => function (BelongsToMany $sq): void {
                     $table = $sq->getRelated()->getTable();
 
+                    $sq->where('is_published', true);
+
                     $sq->select([
                         "{$table}.id",
                         "{$table}.name",
@@ -196,6 +198,8 @@ class ListController extends Controller
                 },
                 'author' => function (BelongsTo $sq): void {
                     $table = $sq->getRelated()->getTable();
+
+                    $sq->where('is_published', true);
 
                     $sq->select([
                         "{$table}.id",
@@ -247,7 +251,8 @@ class ListController extends Controller
 
     protected function getBasePatternAuthorQuery(): Builder
     {
-        return PatternAuthor::query();
+        return PatternAuthor::query()
+            ->where('is_published', true);
     }
 
     /**

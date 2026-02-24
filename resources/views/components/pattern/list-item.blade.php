@@ -84,7 +84,7 @@
             </div>
         @endif
 
-        @if ($pattern->tags !== null)
+        @if ($pattern->tags && $pattern->tags->isEmpty() === false)
             <div class="pattern-list-item__tags">
                 @foreach ($pattern->tags as $tag)
                     <x-badge.link

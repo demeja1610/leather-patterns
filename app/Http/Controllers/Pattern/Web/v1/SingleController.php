@@ -60,7 +60,7 @@ class SingleController extends Controller
                     'author' => function (BelongsTo $sq): BelongsTo {
                         $table = $sq->getRelated()->getTable();
 
-                        // $sq->where('is_published', true);
+                        $sq->where('is_published', true);
 
                         $sq->select([
                             "{$table}.id",

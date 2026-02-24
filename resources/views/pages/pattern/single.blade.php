@@ -24,7 +24,7 @@
             </h1>
         </div>
 
-        @if ($pattern->author)
+        @if ($pattern->author !== null)
             <div class="page-single-pattern__authors">
                 <h3 class="page-single-pattern__authors-title">
                     {{ __('pattern.authors') }}:
