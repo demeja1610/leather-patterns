@@ -27,6 +27,7 @@ class CalculatePatternsAverageRating extends Command
                 operator: '=',
                 second: 'pattern_reviews.pattern_id',
             )
+            ->where('pattern_reviews.is_approved', true)
             ->select(columns: [
                 'patterns.id',
                 DB::raw('AVG(pattern_reviews.rating) as avg_rating'),
