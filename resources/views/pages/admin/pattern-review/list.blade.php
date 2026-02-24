@@ -285,14 +285,14 @@
                                 {{ $review->user?->name }}
                             </x-table.td>
 
-                            <x-table.td>
+                            <x-table.td-clamp clamp="2">
                                 <x-link.default
                                     :href="route('page.pattern.single', ['id' => $review->pattern->id])"
                                     target="_blank"
                                 >
-                                    <x-icon.svg name="external-link" />
+                                    {{ $review->pattern->title }}
                                 </x-link.default>
-                            </x-table.td>
+                            </x-table.td-clamp>
 
                             <x-table.td>
                                 {{ $review->created_at->translatedFormat('d F Y H:i') }}
