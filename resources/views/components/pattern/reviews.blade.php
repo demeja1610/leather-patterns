@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="pattern-reviews__review-date">
-                        {{ $review->reviewed_at->format('d.m.Y H:i') }}
+                        {{ $review->created_at->format('d.m.Y H:i') }}
                     </div>
                 </div>
             @endforeach

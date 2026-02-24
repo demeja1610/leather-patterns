@@ -185,12 +185,10 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
         ?string $comment = null,
         ?float $rating = null,
         ?string $reviewerName = null,
-        ?string $reviewedAt = null,
     ): PatternReview {
         return new PatternReview(attributes: [
             'rating' => $rating ?? 0,
             'reviewer_name' => $reviewerName ?? 'Unknown',
-            'reviewed_at' => $reviewedAt ?? now(),
             'comment' => $comment ?? '',
         ]);
     }

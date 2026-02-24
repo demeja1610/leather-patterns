@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $reviewer_name
  * @property int $rating
  * @property string $comment
- * @property \Carbon\Carbon $reviewed_at
  * @property bool $is_approved
  * @property null|int $user_id
  * @property int $pattern_id
@@ -27,7 +26,6 @@ class PatternReview extends Model
         'reviewer_name',
         'rating',
         'comment',
-        'reviewed_at',
         'is_approved',
         'user_id',
         'pattern_id',
@@ -41,12 +39,5 @@ class PatternReview extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(related: User::class);
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'reviewed_at' => 'datetime',
-        ];
     }
 }

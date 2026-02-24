@@ -183,7 +183,6 @@ class ParsePatternsCommand extends Command
     //         $toReturn[] = [
     //             'rating' => floatval($stars),
     //             'reviewer_name' => trim($name),
-    //             'reviewed_at' => trim($date),
     //             'comment' => trim($text),
     //         ];
     //     }

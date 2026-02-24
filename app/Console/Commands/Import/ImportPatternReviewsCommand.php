@@ -45,7 +45,6 @@ class ImportPatternReviewsCommand extends Command
                             'reviewer_name' => $item->reviewer_name,
                             'rating' => $item->rating,
                             'comment' => $item->review,
-                            'reviewed_at' => $item->review_date,
                             'is_approved' => $item->approved,
                             'user_id' => $item->user_id,
                             'pattern_id' => $item->pattern_id,

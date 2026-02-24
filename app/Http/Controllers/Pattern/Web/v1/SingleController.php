@@ -102,7 +102,6 @@ class SingleController extends Controller
                             "{$table}.reviewer_name",
                             "{$table}.rating",
                             "{$table}.comment",
-                            "{$table}.reviewed_at",
                             "{$table}.pattern_id",
                         ]);
 

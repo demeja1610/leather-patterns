@@ -180,7 +180,6 @@ class ParseReviewsCommand extends Command
             $toReturn[] = [
                 'rating' => floatval(value: $stars),
                 'reviewer_name' => trim(string: (string) $name),
-                'reviewed_at' => trim(string: (string) $date),
                 'comment' => trim(string: (string) $text),
             ];
         }
@@ -229,7 +228,6 @@ class ParseReviewsCommand extends Command
             $toReturn[] = [
                 'rating' => floatval(value: $stars),
                 'reviewer_name' => trim(string: (string) $name),
-                'reviewed_at' => trim(string: (string) $date),
                 'comment' => trim(string: (string) $text),
             ];
         }
