@@ -62,10 +62,20 @@
             <li
                 x-on:click="selectItem(item)"
                 x-on:keyup.enter="selectItem(item)"
-                x-text="item.{{ $valueName }}"
                 class="fetch-select__option"
                 tabindex="0"
-            ></li>
+                x-bind:class="{ 'fetch-select__option--active': selectedKey === item.{{ $keyName }} }"
+            >
+                <span x-text="item.{{ $valueName }}"></span>
+
+                <template x-if="selectedKey === item.{{ $keyName }}">
+                    <x-icon.svg
+                        name="check"
+                        class="fetch-select__option-check"
+                    >
+                    </x-icon.svg>
+                </template>
+            </li>
         </template>
 
         <template x-if="getItems().length === 0 && !loading">

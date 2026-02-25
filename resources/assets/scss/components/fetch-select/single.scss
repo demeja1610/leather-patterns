@@ -46,10 +46,22 @@
         cursor: pointer;
         transition: background-color 0.3s ease;
         outline-color: var(--gray-soft);
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 1rem;
 
         &:hover,
         &:focus {
             background-color: var(--bg-alt);
+        }
+
+        &-check {
+            margin-left: auto;
+        }
+
+        &--active {
+            color: var(--red-2);
         }
     }
 }
