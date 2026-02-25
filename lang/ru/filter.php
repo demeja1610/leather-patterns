@@ -33,6 +33,7 @@ return [
     'name' => 'Название',
     'older_than' => 'Старее чем',
     'newer_than' => 'Новее чем',
+    'title' => 'Заголовок',
 
     'pattern_order' => [
         'default' => 'По умолчанию',

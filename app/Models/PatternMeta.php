@@ -22,4 +22,11 @@ class PatternMeta extends Model
     {
         return $this->belongsTo(related: Pattern::class);
     }
+
+    protected function casts()
+    {
+        return [
+            'reviews_updated_at' => 'datetime',
+        ];
+    }
 }

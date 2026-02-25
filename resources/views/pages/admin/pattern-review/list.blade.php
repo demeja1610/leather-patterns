@@ -285,7 +285,7 @@
                                 {{ $review->rating }}
                             </x-table.td>
 
-                            <x-table.td-clamp clamp="2">
+                            <x-table.td-clamp clamp="2" :title="$review->comment">
                                 {{ $review->comment }}
                             </x-table.td-clamp>
 

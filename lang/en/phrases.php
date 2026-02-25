@@ -14,4 +14,7 @@ return [
     'no' => 'No',
     'nothing_found' => 'Nothing found',
     'search' => 'Search',
+    'open_list' => 'Open list',
+    'open' => 'Open',
+    'list' => 'List',
 ];

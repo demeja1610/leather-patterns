@@ -33,6 +33,7 @@ return [
     'name' => 'Name',
     'older_than' => 'Older than',
     'newer_than' => 'Newer than',
+    'title' => 'Title',
 
     'pattern_order' => [
         'default' => 'Default',

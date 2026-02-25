@@ -2,7 +2,7 @@
 
 @section('content')
     <div
-        class="admin-page admin-page-list"
+        class="admin-page admin-page-list {{ $classes ?? '' }}"
         x-data="{ showFilters: false }"
     >
         <x-admin.page-header.header

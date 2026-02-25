@@ -23,4 +23,9 @@ return [
     'pattern_review' => [
         'pattern_reviews' => 'Отзывы на выкройки',
     ],
+
+    'pattern' => [
+        'patterns' => 'Выкройки',
+        'add_new' => 'Add new',
+    ],
 ];

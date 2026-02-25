@@ -23,6 +23,8 @@ Route::prefix('admin')
 
         require_once __DIR__ . '/admin/pattern-review.php';
 
+        require_once __DIR__ . '/admin/pattern.php';
+
         // Route::prefix('pattern')
         //     ->group(function (): void {
         //         Route::get('/', \App\Http\Controllers\App\Admin\Pattern\ListPageController::class)

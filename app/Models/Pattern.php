@@ -13,11 +13,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property-read int $id
- * @property int $author_id
  *
+ * @property int $author_id
+ * @property float $avg_rating
  * @property null|string $title
  * @property PatternSourceEnum $source
  * @property string $source_url
+ * @property boolean $is_published
  *
  * @property-read \Carbon\Carbon $created_at
  * @property-read \Carbon\Carbon $updated_at
@@ -26,9 +28,11 @@ class Pattern extends Model
 {
     protected $fillable = [
         'author_id',
+        'avg_rating',
         'title',
         'source',
         'source_url',
+        'is_published',
     ];
 
     public function images(): HasMany
@@ -71,10 +75,16 @@ class Pattern extends Model
         return $this->hasOne(related: PatternMeta::class);
     }
 
+    public function isDeletable(): bool
+    {
+        return true;
+    }
+
     protected function casts(): array
     {
         return [
             'source' => PatternSourceEnum::class,
+            'is_published' => 'boolean',
         ];
     }
 }

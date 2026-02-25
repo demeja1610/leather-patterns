@@ -23,4 +23,9 @@ return [
     'pattern_review' => [
         'pattern_reviews' => 'Pattern Reviews',
     ],
+
+    'pattern' => [
+        'patterns' => 'Patterns',
+        'add_new' => 'Add new',
+    ],
 ];

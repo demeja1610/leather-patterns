@@ -74,6 +74,24 @@ class MenuService implements MenuServiceInterface
                 route: 'admin.page.pattern-review.list',
                 icon: 'star',
             ),
+
+             new MenuItemDto(
+                text: __(key: 'admin_menu.pattern.patterns'),
+                route: 'admin.page.patterns.list',
+                icon: 'pattern',
+                subMenu: new MenuItemListDto(
+                    new MenuItemDto(
+                        text: __(key: 'admin_menu.pattern.patterns'),
+                        route: 'admin.page.patterns.list',
+                        icon: 'pattern',
+                    ),
+                    // new MenuItemDto(
+                    //     text: __(key: 'admin_menu.pattern_author.add_new'),
+                    //     route: 'admin.page.pattern-author.create',
+                    //     icon: 'create',
+                    // ),
+                ),
+            ),
         );
     }
 }
