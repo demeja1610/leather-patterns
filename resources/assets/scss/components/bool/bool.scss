@@ -1,0 +1,18 @@
+.bool {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    color: var(--green-3);
+
+    &__dot {
+        background-color: currentColor;
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+    }
+
+    &--negative {
+        color: var(--red-2);
+    }
+}

@@ -1,0 +1,24 @@
+@use '@styles/components/table/td.scss';
+
+.table-data-dropdown {
+    @extend .table-data;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 1rem;
+    }
+
+    &__title {
+        white-space: nowrap;
+    }
+
+    &__icon {
+        transition: transform 0.3s ease;
+
+        &--open {
+            transform: rotate(180deg);
+        }
+    }
+}

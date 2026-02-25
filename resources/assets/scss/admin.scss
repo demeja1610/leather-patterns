@@ -24,6 +24,9 @@
 @use '@styles/components/badge/link.scss' as badge-link;
 @use '@styles/components/badge/button.scss' as badge-button;
 
+@use '@styles/components/bool/bool.scss' as bool;
+@use '@styles/components/bool/bool-reverse.scss' as bool-reverse;
+
 @use '@styles/components/theme-toggler/theme-toggler.scss' as theme-toggler;
 
 @use '@styles/components/loader/spin.scss' as loader-spin;
@@ -60,9 +63,9 @@
 @use '@styles/components/table/td-bool.scss' as table-td-bool;
 @use '@styles/components/table/td-clamp.scss' as table-td-clamp;
 @use '@styles/components/table/td-image.scss' as table-td-image;
+@use '@styles/components/table/td-dropdown.scss' as table-td-dropdown;
 @use '@styles/components/table/overflow-x-container.scss' as table-overflow-x-container;
 @use '@styles/components/table/empty.scss' as table-empty;
-
 
 @use '@styles/components/modal/modal.scss' as modal;
 

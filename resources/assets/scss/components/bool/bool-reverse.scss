@@ -1,0 +1,15 @@
+@use '@styles/components/bool/bool.scss';
+
+.bool-reverse {
+    @extend .bool;
+
+    color: var(--red-2);
+
+    &__dot {
+        @extend .bool__dot;
+    }
+
+    &--negative {
+        color: var(--green-3);
+    }
+}
