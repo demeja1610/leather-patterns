@@ -16,6 +16,9 @@ return [
     'download_from_source' => 'Скачать из источника',
     'created_at' => 'Дата добавления',
 
+    'creation' => 'Создание выкройки',
+    'edition' => 'Редактирование выкройки',
+
     'patterns' => 'Выкройки',
     'id' => 'ID',
     'title' => 'Заголовок',
@@ -39,6 +42,7 @@ return [
     'images_downloaded' => 'Изображения скачаны',
     'is_download_url_wrong' => 'Неверное URL скачивания',
     'is_video_checked' => 'Наличие видео проверено',
+    'source_url' => 'URL источника',
 
     'meta' => [
         'meta' => 'Метаданные',

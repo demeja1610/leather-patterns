@@ -16,6 +16,9 @@ return [
     'download_from_source' => 'Download from source',
     'created_at' => 'Created at',
 
+    'creation' => 'Create pattern',
+    'edition' => 'Edit pattern',
+
     'patterns' => 'Patterns',
     'id' => 'ID',
     'title' => 'Title',
@@ -39,6 +42,7 @@ return [
     'images_downloaded' => 'Images downloaded',
     'is_download_url_wrong' => 'Wrong download URL',
     'is_video_checked' => 'Page checked for videos',
+    'source_url' => 'Source URL',
 
     'meta' => [
         'meta' => 'Metadata',
