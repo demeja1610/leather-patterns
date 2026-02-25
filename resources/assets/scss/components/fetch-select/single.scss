@@ -1,4 +1,5 @@
 @use '@styles/components/input/text.scss';
+@use '@styles/common/mixins/thin-scrollbar.scss' as thin-scrollbar;
 
 .fetch-select {
     display: flex;
@@ -17,6 +18,8 @@
     }
 
     &__options {
+        @include thin-scrollbar.thin-scrollbar;
+
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -33,6 +36,8 @@
         transform: translate(0, calc(100% + 0.5rem));
         z-index: 1;
         color: var(--text-1);
+        max-height: 350px;
+        overflow-y: auto;
     }
 
     &__option {
