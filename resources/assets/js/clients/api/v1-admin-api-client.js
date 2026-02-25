@@ -11,7 +11,11 @@ export default class V1AdminApiClient {
         if (Object.keys(params).length !== 0) {
             const queryString = new URLSearchParams(params).toString();
 
-            url = `${url}?${queryString}`;
+            const hasQueryParams = url.includes("?");
+
+            url = hasQueryParams
+                ? `${url}&${queryString}`
+                : `${url}?${queryString}`;
         }
 
         try {
