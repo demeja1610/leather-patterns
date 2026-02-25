@@ -10,10 +10,12 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\Admin\PatternReview\ListRequest;
+use App\Models\Pattern;
 
 class ListPageController extends Controller
 {
     protected array $activeFilters = [];
+    protected array $extraData = [];
 
     public function __invoke(ListRequest $request): View
     {
@@ -21,6 +23,7 @@ class ListPageController extends Controller
 
         return view(view: 'pages.admin.pattern-review.list', data: [
             'activeFilters' => $this->activeFilters,
+            'extraData' => $this->extraData,
             'reviews' => $reviews,
         ]);
     }
@@ -98,6 +101,20 @@ class ListPageController extends Controller
             $query->where('created_at', '>', $newerThan);
         }
 
+
+        $patternId = $request->input(key: 'pattern_id');
+
+        if ($patternId !== null) {
+            $pattern = $this->getPattern(id: $patternId);
+
+            if ($pattern !== null) {
+                $this->activeFilters['pattern_id'] = $patternId;
+                $this->extraData['pattern_title'] = $pattern->title;
+
+                $query->where('pattern_id', $patternId);
+            }
+        }
+
         $isPublished = $request->input(key: 'is_approved');
 
         if ($isPublished !== null) {
@@ -133,5 +150,18 @@ class ListPageController extends Controller
                 $query->whereNull('user_id');
             }
         }
+    }
+
+    protected function getPattern($id): ?Pattern
+    {
+        $q =  Pattern::query()
+            ->where('id', $id);
+
+        $q->select([
+            'id',
+            'title',
+        ]);
+
+        return $q->first();
     }
 }

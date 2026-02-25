@@ -24,6 +24,10 @@ class ListRequest extends FormRequest
                 'nullable',
                 'date',
             ],
+            'pattern_id' => [
+                'nullable',
+                'numeric',
+            ]
         ];
     }
 }

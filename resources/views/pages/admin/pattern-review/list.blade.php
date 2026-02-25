@@ -124,6 +124,18 @@
         />
     </x-input-text.input-text>
 
+    <x-fetch-select.single
+        :url="route('api.admin.v1.pattern.search', ['has_reviews' => 1])"
+        id="pattern_id"
+        name="pattern_id"
+        :label="__('pattern_review.pattern')"
+        :placeholder="__('phrases.search')"
+        keyName="id"
+        valueName="title"
+        :selectedKey="isset($activeFilters['pattern_id']) ? $activeFilters['pattern_id'] : null"
+        :selectedValue="isset($extraData['pattern_title']) ? $extraData['pattern_title'] : null"
+    />
+
     <x-select.wrapper>
         <x-select.label for="is_approved">
             {{ __('pattern_review.is_approved') }}
