@@ -46,8 +46,8 @@
             name="replace_id"
             :label="__('pattern_author.replacement')"
             :placeholder="__('phrases.search')"
-            :selectedKey="$author->replacement?->id"
-            :selectedValue="$author->replacement?->name"
+            :selectedKey="old('replace_id') ?? $author->replacement?->id"
+            :selectedValue="session()->get('replace_name') ?? $author->replacement?->name"
         />
 
         <x-checkbox.custom :label="__('pattern_author.remove_on_appear')">

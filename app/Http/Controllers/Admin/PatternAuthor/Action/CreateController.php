@@ -32,6 +32,16 @@ class CreateController extends Controller
             }
         }
 
+        $replaceId = $request->input('replace_id');
+
+        if ($replaceId !== null) {
+            $replace = PatternAuthor::query()->where('id', $replaceId)->select(['id', 'name'])->first();
+
+            if ($replace instanceof PatternAuthor) {
+                $request->session()->flash('replace_name', $replace->name);
+            }
+        }
+
         if ($data['remove_on_appear'] === true &&  $replaceToCount !== 0) {
             return back()->withInput()->with(
                 key: 'notifications',

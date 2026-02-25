@@ -46,8 +46,8 @@
             name="replace_id"
             :label="__('pattern_category.replacement')"
             :placeholder="__('phrases.search')"
-            :selectedKey="$category->replacement?->id"
-            :selectedValue="$category->replacement?->name"
+            :selectedKey="old('replace_id') ?? $category->replacement?->id"
+            :selectedValue="session()->get('replace_name') ?? $category->replacement?->name"
         />
 
         <x-checkbox.custom :label="__('pattern_category.remove_on_appear')">

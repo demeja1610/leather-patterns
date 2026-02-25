@@ -32,7 +32,17 @@ class CreateController extends Controller
             }
         }
 
-        if ($data['remove_on_appear'] === true &&  $replaceToCount !== 0) {
+        $replaceId = $request->input('replace_id');
+
+        if ($replaceId !== null) {
+            $replace = PatternCategory::query()->where('id', $replaceId)->select(['id', 'name'])->first();
+
+            if ($replace instanceof PatternCategory) {
+                $request->session()->flash('replace_name', $replace->name);
+            }
+        }
+
+        if ($data['remove_on_appear'] === true && $replaceToCount !== 0) {
             return back()->withInput()->with(
                 key: 'notifications',
                 value: new SessionNotificationListDto(

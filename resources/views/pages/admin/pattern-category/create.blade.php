@@ -30,6 +30,10 @@
             name="replace_id"
             :label="__('pattern_category.replacement')"
             :placeholder="__('phrases.search')"
+            keyName="id"
+            valueName="name"
+            :selectedKey="old('replace_id')"
+            :selectedValue="session()->get('replace_name')"
         />
 
         <x-checkbox.custom :label="__('pattern_category.remove_on_appear')">

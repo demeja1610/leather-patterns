@@ -11,6 +11,8 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\Admin\PatternTag\CreateRequest;
 use App\Dto\SessionNotification\SessionNotificationDto;
 use App\Dto\SessionNotification\SessionNotificationListDto;
+use App\Models\PatternAuthor;
+use App\Models\PatternCategory;
 
 class CreateController extends Controller
 {
@@ -29,6 +31,36 @@ class CreateController extends Controller
         foreach ($data as $key => $value) {
             if (str_starts_with(haystack: (string) $key, needle: 'replace_') && $value !== null) {
                 $replaceToCount++;
+            }
+        }
+
+        $replaceId = $request->input('replace_id');
+
+        if ($replaceId !== null) {
+            $replace = PatternTag::query()->where('id', $replaceId)->select(['id', 'name'])->first();
+
+            if ($replace instanceof PatternTag) {
+                $request->session()->flash('replace_name', $replace->name);
+            }
+        }
+
+        $replaceAuthorId = $request->input('replace_author_id');
+
+        if ($replaceAuthorId !== null) {
+            $replaceAuthor = PatternAuthor::query()->where('id', $replaceAuthorId)->select(['id', 'name'])->first();
+
+            if ($replaceAuthor instanceof PatternAuthor) {
+                $request->session()->flash('replace_author_name', $replaceAuthor->name);
+            }
+        }
+
+        $replaceCategoryId = $request->input('replace_category_id');
+
+        if ($replaceCategoryId !== null) {
+            $replaceCategory = PatternCategory::query()->where('id', $replaceCategoryId)->select(['id', 'name'])->first();
+
+            if ($replaceCategory instanceof PatternCategory) {
+                $request->session()->flash('replace_category_name', $replaceCategory->name);
             }
         }
 

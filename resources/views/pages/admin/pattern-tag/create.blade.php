@@ -30,6 +30,10 @@
             name="replace_id"
             :label="__('pattern_tag.replacement')"
             :placeholder="__('phrases.search')"
+            keyName="id"
+            valueName="name"
+            :selectedKey="old('replace_id')"
+            :selectedValue="session()->get('replace_name')"
         />
 
         <x-fetch-select.single
@@ -38,6 +42,10 @@
             name="replace_author_id"
             :label="__('pattern_tag.author_replacement')"
             :placeholder="__('phrases.search')"
+            keyName="id"
+            valueName="name"
+            :selectedKey="old('replace_author_id')"
+            :selectedValue="session()->get('replace_author_name')"
         />
 
         <x-fetch-select.single
@@ -46,6 +54,10 @@
             name="replace_category_id"
             :label="__('pattern_tag.category_replacement')"
             :placeholder="__('phrases.search')"
+            keyName="id"
+            valueName="name"
+            :selectedKey="old('replace_category_id')"
+            :selectedValue="session()->get('replace_category_name')"
         />
 
         <x-checkbox.custom :label="__('pattern_tag.remove_on_appear')">
