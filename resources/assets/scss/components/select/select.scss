@@ -1,3 +1,5 @@
+@use '@styles/components/input/text.scss';
+
 .select {
     position: relative;
     display: flex;
@@ -12,8 +14,7 @@
     }
 
     &__label {
-        font-size: 0.875rem;
-        color: var(--text-2);
+        @extend .input-text__label;
     }
 
     &__select {
