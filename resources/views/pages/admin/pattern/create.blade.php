@@ -1,47 +1,87 @@
 @extends('layouts.admin.single', [
-    'title' => __('pattern_author.creation'),
+    'title' => __('pattern.creation'),
 ])
 
 @section('page')
-    <x-admin.form.create :action="route('admin.page.pattern-author.create')">
+    <x-admin.form.create :action="route('admin.patterns.create')">
         <x-input-text.input-text>
             <x-input-text.label
-                for="name"
+                for="title"
                 class="required"
             >
-                {{ __('pattern_author.name') }}
+                {{ __('pattern.title') }}
             </x-input-text.label>
 
             <x-input-text.input
-                id="name"
-                name="name"
+                id="title"
+                name="title"
                 type="text"
                 :required="true"
-                :value="old('name')"
-                title="{{ __('pattern_author.name') }}"
+                :value="old('title')"
+                title="{{ __('pattern.title') }}"
             />
 
-            <x-input-text.input-errors :messages="$errors->get('name')" />
+            <x-input-text.input-errors :messages="$errors->get('title')" />
         </x-input-text.input-text>
 
-        <x-fetch-select.single
+        <x-select.wrapper>
+            <x-select.label
+                for="source"
+                class="required"
+            >
+                {{ __('pattern.source') }}
+            </x-select.label>
+
+            <x-select.select
+                name="source"
+                id="source"
+                :title="__('pattern.source')"
+                required
+            >
+                <x-select.option
+                    value=""
+                    :selected="old('source') === null"
+                >
+                    {{ __('filter.not_selected') }}
+                </x-select.option>
+
+                @foreach ($sources as $source)
+                    <x-select.option
+                        :value="$source->value"
+                        :selected="old('source') === $source->value"
+                    >
+                        {{ __("pattern_source.{$source->value}") }}
+                    </x-select.option>
+                @endforeach
+
+            </x-select.select>
+        </x-select.wrapper>
+
+        <x-input-text.input-text>
+            <x-input-text.label for="source_url">
+                {{ __('pattern.source_url') }}
+            </x-input-text.label>
+
+            <x-input-text.input
+                id="source_url"
+                name="source_url"
+                type="url"
+                :value="old('source_url')"
+                title="{{ __('pattern.source_url') }}"
+            />
+
+            <x-input-text.input-errors :messages="$errors->get('source_url')" />
+        </x-input-text.input-text>
+
+        {{-- <x-fetch-select.single
             :url="route('api.admin.v1.pattern-author.search-replace')"
             id="replace_id"
             name="replace_id"
-            :label="__('pattern_author.replacement')"
+            :label="__('pattern.replacement')"
             :placeholder="__('phrases.search')"
-        />
+        /> --}}
 
-        <x-checkbox.custom :label="__('pattern_author.remove_on_appear')">
-            <input
-                type="checkbox"
-                class="checkbox__input"
-                name="remove_on_appear"
-                @checked(old('remove_on_appear') !== null)
-            />
-        </x-checkbox.custom>
-
-        <x-checkbox.custom :label="__('pattern_author.is_published')">
+        <x-checkbox.custom :label="__('pattern.is_published')">
             <input
                 type="checkbox"
                 class="checkbox__input"

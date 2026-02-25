@@ -7,13 +7,13 @@
     'classes' => 'admin-page-patterns-list',
 ])
 
-{{-- @section('header-content')
-    <x-link.button-default :href="route('admin.pattern.create')">
+@section('header-content')
+    <x-link.button-default :href="route('admin.page.patterns.create')">
         <x-icon.svg name="create" />
 
         {{ __('actions.add_new') }}
     </x-link.button-default>
-@endsection --}}
+@endsection
 
 @section('page-filters')
     <x-input-text.input-text>
@@ -608,15 +608,19 @@
                             />
 
                             <x-table.td>
-                                <x-link.default
-                                    :href="$pattern->source_url"
-                                    target="_blank"
-                                    class="admin-page-patterns-list__source-link"
-                                >
+                                @if ($pattern->source->value === 'local')
                                     {{ __("pattern_source.{$pattern->source->value}") }}
+                                @else
+                                    <x-link.default
+                                        :href="$pattern->source_url"
+                                        target="_blank"
+                                        class="admin-page-patterns-list__source-link"
+                                    >
+                                        {{ __("pattern_source.{$pattern->source->value}") }}
 
-                                    <x-icon.svg name="external-link" />
-                                </x-link.default>
+                                        <x-icon.svg name="external-link" />
+                                    </x-link.default>
+                                @endif
                             </x-table.td>
 
                             <x-table.td-clamp clamp="2">

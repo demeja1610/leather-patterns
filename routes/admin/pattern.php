@@ -9,13 +9,13 @@ Route::prefix('patterns')
         Route::get('/', \App\Http\Controllers\Admin\Pattern\Page\ListPageController::class)
             ->name(name: 'page.patterns.list');
 
-        // Route::group(['prefix' => 'create'], function (): void {
-        //     Route::get('/', \App\Http\Controllers\Admin\Pattern\Page\CreatePageController::class)
-        //         ->name(name: 'page.pattern.create');
+        Route::group(['prefix' => 'create'], function (): void {
+            Route::get('/', \App\Http\Controllers\Admin\Pattern\Page\CreatePageController::class)
+                ->name(name: 'page.patterns.create');
 
-        //     Route::post('/', \App\Http\Controllers\Admin\Pattern\Action\CreateController::class)
-        //         ->name(name: 'pattern.create');
-        // });
+            Route::post('/', \App\Http\Controllers\Admin\Pattern\Action\CreateController::class)
+                ->name(name: 'patterns.create');
+        });
 
         Route::group(['prefix' => '{id}'], function (): void {
             //     Route::prefix('edit')
