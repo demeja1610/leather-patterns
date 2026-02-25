@@ -2,7 +2,7 @@
 
 @section('content')
     <div
-        class="admin-page admin-page-single"
+        class="admin-page admin-page-single {{ $classes ?? '' }}"
         @isset($xData)
             x-data="{{ $xData }}"
         @endisset
