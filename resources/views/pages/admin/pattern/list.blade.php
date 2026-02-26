@@ -590,9 +590,9 @@
                                     </x-link.button-default>
                                 @endif
 
-                                {{-- <x-link.button-ghost :href="route('admin.page.patterns.edit', ['id' => $pattern->id])">
+                                <x-link.button-ghost :href="route('admin.page.patterns.edit', ['id' => $pattern->id])">
                                     <x-icon.svg name="edit" />
-                                </x-link.button-ghost> --}}
+                                </x-link.button-ghost>
                             </x-table.td-actions>
 
                             <x-table.td>

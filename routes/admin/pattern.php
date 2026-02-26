@@ -18,14 +18,14 @@ Route::prefix('patterns')
         });
 
         Route::group(['prefix' => '{id}'], function (): void {
-            //     Route::prefix('edit')
-            //         ->group(callback: function (): void {
-            //             Route::get('/', \App\Http\Controllers\Admin\Pattern\Page\EditPageController::class)
-            //                 ->name(name: 'page.pattern.edit');
+            Route::prefix('edit')
+                ->group(callback: function (): void {
+                    Route::get('/', \App\Http\Controllers\Admin\Pattern\Page\EditPageController::class)
+                        ->name(name: 'page.patterns.edit');
 
-            //             Route::patch('/', \App\Http\Controllers\Admin\Pattern\Action\EditController::class)
-            //                 ->name(name: 'pattern.update');
-            //         });
+                    Route::patch('/', \App\Http\Controllers\Admin\Pattern\Action\EditController::class)
+                        ->name(name: 'patterns.update');
+                });
 
             Route::get('/delete', \App\Http\Controllers\Admin\Pattern\Action\DeleteController::class)
                 ->name(name: 'pattern.delete');
