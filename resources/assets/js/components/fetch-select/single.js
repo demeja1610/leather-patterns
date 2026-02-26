@@ -83,7 +83,7 @@ export const fetchSelect = () => ({
     },
 
     setSelectedItem(item) {
-        if (item === this.selectedItem) {
+        if (this.isItemSelected(item)) {
             this.selectedItem = null;
             this.q = "";
         } else {
@@ -98,5 +98,15 @@ export const fetchSelect = () => ({
         }
 
         this.open = false;
+    },
+
+    isItemSelected(item) {
+        return this.selectedItem === item;
+    },
+
+    getItemValueName() {
+        return this.selectedItemOptionValueName === null
+            ? "item"
+            : `item.${this.selectedItemOptionValueName}`;
     },
 });

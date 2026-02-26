@@ -46,8 +46,7 @@
 
         <template x-for="item in getItems()">
             <option
-                x-bind:selected="{{ $selectedItemOptionValueName !== null ? 'selectedItem?.' . $selectedItemOptionValueName : 'selectedItem' }} ===
-                    {{ $selectedItemOptionValueName !== null ? 'item.' . $selectedItemOptionValueName : 'item' }}"
+                x-bind:selected="isItemSelected(item)"
                 x-bind:value="{{ $selectedItemOptionValueName !== null ? 'item.' . $selectedItemOptionValueName : 'item' }}"
                 x-text="{{ $selectedItemOptionLabelName !== null ? 'item.' . $selectedItemOptionLabelName : 'item' }}"
             ></option>
@@ -78,16 +77,11 @@
                 x-on:keyup.enter="setSelectedItem(item)"
                 class="fetch-select__option"
                 tabindex="0"
-                x-bind:class="{
-                    'fetch-select__option--active': {{ $selectedItemOptionValueName !== null ? 'item.' . $selectedItemOptionValueName : 'item' }} === selectedItem
-                        ?.{{ $selectedItemOptionValueName }}
-                }"
+                x-bind:class="{ 'fetch-select__option--active': isItemSelected(item) }"
             >
                 <span x-text="{{ $selectedItemOptionLabelName !== null ? 'item.' . $selectedItemOptionLabelName : 'item' }}"></span>
 
-                <template
-                    x-if="{{ $selectedItemOptionValueName !== null ? 'item.' . $selectedItemOptionValueName : 'item' }} === selectedItem?.{{ $selectedItemOptionValueName }}"
-                >
+                <template x-if="isItemSelected(item)">
                     <x-icon.svg
                         name="check"
                         class="fetch-select__option-check"
