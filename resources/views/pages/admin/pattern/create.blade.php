@@ -1,5 +1,6 @@
 @extends('layouts.admin.single', [
     'title' => __('pattern.creation'),
+    'classes' => 'admin-page-patterns-create',
 ])
 
 @section('page')
@@ -73,13 +74,17 @@
             <x-input-text.input-errors :messages="$errors->get('source_url')" />
         </x-input-text.input-text>
 
-        {{-- <x-fetch-select.single
-            :url="route('api.admin.v1.pattern-author.search-replace')"
-            id="replace_id"
-            name="replace_id"
-            :label="__('pattern.replacement')"
+        <x-fetch-select.single
+            :url="route('api.admin.v1.pattern-author.search')"
+            id="author_id"
+            name="author_id"
+            :label="__('pattern.author')"
             :placeholder="__('phrases.search')"
-        /> --}}
+            keyName="id"
+            valueName="name"
+            :selectedKey="old('author_id')"
+            :selectedValue="session()->get('author_name')"
+        />
 
         <x-checkbox.custom :label="__('pattern.is_published')">
             <input
