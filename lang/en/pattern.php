@@ -56,6 +56,7 @@ return [
     'admin' => [
         'created' => 'Pattern with title: `:title` successfully created',
         'updated' => 'Pattern with id: `:id` successfully updated',
+        'error_while_creating' => 'An erro happened while creating pattern',
         'failed_to_update' => 'Failed to update pattern with id: `:id`',
         'single_delete_success' => 'Pattern with title: `:title` successfully deleted',
         'single_failed_to_delete' => 'Failed to delete pattern with title: `:title`',

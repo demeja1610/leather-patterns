@@ -82,7 +82,35 @@
             :placeholder="__('phrases.search')"
             selectedItemOptionValueName="id"
             selectedItemOptionLabelName="name"
-            :selectedItem="session()->get('selectedAuthor')?->toJson(JSON_UNESCAPED_UNICODE)"
+            :selectedItem="session()
+                ->get('selected_author')
+                ?->toJson(JSON_UNESCAPED_UNICODE)"
+        />
+
+        <x-fetch-select.multiple
+            :url="route('api.admin.v1.pattern-category.search')"
+            id="category_id"
+            name="category_id[]"
+            :label="__('pattern.categories')"
+            :placeholder="__('phrases.search')"
+            selectedItemOptionValueName="id"
+            selectedItemOptionLabelName="name"
+            :selectedItems="session()
+                ->get('selected_categories')
+                ?->toJson(JSON_UNESCAPED_UNICODE)"
+        />
+
+        <x-fetch-select.multiple
+            :url="route('api.admin.v1.pattern-tag.search')"
+            id="tag_id"
+            name="tag_id[]"
+            :label="__('pattern.tags')"
+            :placeholder="__('phrases.search')"
+            selectedItemOptionValueName="id"
+            selectedItemOptionLabelName="name"
+            :selectedItems="session()
+                ->get('selected_tags')
+                ?->toJson(JSON_UNESCAPED_UNICODE)"
         />
 
         <x-checkbox.custom :label="__('pattern.is_published')">
