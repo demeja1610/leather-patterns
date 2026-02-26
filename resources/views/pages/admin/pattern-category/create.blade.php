@@ -35,6 +35,7 @@
             :selectedItem="session()
                 ->get('selectedReplace')
                 ?->toJson(JSON_UNESCAPED_UNICODE)"
+            :required="true"
         />
 
         <x-checkbox.custom :label="__('pattern_category.remove_on_appear')">

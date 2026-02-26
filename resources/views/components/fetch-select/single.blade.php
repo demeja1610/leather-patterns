@@ -12,7 +12,7 @@
 ])
 
 <div
-    {{ $attributes->merge(['class' => 'fetch-select']) }}
+    {{ $attributes->merge(['class' => 'fetch-select' . ($required ? ' fetch-select--required' : '')]) }}
     x-data="fetchSelect()"
     data-url="{{ $url }}"
     data-selected-item="{{ $selectedItem }}"
@@ -29,7 +29,7 @@
 >
     @if ($label)
         <label
-            class="fetch-select__label"
+            class="fetch-select__label {{ $required ? 'required' : '' }}"
             for="{{ $id }}"
         >
             {{ $label }}
@@ -40,6 +40,7 @@
         id="{{ $id }}"
         name="{{ $name }}"
         class="fetch-select__select"
+        @required($required)
     >
         <option value=""></option>
 
