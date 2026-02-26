@@ -61,7 +61,7 @@
         gap: 1rem;
 
         &:hover,
-        &:focus {
+        &:focus-visible {
             background-color: var(--bg-alt);
         }
 

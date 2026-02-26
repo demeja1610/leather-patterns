@@ -1,0 +1,91 @@
+@use '@styles/components/fetch-select/single.scss';
+
+.multiple-fetch-select {
+    @extend .fetch-select;
+
+    &__select {
+        @extend .fetch-select__select;
+    }
+
+    &__selected-items {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        align-content: start;
+        flex-wrap: wrap;
+        gap: 0.5rem
+    }
+
+    &__selected-item {
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        padding: 0;
+
+        &-text {
+            padding: 0.25rem 0.75rem;
+            padding-right: 0;
+        }
+
+        &-remove {
+            border: none;
+            background-color: transparent;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-right: 0.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+
+            &-icon {
+                width: 0.75rem;
+                height: 0.75rem;
+            }
+
+            &:hover {
+                color: var(--red-2)
+            }
+        }
+
+        &:hover {
+            border-color: transparent
+        }
+    }
+
+    &__container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 0.5rem;
+    }
+
+    &__input {
+        @extend .fetch-select__input;
+    }
+
+    &__label {
+        @extend .fetch-select__label;
+    }
+
+    &__options {
+        @extend .fetch-select__options;
+    }
+
+    &__option {
+        @extend .fetch-select__option;
+
+        &-check {
+            @extend .fetch-select__option-check;
+        }
+
+        &--active {
+            @extend .fetch-select__option--active;
+        }
+    }
+}

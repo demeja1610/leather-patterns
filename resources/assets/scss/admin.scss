@@ -5,11 +5,16 @@
 
 // common components
 
+@use '@styles/components/badge/badge.scss' as badge;
+@use '@styles/components/badge/link.scss' as badge-link;
+@use '@styles/components/badge/button.scss' as badge-button;
+
 @use '@styles/components/checkbox/checkbox.scss' as checkbox;
 @use '@styles/components/input/text.scss' as input-text;
 @use '@styles/components/input/image.scss' as input-image;
 @use '@styles/components/select/select.scss' as select;
 @use '@styles/components/fetch-select/single.scss' as single-fetch-select;
+@use '@styles/components/fetch-select/multiple.scss' as multiple-fetch-select;
 @use '@styles/components/textarea/textarea.scss' as textarea;
 
 @use '@styles/components/button/button.scss' as button;
@@ -19,10 +24,6 @@
 @use '@styles/components/link/link.scss' as link;
 @use '@styles/components/link/link-button-default.scss' as link-button-default;
 @use '@styles/components/link/link-button-ghost.scss' as link-button-ghost;
-
-@use '@styles/components/badge/badge.scss' as badge;
-@use '@styles/components/badge/link.scss' as badge-link;
-@use '@styles/components/badge/button.scss' as badge-button;
 
 @use '@styles/components/bool/bool.scss' as bool;
 @use '@styles/components/bool/bool-reverse.scss' as bool-reverse;
