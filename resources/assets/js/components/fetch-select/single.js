@@ -54,6 +54,46 @@ export const fetchSelect = () => ({
         return this.items;
     },
 
+    getSelectedItem() {
+        return this.selectedItem;
+    },
+
+    setSelectedItem(item) {
+        if (this.isItemSelected(item)) {
+            this.selectedItem = null;
+            this.q = "";
+        } else {
+            this.selectedItem = item;
+
+            if (item !== null) {
+                this.q =
+                    this.selectedItemOptionLabelName === null
+                        ? item
+                        : item[this.selectedItemOptionLabelName];
+            }
+        }
+
+        this.open = false;
+    },
+
+    isItemSelected(item) {
+        return this.selectedItem === item;
+    },
+
+    shouldShowOptions() {
+        return this.open === true;
+    },
+
+    showOptions() {
+        this.open = true;
+    },
+
+    hideOptions() {
+        this.open = false;
+
+        this.$refs.textInput.blur();
+    },
+
     async fetchItems() {
         if (this.q === "") {
             this.open = false;
@@ -80,33 +120,5 @@ export const fetchSelect = () => ({
         } finally {
             this.loading = false;
         }
-    },
-
-    setSelectedItem(item) {
-        if (this.isItemSelected(item)) {
-            this.selectedItem = null;
-            this.q = "";
-        } else {
-            this.selectedItem = item;
-
-            if (item !== null) {
-                this.q =
-                    this.selectedItemOptionLabelName === null
-                        ? item
-                        : item[this.selectedItemOptionLabelName];
-            }
-        }
-
-        this.open = false;
-    },
-
-    isItemSelected(item) {
-        return this.selectedItem === item;
-    },
-
-    getItemValueName() {
-        return this.selectedItemOptionValueName === null
-            ? "item"
-            : `item.${this.selectedItemOptionValueName}`;
     },
 });

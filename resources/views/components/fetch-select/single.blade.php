@@ -18,13 +18,13 @@
     data-selected-item="{{ $selectedItem }}"
     data-selected-item-option-value-name="{{ $selectedItemOptionValueName }}"
     data-selected-item-option-label-name="{{ $selectedItemOptionLabelName }}"
-    x-on:keyup.escape.window="open=false"
+    x-on:keyup.escape.window="hideOptions()"
     x-on:keydown.down.prevent="$focus.next()"
     x-on:keydown.up.prevent="$focus.previous()"
     x-bind:class="{
         'fetch-select--empty': getItems().length === 0,
         'fetch-select--has-items': getItems().length > 0,
-        'fetch-select--has-selected': selectedItem !== null
+        'fetch-select--has-selected': getSelectedItem() !== null
     }"
 >
     @if ($label)
@@ -58,14 +58,15 @@
         :title="$placeholder"
         :placeholder="$placeholder"
         x-model="q"
-        x-on:focus="() => {if(getItems().length !== 0) open=true}"
-        x-on:click.outside="open = false"
+        x-on:focus="() => {if(getItems().length !== 0) showOptions()}"
+        x-on:click.outside="hideOptions()"
         x-on:input.debounce.500ms="fetchItems()"
+        x-ref="textInput"
         class="fetch-select__input"
     />
 
     <ul
-        x-show="open"
+        x-show="shouldShowOptions()"
         class="fetch-select__options"
     >
         <template
