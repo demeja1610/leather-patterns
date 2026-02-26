@@ -38,7 +38,7 @@ class EditController extends Controller
             $replace = PatternCategory::query()->where('id', $replaceId)->select(['id', 'name'])->first();
 
             if ($replace instanceof PatternCategory) {
-                $request->session()->flash('replace_name', $replace->name);
+                $request->session()->flash('selectedReplace', $replace);
             }
         }
 

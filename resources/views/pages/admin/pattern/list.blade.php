@@ -180,10 +180,9 @@
         name="category_id"
         :label="__('pattern.category')"
         :placeholder="__('phrases.search')"
-        keyName="id"
-        valueName="name"
-        :selectedKey="isset($activeFilters['category_id']) ? $activeFilters['category_id'] : null"
-        :selectedValue="isset($extraData['category_name']) ? $extraData['category_name'] : null"
+        selectedItemOptionValueName="id"
+        selectedItemOptionLabelName="name"
+        :selectedItem="isset($extraData['selected_category']) ? $extraData['selected_category']->toJson(JSON_UNESCAPED_UNICODE) : null"
     />
 
     <x-select.wrapper>
@@ -226,10 +225,9 @@
         name="tag_id"
         :label="__('pattern.tag')"
         :placeholder="__('phrases.search')"
-        keyName="id"
-        valueName="name"
-        :selectedKey="isset($activeFilters['tag_id']) ? $activeFilters['tag_id'] : null"
-        :selectedValue="isset($extraData['tag_name']) ? $extraData['tag_name'] : null"
+        selectedItemOptionValueName="id"
+        selectedItemOptionLabelName="name"
+        :selectedItem="isset($extraData['selected_tag']) ? $extraData['selected_tag']->toJson(JSON_UNESCAPED_UNICODE) : null"
     />
 
     <x-select.wrapper>
@@ -271,10 +269,9 @@
         name="author_id"
         :label="__('pattern.author')"
         :placeholder="__('phrases.search')"
-        keyName="id"
-        valueName="name"
-        :selectedKey="isset($activeFilters['author_id']) ? $activeFilters['author_id'] : null"
-        :selectedValue="isset($extraData['author_name']) ? $extraData['author_name'] : null"
+        selectedItemOptionValueName="id"
+        selectedItemOptionLabelName="name"
+        :selectedItem="isset($extraData['selected_author']) ? $extraData['selected_author']->toJson(JSON_UNESCAPED_UNICODE) : null"
     />
 
     <x-select.wrapper>

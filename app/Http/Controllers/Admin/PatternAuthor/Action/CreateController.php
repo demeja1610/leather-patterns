@@ -38,7 +38,7 @@ class CreateController extends Controller
             $replace = PatternAuthor::query()->where('id', $replaceId)->select(['id', 'name'])->first();
 
             if ($replace instanceof PatternAuthor) {
-                $request->session()->flash('replace_name', $replace->name);
+                $request->session()->flash('selectedReplace', $replace);
             }
         }
 

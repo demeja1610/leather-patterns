@@ -9,6 +9,10 @@
     gap: 0.5rem;
     position: relative;
 
+    &__select {
+        display: none;
+    }
+
     &__input {
         width: 100%;
     }

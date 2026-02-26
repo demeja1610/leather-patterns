@@ -46,8 +46,11 @@
             name="replace_id"
             :label="__('pattern_author.replacement')"
             :placeholder="__('phrases.search')"
-            :selectedKey="old('replace_id') ?? $author->replacement?->id"
-            :selectedValue="session()->get('replace_name') ?? $author->replacement?->name"
+            selectedItemOptionValueName="id"
+            selectedItemOptionLabelName="name"
+            :selectedItem="session()
+                ->get('selectedReplace', $author->replacement)
+                ?->toJson(JSON_UNESCAPED_UNICODE)"
         />
 
         <x-checkbox.custom :label="__('pattern_author.remove_on_appear')">

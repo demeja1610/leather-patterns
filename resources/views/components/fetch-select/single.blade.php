@@ -3,10 +3,9 @@
     'label' => null,
     'required' => false,
     'placeholder' => null,
-    'selectedKey' => null,
-    'selectedValue' => null,
-    'keyName' => 'id',
-    'valueName' => 'name',
+    'selectedItem' => null,
+    'selectedItemOptionValueName' => null,
+    'selectedItemOptionLabelName' => null,
     'id',
     'name',
     'url',
@@ -16,13 +15,17 @@
     {{ $attributes->merge(['class' => 'fetch-select']) }}
     x-data="fetchSelect()"
     data-url="{{ $url }}"
-    data-selected-key="{{ $selectedKey }}"
-    data-selected-value="{{ $selectedValue }}"
-    data-key-name="{{ $keyName }}"
-    data-value-name="{{ $valueName }}"
+    data-selected-item="{{ $selectedItem }}"
+    data-selected-item-option-value-name="{{ $selectedItemOptionValueName }}"
+    data-selected-item-option-label-name="{{ $selectedItemOptionLabelName }}"
     x-on:keyup.escape.window="open=false"
     x-on:keydown.down.prevent="$focus.next()"
     x-on:keydown.up.prevent="$focus.previous()"
+    x-bind:class="{
+        'fetch-select--empty': getItems().length === 0,
+        'fetch-select--has-items': getItems().length > 0,
+        'fetch-select--has-selected': selectedItem !== null
+    }"
 >
     @if ($label)
         <label
@@ -33,12 +36,22 @@
         </label>
     @endif
 
-    <input
-        type="hidden"
-        x-bind:value="selectedKey"
+    <select
         id="{{ $id }}"
         name="{{ $name }}"
+        class="fetch-select__select"
     >
+        <option value=""></option>
+
+        <template x-for="item in getItems()">
+            <option
+                x-bind:selected="{{ $selectedItemOptionValueName !== null ? 'selectedItem?.' . $selectedItemOptionValueName : 'selectedItem' }} ===
+                    {{ $selectedItemOptionValueName !== null ? 'item.' . $selectedItemOptionValueName : 'item' }}"
+                x-bind:value="{{ $selectedItemOptionValueName !== null ? 'item.' . $selectedItemOptionValueName : 'item' }}"
+                x-text="{{ $selectedItemOptionLabelName !== null ? 'item.' . $selectedItemOptionLabelName : 'item' }}"
+            ></option>
+        </template>
+    </select>
 
     <x-input-text.input
         type="text"
@@ -57,18 +70,23 @@
     >
         <template
             x-for="item in getItems()"
-            x-bind:key="item.{{ $keyName }}"
+            x-bind:key="{{ $selectedItemOptionValueName !== null ? 'item.' . $selectedItemOptionValueName : 'item' }}"
         >
             <li
-                x-on:click="selectItem(item)"
-                x-on:keyup.enter="selectItem(item)"
+                x-on:click="setSelectedItem(item)"
+                x-on:keyup.enter="setSelectedItem(item)"
                 class="fetch-select__option"
                 tabindex="0"
-                x-bind:class="{ 'fetch-select__option--active': selectedKey === item.{{ $keyName }} }"
+                x-bind:class="{
+                    'fetch-select__option--active': {{ $selectedItemOptionValueName !== null ? 'item.' . $selectedItemOptionValueName : 'item' }} === selectedItem
+                        ?.{{ $selectedItemOptionValueName }}
+                }"
             >
-                <span x-text="item.{{ $valueName }}"></span>
+                <span x-text="{{ $selectedItemOptionLabelName !== null ? 'item.' . $selectedItemOptionLabelName : 'item' }}"></span>
 
-                <template x-if="selectedKey === item.{{ $keyName }}">
+                <template
+                    x-if="{{ $selectedItemOptionValueName !== null ? 'item.' . $selectedItemOptionValueName : 'item' }} === selectedItem?.{{ $selectedItemOptionValueName }}"
+                >
                     <x-icon.svg
                         name="check"
                         class="fetch-select__option-check"

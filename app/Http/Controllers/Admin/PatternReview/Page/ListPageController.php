@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin\PatternReview\Page;
 
 use Carbon\Carbon;
+use App\Models\Pattern;
 use App\Models\PatternReview;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\Admin\PatternReview\ListRequest;
-use App\Models\Pattern;
 
 class ListPageController extends Controller
 {
@@ -109,7 +109,7 @@ class ListPageController extends Controller
 
             if ($pattern !== null) {
                 $this->activeFilters['pattern_id'] = $patternId;
-                $this->extraData['pattern_title'] = $pattern->title;
+                $this->extraData['selected_pattern'] = $pattern;
 
                 $query->where('pattern_id', $patternId);
             }

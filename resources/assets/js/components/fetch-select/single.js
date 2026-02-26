@@ -3,29 +3,50 @@ import V1AdminApiClient from "../../clients/api/v1-admin-api-client";
 export const fetchSelect = () => ({
     open: false,
     q: "",
-    selectedKey: null,
-    selectedValue: null,
-    keyName: null,
-    valueName: null,
+    selectedItem: null,
+    selectedItemOptionValueName: null,
+    selectedItemOptionLabelName: null,
     items: [],
     url: null,
     loading: false,
     client: new V1AdminApiClient(),
 
     init() {
-        if (this.$el.getAttribute("data-selected-key") !== "") {
-            this.selectedKey = this.$el.getAttribute("data-selected-key");
-        }
-        if (this.$el.getAttribute("data-selected-value") !== "") {
-            this.selectedValue = this.$el.getAttribute("data-selected-value");
-        }
-
         this.url = this.$el.getAttribute("data-url");
-        this.keyName = this.$el.getAttribute("data-key-name");
-        this.valueName = this.$el.getAttribute("data-value-name");
 
-        if (this.q === "") {
-            this.q = this.selectedValue;
+        const selectedItemOptionValueName = this.$el.getAttribute(
+            "data-selected-item-option-value-name",
+        );
+
+        if (
+            selectedItemOptionValueName !== null &&
+            selectedItemOptionValueName !== ""
+        ) {
+            this.selectedItemOptionValueName = selectedItemOptionValueName;
+        }
+
+        const selectedItemOptionLabelName = this.$el.getAttribute(
+            "data-selected-item-option-label-name",
+        );
+
+        if (
+            selectedItemOptionLabelName !== null &&
+            selectedItemOptionLabelName !== ""
+        ) {
+            this.selectedItemOptionLabelName = selectedItemOptionLabelName;
+        }
+
+        let selectedItem = this.$el.getAttribute("data-selected-item");
+
+        if (selectedItem !== null && selectedItem !== "") {
+            try {
+                selectedItem = JSON.parse(selectedItem);
+            } catch (e) {
+                selectedItem = selectedItem;
+            }
+
+            this.items.push(selectedItem);
+            this.setSelectedItem(selectedItem);
         }
     },
 
@@ -36,7 +57,7 @@ export const fetchSelect = () => ({
     async fetchItems() {
         if (this.q === "") {
             this.open = false;
-            this.selectedKey = null;
+            this.setSelectedItem(null);
 
             return;
         }
@@ -61,10 +82,20 @@ export const fetchSelect = () => ({
         }
     },
 
-    selectItem(item) {
-        this.selectedKey = item[this.keyName];
+    setSelectedItem(item) {
+        if (item === this.selectedItem) {
+            this.selectedItem = null;
+            this.q = "";
+        } else {
+            this.selectedItem = item;
 
-        this.q = item[this.valueName];
+            if (item !== null) {
+                this.q =
+                    this.selectedItemOptionLabelName === null
+                        ? item
+                        : item[this.selectedItemOptionLabelName];
+            }
+        }
 
         this.open = false;
     },

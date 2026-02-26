@@ -46,8 +46,11 @@
             name="replace_id"
             :label="__('pattern_tag.replacement')"
             :placeholder="__('phrases.search')"
-            :selectedKey="old('replace_id') ?? $tag->replacement?->id"
-            :selectedValue="session()->get('replace_name') ?? $tag->replacement?->name"
+            selectedItemOptionValueName="id"
+            selectedItemOptionLabelName="name"
+            :selectedItem="session()
+                ->get('selectedReplace', $tag->replacement)
+                ?->toJson(JSON_UNESCAPED_UNICODE)"
         />
 
         <x-fetch-select.single
@@ -56,8 +59,11 @@
             name="replace_author_id"
             :label="__('pattern_tag.author_replacement')"
             :placeholder="__('phrases.search')"
-            :selectedKey="old('replace_author_id') ?? $tag->authorReplacement?->id"
-            :selectedValue="session()->get('replace_author_name') ?? $tag->authorReplacement?->name"
+            selectedItemOptionValueName="id"
+            selectedItemOptionLabelName="name"
+            :selectedItem="session()
+                ->get('selectedReplaceAuthor', $tag->authorReplacement)
+                ?->toJson(JSON_UNESCAPED_UNICODE)"
         />
 
         <x-fetch-select.single
@@ -66,8 +72,11 @@
             name="replace_category_id"
             :label="__('pattern_tag.category_replacement')"
             :placeholder="__('phrases.search')"
-            :selectedKey="old('replace_category_id') ?? $tag->categoryReplacement?->id"
-            :selectedValue="session()->get('replace_category_name') ?? $tag->categoryReplacement?->name"
+            selectedItemOptionValueName="id"
+            selectedItemOptionLabelName="name"
+            :selectedItem="session()
+                ->get('selectedReplaceCategory', $tag->categoryReplacement)
+                ?->toJson(JSON_UNESCAPED_UNICODE)"
         />
 
         <x-checkbox.custom :label="__('pattern_tag.remove_on_appear')">

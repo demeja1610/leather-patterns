@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\Pattern\Page;
 
-use App\Enum\PatternSourceEnum;
 use Carbon\Carbon;
 use App\Models\Pattern;
+use App\Models\PatternTag;
+use App\Models\PatternAuthor;
+use App\Enum\PatternSourceEnum;
+use App\Models\PatternCategory;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,36 +23,7 @@ class ListPageController extends Controller
 
     public function __invoke(ListRequest $request): View
     {
-        /**
-         * @var \Illuminate\Pagination\CursorPaginator
-         */
         $patterns = $this->getPatterns(request: $request);
-
-        $categoryId = $request->input('category_id');
-
-        if ($categoryId !== null && $patterns->isEmpty() === false) {
-            $this->extraData['category_name'] = $patterns->first()
-                ->categories
-                ->where('id', $categoryId)
-                ->first()
-                ?->name;
-        }
-
-        $tagId = $request->input('tag_id');
-
-        if ($tagId !== null && $patterns->isEmpty() === false) {
-            $this->extraData['tag_name'] = $patterns->first()
-                ->tags
-                ->where('id', $tagId)
-                ->first()
-                ?->name;
-        }
-
-        $authorId = $request->input('author_id');
-
-        if ($authorId !== null && $patterns->isEmpty() === false) {
-            $this->extraData['author_name'] = $patterns->first()->author->name;
-        }
 
         return view(view: 'pages.admin.pattern.list', data: [
             'activeFilters' => $this->activeFilters,
@@ -87,6 +61,39 @@ class ListPageController extends Controller
             perPage: 30,
             cursor: $cursor,
         )->withQueryString();
+    }
+
+    protected function getCategory($id): ?PatternCategory
+    {
+        return PatternCategory::query()
+            ->where('id', $id)
+            ->select([
+                'id',
+                'name',
+            ])
+            ->first();
+    }
+
+    protected function getTag($id): ?PatternTag
+    {
+        return PatternTag::query()
+            ->where('id', $id)
+            ->select([
+                'id',
+                'name',
+            ])
+            ->first();
+    }
+
+    protected function getAuthor($id): ?PatternAuthor
+    {
+        return PatternAuthor::query()
+            ->where('id', $id)
+            ->select([
+                'id',
+                'name',
+            ])
+            ->first();
     }
 
     protected function applyFilters(ListRequest &$request, Builder &$query): void
@@ -159,6 +166,7 @@ class ListPageController extends Controller
 
             if ($categoryId !== null) {
                 $this->activeFilters['category_id'] = $categoryId;
+                $this->extraData['selected_category'] = $this->getCategory(id: $categoryId);
             }
 
             if ((bool) $hasCategories === true || $categoryId !== null) {
@@ -184,6 +192,7 @@ class ListPageController extends Controller
 
             if ($tagId !== null) {
                 $this->activeFilters['tag_id'] = $tagId;
+                $this->extraData['selected_tag'] =  $this->getTag(id: $tagId);
             }
 
             if ((bool) $hasTags === true || $tagId !== null) {
@@ -209,6 +218,7 @@ class ListPageController extends Controller
 
             if ($authorId !== null) {
                 $this->activeFilters['author_id'] = $authorId;
+                $this->extraData['selected_author'] =  $this->getAuthor(id: $authorId);
             }
 
             if ((bool) $hasAuthor === true || $authorId !== null) {

@@ -40,7 +40,7 @@ class CreateController extends Controller
             $replace = PatternTag::query()->where('id', $replaceId)->select(['id', 'name'])->first();
 
             if ($replace instanceof PatternTag) {
-                $request->session()->flash('replace_name', $replace->name);
+                $request->session()->flash('selectedReplace', $replace);
             }
         }
 
@@ -50,7 +50,7 @@ class CreateController extends Controller
             $replaceAuthor = PatternAuthor::query()->where('id', $replaceAuthorId)->select(['id', 'name'])->first();
 
             if ($replaceAuthor instanceof PatternAuthor) {
-                $request->session()->flash('replace_author_name', $replaceAuthor->name);
+                $request->session()->flash('selectedReplaceAuthor', $replaceAuthor);
             }
         }
 
@@ -60,7 +60,7 @@ class CreateController extends Controller
             $replaceCategory = PatternCategory::query()->where('id', $replaceCategoryId)->select(['id', 'name'])->first();
 
             if ($replaceCategory instanceof PatternCategory) {
-                $request->session()->flash('replace_category_name', $replaceCategory->name);
+                $request->session()->flash('selectedReplaceCategory', $replaceCategory);
             }
         }
 

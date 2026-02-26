@@ -130,10 +130,9 @@
         name="pattern_id"
         :label="__('pattern_review.pattern')"
         :placeholder="__('phrases.search')"
-        keyName="id"
-        valueName="title"
-        :selectedKey="isset($activeFilters['pattern_id']) ? $activeFilters['pattern_id'] : null"
-        :selectedValue="isset($extraData['pattern_title']) ? $extraData['pattern_title'] : null"
+        selectedItemOptionValueName="id"
+        selectedItemOptionLabelName="title"
+        :selectedItem="isset($extraData['selected_pattern']) ? $extraData['selected_pattern']->toJson(JSON_UNESCAPED_UNICODE) : null"
     />
 
     <x-select.wrapper>
@@ -285,7 +284,10 @@
                                 {{ $review->rating }}
                             </x-table.td>
 
-                            <x-table.td-clamp clamp="2" :title="$review->comment">
+                            <x-table.td-clamp
+                                clamp="2"
+                                :title="$review->comment"
+                            >
                                 {{ $review->comment }}
                             </x-table.td-clamp>
 

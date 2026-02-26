@@ -80,10 +80,9 @@
             name="author_id"
             :label="__('pattern.author')"
             :placeholder="__('phrases.search')"
-            keyName="id"
-            valueName="name"
-            :selectedKey="old('author_id')"
-            :selectedValue="session()->get('author_name')"
+            selectedItemOptionValueName="id"
+            selectedItemOptionLabelName="name"
+            :selectedItem="session()->get('selectedAuthor')?->toJson(JSON_UNESCAPED_UNICODE)"
         />
 
         <x-checkbox.custom :label="__('pattern.is_published')">

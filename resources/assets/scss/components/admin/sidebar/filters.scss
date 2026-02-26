@@ -17,16 +17,30 @@
         justify-content: flex-start;
         gap: 1rem;
 
-        > .input-text {
+        >.input-text {
             width: 100%;
         }
 
-        > .select {
+        >.select {
             width: 100%;
         }
 
-        > .fetch-select {
+        >.fetch-select {
             width: 100%;
+        }
+
+        .fetch-select--has-selected {
+            .fetch-select {
+                &__label {
+                    color: var(--red-2);
+                }
+            }
+
+            .input-text__input {
+                border-color: var(--red-2);
+                color: var(--red-2);
+                outline-color: var(--red-2);
+            }
         }
     }
 
