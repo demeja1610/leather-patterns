@@ -290,7 +290,12 @@
                             </x-table.td-bool>
 
                             <x-table.td>
-                                {{ $author->patterns_count }}
+                                <x-link.default
+                                    :href="route('admin.page.patterns.list', ['author_id' => $author->id])"
+                                    target="_blank"
+                                >
+                                    {{ $author->patterns_count }}
+                                </x-link.default>
                             </x-table.td>
 
                             <x-table.td>

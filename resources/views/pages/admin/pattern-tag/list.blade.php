@@ -368,7 +368,12 @@
                             </x-table.td-bool>
 
                             <x-table.td>
-                                {{ $tag->patterns_count }}
+                                <x-link.default
+                                    :href="route('admin.page.patterns.list', ['tag_id' => $tag->id])"
+                                    target="_blank"
+                                >
+                                    {{ $tag->patterns_count }}
+                                </x-link.default>
                             </x-table.td>
 
                             <x-table.td>
