@@ -61,6 +61,21 @@
         </x-input-text.input-text>
 
         <x-input-text.input-text>
+            <x-input-text.label for="rating">
+                {{ __('pattern_review.rating') }}
+            </x-input-text.label>
+
+            <x-input-text.input
+                id="rating"
+                name="rating"
+                type="number"
+                disabled
+                :value="$review->rating"
+                title="{{ __('pattern_review.rating') }}"
+            />
+        </x-input-text.input-text>
+
+        <x-input-text.input-text>
             <x-input-text.label
                 for="reviewer_name"
                 class="required"
