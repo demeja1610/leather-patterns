@@ -66,7 +66,7 @@ class EditController extends Controller
         return back()->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
-                $updated > 0
+                $updated !== false
                     ? new SessionNotificationDto(
                         text: __(key: 'pattern_author.admin.updated', replace: ['id' => $id]),
                         type: NotificationTypeEnum::SUCCESS,
