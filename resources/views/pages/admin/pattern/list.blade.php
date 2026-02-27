@@ -602,6 +602,7 @@
                             <x-table.td-image
                                 :image="$pattern->images->isEmpty() ? null : asset('/storage/' . $pattern->images->first()->path)"
                                 :alt="$pattern->title"
+                                :canZoom="true"
                             />
 
                             <x-table.td>

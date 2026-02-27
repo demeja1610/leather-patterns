@@ -1,6 +1,7 @@
 import Alpine from "alpinejs";
 import focus from "@alpinejs/focus";
 import toggleTheme from "./components/theme-toggler";
+import imagePopups from "@js/components/image-popups";
 import { fetchSelect } from "./components/fetch-select/single";
 import { multipleFetchSelect } from "./components/fetch-select/multiple";
 
@@ -17,4 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
     Alpine.start();
 
     toggleTheme();
+
+    imagePopups();
 });

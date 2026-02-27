@@ -11,6 +11,12 @@
         justify-content: center;
     }
 
+    &__image-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     &__image-placeholder {
         width: 4rem;
         height: 4rem;
