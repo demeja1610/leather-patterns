@@ -11,11 +11,18 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\Admin\PatternAuthor\EditRequest;
 use App\Dto\SessionNotification\SessionNotificationDto;
 use App\Dto\SessionNotification\SessionNotificationListDto;
+use Symfony\Component\HttpFoundation\Response;
 
 class EditController extends Controller
 {
     public function __invoke($id, EditRequest $request): RedirectResponse
     {
+        $author = PatternAuthor::query()->where('id', $id)->first();
+
+        if (!$author instanceof PatternAuthor) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
         $data = array_merge(
             $request->validated(),
             [
@@ -54,9 +61,7 @@ class EditController extends Controller
             );
         }
 
-        $updated = PatternAuthor::query()
-            ->where('id', $id)
-            ->update(values: $data);
+        $updated = $author->update($data);
 
         return back()->with(
             key: 'notifications',
