@@ -45,7 +45,7 @@
     >
         <option value=""></option>
 
-        <template x-for="item in getItems()">
+        <template x-for="item in getSelectedItems()">
             <option
                 x-bind:selected="isItemSelected(item)"
                 x-bind:value="{{ $selectedItemOptionValueName !== null ? 'item.' . $selectedItemOptionValueName : 'item' }}"
