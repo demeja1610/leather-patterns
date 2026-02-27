@@ -26,7 +26,7 @@ class CalculatePatternAverageRatingJob implements ShouldQueue
         $q = $this->getBaseQuery();
 
         if ($this->patternId !== null) {
-            Log::info(ucfirst($this->actionName) . ". Patterd ID: {$this->patternId}");
+            Log::info(ucfirst($this->actionName) . ". Pattern ID: {$this->patternId}");
 
             $q->where('patterns.id', $this->patternId);
 
