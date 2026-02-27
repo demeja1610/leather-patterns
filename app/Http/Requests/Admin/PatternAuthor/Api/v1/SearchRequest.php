@@ -20,6 +20,11 @@ class SearchRequest extends FormRequest
                 'required',
                 'string',
             ],
+
+            'except_id' => [
+                'nullable',
+                'numeric',
+            ]
         ];
     }
 }

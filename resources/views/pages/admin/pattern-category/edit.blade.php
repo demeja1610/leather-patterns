@@ -41,7 +41,7 @@
         </x-input-text.input-text>
 
         <x-fetch-select.single
-            :url="route('api.admin.v1.pattern-category.search-replace')"
+            :url="route('api.admin.v1.pattern-category.search-replace', ['except_id' => $category->id])"
             id="replace_id"
             name="replace_id"
             :label="__('pattern_category.replacement')"

@@ -50,5 +50,11 @@ class SearchController extends Controller
         $q = $request->input(key: 'q');
 
         $query->where('name', 'LIKE', "%{$q}%");
+
+        $exceptId = $request->input('except_id');
+
+        if ($exceptId !== null) {
+            $query->where('id', '!=', $exceptId);
+        }
     }
 }
