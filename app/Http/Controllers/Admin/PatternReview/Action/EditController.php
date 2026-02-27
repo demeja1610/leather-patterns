@@ -8,6 +8,7 @@ use App\Models\PatternReview;
 use App\Enum\NotificationTypeEnum;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Admin\PatternReview\EditRequest;
 use App\Dto\SessionNotification\SessionNotificationDto;
 use App\Dto\SessionNotification\SessionNotificationListDto;
@@ -16,6 +17,14 @@ class EditController extends Controller
 {
     public function __invoke($id, EditRequest $request): RedirectResponse
     {
+        $review = PatternReview::query()
+            ->where('id', $id)
+            ->first();
+
+        if (!$review instanceof PatternReview) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
         $data = array_merge(
             $request->validated(),
             [
@@ -27,14 +36,12 @@ class EditController extends Controller
             $data['comment'] = trim($data['comment']);
         }
 
-        $updated = PatternReview::query()
-            ->where('id', $id)
-            ->update(values: $data);
+        $updated = $review->update($data);
 
         return back()->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
-                $updated > 0
+                $updated !== false
                     ? new SessionNotificationDto(
                         text: __(key: 'pattern_review.admin.updated', replace: ['id' => $id]),
                         type: NotificationTypeEnum::SUCCESS,
