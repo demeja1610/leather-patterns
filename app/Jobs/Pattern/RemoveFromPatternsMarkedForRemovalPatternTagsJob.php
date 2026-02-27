@@ -84,8 +84,14 @@ class RemoveFromPatternsMarkedForRemovalPatternTagsJob implements ShouldQueue
             ->filter(fn(PatternTag $patternTag): bool => (bool) $patternTag->remove_on_appear);
 
         if ($this->tagId !== null) {
-            $tagsToRemove = $pattern->tags
+            $tagsToRemove = $tagsToRemove
                 ->filter(fn(PatternTag $patternTag): bool => $patternTag->id === $this->tagId);
+        }
+
+        if ($tagsToRemove->isEmpty()) {
+            Log::info(ucfirst($this->actionName) . ". Specified pattern with ID: {$this->patternId} don't have any tags to remove");
+
+            return;
         }
 
         $ids = $tagsToRemove->pluck('id');

@@ -84,8 +84,14 @@ class RemoveFromPatternsMarkedForRemovalPatternCategoriesJob implements ShouldQu
             ->filter(fn(PatternCategory $patternCategory): bool => (bool) $patternCategory->remove_on_appear);
 
         if ($this->categoryId !== null) {
-            $categoriesToRemove = $pattern->categories
+            $categoriesToRemove = $categoriesToRemove
                 ->filter(fn(PatternCategory $patternCategory): bool => $patternCategory->id === $this->categoryId);
+        }
+
+        if ($categoriesToRemove->isEmpty()) {
+            Log::info(ucfirst($this->actionName) . ". Specified pattern with ID: {$this->patternId} don't have any categories to remove");
+
+            return;
         }
 
         $ids = $categoriesToRemove->pluck('id');
