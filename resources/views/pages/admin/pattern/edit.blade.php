@@ -1,5 +1,5 @@
 @extends('layouts.admin.single', [
-    'title' => __('pattern_author.edition'),
+    'title' => __('pattern.edition'),
 ])
 
 @section('page')
