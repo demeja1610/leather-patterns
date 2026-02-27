@@ -9,7 +9,7 @@ use App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternAuthorsJob;
 
 class RemoveFromPatternsMarkedForRemovalPatternAuthorsCommand extends Command
 {
-    protected $signature = 'tools:remove-from-patterns-marked-for-removal-pattern-authors {--pattern_id=} {--author_id=}';
+    protected $signature = 'tools:pattern:remove-from-patterns-marked-for-removal-pattern-authors {--pattern_id=} {--author_id=}';
 
     protected $description = 'Remove marked for removal pattern author(s) from pattern(s)';
 

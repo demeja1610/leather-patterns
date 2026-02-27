@@ -9,7 +9,7 @@ use App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternCategorisJob;
 
 class RemoveFromPatternsMarkedForRemovalPatternCategoriesCommand extends Command
 {
-    protected $signature = 'tools:remove-from-patterns-marked-for-removal-pattern-categories {--pattern_id=} {--category_id=}';
+    protected $signature = 'tools:pattern:remove-from-patterns-marked-for-removal-pattern-categories {--pattern_id=} {--category_id=}';
 
     protected $description = 'Remove marked for removal pattern category(s) from pattern(s)';
 
