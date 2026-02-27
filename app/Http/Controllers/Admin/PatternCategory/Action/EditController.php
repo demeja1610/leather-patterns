@@ -11,11 +11,18 @@ use Illuminate\Http\RedirectResponse;
 use App\Dto\SessionNotification\SessionNotificationDto;
 use App\Http\Requests\Admin\PatternCategory\EditRequest;
 use App\Dto\SessionNotification\SessionNotificationListDto;
+use Symfony\Component\HttpFoundation\Response;
 
 class EditController extends Controller
 {
     public function __invoke($id, EditRequest $request): RedirectResponse
     {
+        $category = PatternCategory::query()->where('id', $id)->first();
+
+        if (!$category instanceof PatternCategory) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
         $data = array_merge(
             $request->validated(),
             [
@@ -54,14 +61,12 @@ class EditController extends Controller
             );
         }
 
-        $updated = PatternCategory::query()
-            ->where('id', $id)
-            ->update(values: $data);
+        $updated = $category->update($data);
 
         return back()->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
-                $updated > 0
+                $updated !== false
                     ? new SessionNotificationDto(
                         text: __(key: 'pattern_category.admin.updated', replace: ['id' => $id]),
                         type: NotificationTypeEnum::SUCCESS,
