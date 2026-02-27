@@ -10,7 +10,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
 
-class RemoveFromPatternsMarkedForRemovalPatternCategorisJob implements ShouldQueue
+class RemoveFromPatternsMarkedForRemovalPatternCategoriesJob implements ShouldQueue
 {
     use Queueable;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands\Tools\Pattern;
 
 use Illuminate\Console\Command;
-use App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternCategorisJob;
+use App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternCategoriesJob;
 
 class RemoveFromPatternsMarkedForRemovalPatternCategoriesCommand extends Command
 {
@@ -34,6 +34,6 @@ class RemoveFromPatternsMarkedForRemovalPatternCategoriesCommand extends Command
             "A job will be dispatched to remove marked for removal pattern category(s) from pattern(s), don't forget to run the job"
         );
 
-        RemoveFromPatternsMarkedForRemovalPatternCategorisJob::dispatch($patternId, $categoryId);
+        RemoveFromPatternsMarkedForRemovalPatternCategoriesJob::dispatch($patternId, $categoryId);
     }
 }

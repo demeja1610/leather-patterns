@@ -19,5 +19,7 @@ class ModelObserverServiceProvider extends ServiceProvider
         \App\Models\PatternAuthor::observe(classes: \App\Observers\PatternAuthorObserver::class);
 
         \App\Models\PatternCategory::observe(classes: \App\Observers\PatternCategoryObserver::class);
+
+        \App\Models\PatternTag::observe(classes: \App\Observers\PatternTagObserver::class);
     }
 }

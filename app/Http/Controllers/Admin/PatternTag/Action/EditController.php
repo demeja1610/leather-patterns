@@ -10,6 +10,7 @@ use App\Models\PatternCategory;
 use App\Enum\NotificationTypeEnum;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Admin\PatternTag\EditRequest;
 use App\Dto\SessionNotification\SessionNotificationDto;
 use App\Dto\SessionNotification\SessionNotificationListDto;
@@ -18,6 +19,12 @@ class EditController extends Controller
 {
     public function __invoke($id, EditRequest $request): RedirectResponse
     {
+        $tag = PatternTag::query()->where('id', $id)->first();
+
+        if (!$tag instanceof PatternTag) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
         $data = array_merge(
             $request->validated(),
             [
@@ -88,9 +95,7 @@ class EditController extends Controller
             );
         }
 
-        $updated = PatternTag::query()
-            ->where('id', $id)
-            ->update(values: $data);
+        $updated = $tag->update($data);
 
         return back()->with(
             key: 'notifications',

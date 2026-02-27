@@ -3,14 +3,14 @@
 namespace App\Observers;
 
 use App\Models\PatternCategory;
-use App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternCategorisJob;
+use App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternCategoriesJob;
 
 class PatternCategoryObserver
 {
     public function updated(PatternCategory $category): void
     {
         if ($category->remove_on_appear === true) {
-            dispatch(new RemoveFromPatternsMarkedForRemovalPatternCategorisJob(categoryId: $category->id));
+            dispatch(new RemoveFromPatternsMarkedForRemovalPatternCategoriesJob(categoryId: $category->id));
         }
     }
 }
