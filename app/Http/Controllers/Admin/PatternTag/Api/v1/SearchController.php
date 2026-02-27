@@ -56,5 +56,27 @@ class SearchController extends Controller
         if ($exceptId !== null) {
             $query->where('id', '!=', $exceptId);
         }
+
+        $patternReplaceable = $request->input('pattern_replaceable');
+
+        if ($patternReplaceable !== null) {
+            $patternReplaceable = (bool) $patternReplaceable;
+
+            if ($patternReplaceable === true) {
+                $query->whereNotNull('replace_id')
+                    ->whereNotNull('replace_author_id')
+                    ->whereNotNull('replace_category_id');
+            } else {
+                $query->whereNull('replace_id')
+                    ->whereNull('replace_author_id')
+                    ->whereNull('replace_category_id');
+            }
+        }
+
+        $patternRemovable = $request->input('pattern_removable');
+
+        if ($patternRemovable !== null) {
+            $query->where('remove_on_appear', (bool) $patternRemovable);
+        }
     }
 }

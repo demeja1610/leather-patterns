@@ -25,7 +25,7 @@
         </x-input-text.input-text>
 
         <x-fetch-select.single
-            :url="route('api.admin.v1.pattern-author.search-replace')"
+            :url="route('api.admin.v1.pattern-author.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
             id="replace_id"
             name="replace_id"
             :label="__('pattern_author.replacement')"

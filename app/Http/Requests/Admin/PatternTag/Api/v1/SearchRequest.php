@@ -24,7 +24,17 @@ class SearchRequest extends FormRequest
             'except_id' => [
                 'nullable',
                 'numeric',
-            ]
+            ],
+
+            'pattern_replaceable' => [
+                'nullable',
+                'numeric',
+            ],
+
+            'pattern_removable' => [
+                'nullable',
+                'numeric',
+            ],
         ];
     }
 }

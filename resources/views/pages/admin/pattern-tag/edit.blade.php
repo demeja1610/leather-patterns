@@ -41,7 +41,11 @@
         </x-input-text.input-text>
 
         <x-fetch-select.single
-            :url="route('api.admin.v1.pattern-tag.search-replace', ['except_id' => $tag->id])"
+            :url="route('api.admin.v1.pattern-tag.search', [
+                'except_id' => $tag->id,
+                'pattern_replaceable' => 0,
+                'pattern_removable' => 0,
+            ])"
             id="replace_id"
             name="replace_id"
             :label="__('pattern_tag.replacement')"
@@ -54,7 +58,7 @@
         />
 
         <x-fetch-select.single
-            :url="route('api.admin.v1.pattern-author.search-replace')"
+            :url="route('api.admin.v1.pattern-author.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
             id="replace_author_id"
             name="replace_author_id"
             :label="__('pattern_tag.author_replacement')"
@@ -67,7 +71,7 @@
         />
 
         <x-fetch-select.single
-            :url="route('api.admin.v1.pattern-category.search-replace')"
+            :url="route('api.admin.v1.pattern-category.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
             id="replace_category_id"
             name="replace_category_id"
             :label="__('pattern_tag.category_replacement')"

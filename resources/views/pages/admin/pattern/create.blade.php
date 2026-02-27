@@ -75,7 +75,7 @@
         </x-input-text.input-text>
 
         <x-fetch-select.single
-            :url="route('api.admin.v1.pattern-author.search')"
+            :url="route('api.admin.v1.pattern-author.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
             id="author_id"
             name="author_id"
             :label="__('pattern.author')"
@@ -88,7 +88,7 @@
         />
 
         <x-fetch-select.multiple
-            :url="route('api.admin.v1.pattern-category.search')"
+            :url="route('api.admin.v1.pattern-category.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
             id="category_id"
             name="category_id[]"
             :label="__('pattern.categories')"
@@ -101,7 +101,7 @@
         />
 
         <x-fetch-select.multiple
-            :url="route('api.admin.v1.pattern-tag.search')"
+            :url="route('api.admin.v1.pattern-tag.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
             id="tag_id"
             name="tag_id[]"
             :label="__('pattern.tags')"
