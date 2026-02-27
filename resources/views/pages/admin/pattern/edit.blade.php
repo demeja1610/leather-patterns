@@ -90,44 +90,47 @@
             <x-input-text.input-errors :messages="$errors->get('source_url')" />
         </x-input-text.input-text>
 
-        <x-fetch-select.single
-            :url="route('api.admin.v1.pattern-author.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
-            id="author_id"
-            name="author_id"
-            :label="__('pattern.author')"
-            :placeholder="__('phrases.search')"
-            selectedItemOptionValueName="id"
-            selectedItemOptionLabelName="name"
-            :selectedItem="session()
-                ->get('selected_author', $pattern->author)
-                ?->toJson(JSON_UNESCAPED_UNICODE)"
-        />
+        <div class="admin-page-single__grid admin-page-single__grid--3 ">
 
-        <x-fetch-select.multiple
-            :url="route('api.admin.v1.pattern-category.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
-            id="category_id"
-            name="category_id[]"
-            :label="__('pattern.categories')"
-            :placeholder="__('phrases.search')"
-            selectedItemOptionValueName="id"
-            selectedItemOptionLabelName="name"
-            :selectedItems="session()
-                ->get('selected_categories', $pattern->categories)
-                ?->toJson(JSON_UNESCAPED_UNICODE)"
-        />
+            <x-fetch-select.single
+                :url="route('api.admin.v1.pattern-author.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
+                id="author_id"
+                name="author_id"
+                :label="__('pattern.author')"
+                :placeholder="__('phrases.search')"
+                selectedItemOptionValueName="id"
+                selectedItemOptionLabelName="name"
+                :selectedItem="session()
+                    ->get('selected_author', $pattern->author)
+                    ?->toJson(JSON_UNESCAPED_UNICODE)"
+            />
 
-        <x-fetch-select.multiple
-            :url="route('api.admin.v1.pattern-tag.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
-            id="tag_id"
-            name="tag_id[]"
-            :label="__('pattern.tags')"
-            :placeholder="__('phrases.search')"
-            selectedItemOptionValueName="id"
-            selectedItemOptionLabelName="name"
-            :selectedItems="session()
-                ->get('selected_tags', $pattern->tags)
-                ?->toJson(JSON_UNESCAPED_UNICODE)"
-        />
+            <x-fetch-select.multiple
+                :url="route('api.admin.v1.pattern-category.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
+                id="category_id"
+                name="category_id[]"
+                :label="__('pattern.categories')"
+                :placeholder="__('phrases.search')"
+                selectedItemOptionValueName="id"
+                selectedItemOptionLabelName="name"
+                :selectedItems="session()
+                    ->get('selected_categories', $pattern->categories)
+                    ?->toJson(JSON_UNESCAPED_UNICODE)"
+            />
+
+            <x-fetch-select.multiple
+                :url="route('api.admin.v1.pattern-tag.search', ['pattern_replaceable' => 0, 'pattern_removable' => 0])"
+                id="tag_id"
+                name="tag_id[]"
+                :label="__('pattern.tags')"
+                :placeholder="__('phrases.search')"
+                selectedItemOptionValueName="id"
+                selectedItemOptionLabelName="name"
+                :selectedItems="session()
+                    ->get('selected_tags', $pattern->tags)
+                    ?->toJson(JSON_UNESCAPED_UNICODE)"
+            />
+        </div>
 
         <x-checkbox.custom :label="__('pattern.is_published')">
             <input

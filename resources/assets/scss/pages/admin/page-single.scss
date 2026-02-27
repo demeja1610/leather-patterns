@@ -16,12 +16,26 @@
         justify-content: flex-start;
         gap: 1rem;
 
-        > .admin-form-create {
+        >.admin-form-create {
             flex-grow: 1;
         }
 
-        > .admin-form-edit {
+        >.admin-form-edit {
             flex-grow: 1;
+        }
+    }
+
+    &__grid {
+        width: 100%;
+        display: grid;
+        gap: 1rem;
+
+        &--2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        &--3 {
+            grid-template-columns: repeat(3, 1fr);
         }
     }
 }
