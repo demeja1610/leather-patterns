@@ -1,3 +1,5 @@
+@blaze(memo: true)
+
 @props(['name'])
 
 <svg
