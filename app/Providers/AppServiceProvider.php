@@ -16,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
         Blaze::optimize()
             ->in(resource_path('views/components'))
             ->in(resource_path('views/components/admin/sidebar'), compile: false)
+            ->in(resource_path('views/components/sidebar'), compile: false)
         ;
     }
 }
