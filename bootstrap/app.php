@@ -19,5 +19,7 @@ return Application::configure(basePath: dirname(path: __DIR__))
         $middleware->redirectGuestsTo(
             redirect: fn(Request $request): string => route(name: 'page.auth.login'),
         );
+
+        $middleware->statefulApi();
     })
     ->withExceptions(using: function (Exceptions $exceptions): void {})->create();

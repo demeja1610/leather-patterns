@@ -7,7 +7,7 @@ export default class V1AdminApiClient {
         this.apiBaseUrl = `${import.meta.env.VITE_APP_ADMIN_API_BASE_URL}/v1`;
     }
 
-    async _unkownGet(url, params = {}) {
+    async _unkownGet(url, csrf, params = {}, headers = {}) {
         if (Object.keys(params).length !== 0) {
             const queryString = new URLSearchParams(params).toString();
 
@@ -23,6 +23,8 @@ export default class V1AdminApiClient {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
+                    "X-CSRF-TOKEN": csrf,
+                    ...headers,
                 },
             });
 
@@ -38,7 +40,7 @@ export default class V1AdminApiClient {
         }
     }
 
-    async _get(endpoint, params = {}) {
+    async _get(endpoint, csrf, params = {}, headers = {}) {
         let url = `${this.apiBaseUrl}/${endpoint}`;
 
         if (Object.keys(params).length !== 0) {
@@ -52,6 +54,8 @@ export default class V1AdminApiClient {
                 method: "GET",
                 headers: {
                     Accept: "application/json",
+                    "X-CSRF-TOKEN": csrf,
+                    ...headers,
                 },
             });
 

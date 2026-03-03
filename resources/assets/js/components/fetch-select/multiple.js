@@ -10,9 +10,14 @@ export const multipleFetchSelect = () => ({
     url: null,
     loading: false,
     client: new V1AdminApiClient(),
+    csrf: null,
 
     init() {
         this.url = this.$el.getAttribute("data-url");
+
+        this.csrf = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
 
         const selectedItemOptionValueName = this.$el.getAttribute(
             "data-selected-item-option-value-name",
@@ -137,7 +142,7 @@ export const multipleFetchSelect = () => ({
         this.loading = true;
 
         try {
-            const resp = await this.client._unkownGet(this.url, {
+            const resp = await this.client._unkownGet(this.url, this.csrf, {
                 q: this.q,
             });
 
