@@ -22,6 +22,15 @@ class EditRequest extends CreateRequest
                     'url',
                     "unique:patterns,source_url, $this->id",
                 ],
+
+                'remove_images' => [
+                    'nullable',
+                    'array',
+                ],
+
+                'remove_images*' => [
+                    'url',
+                ]
             ]
         );
     }

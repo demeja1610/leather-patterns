@@ -72,6 +72,15 @@ class CreateRequest extends FormRequest
                 'nullable',
                 'in:on',
             ],
+
+            'images' => [
+                'nullable',
+                'array',
+            ],
+
+            'images.*' => [
+                'url',
+            ]
         ];
     }
 
