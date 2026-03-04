@@ -106,8 +106,6 @@ export const previewInputImage = () => ({
             } finally {
                 this.loading = false;
             }
-
-            console.log(this.images, this.removeImages);
         }
     },
 
