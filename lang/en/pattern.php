@@ -43,6 +43,7 @@ return [
     'is_download_url_wrong' => 'Wrong download URL',
     'is_video_checked' => 'Page checked for videos',
     'source_url' => 'Source URL',
+    'images' => 'Images',
 
     'meta' => [
         'meta' => 'Metadata',
@@ -61,7 +62,7 @@ return [
         'failed_to_update' => 'Failed to update pattern with id: `:id`',
         'single_delete_success' => 'Pattern with title: `:title` successfully deleted',
         'single_failed_to_delete' => 'Failed to delete pattern with title: `:title`',
-        'confirm_delete_text' => 'Please confirm pattern delete',
+        'confirm_delete_text' => 'Please confirm pattern delete. (It will also delete all related files and images without restore option)',
         'pattern_isnt_deletable' => 'Pattern with name :name cannot be deleted',
     ],
 ];

@@ -17,4 +17,7 @@ return [
     'open_list' => 'Open list',
     'open' => 'Open',
     'list' => 'List',
+    'select_images' => 'Select images',
+    'select_image' => 'Select image',
+    'remove' => 'Remove',
 ];
