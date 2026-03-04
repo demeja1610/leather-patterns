@@ -120,7 +120,6 @@ export const previewInputImage = () => ({
             this.removeImages.push(image);
         }
 
-        console.log(this.images, this.removeImages);
     },
 
     emptyImages() {
