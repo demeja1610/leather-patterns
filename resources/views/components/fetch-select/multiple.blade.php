@@ -42,6 +42,7 @@
         class="multiple-fetch-select__select"
         multiple
         @required($required)
+        tabindex="-1"
     >
         <option value=""></option>
 

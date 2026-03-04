@@ -41,6 +41,7 @@
         name="{{ $name }}"
         class="fetch-select__select"
         @required($required)
+        tabindex="-1"
     >
         <option value=""></option>
 
