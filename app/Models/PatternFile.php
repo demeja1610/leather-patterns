@@ -47,4 +47,11 @@ class PatternFile extends Model
             'type' => FileTypeEnum::class,
         ];
     }
+
+    public function getUploadPath(): string
+    {
+        return $this->pattern_id !== null
+            ? "patterns/{$this->pattern_id}"
+            : 'patterns/temp';
+    }
 }

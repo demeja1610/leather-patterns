@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin\Pattern\Action;
 
 use App\Models\Pattern;
+use App\Models\PatternFile;
 use App\Models\PatternImage;
 use App\Enum\NotificationTypeEnum;
 use Illuminate\Support\Facades\DB;
@@ -62,6 +63,14 @@ class EditController extends Controller
 
         $removePatternImagesUrls = isset($data['remove_images']) ? $data['remove_images'] : [];
 
+        $filesUrls = isset($data['files']) ? $data['files'] : [];
+
+        $patternFiles = $filesUrls === []
+            ? []
+            : $this->makePatternFiles($filesUrls);
+
+        $removePatternFilesUrls = isset($data['remove_files']) ? $data['remove_files'] : [];
+
         try {
             DB::beginTransaction();
 
@@ -70,10 +79,6 @@ class EditController extends Controller
             $pattern->categories()->sync($categoryIds);
 
             $pattern->tags()->sync($tagIds);
-
-            if ($patternImages !== []) {
-                $pattern->images()->saveMany($patternImages);
-            }
 
             if ($removePatternImagesUrls !== []) {
                 $pattern->load('images');
@@ -89,6 +94,22 @@ class EditController extends Controller
                 ));
 
                 $toDeleteImages->each(fn(PatternImage $image) => $image->delete());
+            }
+
+            if ($removePatternFilesUrls !== []) {
+                $pattern->load('files');
+
+                /**
+                 * @var \Illuminate\Filesystem\Filesystem
+                 */
+                $disk  = Storage::disk('public');
+
+                $toDeleteFiles = $pattern->files->filter(fn(PatternFile $patternFile) => in_array(
+                    haystack: $removePatternFilesUrls,
+                    needle: asset($disk->url($patternFile->path)),
+                ));
+
+                $toDeleteFiles->each(fn(PatternFile $file) => $file->delete());
             }
 
             DB::commit();
@@ -108,6 +129,14 @@ class EditController extends Controller
                     ),
                 ),
             );
+        }
+
+        if ($patternImages !== []) {
+            $pattern->images()->saveMany($patternImages);
+        }
+
+        if ($patternFiles !== []) {
+            $pattern->files()->saveMany($patternFiles);
         }
 
         return back()->with(
@@ -158,5 +187,41 @@ class EditController extends Controller
         }
 
         return $images;
+    }
+
+    /**
+     * @return array<PatternFile>
+     */
+    protected function makePatternFiles(array $urls): array
+    {
+        $files = [];
+
+        foreach ($urls as $url) {
+            $storagePath = parse_url($url, PHP_URL_PATH);
+            $path = str_replace('/storage/', '', $storagePath);
+
+            if (Storage::disk('public')->exists($path)) {
+                $publicPath = Storage::disk('public')->path($path);
+
+                $ext = $this->fileService->getExtension($publicPath);
+                $size = $this->fileService->getSize($publicPath);
+                $mime = $this->fileService->getMimeType($publicPath);
+                $type = $this->fileService->getFileType($mime);
+                $hash = $this->fileService->getHash($publicPath);
+                $algo = $this->fileService->getHashAlgo();
+
+                $files[] = new PatternFile([
+                    'path' => $path,
+                    'type' => $type?->value,
+                    'extension' => $ext,
+                    'size' => $size,
+                    'mime_type' => $mime,
+                    'hash_algorithm' => $algo,
+                    'hash' => $hash,
+                ]);
+            }
+        }
+
+        return $files;
     }
 }

@@ -30,7 +30,16 @@ class EditRequest extends CreateRequest
 
                 'remove_images*' => [
                     'url',
-                ]
+                ],
+
+                'remove_files' => [
+                    'nullable',
+                    'array',
+                ],
+
+                'remove_files*' => [
+                    'url',
+                ],
             ]
         );
     }

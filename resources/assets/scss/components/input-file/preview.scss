@@ -1,0 +1,124 @@
+@use '@styles/components/input-image/preview.scss';
+
+.preview-input-file {
+    @extend .preview-input-image;
+
+    &__label {
+        @extend .preview-input-image__label;
+
+        &-text {
+            @extend .preview-input-image__label-text;
+        }
+
+        &:focus {
+            .preview-input-file__input-wrapper {
+                outline: 2px solid var(--gray-1);
+            }
+        }
+    }
+
+    &__loading {
+        @extend .preview-input-image__loading;
+
+        &-icon {
+            @extend .preview-input-image__loading-icon;
+        }
+    }
+
+    &__input {
+        @extend .preview-input-image__input;
+
+
+        &-wrapper {
+            @extend .preview-input-image__input-wrapper;
+
+            .preview-input-file {
+                &__loading {
+                    display: none;
+                }
+            }
+        }
+
+        &-icon {
+            @extend .preview-input-image__input-icon;
+        }
+    }
+
+    &__previews {
+        @extend .preview-input-image__previews;
+    }
+
+    &__preview {
+        @extend .preview-input-image__preview;
+
+        border: 1px solid var(--gray-soft);
+        border-radius: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        color: var(--text-2);
+
+        &-icon {
+            @extend .preview-input-image__input-icon;
+        }
+    }
+
+    &__remove {
+        @extend .preview-input-image__remove;
+
+        border-radius: 0 0.5rem 0 0.5rem;
+
+        &-icon {
+            @extend .preview-input-image__remove-icon;
+        }
+
+        &:hover {
+            color: var(--red-2);
+        }
+    }
+
+    &__download {
+        @extend .preview-input-image__download;
+
+        &-icon {
+            @extend .preview-input-image__download-icon;
+
+            width: 0.9rem;
+            height: 0.9rem;
+        }
+
+        &:hover {
+            color: var(--red-2);
+        }
+    }
+
+    &__errors {
+        @extend .preview-input-image__errors;
+    }
+
+    &__error {
+        @extend .preview-input-image__error;
+    }
+
+    &--loading {
+        @extend .preview-input-image--loading;
+
+        .preview-input-file {
+            &__loading {
+                display: flex;
+            }
+
+            &__input {
+                &-text {
+                    display: none;
+                }
+
+                &-icon {
+                    display: none;
+                }
+            }
+        }
+    }
+}

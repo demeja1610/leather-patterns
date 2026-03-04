@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enum\FileTypeEnum;
 use App\Interfaces\Services\FileServiceInterface;
 
 class FileService implements FileServiceInterface
@@ -13,6 +14,11 @@ class FileService implements FileServiceInterface
         return $ext === ''
             ? null
             : $ext;
+    }
+
+    public function getFileType(string $mimeType): ?FileTypeEnum
+    {
+        return FileTypeEnum::fromMimeType($mimeType);
     }
 
     public function getSize(string $path): ?int

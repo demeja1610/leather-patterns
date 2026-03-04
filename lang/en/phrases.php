@@ -19,5 +19,7 @@ return [
     'list' => 'List',
     'select_images' => 'Select images',
     'select_image' => 'Select image',
+    'select_files' => 'Select files',
+    'select_file' => 'Select file',
     'remove' => 'Remove',
 ];

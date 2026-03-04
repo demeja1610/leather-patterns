@@ -17,7 +17,7 @@ class PatternObserver
         $this->createPatternMeta(pattern: $pattern);
     }
 
-    public function updated(Pattern $pattern): void {}
+    // public function updated(Pattern $pattern): void {}
 
     public function deleting(Pattern $pattern): void
     {
@@ -26,11 +26,11 @@ class PatternObserver
         $this->removePatternFiles($pattern);
     }
 
-    public function deleted(Pattern $pattern): void {}
+    // public function deleted(Pattern $pattern): void {}
 
-    public function restored(Pattern $pattern): void {}
+    // public function restored(Pattern $pattern): void {}
 
-    public function forceDeleted(Pattern $pattern): void {}
+    // public function forceDeleted(Pattern $pattern): void {}
 
     protected function createPatternMeta(Pattern &$pattern): void
     {

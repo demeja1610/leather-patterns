@@ -124,6 +124,15 @@
             :images="json_encode(array_map(array: old('images', []), callback: fn($url) => ['url' => $url, 'isNew' => true]), JSON_UNESCAPED_SLASHES)"
         />
 
+        <x-input-file.preview
+            id="files"
+            name="files[]"
+            :label="__('pattern.files')"
+            :multiple="true"
+            :url="route('api.admin.v1.pattern-file.upload')"
+            :files="json_encode(old('files', []), JSON_UNESCAPED_SLASHES)"
+        />
+
         <x-checkbox.custom :label="__('pattern.is_published')">
             <input
                 type="checkbox"

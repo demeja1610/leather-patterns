@@ -80,7 +80,16 @@ class CreateRequest extends FormRequest
 
             'images.*' => [
                 'url',
-            ]
+            ],
+
+            'files' => [
+                'nullable',
+                'array',
+            ],
+
+            'files.*' => [
+                'url',
+            ],
         ];
     }
 

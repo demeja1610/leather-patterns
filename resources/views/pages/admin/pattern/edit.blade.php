@@ -147,6 +147,27 @@
             )"
         />
 
+        <x-input-file.preview
+            id="files"
+            name="files[]"
+            :label="__('pattern.files')"
+            :multiple="true"
+            :url="route('api.admin.v1.pattern-file.upload')"
+            :files="json_encode(
+                array_merge(
+                    old('files', []),
+                    array_map(
+                        array: $pattern->files->select('id', 'path')->toArray(),
+                        callback: function ($file) {
+                            $file['url'] = asset('/storage/' . $file['path']);
+                            return $file;
+                        },
+                    ),
+                ),
+                JSON_UNESCAPED_SLASHES,
+            )"
+        />
+
         <x-checkbox.custom :label="__('pattern.is_published')">
             <input
                 type="checkbox"

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin\Pattern\Action;
 
 use App\Models\Pattern;
+use App\Models\PatternFile;
 use App\Models\PatternImage;
 use App\Enum\NotificationTypeEnum;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +52,13 @@ class CreateController extends Controller
 
         $patternImages = $imagesUrls === []
             ? []
-            : $this->getPatternImages($imagesUrls);
+            : $this->makePatternImages($imagesUrls);
+
+        $filesUrls = isset($data['files']) ? $data['files'] : [];
+
+        $patternFiles = $filesUrls === []
+            ? []
+            : $this->makePatternFiles($filesUrls);
 
         try {
             DB::beginTransaction();
@@ -66,9 +73,7 @@ class CreateController extends Controller
                 $pattern->tags()->attach($tagIds);
             }
 
-            if ($patternImages !== []) {
-                $pattern->images()->saveMany($patternImages);
-            }
+
 
             DB::commit();
         } catch (\Throwable $th) {
@@ -89,6 +94,14 @@ class CreateController extends Controller
             );
         }
 
+        if ($patternImages !== []) {
+            $pattern->images()->saveMany($patternImages);
+        }
+
+        if ($patternFiles !== []) {
+            $pattern->files()->saveMany($patternFiles);
+        }
+
         return to_route(route: 'admin.page.patterns.list')->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
@@ -103,7 +116,7 @@ class CreateController extends Controller
     /**
      * @return array<PatternImage>
      */
-    protected function getPatternImages(array $urls): array
+    protected function makePatternImages(array $urls): array
     {
         $images = [];
 
@@ -132,5 +145,41 @@ class CreateController extends Controller
         }
 
         return $images;
+    }
+
+    /**
+     * @return array<PatternFile>
+     */
+    protected function makePatternFiles(array $urls): array
+    {
+        $files = [];
+
+        foreach ($urls as $url) {
+            $storagePath = parse_url($url, PHP_URL_PATH);
+            $path = str_replace('/storage/', '', $storagePath);
+
+            if (Storage::disk('public')->exists($path)) {
+                $publicPath = Storage::disk('public')->path($path);
+
+                $ext = $this->fileService->getExtension($publicPath);
+                $size = $this->fileService->getSize($publicPath);
+                $mime = $this->fileService->getMimeType($publicPath);
+                $type = $this->fileService->getFileType($mime);
+                $hash = $this->fileService->getHash($publicPath);
+                $algo = $this->fileService->getHashAlgo();
+
+                $files[] = new PatternFile([
+                    'path' => $path,
+                    'type' => $type?->value,
+                    'extension' => $ext,
+                    'size' => $size,
+                    'mime_type' => $mime,
+                    'hash_algorithm' => $algo,
+                    'hash' => $hash,
+                ]);
+            }
+        }
+
+        return $files;
     }
 }

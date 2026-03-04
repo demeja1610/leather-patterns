@@ -11,6 +11,7 @@
 
 @use '@styles/components/checkbox/checkbox.scss' as checkbox;
 @use '@styles/components/input-text/input-text.scss' as input-text;
+@use '@styles/components/input-file/preview.scss' as preview-input-file;
 @use '@styles/components/input-image/preview.scss' as preview-input-image;
 @use '@styles/components/select/select.scss' as select;
 @use '@styles/components/fetch-select/single.scss' as single-fetch-select;

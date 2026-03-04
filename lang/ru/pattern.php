@@ -44,6 +44,7 @@ return [
     'is_video_checked' => 'Наличие видео проверено',
     'source_url' => 'URL источника',
     'images' => 'Изображения',
+    'files' => 'Файлы',
 
     'meta' => [
         'meta' => 'Метаданные',

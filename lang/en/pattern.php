@@ -44,6 +44,7 @@ return [
     'is_video_checked' => 'Page checked for videos',
     'source_url' => 'Source URL',
     'images' => 'Images',
+    'files' => 'Files',
 
     'meta' => [
         'meta' => 'Metadata',
