@@ -21,5 +21,7 @@ class ModelObserverServiceProvider extends ServiceProvider
         \App\Models\PatternCategory::observe(classes: \App\Observers\PatternCategoryObserver::class);
 
         \App\Models\PatternTag::observe(classes: \App\Observers\PatternTagObserver::class);
+
+        \App\Models\PatternImage::observe(classes: \App\Observers\PatternImageObserver::class);
     }
 }

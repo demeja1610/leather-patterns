@@ -6,7 +6,7 @@
 // common components
 
 @use '@styles/components/checkbox/checkbox.scss' as checkbox;
-@use '@styles/components/input/text.scss' as input-text;
+@use '@styles/components/input-text/input-text.scss' as input-text;
 @use '@styles/components/select/select.scss' as select;
 
 @use '@styles/components/button/button.scss' as button;
@@ -72,7 +72,7 @@
 
 body {
     @include thin-scrollbar.thin-scrollbar;
-    
+
     font-family: "instrument-sans", sans-serif;
     background: var(--bg);
 }

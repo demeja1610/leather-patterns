@@ -132,6 +132,21 @@
             />
         </div>
 
+        <x-input-image.preview
+            id="images"
+            name="images[]"
+            :label="__('pattern.images')"
+            :multiple="true"
+            :url="route('api.admin.v1.pattern-image.upload')"
+            :images="json_encode(
+                array_merge(
+                    array_map(array: old('images', []), callback: fn($url) => ['url' => $url, 'isNew' => true]),
+                    array_map(array: $pattern->images->pluck('path')->toArray(), callback: fn($path) => ['url' => asset('/storage/' . $path), 'isNew' => false]),
+                ),
+                JSON_UNESCAPED_SLASHES,
+            )"
+        />
+
         <x-checkbox.custom :label="__('pattern.is_published')">
             <input
                 type="checkbox"

@@ -1,0 +1,166 @@
+@use '@styles/components/input-text/input-text.scss';
+
+.preview-input-image {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5rem;
+
+    &__label {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        outline: none;
+
+        &-text {
+            @extend .input-text__label;
+        }
+
+        &:focus {
+            .preview-input-image__input-wrapper {
+                outline: 2px solid var(--gray-1);
+            }
+        }
+    }
+
+    &__loading {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+
+        &-icon {
+            animation: spin 1s linear infinite;
+        }
+    }
+
+    &__input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        opacity: 0;
+        cursor: pointer;
+
+        &-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--gray-soft);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: var(--text-2);
+            cursor: pointer;
+            transition: color 0.3s ease;
+
+            .preview-input-image {
+                &__loading {
+                    display: none;
+                }
+            }
+        }
+
+        &-icon {
+            width: 2rem;
+            height: 2rem;
+            transition: fill 0.3s ease, color 0.3s ease;
+        }
+    }
+
+    &__previews {
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: flex-start;
+        align-content: start;
+        gap: 1rem;
+        z-index: 2;
+    }
+
+    &__preview {
+        width: 10rem;
+        height: 10rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        &-link {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        &-image {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+        }
+    }
+
+    &__remove {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0 0.3rem 0 0.5rem;
+        padding: 0.5rem;
+        border: none;
+        background-color: var(--bg);
+        color: var(--text-2);
+        transition: color 0.3s ease;
+        cursor: pointer;
+
+        &-icon {
+            width: 0.75rem;
+            height: 0.75rem;
+        }
+
+        &:hover {
+            color: var(--red-2);
+        }
+    }
+
+    &__errors {
+        @extend .input-text__errors;
+    }
+
+    &__error {
+        @extend .input-text__error;
+    }
+
+    &--loading {
+        pointer-events: none;
+
+        .preview-input-image {
+            &__loading {
+                display: flex;
+            }
+
+            &__input {
+                &-text {
+                    display: none;
+                }
+
+                &-icon {
+                    display: none;
+                }
+            }
+        }
+    }
+}

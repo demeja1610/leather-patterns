@@ -5,16 +5,23 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin\Pattern\Action;
 
 use App\Models\Pattern;
+use App\Models\PatternImage;
 use App\Enum\NotificationTypeEnum;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
+use App\Interfaces\Services\FileServiceInterface;
 use App\Http\Requests\Admin\Pattern\CreateRequest;
 use App\Dto\SessionNotification\SessionNotificationDto;
 use App\Dto\SessionNotification\SessionNotificationListDto;
 
 class CreateController extends Controller
 {
+    public function __construct(
+        protected readonly FileServiceInterface $fileService
+    ) {}
+
     public function __invoke(CreateRequest $request): RedirectResponse
     {
         $data = array_merge(
@@ -40,6 +47,12 @@ class CreateController extends Controller
             unset($data['tag_id']);
         }
 
+        $imagesUrls = isset($data['images']) ? $data['images'] : [];
+
+        $patternImages = $imagesUrls === []
+            ? []
+            : $this->getPatternImages($imagesUrls);
+
         try {
             DB::beginTransaction();
 
@@ -51,6 +64,10 @@ class CreateController extends Controller
 
             if ($tagIds !== []) {
                 $pattern->tags()->attach($tagIds);
+            }
+
+            if ($patternImages !== []) {
+                $pattern->images()->saveMany($patternImages);
             }
 
             DB::commit();
@@ -81,5 +98,39 @@ class CreateController extends Controller
                 ),
             ),
         );
+    }
+
+    /**
+     * @return array<PatternImage>
+     */
+    protected function getPatternImages(array $urls): array
+    {
+        $images = [];
+
+        foreach ($urls as $url) {
+            $storagePath = parse_url($url, PHP_URL_PATH);
+            $path = str_replace('/storage/', '', $storagePath);
+
+            if (Storage::disk('public')->exists($path)) {
+                $publicPath = Storage::disk('public')->path($path);
+
+                $ext = $this->fileService->getExtension($publicPath);
+                $size = $this->fileService->getSize($publicPath);
+                $mime = $this->fileService->getMimeType($publicPath);
+                $hash = $this->fileService->getHash($publicPath);
+                $algo = $this->fileService->getHashAlgo();
+
+                $images[] = new PatternImage([
+                    'path' => $path,
+                    'extension' => $ext,
+                    'size' => $size,
+                    'mime_type' => $mime,
+                    'hash_algorithm' => $algo,
+                    'hash' => $hash,
+                ]);
+            }
+        }
+
+        return $images;
     }
 }

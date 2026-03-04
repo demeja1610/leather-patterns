@@ -14,4 +14,6 @@ Route::prefix('v1')
         require_once __DIR__ . '/pattern-author.php';
 
         require_once __DIR__ . '/pattern.php';
+
+        require_once __DIR__ . '/pattern-image.php';
     });

@@ -37,4 +37,11 @@ class PatternImage extends Model
     {
         return $this->belongsTo(related: Pattern::class);
     }
+
+    public function getUploadPath(): string
+    {
+        return $this->pattern_id !== null
+            ? "images/patterns/{$this->pattern_id}"
+            : 'images/patterns/temp';
+    }
 }
