@@ -136,6 +136,31 @@
         }
     }
 
+    &__download {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem 0 0.3rem 0;
+        padding: 0.5rem;
+        border: none;
+        background-color: var(--bg);
+        color: var(--text-2);
+        transition: color 0.3s ease;
+        cursor: pointer;
+
+        &-icon {
+            width: 0.75rem;
+            height: 0.75rem;
+        }
+
+        &:hover {
+            color: var(--red-2);
+        }
+    }
+
     &__errors {
         @extend .input-text__errors;
     }

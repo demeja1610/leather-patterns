@@ -83,6 +83,17 @@
                             class="preview-input-image__remove-icon"
                         />
                     </button>
+
+                    <a
+                        :href="image.url"
+                        class="preview-input-image__download"
+                        download
+                    >
+                        <x-icon.svg
+                            name="download"
+                            class="preview-input-image__download-icon"
+                        />
+                    </a>
                 </div>
             </template>
         </div>
