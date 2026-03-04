@@ -105,8 +105,6 @@ abstract class AbstractPatternAdapter extends AbstractAdapter
 
         $mimeType = finfo_file(finfo: $finfo, filename: $filePath);
 
-        finfo_close(finfo: $finfo);
-
         return $mimeType;
     }
 
