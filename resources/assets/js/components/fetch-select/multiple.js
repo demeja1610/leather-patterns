@@ -142,7 +142,7 @@ export const multipleFetchSelect = () => ({
         this.loading = true;
 
         try {
-            const resp = await this.client._unkownGet(this.url, this.csrf, {
+            const resp = await this.client.get(this.url, this.csrf, {
                 q: this.q,
             });
 
