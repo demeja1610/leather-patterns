@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -21,5 +22,12 @@ return Application::configure(basePath: dirname(path: __DIR__))
         );
 
         $middleware->statefulApi();
+    })
+    ->withSchedule(callback: function (Schedule $schedule): void {
+        $schedule->job(new \App\Jobs\PatternImage\ClearTempPatternImagesDirectoryJob())
+            ->dailyAt('23:59:59');
+
+        $schedule->job(new \App\Jobs\PatternFile\ClearTempPatternFilesDirectoryJob())
+            ->dailyAt('23:59:59');
     })
     ->withExceptions(using: function (Exceptions $exceptions): void {})->create();
