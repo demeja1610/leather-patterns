@@ -19,6 +19,11 @@ class ServiceServiceProvider extends ServiceProvider
             abstract: \App\Interfaces\Services\Menu\MenuServiceInterface::class,
             concrete: \App\Services\Menu\MenuService::class,
         );
+
+        $this->app->bind(
+            abstract: \App\Interfaces\Services\FileServiceInterface::class,
+            concrete: \App\Services\FileService::class,
+        );
     }
 
     public function boot(): void {}
