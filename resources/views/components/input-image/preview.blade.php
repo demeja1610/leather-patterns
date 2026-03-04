@@ -5,7 +5,7 @@
     'placeholder' => __('phrases.select_image'),
     'images' => '[]',
     'multiple' => false,
-    'accept' => 'image/png, image/gif, image/jpeg',
+    'accept' => 'image/png, image/jpeg',
     'url',
     'id',
     'name',
