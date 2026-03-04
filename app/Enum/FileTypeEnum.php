@@ -10,7 +10,7 @@ enum FileTypeEnum: string
     case ARCHIVE = 'archive';
     case PDF = 'pdf';
     case DWG = 'dwg';
-    case SWG = 'swg';
+    case SVG = 'svg';
 
     public static function fromMimeType(string $mimeType): ?self
     {
@@ -22,7 +22,7 @@ enum FileTypeEnum: string
             'application/x-rar' => self::ARCHIVE,
             'application/x-7z-compressed' => self::ARCHIVE,
             'image/vnd.dwg' => self::DWG,
-            'image/svg+xml' => self::SWG,
+            'image/svg+xml' => self::SVG,
             default => null,
         };
     }
