@@ -20,6 +20,10 @@ return [
         'add_new' => 'Add new',
     ],
 
+    'pattern_author_social' => [
+        'pattern_author_socials' => 'Author links',
+    ],
+
     'pattern_review' => [
         'pattern_reviews' => 'Pattern Reviews',
     ],

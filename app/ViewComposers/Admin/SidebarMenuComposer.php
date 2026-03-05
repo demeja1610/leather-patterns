@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\ViewComposers\Admin;
 
+use Illuminate\View\View;
+use Illuminate\Http\Request;
 use App\Dto\MenuItem\MenuItemDto;
 use App\Dto\MenuItem\MenuItemListDto;
-use Illuminate\View\View;
-use App\Interfaces\Services\Menu\MenuServiceInterface;
-use Illuminate\Http\Request;
+use App\Interfaces\Services\MenuServiceInterface;
 
 class SidebarMenuComposer
 {

@@ -16,8 +16,8 @@ class ServiceServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            abstract: \App\Interfaces\Services\Menu\MenuServiceInterface::class,
-            concrete: \App\Services\Menu\MenuService::class,
+            abstract: \App\Interfaces\Services\MenuServiceInterface::class,
+            concrete: \App\Services\MenuService::class,
         );
 
         $this->app->bind(

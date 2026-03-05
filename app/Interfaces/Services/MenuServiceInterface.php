@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Interfaces\Services\Menu;
+namespace App\Interfaces\Services;
 
 use App\Dto\MenuItem\MenuItemListDto;
 

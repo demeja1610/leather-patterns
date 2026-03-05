@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\PatternAuthorSocial;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,6 +32,11 @@ class PatternAuthor extends Model
     public function patterns(): HasMany
     {
         return $this->hasMany(related: Pattern::class, foreignKey: 'author_id');
+    }
+
+    public function socials(): HasMany
+    {
+        return $this->hasMany(PatternAuthorSocial::class, 'author_id');
     }
 
     public function replacementForTags(): HasMany
