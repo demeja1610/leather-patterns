@@ -47,5 +47,8 @@ return Application::configure(basePath: dirname(path: __DIR__))
 
         $schedule->job(new \App\Jobs\Pattern\ReplaceMarkedForReplacePatternTagsInPatternsJob)
             ->dailyAt('23:59:59');
+
+        $schedule->job(new \App\Jobs\Pattern\CalculatePatternAverageRatingJob)
+            ->dailyAt('23:59:59');
     })
     ->withExceptions(using: function (Exceptions $exceptions): void {})->create();
