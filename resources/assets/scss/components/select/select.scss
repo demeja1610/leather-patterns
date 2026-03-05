@@ -70,4 +70,12 @@
             color: var(--red-1);
         }
     }
+
+    &__errors {
+        @extend .input-text__errors;
+    }
+
+    &__error {
+         @extend .input-text__error;
+    }
 }
