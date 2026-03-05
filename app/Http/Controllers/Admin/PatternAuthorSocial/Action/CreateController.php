@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin\PatternAuthorSocial\Action;
 
 use App\Enum\SocialTypeEnum;
+use App\Models\PatternAuthor;
 use App\Enum\NotificationTypeEnum;
 use App\Models\PatternAuthorSocial;
 use App\Http\Controllers\Controller;
@@ -27,7 +28,13 @@ class CreateController extends Controller
 
         $urlSocialType = SocialTypeEnum::getFromUrl($data['url']);
 
+        $authorId = $request->input('author_id');
+
+        $author = $this->getSelectedAuthor($authorId);
+
         if ($urlSocialType === null) {
+            $request->session()->flash('selected_author', $author);
+
             throw ValidationException::withMessages(messages: [
                 'url' => __('validation.bad_url'),
             ]);
@@ -36,6 +43,8 @@ class CreateController extends Controller
         $type = SocialTypeEnum::tryFrom($data['type']);
 
         if ($type !== $urlSocialType) {
+            $request->session()->flash('selected_author', $author);
+
             throw ValidationException::withMessages(messages: [
                 'url' => __('pattern_author_social.admin.url_type_mismatch'),
                 'type' => __('pattern_author_social.admin.url_type_mismatch'),
@@ -53,5 +62,16 @@ class CreateController extends Controller
                 ),
             ),
         );
+    }
+
+    protected function getSelectedAuthor($id): ?PatternAuthor
+    {
+        return PatternAuthor::query()
+            ->where('id', $id)
+            ->select([
+                'id',
+                'name'
+            ])
+            ->first();
     }
 }
