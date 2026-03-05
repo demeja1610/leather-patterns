@@ -76,18 +76,6 @@ class CreateController extends Controller
             );
         }
 
-        if ($replaceToCount > 1) {
-            return back()->withInput()->with(
-                key: 'notifications',
-                value: new SessionNotificationListDto(
-                    new SessionNotificationDto(
-                        text: __(key: 'pattern_tag.admin.cannot_replace_to_multiple'),
-                        type: NotificationTypeEnum::ERROR,
-                    ),
-                ),
-            );
-        }
-
         $tag = PatternTag::query()->create(attributes: $data);
 
         return to_route(route: 'admin.page.pattern-tag.list')->with(
