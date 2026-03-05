@@ -157,6 +157,7 @@ return [
     'url' => 'The :attribute field must be a valid URL.',
     'ulid' => 'The :attribute field must be a valid ULID.',
     'uuid' => 'The :attribute field must be a valid UUID.',
+    'bad_url' => 'The field must be a valid URL with HTTP or HTTPS scheme (also not IP, localhost etc.).',
 
     'custom' => [
         'attribute-name' => [

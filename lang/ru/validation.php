@@ -156,6 +156,7 @@ return [
     'url' => 'Поле :attribute должно быть действительным URL.',
     'ulid' => 'Поле :attribute должно быть действительным ULID.',
     'uuid' => 'Поле :attribute должно быть действительным UUID.',
+    'bad_url' => 'Поле должно быть действительным URL c HTTP или HTTPS схемой (а также не IP, localhost и т.д.).',
 
     'custom' => [
         'attribute-name' => [
