@@ -34,6 +34,7 @@ return [
     'older_than' => 'Older than',
     'newer_than' => 'Newer than',
     'title' => 'Title',
+    'url' => 'URL',
 
     'pattern_order' => [
         'default' => 'Default',

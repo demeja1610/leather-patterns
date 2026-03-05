@@ -34,6 +34,7 @@ return [
     'older_than' => 'Старее чем',
     'newer_than' => 'Новее чем',
     'title' => 'Заголовок',
+    'url' => 'URL',
 
     'pattern_order' => [
         'default' => 'По умолчанию',
