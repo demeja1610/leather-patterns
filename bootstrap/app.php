@@ -29,5 +29,23 @@ return Application::configure(basePath: dirname(path: __DIR__))
 
         $schedule->job(new \App\Jobs\PatternFile\ClearTempPatternFilesDirectoryJob())
             ->dailyAt('23:59:59');
+
+        $schedule->job(new \App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternAuthorsJob)
+            ->dailyAt('23:59:59');
+
+        $schedule->job(new \App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternCategoriesJob)
+            ->dailyAt('23:59:59');
+
+        $schedule->job(new \App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternTagsJob)
+            ->dailyAt('23:59:59');
+
+        $schedule->job(new \App\Jobs\Pattern\ReplaceMarkedForReplacePatternAuthorsInPatternsJob)
+            ->dailyAt('23:59:59');
+
+        $schedule->job(new \App\Jobs\Pattern\ReplaceMarkedForReplacePatternCategoriesInPatternsJob)
+            ->dailyAt('23:59:59');
+
+        $schedule->job(new \App\Jobs\Pattern\ReplaceMarkedForReplacePatternTagsInPatternsJob)
+            ->dailyAt('23:59:59');
     })
     ->withExceptions(using: function (Exceptions $exceptions): void {})->create();
