@@ -13,12 +13,13 @@ return [
     'replacement_for_count' => 'Кол-во замен',
     'created_at' => 'Дата создания',
     'replacement' => 'Заменить на',
+    'tag_replacement' => 'Заменить на тег',
     'remove_on_appear' => 'Удалять из выкроек при появлении',
     'remove_on_appear_short' => 'Удалять при появлении',
     'is_published' => 'Опубликована',
     'has_patterns' => 'Используется в выкройках',
     'has_replacement' => 'Есть замена',
-
+    'has_tag_replacement' => 'Есть замена на тег',
 
     'admin' => [
         'created' => 'Категория выкройки: `:name` успешно создана',

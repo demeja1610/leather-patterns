@@ -174,6 +174,39 @@
     </x-select.wrapper>
 
     <x-select.wrapper>
+        <x-select.label for="has_tag_replacement">
+            {{ __('pattern_category.has_tag_replacement') }}
+        </x-select.label>
+
+        <x-select.select
+            name="has_tag_replacement"
+            id="has_tag_replacement"
+            :title="__('pattern_category.has_tag_replacement')"
+        >
+            <x-select.option
+                value=""
+                :selected="!isset($activeFilters['has_tag_replacement'])"
+            >
+                {{ __('filter.not_selected') }}
+            </x-select.option>
+
+            <x-select.option
+                value="1"
+                :selected="isset($activeFilters['has_tag_replacement']) && $activeFilters['has_tag_replacement'] === true"
+            >
+                {{ __('phrases.yes') }}
+            </x-select.option>
+
+            <x-select.option
+                value="0"
+                :selected="isset($activeFilters['has_tag_replacement']) && $activeFilters['has_tag_replacement'] === false"
+            >
+                {{ __('phrases.no') }}
+            </x-select.option>
+        </x-select.select>
+    </x-select.wrapper>
+
+    <x-select.wrapper>
         <x-select.label for="remove_on_appear">
             {{ __('pattern_category.remove_on_appear') }}
         </x-select.label>
@@ -250,6 +283,10 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern_category.tag_replacement') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern_category.remove_on_appear') }}
                         </x-table.th>
 
@@ -306,6 +343,10 @@
 
                             <x-table.td>
                                 {{ $category->replacement?->name }}
+                            </x-table.td>
+
+                            <x-table.td>
+                                {{ $category->tagReplacement?->name }}
                             </x-table.td>
 
                             <x-table.td-bool :value="$category->remove_on_appear">

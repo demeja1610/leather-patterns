@@ -64,8 +64,8 @@ class SearchController extends Controller
 
             if ($patternReplaceable === true) {
                 $query->whereNotNull('replace_id')
-                    ->whereNotNull('replace_author_id')
-                    ->whereNotNull('replace_category_id');
+                    ->orWhereNotNull('replace_author_id')
+                    ->orWhereNotNull('replace_category_id');
             } else {
                 $query->whereNull('replace_id')
                     ->whereNull('replace_author_id')

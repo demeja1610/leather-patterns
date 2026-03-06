@@ -57,6 +57,22 @@
                 ?->toJson(JSON_UNESCAPED_UNICODE)"
         />
 
+        <x-fetch-select.single
+            :url="route('api.admin.v1.pattern-tag.search', [
+                'pattern_replaceable' => 0,
+                'pattern_removable' => 0,
+            ])"
+            id="replace_tag_id"
+            name="replace_tag_id"
+            :label="__('pattern_category.tag_replacement')"
+            :placeholder="__('phrases.search')"
+            selectedItemOptionValueName="id"
+            selectedItemOptionLabelName="name"
+            :selectedItem="session()
+                ->get('selectedTagReplace', $category->tagReplacement)
+                ?->toJson(JSON_UNESCAPED_UNICODE)"
+        />
+
         <x-checkbox.custom :label="__('pattern_category.remove_on_appear')">
             <input
                 type="checkbox"

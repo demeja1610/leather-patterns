@@ -33,7 +33,10 @@ class EditPageController extends Controller
     protected function loadReplacement(PatternCategory &$category): void
     {
         if ($category->replace_id !== null) {
-            $category->load(relations: 'replacement');
+            $category->load([
+                'replacement',
+                'tagReplacement',
+            ]);
         }
     }
 }

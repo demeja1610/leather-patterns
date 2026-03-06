@@ -12,11 +12,13 @@ return [
     'replacement_for_count' => 'Replaces count',
     'created_at' => 'Created at',
     'replacement' => 'Replace to',
+    'tag_replacement' => 'Replace to tag',
     'remove_on_appear' => 'Remove from patterns on appear',
     'remove_on_appear_short' => 'Remove on appear',
     'is_published' => 'Is published',
     'has_patterns' => 'Used by patterns',
     'has_replacement' => 'Has replacement',
+    'has_tag_replacement' => 'Has tag replacement',
 
     'admin' => [
         'created' => 'Category with name: `:name` successfully created',

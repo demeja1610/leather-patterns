@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\PatternCategory\Action;
 
+use App\Models\PatternTag;
 use App\Models\PatternCategory;
 use App\Enum\NotificationTypeEnum;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use App\Dto\SessionNotification\SessionNotificationDto;
 use App\Http\Requests\Admin\PatternCategory\EditRequest;
 use App\Dto\SessionNotification\SessionNotificationListDto;
-use Symfony\Component\HttpFoundation\Response;
 
 class EditController extends Controller
 {
@@ -46,6 +47,16 @@ class EditController extends Controller
 
             if ($replace instanceof PatternCategory) {
                 $request->session()->flash('selectedReplace', $replace);
+            }
+        }
+
+        $tagReplaceId = $request->input('replace_tag_id');
+
+        if ($tagReplaceId !== null) {
+            $replaceTag = PatternTag::query()->where('id', $tagReplaceId)->select(['id', 'name'])->first();
+
+            if ($replaceTag instanceof PatternTag) {
+                $request->session()->flash('selectedTagReplace', $replaceTag);
             }
         }
 

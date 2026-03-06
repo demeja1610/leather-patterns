@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\PatternTag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property-read int $id
  *
  * @property string $name
  * @property null|int $replace_id
+ * @property null|int $replace_tag_id
  * @property bool $remove_on_appear
  * @property bool $is_published
  *
@@ -25,6 +27,7 @@ class PatternCategory extends Model
     protected $fillable = [
         'name',
         'replace_id',
+        'replace_tag_id',
         'remove_on_appear',
         'is_published',
     ];
@@ -40,6 +43,15 @@ class PatternCategory extends Model
             related: static::class,
             foreignKey: 'id',
             localKey: 'replace_id',
+        );
+    }
+
+    public function tagReplacement(): HasOne
+    {
+        return $this->hasOne(
+            related: PatternTag::class,
+            foreignKey: 'id',
+            localKey: 'replace_tag_id',
         );
     }
 
@@ -77,6 +89,7 @@ class PatternCategory extends Model
 
         return $this->remove_on_appear === false
             && $this->replace_id === null
+            && $this->replace_tag_id === null
             && $this->patterns_count === 0
             && $this->replacement_for_count === 0
             && $this->replacement_for_tags_count === 0;

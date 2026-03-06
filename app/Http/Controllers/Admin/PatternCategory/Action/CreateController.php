@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\PatternCategory\Action;
 
+use App\Models\PatternTag;
 use App\Models\PatternCategory;
 use App\Enum\NotificationTypeEnum;
 use App\Http\Controllers\Controller;
@@ -39,6 +40,16 @@ class CreateController extends Controller
 
             if ($replace instanceof PatternCategory) {
                 $request->session()->flash('selectedReplace', $replace);
+            }
+        }
+
+        $tagReplaceId = $request->input('replace_tag_id');
+
+        if ($tagReplaceId !== null) {
+            $replaceTag = PatternTag::query()->where('id', $replaceId)->select(['id', 'name'])->first();
+
+            if ($replaceTag instanceof PatternTag) {
+                $request->session()->flash('selectedTagReplace', $replaceTag);
             }
         }
 

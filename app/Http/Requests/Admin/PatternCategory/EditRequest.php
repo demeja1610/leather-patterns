@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Admin\PatternCategory;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Admin\PatternCategory\CreateRequest;
 
-class EditRequest extends FormRequest
+class EditRequest extends CreateRequest
 {
     public function authorize(): bool
     {
@@ -15,27 +15,17 @@ class EditRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                'min:2',
-                "unique:pattern_categories,name,{$this->id}",
+        return array_merge(
+            parent::rules(),
+            [
+                'name' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    'min:2',
+                    "unique:pattern_categories,name,{$this->id}",
+                ],
             ],
-            'replace_id' => [
-                'nullable',
-                'numeric',
-                'exists:pattern_categories,id',
-            ],
-            'remove_on_appear' => [
-                'nullable',
-                'in:on',
-            ],
-            'is_published' => [
-                'nullable',
-                'in:on',
-            ],
-        ];
+        );
     }
 }

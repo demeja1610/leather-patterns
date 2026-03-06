@@ -63,9 +63,11 @@ class SearchController extends Controller
             $patternReplaceable = (bool) $patternReplaceable;
 
             if ($patternReplaceable === true) {
-                $query->whereNotNull('replace_id');
+                $query->whereNotNull('replace_id')
+                    ->orWhereNotNull('replace_tag_id');
             } else {
-                $query->whereNull('replace_id');
+                $query->whereNull('replace_id')
+                    ->whereNull('replace_tag_id');
             }
         }
 

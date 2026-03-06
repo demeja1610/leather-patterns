@@ -4,6 +4,7 @@ namespace App\Jobs\Pattern;
 
 use App\Models\Pattern;
 use App\Models\PatternCategory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Queue\Queueable;
@@ -28,7 +29,8 @@ class ReplaceMarkedForReplacePatternCategoriesInPatternsJob implements ShouldQue
         $q = Pattern::query();
 
         $q->whereHas(relation: 'categories', callback: function (Builder $sq) {
-            $sq->whereNotNull('replace_id');
+            $sq->whereNotNull('replace_id')
+                ->orWhereNotNull('replace_tag_id');
 
             if ($this->categoryId !== null) {
                 Log::info(ucfirst($this->actionName) . ". Pattern category ID: {$this->categoryId}");
@@ -39,7 +41,10 @@ class ReplaceMarkedForReplacePatternCategoriesInPatternsJob implements ShouldQue
             return $sq;
         });
 
-        $q->with(relations: 'categories.replacement');
+        $q->with([
+            'categories.replacement',
+            'categories.tagReplacement',
+        ]);
 
         $result = 0;
 
@@ -81,7 +86,7 @@ class ReplaceMarkedForReplacePatternCategoriesInPatternsJob implements ShouldQue
     protected function replaceMarkedCategoriesInPattern(Pattern $pattern): void
     {
         $categoriesForReplace = $pattern->categories
-            ->filter(fn(PatternCategory $patternCategory): bool => $patternCategory->replace_id !== null);
+            ->filter(fn(PatternCategory $patternCategory): bool => $patternCategory->replace_id !== null || $patternCategory->replace_tag_id !== null);
 
         if ($this->categoryId !== null) {
             $categoriesForReplace = $categoriesForReplace
@@ -94,46 +99,92 @@ class ReplaceMarkedForReplacePatternCategoriesInPatternsJob implements ShouldQue
             return;
         }
 
-        $categoriesForReplaceIds = $categoriesForReplace->pluck('id');
-        $replacesIds = [];
+        try {
+            DB::beginTransaction();
 
-        foreach ($categoriesForReplace as $categoryForReplace) {
-            if (!$pattern->categories->contains('id', '=', $categoryForReplace->replacement->id)) {
-                $replacesIds[] = $categoryForReplace->replacement->id;
+            $categoriesForReplaceIds = $categoriesForReplace->pluck('id');
+            $replacesIds = [];
+            $tagReplacesIds = [];
+
+            foreach ($categoriesForReplace as $categoryForReplace) {
+                if ($categoryForReplace->replace_id !== null) {
+                    if (!$pattern->categories->contains('id', '=', $categoryForReplace->replacement->id)) {
+                        $replacesIds[] = $categoryForReplace->replacement->id;
+                    } else {
+                        Log::info(
+                            ucfirst($this->actionName) .
+                                ". Pattern with id {$pattern->id} already has category with ID: {$categoryForReplace->replacement->id}"
+                        );
+                    }
+                }
+
+                if ($categoryForReplace->replace_tag_id !== null) {
+                    if (!$pattern->tags->contains('id', '=', $categoryForReplace->tagReplacement->id)) {
+                        $tagReplacesIds[] = $categoryForReplace->tagReplacement->id;
+                    } else {
+                        Log::info(
+                            ucfirst($this->actionName) .
+                                ". Pattern with id {$pattern->id} already has tag with ID: {$categoryForReplace->tagReplacement->id}"
+                        );
+                    }
+                }
+            }
+
+            if ($replacesIds !== []) {
+                $replacesIdsStr = implode(
+                    array: $replacesIds,
+                    separator: ', ',
+                );
+
+                Log::info(
+                    ucfirst($this->actionName) .
+                        ". Attaching categories with IDs: `{$replacesIdsStr}` to pattern ID: {$pattern->id}"
+                );
+
+                $pattern->categories()->attach(ids: $replacesIds);
             } else {
                 Log::info(
                     ucfirst($this->actionName) .
-                        ". Pattern with id {$pattern->id} already has category with ID: {$categoryForReplace->replacement->id}"
+                        ". No categories to attach to pattern with ID: {$pattern->id}"
                 );
             }
-        }
 
-        Log::info(
-            ucfirst($this->actionName) .
-                ". Detaching categories with IDs: {$categoriesForReplaceIds->implode('id', ', ')} from pattern with id {$pattern->id}"
-        );
+            if ($tagReplacesIds !== []) {
+                $tagReplacesIdsStr = implode(
+                    array: $tagReplacesIds,
+                    separator: ', ',
+                );
 
-        $pattern->categories()->detach(ids: $categoriesForReplaceIds->toArray());
+                Log::info(
+                    ucfirst($this->actionName) .
+                        ". Attaching tags with IDs: `{$tagReplacesIdsStr}` to pattern ID: {$pattern->id}"
+                );
 
-        if ($replacesIds === []) {
+                $pattern->tags()->attach(ids: $tagReplacesIds);
+            } else {
+                Log::info(
+                    ucfirst($this->actionName) .
+                        ". No tags to attach to pattern with ID: {$pattern->id}"
+                );
+            }
+
             Log::info(
                 ucfirst($this->actionName) .
-                    ". No categories to attach to pattern with ID: {$pattern->id}"
+                    ". Detaching categories with IDs: {$categoriesForReplaceIds->implode('id', ', ')} from pattern with id {$pattern->id}"
             );
 
-            return;
+            $pattern->categories()->detach(ids: $categoriesForReplaceIds->toArray());
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error(
+                ucfirst($this->actionName) .
+                    ". An error happened while trying to replace category for pattern with ID: {$this->patternId}"
+            );
+
+            throw $th;
         }
-
-        $replacesIdsStr = implode(
-            array: $replacesIds,
-            separator: ', ',
-        );
-
-        Log::info(
-            ucfirst($this->actionName) .
-                ". Attaching categories with IDs: `{$replacesIdsStr}` to pattern ID: {$pattern->id}"
-        );
-
-        $pattern->categories()->attach(ids: $replacesIds);
     }
 }

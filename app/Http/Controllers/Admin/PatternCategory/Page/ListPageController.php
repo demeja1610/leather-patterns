@@ -42,7 +42,10 @@ class ListPageController extends Controller
             'replacementForTags',
         ]);
 
-        $q->with(relations: 'replacement');
+        $q->with([
+            'replacement',
+            'tagReplacement',
+        ]);
 
         return $q->orderBy('id', 'desc')->cursorPaginate(
             perPage: 30,
@@ -121,6 +124,18 @@ class ListPageController extends Controller
                 $query->whereNotNull('replace_id');
             } else {
                 $query->whereNull('replace_id');
+            }
+        }
+
+        $hasTagReplacement = $request->input(key: 'has_tag_replacement');
+
+        if ($hasTagReplacement !== null) {
+            $this->activeFilters['has_tag_replacement'] = (bool) $hasTagReplacement;
+
+            if ((bool) $hasTagReplacement) {
+                $query->whereNotNull('replace_tag_id');
+            } else {
+                $query->whereNull('replace_tag_id');
             }
         }
 
