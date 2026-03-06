@@ -173,6 +173,17 @@
         </x-select.select>
     </x-select.wrapper>
 
+    <x-fetch-select.single
+        :url="route('api.admin.v1.pattern-tag.search')"
+        id="replace_to_tag_id"
+        name="replace_to_tag_id"
+        :label="__('pattern_tag.replace_to_tag')"
+        :placeholder="__('phrases.search')"
+        selectedItemOptionValueName="id"
+        selectedItemOptionLabelName="name"
+        :selectedItem="isset($extraData['replace_to_tag']) ? $extraData['replace_to_tag']->toJson(JSON_UNESCAPED_UNICODE) : null"
+    />
+
     <x-select.wrapper>
         <x-select.label for="has_author_replacement">
             {{ __('pattern_tag.has_author_replacement') }}
@@ -240,6 +251,17 @@
 
         </x-select.select>
     </x-select.wrapper>
+
+    <x-fetch-select.single
+        :url="route('api.admin.v1.pattern-category.search')"
+        id="replace_to_category_id"
+        name="replace_to_category_id"
+        :label="__('pattern_tag.replace_to_category')"
+        :placeholder="__('phrases.search')"
+        selectedItemOptionValueName="id"
+        selectedItemOptionLabelName="name"
+        :selectedItem="isset($extraData['replace_to_category']) ? $extraData['replace_to_category']->toJson(JSON_UNESCAPED_UNICODE) : null"
+    />
 
     <x-select.wrapper>
         <x-select.label for="remove_on_appear">

@@ -22,6 +22,8 @@ return [
     'has_replacement' => 'Есть замена',
     'has_author_replacement' => 'Есть замена на автора',
     'has_category_replacement' => 'Есть замена на категорию',
+    'replace_to_tag' => 'Заменить на тег',
+    'replace_to_category' => 'Заменить на категорию',
 
     'admin' => [
         'created' => 'Тег выкройки: `:name` успешно создан',

@@ -21,6 +21,8 @@ return [
     'has_replacement' => 'Has replacement',
     'has_author_replacement' => 'Has author replacement',
     'has_category_replacement' => 'Has category replacement',
+    'replace_to_tag' => 'Replace to tag',
+    'replace_to_category' => 'Replace to category',
 
     'admin' => [
         'created' => 'Tag with name: `:name` successfully created',

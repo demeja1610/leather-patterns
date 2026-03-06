@@ -10,10 +10,12 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\Admin\PatternTag\ListRequest;
+use App\Models\PatternCategory;
 
 class ListPageController extends Controller
 {
     protected array $activeFilters = [];
+    protected array $extraData = [];
 
     public function __invoke(ListRequest $request): View
     {
@@ -21,6 +23,7 @@ class ListPageController extends Controller
 
         return view(view: 'pages.admin.pattern-tag.list', data: [
             'activeFilters' => $this->activeFilters,
+            'extraData' => $this->extraData,
             'tags' => $tags,
         ]);
     }
@@ -126,6 +129,16 @@ class ListPageController extends Controller
             }
         }
 
+        $replaceToTagId = $request->input('replace_to_tag_id');
+
+        if ($replaceToTagId !== null) {
+            $this->activeFilters['replace_to_tag_id'] = $replaceToTagId;
+
+            $this->extraData['selected_tag'] =  $this->getTag(id: $replaceToTagId);
+
+            $query->where('replace_id', $replaceToTagId);
+        }
+
         $hasAuthorReplacement = $request->input(key: 'has_author_replacement');
 
         if ($hasAuthorReplacement !== null) {
@@ -150,6 +163,16 @@ class ListPageController extends Controller
             }
         }
 
+        $replaceToCategoryId = $request->input('replace_to_category_id');
+
+        if ($replaceToCategoryId !== null) {
+            $this->activeFilters['replace_to_category_id'] = $replaceToCategoryId;
+
+            $this->extraData['selected_category'] =  $this->getCategory(id: $replaceToCategoryId);
+
+            $query->where('replace_category_id', $replaceToCategoryId);
+        }
+
         $removeOnAppear = $request->input(key: 'remove_on_appear');
 
         if ($removeOnAppear !== null) {
@@ -161,5 +184,27 @@ class ListPageController extends Controller
                 $query->where('remove_on_appear', false);
             }
         }
+    }
+
+    protected function getTag($id): ?PatternTag
+    {
+        return PatternTag::query()
+            ->where('id', $id)
+            ->select([
+                'id',
+                'name',
+            ])
+            ->first();
+    }
+
+    protected function getCategory($id): ?PatternCategory
+    {
+        return PatternCategory::query()
+            ->where('id', $id)
+            ->select([
+                'id',
+                'name',
+            ])
+            ->first();
     }
 }
