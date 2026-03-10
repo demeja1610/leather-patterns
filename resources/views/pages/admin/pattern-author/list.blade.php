@@ -174,6 +174,17 @@
         </x-select.select>
     </x-select.wrapper>
 
+    <x-fetch-select.single
+        :url="route('api.admin.v1.pattern-author.search')"
+        id="replace_to_author_id"
+        name="replace_to_author_id"
+        :label="__('pattern_author.replace_to_author')"
+        :placeholder="__('phrases.search')"
+        selectedItemOptionValueName="id"
+        selectedItemOptionLabelName="name"
+        :selectedItem="isset($extraData['replace_to_author']) ? $extraData['replace_to_author']->toJson(JSON_UNESCAPED_UNICODE) : null"
+    />
+
     <x-select.wrapper>
         <x-select.label for="remove_on_appear">
             {{ __('pattern_author.remove_on_appear') }}
@@ -239,6 +250,10 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern_author.remove_on_appear') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern_author.links') }}
                         </x-table.th>
 
@@ -247,15 +262,15 @@
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern_author.replacement_for_count') }}
+                            {{ __('pattern_author.replacement_for_authors_count') }}
+                        </x-table.th>
+
+                        <x-table.th>
+                            {{ __('pattern_author.replacement_for_tags_count') }}
                         </x-table.th>
 
                         <x-table.th>
                             {{ __('pattern_author.replacement') }}
-                        </x-table.th>
-
-                        <x-table.th>
-                            {{ __('pattern_author.remove_on_appear') }}
                         </x-table.th>
 
                         <x-table.th>
@@ -294,6 +309,10 @@
                                 {{ $author->is_published ? __('phrases.yes') : __('phrases.no') }}
                             </x-table.td-bool>
 
+                            <x-table.td-bool :value="$author->remove_on_appear">
+                                {{ $author->remove_on_appear ? __('phrases.yes') : __('phrases.no') }}
+                            </x-table.td-bool>
+
                             <x-table.td>
                                 <div class="admin-page-pattern-author-list__socials">
                                     @foreach ($author->socials as $social)
@@ -321,16 +340,33 @@
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $author->replacement_for_count + $author->replacement_for_tags_count }}
+                                <x-link.default
+                                    :href="route('admin.page.pattern-author.list', ['replace_to_author_id' => $author->id])"
+                                    target="_blank"
+                                >
+                                    {{ $author->replacement_for_count }}
+                                </x-link.default>
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $author->replacement?->name }}
+                                <x-link.default
+                                    :href="route('admin.page.pattern-tag.list', ['replace_to_author_id' => $author->id])"
+                                    target="_blank"
+                                >
+                                    {{ $author->replacement_for_tags_count }}
+                                </x-link.default>
                             </x-table.td>
 
-                            <x-table.td-bool :value="$author->remove_on_appear">
-                                {{ $author->remove_on_appear ? __('phrases.yes') : __('phrases.no') }}
-                            </x-table.td-bool>
+                            <x-table.td>
+                                @if ($author->replacement)
+                                    <x-link.default
+                                        :href="route('admin.page.pattern-author.list', ['id' => $author->replacement->id])"
+                                        target="_blank"
+                                    >
+                                        {{ $author->replacement->name }}
+                                    </x-link.default>
+                                @endif
+                            </x-table.td>
 
                             <x-table.td>
                                 {{ $author->created_at->translatedFormat('d F Y H:i') }}

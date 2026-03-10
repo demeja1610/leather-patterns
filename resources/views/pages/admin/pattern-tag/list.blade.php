@@ -339,11 +339,19 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern_tag.remove_on_appear') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern_tag.patterns_count') }}
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern_tag.replacement_for_count') }}
+                            {{ __('pattern_tag.replacement_for_tags_count') }}
+                        </x-table.th>
+
+                        <x-table.th>
+                            {{ __('pattern_tag.replacement_for_categories_count') }}
                         </x-table.th>
 
                         <x-table.th>
@@ -356,10 +364,6 @@
 
                         <x-table.th>
                             {{ __('pattern_tag.category_replacement') }}
-                        </x-table.th>
-
-                        <x-table.th>
-                            {{ __('pattern_tag.remove_on_appear') }}
                         </x-table.th>
 
                         <x-table.th>
@@ -384,8 +388,6 @@
                                 <x-link.button-ghost :href="route('admin.page.pattern-tag.edit', ['id' => $tag->id])">
                                     <x-icon.svg name="edit" />
                                 </x-link.button-ghost>
-
-
                             </x-table.td-actions>
 
                             <x-table.td>
@@ -400,6 +402,10 @@
                                 {{ $tag->is_published ? __('phrases.yes') : __('phrases.no') }}
                             </x-table.td-bool>
 
+                            <x-table.td-bool :value="$tag->remove_on_appear">
+                                {{ $tag->remove_on_appear ? __('phrases.yes') : __('phrases.no') }}
+                            </x-table.td-bool>
+
                             <x-table.td>
                                 <x-link.default
                                     :href="route('admin.page.patterns.list', ['tag_id' => $tag->id])"
@@ -410,24 +416,56 @@
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $tag->replacement_for_count }}
+                                <x-link.default
+                                    :href="route('admin.page.pattern-tag.list', ['replace_to_tag_id' => $tag->id])"
+                                    target="_blank"
+                                >
+                                    {{ $tag->replacement_for_count }}
+                                </x-link.default>
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $tag->replacement?->name }}
+                                <x-link.default
+                                    :href="route('admin.page.pattern-category.list', ['replace_to_tag_id' => $tag->id])"
+                                    target="_blank"
+                                >
+                                    {{ $tag->replacement_for_categories_count }}
+                                </x-link.default>
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $tag->authorReplacement?->name }}
+                                @if ($tag->replacement)
+                                    <x-link.default
+                                        :href="route('admin.page.pattern-tag.list', ['id' => $tag->replacement->id])"
+                                        target="_blank"
+                                    >
+                                        {{ $tag->replacement->name }}
+                                    </x-link.default>
+                                @endif
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $tag->categoryReplacement?->name }}
+                                @if ($tag->authorReplacement)
+                                    <x-link.default
+                                        :href="route('admin.page.pattern-author.list', ['id' => $tag->authorReplacement->id])"
+                                        target="_blank"
+                                    >
+                                        {{ $tag->authorReplacement->name }}
+                                    </x-link.default>
+                                @endif
+
                             </x-table.td>
 
-                            <x-table.td-bool :value="$tag->remove_on_appear">
-                                {{ $tag->remove_on_appear ? __('phrases.yes') : __('phrases.no') }}
-                            </x-table.td-bool>
+                            <x-table.td>
+                                @if ($tag->categoryReplacement)
+                                    <x-link.default
+                                        :href="route('admin.page.pattern-category.list', ['id' => $tag->categoryReplacement->id])"
+                                        target="_blank"
+                                    >
+                                        {{ $tag->categoryReplacement->name }}
+                                    </x-link.default>
+                                @endif
+                            </x-table.td>
 
                             <x-table.td>
                                 {{ $tag->created_at->translatedFormat('d F Y H:i') }}

@@ -9,13 +9,13 @@ return [
 
     'id' => 'ID',
     'name' => 'Название',
-    'patterns_count' => 'Кол-во выкроек',
+    'patterns_count' => 'Выкроек',
     'replacement_for_count' => 'Кол-во замен',
     'created_at' => 'Дата создания',
     'replacement' => 'Заменить на',
     'author_replacement' => 'Заменить на автора',
     'category_replacement' => 'Заменить на категорию',
-    'remove_on_appear' => 'Удалять из выкроек при появлении',
+    'remove_on_appear' => 'Удалять',
     'remove_on_appear_short' => 'Удалять при появлении',
     'is_published' => 'Опубликован',
     'has_patterns' => 'Используется в выкройках',
@@ -24,6 +24,10 @@ return [
     'has_category_replacement' => 'Есть замена на категорию',
     'replace_to_tag' => 'Заменить на тег',
     'replace_to_category' => 'Заменить на категорию',
+    'replacement_for_tags_count' => 'Замен',
+    'replacement_for_categories_count' => 'Замен категорий',
+    'replacement_for_authors_count' => 'Замен авторов',
+
 
     'admin' => [
         'created' => 'Тег выкройки: `:name` успешно создан',

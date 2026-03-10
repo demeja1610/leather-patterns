@@ -211,7 +211,12 @@
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $social->author->name }}
+                                <x-link.default
+                                    :href="route('admin.page.pattern-author.list', ['id' => $social->author->id])"
+                                    target="_blank"
+                                >
+                                    {{ $social->author->name }}
+                                </x-link.default>
                             </x-table.td>
 
                             <x-table.td-bool :value="$social->is_published">

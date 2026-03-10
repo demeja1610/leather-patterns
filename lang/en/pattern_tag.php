@@ -8,13 +8,13 @@ return [
 
     'id' => 'ID',
     'name' => 'Name',
-    'patterns_count' => 'Patterns count',
+    'patterns_count' => 'Patterns',
     'replacement_for_count' => 'Replaces count',
     'created_at' => 'Created at',
     'replacement' => 'Replace to',
     'author_replacement' => 'Replace to author',
     'category_replacement' => 'Replace to category',
-    'remove_on_appear' => 'Remove from patterns on appear',
+    'remove_on_appear' => 'Remove',
     'remove_on_appear_short' => 'Remove on appear',
     'is_published' => 'Is published',
     'has_patterns' => 'Used by patterns',
@@ -23,6 +23,9 @@ return [
     'has_category_replacement' => 'Has category replacement',
     'replace_to_tag' => 'Replace to tag',
     'replace_to_category' => 'Replace to category',
+    'replacement_for_tags_count' => 'Replaces',
+    'replacement_for_categories_count' => 'Replaces categories',
+    'replacement_for_authors_count' => 'Replaces authors',
 
     'admin' => [
         'created' => 'Tag with name: `:name` successfully created',

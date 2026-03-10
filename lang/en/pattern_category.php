@@ -8,17 +8,19 @@ return [
 
     'id' => 'ID',
     'name' => 'Name',
-    'patterns_count' => 'Patterns count',
+    'patterns_count' => 'Patterns',
     'replacement_for_count' => 'Replaces count',
     'created_at' => 'Created at',
     'replacement' => 'Replace to',
     'tag_replacement' => 'Replace to tag',
-    'remove_on_appear' => 'Remove from patterns on appear',
+    'remove_on_appear' => 'Remove',
     'remove_on_appear_short' => 'Remove on appear',
     'is_published' => 'Is published',
     'has_patterns' => 'Used by patterns',
     'has_replacement' => 'Has replacement',
     'has_tag_replacement' => 'Has tag replacement',
+    'replacement_for_categories_count' => 'Replaces',
+    'replacement_for_tags_count' => 'Replaces tags',
 
     'admin' => [
         'created' => 'Category with name: `:name` successfully created',

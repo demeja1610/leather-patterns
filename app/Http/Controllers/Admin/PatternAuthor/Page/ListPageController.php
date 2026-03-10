@@ -14,6 +14,7 @@ use App\Http\Requests\Admin\PatternAuthor\ListRequest;
 class ListPageController extends Controller
 {
     protected array $activeFilters = [];
+    protected array $extraData = [];
 
     public function __invoke(ListRequest $request): View
     {
@@ -21,6 +22,7 @@ class ListPageController extends Controller
 
         return view(view: 'pages.admin.pattern-author.list', data: [
             'activeFilters' => $this->activeFilters,
+            'extraData' => $this->extraData,
             'authors' => $authors,
         ]);
     }
@@ -127,6 +129,16 @@ class ListPageController extends Controller
             }
         }
 
+        $replaceToAuthorId = $request->input('replace_to_author_id');
+
+        if ($replaceToAuthorId !== null) {
+            $this->activeFilters['replace_to_author_id'] = $replaceToAuthorId;
+
+            $this->extraData['replace_to_author'] =  $this->getAuthor(id: $replaceToAuthorId);
+
+            $query->where('replace_id', $replaceToAuthorId);
+        }
+
         $removeOnAppear = $request->input(key: 'remove_on_appear');
 
         if ($removeOnAppear !== null) {
@@ -138,5 +150,16 @@ class ListPageController extends Controller
                 $query->where('remove_on_appear', false);
             }
         }
+    }
+
+    protected function getAuthor($id): ?PatternAuthor
+    {
+        return PatternAuthor::query()
+            ->where('id', $id)
+            ->select([
+                'id',
+                'name',
+            ])
+            ->first();
     }
 }

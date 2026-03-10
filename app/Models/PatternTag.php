@@ -56,6 +56,15 @@ class PatternTag extends Model
         );
     }
 
+    public function replacementForCategories(): HasMany
+    {
+         return $this->hasMany(
+            related: PatternCategory::class,
+            foreignKey: 'replace_tag_id',
+            localKey: 'id',
+        );
+    }
+
     public function authorReplacement(): HasOne
     {
         return $this->hasOne(
@@ -89,7 +98,8 @@ class PatternTag extends Model
             && $this->replace_author_id === null
             && $this->replace_category_id === null
             && $this->patterns_count === 0
-            && $this->replacement_for_count === 0;
+            && $this->replacement_for_count === 0
+            && $this->replacement_for_categories_count === 0;
     }
 
     protected function casts(): array

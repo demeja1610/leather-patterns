@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\PatternCategory\Page;
 
+use Carbon\Carbon;
+use App\Models\PatternTag;
 use App\Models\PatternCategory;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\Admin\PatternCategory\ListRequest;
-use Carbon\Carbon;
 
 class ListPageController extends Controller
 {
     protected array $activeFilters = [];
+    protected array $extraData = [];
 
     public function __invoke(ListRequest $request): View
     {
@@ -21,6 +23,7 @@ class ListPageController extends Controller
 
         return view(view: 'pages.admin.pattern-category.list', data: [
             'activeFilters' => $this->activeFilters,
+            'extraData' => $this->extraData,
             'categories' => $categories,
         ]);
     }
@@ -127,6 +130,16 @@ class ListPageController extends Controller
             }
         }
 
+        $replaceToCategoryId = $request->input('replace_to_category_id');
+
+        if ($replaceToCategoryId !== null) {
+            $this->activeFilters['replace_to_category_id'] = $replaceToCategoryId;
+
+            $this->extraData['replace_to_category'] =  $this->getCategory(id: $replaceToCategoryId);
+
+            $query->where('replace_id', $replaceToCategoryId);
+        }
+
         $hasTagReplacement = $request->input(key: 'has_tag_replacement');
 
         if ($hasTagReplacement !== null) {
@@ -137,6 +150,16 @@ class ListPageController extends Controller
             } else {
                 $query->whereNull('replace_tag_id');
             }
+        }
+
+        $replaceToTagId = $request->input('replace_to_tag_id');
+
+        if ($replaceToTagId !== null) {
+            $this->activeFilters['replace_to_tag_id'] = $replaceToTagId;
+
+            $this->extraData['replace_to_tag'] =  $this->getTag(id: $replaceToTagId);
+
+            $query->where('replace_tag_id', $replaceToTagId);
         }
 
         $removeOnAppear = $request->input(key: 'remove_on_appear');
@@ -150,5 +173,27 @@ class ListPageController extends Controller
                 $query->where('remove_on_appear', false);
             }
         }
+    }
+
+    protected function getTag($id): ?PatternTag
+    {
+        return PatternTag::query()
+            ->where('id', $id)
+            ->select([
+                'id',
+                'name',
+            ])
+            ->first();
+    }
+
+    protected function getCategory($id): ?PatternCategory
+    {
+        return PatternCategory::query()
+            ->where('id', $id)
+            ->select([
+                'id',
+                'name',
+            ])
+            ->first();
     }
 }

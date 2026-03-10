@@ -8,17 +8,19 @@ return [
 
     'id' => 'ID',
     'name' => 'Name',
-    'patterns_count' => 'Patterns count',
+    'patterns_count' => 'Patterns',
     'replacement_for_count' => 'Replaces count',
     'created_at' => 'Created at',
     'replacement' => 'Replace to',
-    'remove_on_appear' => 'Remove from patterns on appear',
+    'remove_on_appear' => 'Remove',
     'remove_on_appear_short' => 'Remove on appear',
     'is_published' => 'Is published',
     'has_patterns' => 'Used by patterns',
     'has_replacement' => 'Has replacement',
     'replace_to_author' => 'Replace to author',
     'links' => 'Links',
+    'replacement_for_authors_count' => 'Replaces',
+    'replacement_for_tags_count' => 'Replaces tags',
 
     'admin' => [
         'created' => 'Author with name: `:name` successfully created',

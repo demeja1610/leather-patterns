@@ -173,6 +173,17 @@
         </x-select.select>
     </x-select.wrapper>
 
+    <x-fetch-select.single
+        :url="route('api.admin.v1.pattern-category.search')"
+        id="replace_to_category_id"
+        name="replace_to_category_id"
+        :label="__('pattern_tag.replace_to_category')"
+        :placeholder="__('phrases.search')"
+        selectedItemOptionValueName="id"
+        selectedItemOptionLabelName="name"
+        :selectedItem="isset($extraData['replace_to_category']) ? $extraData['replace_to_category']->toJson(JSON_UNESCAPED_UNICODE) : null"
+    />
+
     <x-select.wrapper>
         <x-select.label for="has_tag_replacement">
             {{ __('pattern_category.has_tag_replacement') }}
@@ -205,6 +216,17 @@
             </x-select.option>
         </x-select.select>
     </x-select.wrapper>
+
+    <x-fetch-select.single
+        :url="route('api.admin.v1.pattern-tag.search')"
+        id="replace_to_tag_id"
+        name="replace_to_tag_id"
+        :label="__('pattern_tag.replace_to_tag')"
+        :placeholder="__('phrases.search')"
+        selectedItemOptionValueName="id"
+        selectedItemOptionLabelName="name"
+        :selectedItem="isset($extraData['replace_to_tag']) ? $extraData['replace_to_tag']->toJson(JSON_UNESCAPED_UNICODE) : null"
+    />
 
     <x-select.wrapper>
         <x-select.label for="remove_on_appear">
@@ -271,11 +293,19 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern_category.remove_on_appear') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern_category.patterns_count') }}
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern_category.replacement_for_count') }}
+                            {{ __('pattern_category.replacement_for_categories_count') }}
+                        </x-table.th>
+
+                        <x-table.th>
+                            {{ __('pattern_category.replacement_for_tags_count') }}
                         </x-table.th>
 
                         <x-table.th>
@@ -284,10 +314,6 @@
 
                         <x-table.th>
                             {{ __('pattern_category.tag_replacement') }}
-                        </x-table.th>
-
-                        <x-table.th>
-                            {{ __('pattern_category.remove_on_appear') }}
                         </x-table.th>
 
                         <x-table.th>
@@ -328,6 +354,10 @@
                                 {{ $category->is_published ? __('phrases.yes') : __('phrases.no') }}
                             </x-table.td-bool>
 
+                            <x-table.td-bool :value="$category->remove_on_appear">
+                                {{ $category->remove_on_appear ? __('phrases.yes') : __('phrases.no') }}
+                            </x-table.td-bool>
+
                             <x-table.td>
                                 <x-link.default
                                     :href="route('admin.page.patterns.list', ['category_id' => $category->id])"
@@ -338,20 +368,44 @@
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $category->replacement_for_count + $category->replacement_for_tags_count }}
+                                <x-link.default
+                                    :href="route('admin.page.pattern-category.list', ['replace_to_category_id' => $category->id])"
+                                    target="_blank"
+                                >
+                                    {{ $category->replacement_for_count }}
+                                </x-link.default>
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $category->replacement?->name }}
+                                <x-link.default
+                                    :href="route('admin.page.pattern-tag.list', ['replace_to_category_id' => $category->id])"
+                                    target="_blank"
+                                >
+                                    {{ $category->replacement_for_tags_count }}
+                                </x-link.default>
                             </x-table.td>
 
                             <x-table.td>
-                                {{ $category->tagReplacement?->name }}
+                                @if ($category->replacement)
+                                    <x-link.default
+                                        :href="route('admin.page.pattern-category.list', ['id' => $category->replacement->id])"
+                                        target="_blank"
+                                    >
+                                        {{ $category->replacement->name }}
+                                    </x-link.default>
+                                @endif
                             </x-table.td>
 
-                            <x-table.td-bool :value="$category->remove_on_appear">
-                                {{ $category->remove_on_appear ? __('phrases.yes') : __('phrases.no') }}
-                            </x-table.td-bool>
+                            <x-table.td>
+                                @if ($category->tagReplacement)
+                                    <x-link.default
+                                        :href="route('admin.page.pattern-tag.list', ['id' => $category->tagReplacement->id])"
+                                        target="_blank"
+                                    >
+                                        {{ $category->tagReplacement->name }}
+                                    </x-link.default>
+                                @endif
+                            </x-table.td>
 
                             <x-table.td>
                                 {{ $category->created_at->translatedFormat('d F Y H:i') }}

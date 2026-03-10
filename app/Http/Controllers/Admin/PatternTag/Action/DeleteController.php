@@ -63,6 +63,7 @@ class DeleteController extends Controller
         $q->withCount(relations: [
             'patterns',
             'replacementFor',
+            'replacementForCategories',
         ]); // optimization for isDeleted method
 
         return $q->first();
