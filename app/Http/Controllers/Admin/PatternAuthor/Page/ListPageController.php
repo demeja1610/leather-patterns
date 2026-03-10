@@ -42,7 +42,10 @@ class ListPageController extends Controller
             'replacementForTags',
         ]);
 
-        $q->with(relations: 'replacement');
+        $q->with([
+            'replacement',
+            'socials',
+        ]);
 
         return $q->orderBy('id', 'desc')->cursorPaginate(
             perPage: 30,

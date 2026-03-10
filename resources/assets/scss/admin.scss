@@ -80,8 +80,7 @@
 @use '@styles/pages/admin/page-single.scss' as admin-page-single;
 
 @use '@styles/pages/admin/pattern/list.scss' as admin-page-patterns-list;
-// @use '@styles/pages/admin/pattern/edit.scss' as admin-page-pattern-edit;
-// @use '@styles/pages/admin/pattern/create.scss' as admin-page-pattern-edit;
+@use '@styles/pages/admin/pattern-author/list.scss' as admin-page-pattern-authors-list;
 
 @use '@styles/common/mixins/thin-scrollbar.scss' as thin-scrollbar;
 

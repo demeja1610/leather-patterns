@@ -18,6 +18,7 @@ return [
     'has_patterns' => 'Used by patterns',
     'has_replacement' => 'Has replacement',
     'replace_to_author' => 'Replace to author',
+    'links' => 'Links',
 
     'admin' => [
         'created' => 'Author with name: `:name` successfully created',

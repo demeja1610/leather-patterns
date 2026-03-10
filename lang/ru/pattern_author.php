@@ -19,6 +19,7 @@ return [
     'has_patterns' => 'Используется в выкройках',
     'has_replacement' => 'Есть замена',
     'replace_to_author' => 'Заменить на автора',
+    'links' => 'Ссылки',
 
     'admin' => [
         'created' => 'Автор выкройки: `:name` успешно создан',

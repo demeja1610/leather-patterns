@@ -4,6 +4,7 @@
     'showFilters' => $activeFilters !== [],
     'filterUrl' => route('admin.page.pattern-author.list'),
     'resetUrl' => route('admin.page.pattern-author.list'),
+    'classes' => 'admin-page-pattern-author-list',
 ])
 
 @section('header-content')
@@ -238,6 +239,10 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern_author.links') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern_author.patterns_count') }}
                         </x-table.th>
 
@@ -288,6 +293,23 @@
                             <x-table.td-bool :value="$author->is_published">
                                 {{ $author->is_published ? __('phrases.yes') : __('phrases.no') }}
                             </x-table.td-bool>
+
+                            <x-table.td>
+                                <div class="admin-page-pattern-author-list__socials">
+                                    @foreach ($author->socials as $social)
+                                        <x-link.default
+                                            :href="$social->url"
+                                            target="_blank"
+                                            class="admin-page-pattern-author-list__social"
+                                        >
+                                            <x-icon.svg
+                                                :name="$social->type->value"
+                                                class="admin-page-pattern-author-list__social-icon admin-page-pattern-author-list__social-icon--{{ $social->type->value }}"
+                                            />
+                                        </x-link.default>
+                                    @endforeach
+                                </div>
+                            </x-table.td>
 
                             <x-table.td>
                                 <x-link.default
