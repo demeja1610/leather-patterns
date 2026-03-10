@@ -17,5 +17,9 @@ class PatternCategoryObserver
         if ($category->replace_id !== null && $category->isDirty('replace_id')) {
             dispatch(new ReplaceMarkedForReplacePatternCategoriesInPatternsJob(categoryId: $category->id));
         }
+
+        if ($category->replace_tag_id !== null && $category->isDirty('replace_tag_id')) {
+            dispatch(new ReplaceMarkedForReplacePatternCategoriesInPatternsJob(categoryId: $category->id));
+        }
     }
 }
