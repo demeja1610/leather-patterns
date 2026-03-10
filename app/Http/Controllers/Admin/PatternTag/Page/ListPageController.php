@@ -6,11 +6,12 @@ namespace App\Http\Controllers\Admin\PatternTag\Page;
 
 use Carbon\Carbon;
 use App\Models\PatternTag;
+use App\Models\PatternAuthor;
+use App\Models\PatternCategory;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\Admin\PatternTag\ListRequest;
-use App\Models\PatternCategory;
 
 class ListPageController extends Controller
 {
@@ -134,7 +135,7 @@ class ListPageController extends Controller
         if ($replaceToTagId !== null) {
             $this->activeFilters['replace_to_tag_id'] = $replaceToTagId;
 
-            $this->extraData['selected_tag'] =  $this->getTag(id: $replaceToTagId);
+            $this->extraData['replace_to_tag'] =  $this->getTag(id: $replaceToTagId);
 
             $query->where('replace_id', $replaceToTagId);
         }
@@ -149,6 +150,16 @@ class ListPageController extends Controller
             } else {
                 $query->whereNull('replace_author_id');
             }
+        }
+
+        $replaceToAuthorId = $request->input('replace_to_author_id');
+
+        if ($replaceToAuthorId !== null) {
+            $this->activeFilters['replace_to_author_id'] = $replaceToAuthorId;
+
+            $this->extraData['replace_to_author'] =  $this->getAuthor(id: $replaceToAuthorId);
+
+            $query->where('replace_author_id', $replaceToAuthorId);
         }
 
         $hasCategoryReplacement = $request->input(key: 'has_category_replacement');
@@ -168,7 +179,7 @@ class ListPageController extends Controller
         if ($replaceToCategoryId !== null) {
             $this->activeFilters['replace_to_category_id'] = $replaceToCategoryId;
 
-            $this->extraData['selected_category'] =  $this->getCategory(id: $replaceToCategoryId);
+            $this->extraData['replace_to_category'] =  $this->getCategory(id: $replaceToCategoryId);
 
             $query->where('replace_category_id', $replaceToCategoryId);
         }
@@ -200,6 +211,17 @@ class ListPageController extends Controller
     protected function getCategory($id): ?PatternCategory
     {
         return PatternCategory::query()
+            ->where('id', $id)
+            ->select([
+                'id',
+                'name',
+            ])
+            ->first();
+    }
+
+    protected function getAuthor($id): ?PatternAuthor
+    {
+        return PatternAuthor::query()
             ->where('id', $id)
             ->select([
                 'id',

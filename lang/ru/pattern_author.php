@@ -18,7 +18,7 @@ return [
     'is_published' => 'Опубликован',
     'has_patterns' => 'Используется в выкройках',
     'has_replacement' => 'Есть замена',
-
+    'replace_to_author' => 'Заменить на автора',
 
     'admin' => [
         'created' => 'Автор выкройки: `:name` успешно создан',

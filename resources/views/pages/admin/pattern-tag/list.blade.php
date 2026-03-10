@@ -218,6 +218,17 @@
         </x-select.select>
     </x-select.wrapper>
 
+    <x-fetch-select.single
+        :url="route('api.admin.v1.pattern-author.search')"
+        id="replace_to_author_id"
+        name="replace_to_author_id"
+        :label="__('pattern_author.replace_to_author')"
+        :placeholder="__('phrases.search')"
+        selectedItemOptionValueName="id"
+        selectedItemOptionLabelName="name"
+        :selectedItem="isset($extraData['replace_to_author']) ? $extraData['replace_to_author']->toJson(JSON_UNESCAPED_UNICODE) : null"
+    />
+
     <x-select.wrapper>
         <x-select.label for="has_category_replacement">
             {{ __('pattern_tag.has_category_replacement') }}
