@@ -4,6 +4,7 @@
     'showFilters' => $activeFilters !== [],
     'filterUrl' => route('admin.page.pattern-author-social.list'),
     'resetUrl' => route('admin.page.pattern-author-social.list'),
+    'classes' => 'admin-page-pattern-author-social-list',
 ])
 
 @section('header-content')
@@ -167,6 +168,10 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern_author_social.url') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern_author_social.type') }}
                         </x-table.th>
 
@@ -204,6 +209,21 @@
 
                             <x-table.td>
                                 {{ $social->id }}
+                            </x-table.td>
+
+                            <x-table.td>
+                                <div class="admin-page-pattern-author-social-list__socials">
+                                    <x-link.default
+                                        :href="$social->url"
+                                        target="_blank"
+                                        class="admin-page-pattern-author-social-list__social"
+                                    >
+                                        <x-icon.svg
+                                            :name="$social->type->value"
+                                            class="admin-page-pattern-author-social-list__social-icon admin-page-pattern-author-social-list__social-icon--{{ $social->type->value }}"
+                                        />
+                                    </x-link.default>
+                                </div>
                             </x-table.td>
 
                             <x-table.td>
