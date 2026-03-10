@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Admin\PatternTag;
 
-use Illuminate\Foundation\Http\FormRequest;
 
-class EditRequest extends FormRequest
+class EditRequest extends CreateRequest
 {
     public function authorize(): bool
     {
@@ -15,37 +14,17 @@ class EditRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                'min:1',
-                "unique:pattern_tags,name,{$this->id}",
+        return array_merge(
+            parent::rules(),
+            [
+                'name' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    'min:1',
+                    "unique:pattern_tags,name,{$this->id}",
+                ],
             ],
-            'replace_id' => [
-                'nullable',
-                'numeric',
-                'exists:pattern_tags,id',
-            ],
-            'replace_author_id' => [
-                'nullable',
-                'numeric',
-                'exists:pattern_authors,id',
-            ],
-            'replace_category_id' => [
-                'nullable',
-                'numeric',
-                'exists:pattern_categories,id',
-            ],
-            'remove_on_appear' => [
-                'nullable',
-                'in:on',
-            ],
-            'is_published' => [
-                'nullable',
-                'in:on',
-            ],
-        ];
+        );
     }
 }
