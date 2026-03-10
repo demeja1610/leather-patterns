@@ -49,6 +49,7 @@ class ListPageController extends Controller
         $q->with(relations: [
             'replacement',
             'authorReplacement',
+            'categoryReplacement',
         ]);
 
         return $q->orderBy('id', 'desc')->cursorPaginate(
