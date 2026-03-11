@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('tags')
     ->group(callback: function (): void {
         Route::get('/', \App\Http\Controllers\Admin\PatternTag\Page\ListPageController::class)
-            ->name(name: 'page.pattern-tag.list');
+            ->name(name: 'page.pattern-tags.list');
 
         Route::group(['prefix' => 'create'], function (): void {
             Route::get('/', \App\Http\Controllers\Admin\PatternTag\Page\CreatePageController::class)
-                ->name(name: 'page.pattern-tag.create');
+                ->name(name: 'page.pattern-tags.create');
 
             Route::post('/', \App\Http\Controllers\Admin\PatternTag\Action\CreateController::class)
                 ->name(name: 'pattern-tag.create');
@@ -21,7 +21,7 @@ Route::prefix('tags')
             Route::prefix('edit')
                 ->group(callback: function (): void {
                     Route::get('/', \App\Http\Controllers\Admin\PatternTag\Page\EditPageController::class)
-                        ->name(name: 'page.pattern-tag.edit');
+                        ->name(name: 'page.pattern-tags.edit');
 
                     Route::patch('/', \App\Http\Controllers\Admin\PatternTag\Action\EditController::class)
                         ->name(name: 'pattern-tag.update');

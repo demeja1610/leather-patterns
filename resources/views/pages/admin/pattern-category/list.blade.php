@@ -2,8 +2,8 @@
     'paginator' => $categories,
     'title' => __('pattern_category.pattern_categories'),
     'showFilters' => $activeFilters !== [],
-    'filterUrl' => route('admin.page.pattern-category.list'),
-    'resetUrl' => route('admin.page.pattern-category.list'),
+    'filterUrl' => route('admin.page.pattern-categories.list'),
+    'resetUrl' => route('admin.page.pattern-categories.list'),
 ])
 
 @section('header-content')
@@ -335,7 +335,7 @@
                                     </x-link.button-default>
                                 @endif
 
-                                <x-link.button-ghost :href="route('admin.page.pattern-category.edit', ['id' => $category->id])">
+                                <x-link.button-ghost :href="route('admin.page.pattern-categories.edit', ['id' => $category->id])">
                                     <x-icon.svg name="edit" />
                                 </x-link.button-ghost>
 
@@ -369,7 +369,7 @@
 
                             <x-table.td>
                                 <x-link.default
-                                    :href="route('admin.page.pattern-category.list', ['replace_to_category_id' => $category->id])"
+                                    :href="route('admin.page.pattern-categories.list', ['replace_to_category_id' => $category->id])"
                                     target="_blank"
                                 >
                                     {{ $category->replacement_for_count }}
@@ -378,7 +378,7 @@
 
                             <x-table.td>
                                 <x-link.default
-                                    :href="route('admin.page.pattern-tag.list', ['replace_to_category_id' => $category->id])"
+                                    :href="route('admin.page.pattern-tags.list', ['replace_to_category_id' => $category->id])"
                                     target="_blank"
                                 >
                                     {{ $category->replacement_for_tags_count }}
@@ -388,7 +388,7 @@
                             <x-table.td>
                                 @if ($category->replacement)
                                     <x-link.default
-                                        :href="route('admin.page.pattern-category.list', ['id' => $category->replacement->id])"
+                                        :href="route('admin.page.pattern-categories.list', ['id' => $category->replacement->id])"
                                         target="_blank"
                                     >
                                         {{ $category->replacement->name }}
@@ -399,7 +399,7 @@
                             <x-table.td>
                                 @if ($category->tagReplacement)
                                     <x-link.default
-                                        :href="route('admin.page.pattern-tag.list', ['id' => $category->tagReplacement->id])"
+                                        :href="route('admin.page.pattern-tags.list', ['id' => $category->tagReplacement->id])"
                                         target="_blank"
                                     >
                                         {{ $category->tagReplacement->name }}

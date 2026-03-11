@@ -53,7 +53,7 @@ class CreateController extends Controller
 
         $social = PatternAuthorSocial::query()->create(attributes: $data);
 
-        return to_route(route: 'admin.page.pattern-author-social.list')->with(
+        return to_route(route: 'admin.page.pattern-author-socials.list')->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
                 new SessionNotificationDto(

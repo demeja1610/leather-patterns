@@ -3,7 +3,7 @@
 ])
 
 @section('page')
-    <x-admin.form.create :action="route('admin.page.pattern-author.create')">
+    <x-admin.form.create :action="route('admin.page.pattern-authors.create')">
         <x-input-text.input-text>
             <x-input-text.label
                 for="name"

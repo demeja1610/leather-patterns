@@ -21,7 +21,7 @@ Route::prefix('admin')
 
         require_once __DIR__ . '/admin/pattern-author.php';
 
-        require_once __DIR__ . '/admin/pattern-author-social.php';
+        require_once __DIR__ . '/admin/pattern-authors-social.php';
 
         require_once __DIR__ . '/admin/pattern-review.php';
 

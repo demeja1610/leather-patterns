@@ -78,6 +78,7 @@ class SidebarMenuComposer
                     }
 
                     $currentRouteContainsMenuItemRoutePart = false;
+
                     $itemRoutePart = implode(
                         separator: '.',
                         array: array_slice(

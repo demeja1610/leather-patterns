@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('reviews')
+Route::prefix('patterns-reviews')
     ->group(callback: function (): void {
         Route::get('/', \App\Http\Controllers\Admin\PatternReview\Page\ListPageController::class)
             ->name(name: 'page.pattern-review.list');

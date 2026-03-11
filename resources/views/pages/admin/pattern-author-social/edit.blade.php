@@ -3,7 +3,7 @@
 ])
 
 @section('page')
-    <x-admin.form.edit :action="route('admin.pattern-author-social.update', ['id' => $social->id])">
+    <x-admin.form.edit :action="route('admin.pattern-author-socials.update', ['id' => $social->id])">
         @method('PATCH')
 
         <x-select.wrapper>

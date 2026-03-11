@@ -2,13 +2,13 @@
     'paginator' => $socials,
     'title' => __('pattern_author_social.pattern_author_socials'),
     'showFilters' => $activeFilters !== [],
-    'filterUrl' => route('admin.page.pattern-author-social.list'),
-    'resetUrl' => route('admin.page.pattern-author-social.list'),
+    'filterUrl' => route('admin.page.pattern-author-socials.list'),
+    'resetUrl' => route('admin.page.pattern-author-socials.list'),
     'classes' => 'admin-page-pattern-author-social-list',
 ])
 
 @section('header-content')
-    <x-link.button-default :href="route('admin.pattern-author-social.create')">
+    <x-link.button-default :href="route('admin.pattern-author-socials.create')">
         <x-icon.svg name="create" />
 
         {{ __('actions.add_new') }}
@@ -195,14 +195,14 @@
                             <x-table.td-actions>
                                 @if ($social->isDeletable() === true)
                                     <x-link.button-default
-                                        :href="route('admin.pattern-author-social.delete', ['id' => $social->id])"
+                                        :href="route('admin.pattern-author-socials.delete', ['id' => $social->id])"
                                         x-on:click.prevent="() => {deleteUrl=$el.href}"
                                     >
                                         <x-icon.svg name="delete" />
                                     </x-link.button-default>
                                 @endif
 
-                                <x-link.button-ghost :href="route('admin.page.pattern-author-social.edit', ['id' => $social->id])">
+                                <x-link.button-ghost :href="route('admin.page.pattern-author-socials.edit', ['id' => $social->id])">
                                     <x-icon.svg name="edit" />
                                 </x-link.button-ghost>
                             </x-table.td-actions>
@@ -232,7 +232,7 @@
 
                             <x-table.td>
                                 <x-link.default
-                                    :href="route('admin.page.pattern-author.list', ['id' => $social->author->id])"
+                                    :href="route('admin.page.pattern-authors.list', ['id' => $social->author->id])"
                                     target="_blank"
                                 >
                                     {{ $social->author->name }}

@@ -56,7 +56,7 @@ class CreateController extends Controller
 
         $author = PatternAuthor::query()->create(attributes: $data);
 
-        return to_route(route: 'admin.page.pattern-author.list')->with(
+        return to_route(route: 'admin.page.pattern-authors.list')->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
                 new SessionNotificationDto(

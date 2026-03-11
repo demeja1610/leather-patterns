@@ -3,7 +3,7 @@
 ])
 
 @section('page')
-    <x-admin.form.create :action="route('admin.page.pattern-author-social.create')">
+    <x-admin.form.create :action="route('admin.page.pattern-author-socials.create')">
         <x-select.wrapper>
             <x-select.label
                 for="type"

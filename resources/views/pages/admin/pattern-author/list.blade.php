@@ -2,8 +2,8 @@
     'paginator' => $authors,
     'title' => __('pattern_author.pattern_authors'),
     'showFilters' => $activeFilters !== [],
-    'filterUrl' => route('admin.page.pattern-author.list'),
-    'resetUrl' => route('admin.page.pattern-author.list'),
+    'filterUrl' => route('admin.page.pattern-authors.list'),
+    'resetUrl' => route('admin.page.pattern-authors.list'),
     'classes' => 'admin-page-pattern-author-list',
 ])
 
@@ -292,7 +292,7 @@
                                     </x-link.button-default>
                                 @endif
 
-                                <x-link.button-ghost :href="route('admin.page.pattern-author.edit', ['id' => $author->id])">
+                                <x-link.button-ghost :href="route('admin.page.pattern-authors.edit', ['id' => $author->id])">
                                     <x-icon.svg name="edit" />
                                 </x-link.button-ghost>
                             </x-table.td-actions>
@@ -341,7 +341,7 @@
 
                             <x-table.td>
                                 <x-link.default
-                                    :href="route('admin.page.pattern-author.list', ['replace_to_author_id' => $author->id])"
+                                    :href="route('admin.page.pattern-authors.list', ['replace_to_author_id' => $author->id])"
                                     target="_blank"
                                 >
                                     {{ $author->replacement_for_count }}
@@ -350,7 +350,7 @@
 
                             <x-table.td>
                                 <x-link.default
-                                    :href="route('admin.page.pattern-tag.list', ['replace_to_author_id' => $author->id])"
+                                    :href="route('admin.page.pattern-tags.list', ['replace_to_author_id' => $author->id])"
                                     target="_blank"
                                 >
                                     {{ $author->replacement_for_tags_count }}
@@ -360,7 +360,7 @@
                             <x-table.td>
                                 @if ($author->replacement)
                                     <x-link.default
-                                        :href="route('admin.page.pattern-author.list', ['id' => $author->replacement->id])"
+                                        :href="route('admin.page.pattern-authors.list', ['id' => $author->replacement->id])"
                                         target="_blank"
                                     >
                                         {{ $author->replacement->name }}

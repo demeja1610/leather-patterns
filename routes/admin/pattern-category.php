@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('categories')
     ->group(callback: function (): void {
         Route::get('/', \App\Http\Controllers\Admin\PatternCategory\Page\ListPageController::class)
-            ->name(name: 'page.pattern-category.list');
+            ->name(name: 'page.pattern-categories.list');
 
         Route::group(['prefix' => 'create'], function (): void {
             Route::get('/', \App\Http\Controllers\Admin\PatternCategory\Page\CreatePageController::class)
-                ->name(name: 'page.pattern-category.create');
+                ->name(name: 'page.pattern-categories.create');
 
             Route::post('/', \App\Http\Controllers\Admin\PatternCategory\Action\CreateController::class)
                 ->name(name: 'pattern-category.create');
@@ -21,7 +21,7 @@ Route::prefix('categories')
             Route::prefix('edit')
                 ->group(callback: function (): void {
                     Route::get('/', \App\Http\Controllers\Admin\PatternCategory\Page\EditPageController::class)
-                        ->name(name: 'page.pattern-category.edit');
+                        ->name(name: 'page.pattern-categories.edit');
 
                     Route::patch('/', \App\Http\Controllers\Admin\PatternCategory\Action\EditController::class)
                         ->name(name: 'pattern-category.update');

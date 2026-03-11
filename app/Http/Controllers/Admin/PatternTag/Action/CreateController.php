@@ -78,7 +78,7 @@ class CreateController extends Controller
 
         $tag = PatternTag::query()->create(attributes: $data);
 
-        return to_route(route: 'admin.page.pattern-tag.list')->with(
+        return to_route(route: 'admin.page.pattern-tags.list')->with(
             key: 'notifications',
             value: new SessionNotificationListDto(
                 new SessionNotificationDto(
