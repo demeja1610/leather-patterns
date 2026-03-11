@@ -40,16 +40,7 @@ class CreateController extends Controller
             ]);
         }
 
-        $type = SocialTypeEnum::tryFrom($data['type']);
-
-        if ($type !== $urlSocialType) {
-            $request->session()->flash('selected_author', $author);
-
-            throw ValidationException::withMessages(messages: [
-                'url' => __('pattern_author_social.admin.url_type_mismatch'),
-                'type' => __('pattern_author_social.admin.url_type_mismatch'),
-            ]);
-        }
+        $data['type'] = $urlSocialType->value;
 
         $social = PatternAuthorSocial::query()->create(attributes: $data);
 

@@ -4,40 +4,6 @@
 
 @section('page')
     <x-admin.form.create :action="route('admin.page.pattern-author-socials.create')">
-        <x-select.wrapper>
-            <x-select.label
-                for="type"
-                class="required"
-            >
-                {{ __('pattern_author_social.type') }}
-            </x-select.label>
-
-            <x-select.select
-                name="type"
-                id="type"
-                :title="__('pattern_author_social.type')"
-                required
-            >
-                <x-select.option
-                    value=""
-                    :selected="old('type') === null"
-                >
-                    {{ __('filter.not_selected') }}
-                </x-select.option>
-
-                @foreach ($types as $type)
-                    <x-select.option
-                        :value="$type->value"
-                        :selected="old('type') === $type->value"
-                    >
-                        {{ __("pattern_author_social.types.{$type->value}") }}
-                    </x-select.option>
-                @endforeach
-            </x-select.select>
-
-            <x-select.errors :messages="$errors->get('type')" />
-        </x-select.wrapper>
-
         <x-input-text.input-text>
             <x-input-text.label
                 for="url"

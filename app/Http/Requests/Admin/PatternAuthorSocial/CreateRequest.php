@@ -20,10 +20,6 @@ class CreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => [
-                'required',
-                Rule::enum(SocialTypeEnum::class),
-            ],
             'url' => [
                 'url',
             ],

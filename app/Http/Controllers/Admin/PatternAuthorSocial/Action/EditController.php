@@ -40,14 +40,7 @@ class EditController extends Controller
             ]);
         }
 
-        $type = SocialTypeEnum::tryFrom($data['type']);
-
-        if ($type !== $urlSocialType) {
-            throw ValidationException::withMessages(messages: [
-                'url' => __('pattern_author_social.admin.url_type_mismatch'),
-                'type' => __('pattern_author_social.admin.url_type_mismatch'),
-            ]);
-        }
+        $data['type'] = $urlSocialType->value;
 
         $updated = $social->update($data);
 
