@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin\Pattern\Action;
 use App\Models\Pattern;
 use App\Models\PatternFile;
 use App\Models\PatternImage;
+use App\Enum\PatternSourceEnum;
 use App\Enum\NotificationTypeEnum;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -29,6 +30,7 @@ class CreateController extends Controller
             $request->validated(),
             [
                 'is_published' => (bool) $request->input(key: 'is_published', default: false),
+                'source' => PatternSourceEnum::LOCAL->value,
             ],
         );
 

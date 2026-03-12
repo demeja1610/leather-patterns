@@ -21,6 +21,40 @@
             />
         </x-input-text.input-text>
 
+        @if ($pattern->isParsed())
+            <x-input-text.input-text>
+                <x-input-text.label for="id">
+                    {{ __('pattern.source') }}
+                </x-input-text.label>
+
+                <x-input-text.input
+                    id="source"
+                    name="source"
+                    type="text"
+                    disabled
+                    :value="__('pattern_source.' . $pattern->source->value)"
+                    :title="__('pattern.source')"
+                />
+            </x-input-text.input-text>
+        @endif
+
+        @if ($pattern->source_url !== null)
+            <x-input-text.input-text>
+                <x-input-text.label for="id">
+                    {{ __('pattern.source_url') }}
+                </x-input-text.label>
+
+                <x-input-text.input
+                    id="source"
+                    name="source"
+                    type="text"
+                    disabled
+                    :value="$pattern->source_url"
+                    title="{{ __('pattern.source_url') }}"
+                />
+            </x-input-text.input-text>
+        @endif
+
         <x-input-text.input-text>
             <x-input-text.label
                 for="title"
@@ -39,55 +73,6 @@
             />
 
             <x-input-text.input-errors :messages="$errors->get('title')" />
-        </x-input-text.input-text>
-
-        <x-select.wrapper>
-            <x-select.label
-                for="source"
-                class="required"
-            >
-                {{ __('pattern.source') }}
-            </x-select.label>
-
-            <x-select.select
-                name="source"
-                id="source"
-                :title="__('pattern.source')"
-                required
-            >
-                <x-select.option
-                    value=""
-                    :selected="old('source', $pattern->source) === null"
-                >
-                    {{ __('filter.not_selected') }}
-                </x-select.option>
-
-                @foreach ($sources as $source)
-                    <x-select.option
-                        :value="$source->value"
-                        :selected="old('source', $pattern->source->value) === $source->value"
-                    >
-                        {{ __("pattern_source.{$source->value}") }}
-                    </x-select.option>
-                @endforeach
-
-            </x-select.select>
-        </x-select.wrapper>
-
-        <x-input-text.input-text>
-            <x-input-text.label for="source_url">
-                {{ __('pattern.source_url') }}
-            </x-input-text.label>
-
-            <x-input-text.input
-                id="source_url"
-                name="source_url"
-                type="url"
-                :value="old('source_url', $pattern->source_url)"
-                title="{{ __('pattern.source_url') }}"
-            />
-
-            <x-input-text.input-errors :messages="$errors->get('source_url')" />
         </x-input-text.input-text>
 
         <div class="admin-page-single__grid admin-page-single__grid--3 ">

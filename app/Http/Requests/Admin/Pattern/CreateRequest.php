@@ -6,9 +6,7 @@ namespace App\Http\Requests\Admin\Pattern;
 
 use App\Models\PatternTag;
 use App\Models\PatternAuthor;
-use App\Enum\PatternSourceEnum;
 use App\Models\PatternCategory;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Validation\Validator;
@@ -22,26 +20,12 @@ class CreateRequest extends FormRequest
 
     public function rules(): array
     {
-        $localSource = PatternSourceEnum::LOCAL;
-
         return [
             'title' => [
                 'required',
                 'string',
                 'max:255',
                 'min:2',
-            ],
-
-            'source' => [
-                'required',
-                Rule::enum(PatternSourceEnum::class),
-            ],
-
-            'source_url' => [
-                'nullable',
-                "required_unless:source,{$localSource->value}",
-                'url',
-                'unique:patterns,source_url',
             ],
 
             'author_id' => [
