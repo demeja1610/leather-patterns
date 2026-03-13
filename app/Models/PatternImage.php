@@ -44,4 +44,9 @@ class PatternImage extends Model
             ? "images/patterns/{$this->pattern_id}"
             : 'images/patterns/temp';
     }
+
+    public function getSaveToDiskName(): string
+    {
+        return 'public';
+    }
 }

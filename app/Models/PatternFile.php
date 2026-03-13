@@ -54,4 +54,9 @@ class PatternFile extends Model
             ? "patterns/{$this->pattern_id}"
             : 'patterns/temp';
     }
+
+    public function getSaveToDiskName(): string
+    {
+        return 'public';
+    }
 }

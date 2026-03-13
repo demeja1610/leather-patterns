@@ -80,6 +80,11 @@ class Pattern extends Model
         return true;
     }
 
+    public function isParsed(): bool
+    {
+        return $this->source !== PatternSourceEnum::LOCAL;
+    }
+
     protected function casts(): array
     {
         return [
