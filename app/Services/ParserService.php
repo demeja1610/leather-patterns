@@ -8,6 +8,10 @@ use DOMXPath;
 use Exception;
 use DOMDocument;
 use GuzzleHttp\Client;
+use App\Enum\VideoSourceEnum;
+use App\Dto\Parser\Pattern\ImageDto;
+use App\Dto\Parser\Pattern\VideoDto;
+use App\Dto\Parser\Pattern\VideoListDto;
 use GuzzleHttp\Exception\GuzzleException;
 use App\Interfaces\Services\ParserServiceInterface;
 
@@ -105,5 +109,69 @@ class ParserService implements ParserServiceInterface
         }
 
         return array_unique(array: $ids);
+    }
+
+    public function getVideosFromString(string $content): VideoListDto
+    {
+        $youtubeVideoIds = $this->getYoutubeVideoIdsFromString($content);
+        $vkVideoIds = $this->getVkVideoIdsFromString($content);
+
+        $videos = [];
+
+        foreach ($youtubeVideoIds as $videoId) {
+            $videos[] = new VideoDto(
+                url: "https://www.youtube.com/watch?v={$videoId}",
+                source: VideoSourceEnum::YOUTUBE,
+                sourceIdentifier: $videoId,
+            );
+        }
+
+        foreach ($vkVideoIds as $videoId) {
+            $videos[] = new VideoDto(
+                url: "https://vkvideo.ru/video{$videoId}",
+                source: VideoSourceEnum::VK,
+                sourceIdentifier: $videoId,
+            );
+        }
+
+        return new VideoListDto(
+            ...$videos
+        );
+    }
+
+    public function getBiggestImageFromSrcset(string $srcset): ?ImageDto
+    {
+        $maxWidth = 0;
+        $imageUrl = null;
+
+        $srcsetPairs = array_filter(
+            array: explode(
+                string: $srcset,
+                separator: ',',
+            )
+        );
+
+        foreach ($srcsetPairs as $pair) {
+            $parts = explode(
+                string: trim(string: $pair),
+                separator: ' ',
+            );
+
+            if (count(value: $parts) === 2) {
+                $url = $parts[0];
+                $width = (int) str_replace(search: 'w', replace: '', subject: $parts[1]);
+
+                if ($width > $maxWidth) {
+                    $maxWidth = $width;
+                    $imageUrl = $url;
+                }
+            }
+        }
+
+        return $imageUrl === null
+            ? null
+            : new ImageDto(
+                url: $imageUrl,
+            );
     }
 }

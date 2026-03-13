@@ -8,6 +8,8 @@ use DOMXPath;
 use Exception;
 use DOMDocument;
 use GuzzleHttp\Client;
+use App\Dto\Parser\Pattern\ImageDto;
+use App\Dto\Parser\Pattern\VideoListDto;
 
 interface ParserServiceInterface
 {
@@ -27,4 +29,8 @@ interface ParserServiceInterface
     public function getYoutubeVideoIdsFromString(string $string): array;
 
     public function getVkVideoIdsFromString(string $string): array;
+
+    public function getVideosFromString(string $content): VideoListDto;
+
+    public function getBiggestImageFromSrcset(string $srcset): ?ImageDto;
 }
