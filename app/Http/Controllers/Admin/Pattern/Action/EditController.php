@@ -83,10 +83,12 @@ class EditController extends Controller
             if ($removePatternImagesUrls !== []) {
                 $pattern->load('images');
 
+                $newPatternImage = new PatternImage();
+
                 /**
                  * @var \Illuminate\Filesystem\Filesystem
                  */
-                $disk  = Storage::disk('public');
+                $disk  = Storage::disk($newPatternImage->getSaveDiskName());
 
                 $toDeleteImages = $pattern->images->filter(fn(PatternImage $patternImage) => in_array(
                     haystack: $removePatternImagesUrls,
@@ -99,10 +101,12 @@ class EditController extends Controller
             if ($removePatternFilesUrls !== []) {
                 $pattern->load('files');
 
+                 $newPatternFile = new PatternFile();
+
                 /**
                  * @var \Illuminate\Filesystem\Filesystem
                  */
-                $disk  = Storage::disk('public');
+                $disk  = Storage::disk($newPatternFile->getSaveDiskName());
 
                 $toDeleteFiles = $pattern->files->filter(fn(PatternFile $patternFile) => in_array(
                     haystack: $removePatternFilesUrls,
@@ -162,12 +166,14 @@ class EditController extends Controller
     {
         $images = [];
 
+        $newPatternImage = new PatternImage();
+
         foreach ($urls as $url) {
             $storagePath = parse_url($url, PHP_URL_PATH);
             $path = str_replace('/storage/', '', $storagePath);
 
-            if (Storage::disk('public')->exists($path)) {
-                $publicPath = Storage::disk('public')->path($path);
+            if (Storage::disk($newPatternImage->getSaveDiskName())->exists($path)) {
+                $publicPath = Storage::disk($newPatternImage->getSaveDiskName())->path($path);
 
                 $ext = $this->fileService->getExtension($publicPath);
                 $size = $this->fileService->getSize($publicPath);
@@ -196,12 +202,14 @@ class EditController extends Controller
     {
         $files = [];
 
+        $newPatternFile = new PatternFile();
+
         foreach ($urls as $url) {
             $storagePath = parse_url($url, PHP_URL_PATH);
             $path = str_replace('/storage/', '', $storagePath);
 
-            if (Storage::disk('public')->exists($path)) {
-                $publicPath = Storage::disk('public')->path($path);
+            if (Storage::disk($newPatternFile->getSaveDiskName())->exists($path)) {
+                $publicPath = Storage::disk($newPatternFile->getSaveDiskName())->path($path);
 
                 $ext = $this->fileService->getExtension($publicPath);
                 $size = $this->fileService->getSize($publicPath);

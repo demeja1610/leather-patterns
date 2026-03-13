@@ -12,17 +12,16 @@ class UploadController extends Controller
     {
         $saved = [];
 
-        $filePath = (new PatternFile())->getUploadPath();
-
         if ($request->hasFile('files')) {
+            $newPatternFile = new PatternFile();
             /**
              * @var \Illuminate\Http\UploadedFile $file
              */
             foreach ($request->file('files') as $file) {
-                $path = $file->store($filePath, 'public');
+                $path = $file->store($newPatternFile->getUploadPath(), $newPatternFile->getSaveToDiskName());
 
                 if ($path !== false) {
-                    $saved[] = asset('storage/' . $path);
+                    $saved[] = asset('storage/' . $path); // TODO: private storages?
                 }
             }
         }
