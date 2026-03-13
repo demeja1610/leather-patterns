@@ -52,4 +52,9 @@ class FileService implements FileServiceInterface
 
         return $hash ? $hash : null;
     }
+
+    public function generateName(string $prefix = ''): string
+    {
+        return uniqid(prefix: $prefix, more_entropy: true);
+    }
 }

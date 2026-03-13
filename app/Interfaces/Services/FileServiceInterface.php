@@ -17,4 +17,6 @@ interface FileServiceInterface
     public function getHashAlgo(): string;
 
     public function getHash(string $path): ?string;
+
+    public function generateName(string $prefix = ''): string;
 }
