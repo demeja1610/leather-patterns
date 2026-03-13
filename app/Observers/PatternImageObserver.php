@@ -16,7 +16,7 @@ class PatternImageObserver
 
         $newImagePath = "{$newPath}/{$name}";
 
-        $moved =  Storage::disk('public')->move($patternImage->path, $newImagePath);
+        $moved =  Storage::disk($patternImage->getSaveToDiskName())->move($patternImage->path, $newImagePath);
 
         if ($moved === true) {
             $patternImage->path = $newImagePath;
@@ -27,7 +27,7 @@ class PatternImageObserver
     {
         dispatch(new DeleteFileJob(
             path: $patternImage->path,
-            disk: 'public'
+            disk: $patternImage->getSaveToDiskName(),
         ));
     }
 }

@@ -18,19 +18,22 @@ class ClearTempPatternFilesDirectoryJob implements ShouldQueue
     {
         Log::info("Start {$this->actionName}");
 
-        $tempPath = (new PatternFile())->getUploadPath();
-        $publicTempPath = Storage::disk('public')->path($tempPath);
+        $newPatternFile = new PatternFile();
+
+        $tempPath = $newPatternFile->getUploadPath();
+
+        $publicTempPath = Storage::disk($newPatternFile->getSaveToDiskName())->path($tempPath);
 
         Log::info(ucfirst($this->actionName) . ". Directory is: {$publicTempPath}");
 
-        if (Storage::disk('public')->exists($tempPath)) {
-            $filesList = Storage::disk('public')->allFiles($tempPath);
+        if (Storage::disk($newPatternFile->getSaveToDiskName())->exists($tempPath)) {
+            $filesList = Storage::disk($newPatternFile->getSaveToDiskName())->allFiles($tempPath);
 
             $filesListCount = count($filesList);
 
             Log::info(ucfirst($this->actionName) . ". Directory contains {$filesListCount} files");
 
-            $deleted = Storage::disk('public')->delete($filesList);
+            $deleted = Storage::disk($newPatternFile->getSaveToDiskName())->delete($filesList);
 
             if ($deleted === true) {
                 Log::info(ucfirst($this->actionName) . ". All files in directory {$publicTempPath} deleted");

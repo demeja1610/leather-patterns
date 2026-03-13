@@ -6,18 +6,35 @@ namespace App\Observers;
 
 use App\Models\Pattern;
 use App\Jobs\DeleteFileJob;
+use App\Models\PatternFile;
 use App\Models\PatternMeta;
+use App\Models\PatternImage;
 use App\Enum\PatternSourceEnum;
 use App\Jobs\DeleteDirectoryJob;
+use App\Jobs\Pattern\ReplaceMarkedForReplacePatternTagsInPatternsJob;
+use App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternTagsJob;
+use App\Jobs\Pattern\ReplaceMarkedForReplacePatternAuthorsInPatternsJob;
+use App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternAuthorsJob;
+use App\Jobs\Pattern\ReplaceMarkedForReplacePatternCategoriesInPatternsJob;
+use App\Jobs\Pattern\RemoveFromPatternsMarkedForRemovalPatternCategoriesJob;
 
 class PatternObserver
 {
     public function created(Pattern $pattern): void
     {
         $this->createPatternMeta(pattern: $pattern);
+
+        if ($pattern->source !== PatternSourceEnum::LOCAL) {
+            $this->clearParsedPattern($pattern);
+        }
     }
 
-    // public function updated(Pattern $pattern): void {}
+    public function updated(Pattern $pattern): void
+    {
+        if ($pattern->source !== PatternSourceEnum::LOCAL) {
+            $this->clearParsedPattern($pattern);
+        }
+    }
 
     public function deleting(Pattern $pattern): void
     {
@@ -53,6 +70,8 @@ class PatternObserver
             $toRemove = $pattern->images->pluck('path')->toArray();
             $toRemoveDirs = [];
 
+            $newPatternImage = new PatternImage();
+
             if ($toRemove !== []) {
                 foreach ($toRemove as $path) {
                     $dirName = dirname($path);
@@ -64,7 +83,7 @@ class PatternObserver
 
                 dispatch(new DeleteFileJob(
                     path: $toRemove,
-                    disk: 'public'
+                    disk: $newPatternImage->getSaveDiskName()
                 ));
             }
 
@@ -72,7 +91,7 @@ class PatternObserver
                 foreach (array_keys($toRemoveDirs) as $dir) {
                     dispatch(new DeleteDirectoryJob(
                         path: $dir,
-                        disk: 'public'
+                        disk: $newPatternImage->getSaveDiskName()
                     ));
                 }
             }
@@ -87,6 +106,8 @@ class PatternObserver
             $toRemove = $pattern->files->pluck('path')->toArray();
             $toRemoveDirs = [];
 
+            $newPatternFile = new PatternFile();
+
             if ($toRemove !== []) {
                 foreach ($toRemove as $path) {
                     $dirName = dirname($path);
@@ -98,7 +119,7 @@ class PatternObserver
 
                 dispatch(new DeleteFileJob(
                     path: $toRemove,
-                    disk: 'public'
+                    disk: $newPatternFile->getSaveDiskName()
                 ));
             }
 
@@ -106,10 +127,25 @@ class PatternObserver
                 foreach (array_keys($toRemoveDirs) as $dir) {
                     dispatch(new DeleteDirectoryJob(
                         path: $dir,
-                        disk: 'public'
+                        disk: $newPatternFile->getSaveDiskName()
                     ));
                 }
             }
         };
+    }
+
+    protected function clearParsedPattern(Pattern &$pattern): void
+    {
+        dispatch(new RemoveFromPatternsMarkedForRemovalPatternAuthorsJob($pattern->id));
+
+        dispatch(new RemoveFromPatternsMarkedForRemovalPatternCategoriesJob($pattern->id));
+
+        dispatch(new RemoveFromPatternsMarkedForRemovalPatternTagsJob($pattern->id));
+
+        dispatch(new ReplaceMarkedForReplacePatternAuthorsInPatternsJob($pattern->id));
+
+        dispatch(new ReplaceMarkedForReplacePatternCategoriesInPatternsJob($pattern->id));
+
+        dispatch(new ReplaceMarkedForReplacePatternTagsInPatternsJob($pattern->id));
     }
 }
