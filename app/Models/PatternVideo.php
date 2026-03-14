@@ -25,6 +25,7 @@ class PatternVideo extends Model
         'url',
         'source',
         'source_identifier',
+        'pattern_id',
     ];
 
     public function pattern(): BelongsTo
