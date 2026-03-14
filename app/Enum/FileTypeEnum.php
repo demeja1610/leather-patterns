@@ -22,6 +22,7 @@ enum FileTypeEnum: string
             'application/pdf' => self::PDF,
             'application/zip' => self::ARCHIVE,
             'application/x-rar' => self::ARCHIVE,
+            'application/vnd.rar' => self::ARCHIVE,
             'application/x-7z-compressed' => self::ARCHIVE,
             'application/x-tar' => self::ARCHIVE,
             'application/x-gzip' => self::ARCHIVE,
