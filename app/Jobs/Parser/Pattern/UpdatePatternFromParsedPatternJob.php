@@ -7,13 +7,20 @@ use GuzzleHttp\Client;
 use App\Enum\FileTypeEnum;
 use App\Models\PatternTag;
 use App\Models\PatternFile;
+use App\Models\PatternMeta;
 use App\Models\PatternImage;
+use App\Models\PatternVideo;
+use App\Models\PatternReview;
+use Illuminate\Support\Carbon;
 use App\Models\PatternCategory;
 use App\Dto\Parser\Pattern\TagDto;
 use Illuminate\Support\Facades\DB;
 use App\Dto\Parser\Pattern\FileDto;
 use Illuminate\Support\Facades\Log;
 use App\Dto\Parser\Pattern\ImageDto;
+use App\Dto\Parser\Pattern\VideoDto;
+use App\Dto\Parser\Pattern\ReviewDto;
+use Illuminate\Queue\SerializesModels;
 use App\Dto\Parser\Pattern\CategoryDto;
 use Illuminate\Support\Facades\Storage;
 use App\Dto\Parser\Pattern\SavedFileDto;
@@ -28,10 +35,9 @@ use Illuminate\Support\Collection as SupportCollection;
 class UpdatePatternFromParsedPatternJob implements ShouldQueue
 {
     use Queueable;
+    use SerializesModels;
 
     protected readonly string $actionName;
-
-    protected readonly Client $client;
 
     protected FileServiceInterface $fileService;
 
@@ -39,12 +45,12 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         public ParsedPatternDto $pattern,
     ) {
         $this->actionName = 'parse pattern data from source url';
-
-        $this->client = new Client();
     }
 
     public function handle(FileServiceInterface $fileService): void
     {
+        $client = new Client();
+
         $this->fileService = $fileService;
 
         $this->logStart();
@@ -66,7 +72,7 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
 
             if ($this->pattern->getImages()->isEmpty() === false) {
                 foreach ($this->pattern->getImages() as $image) {
-                    $savedImage = $this->downloadImage($image);
+                    $savedImage = $this->downloadImage($image, $client);
 
                     if ($savedImage !== null) {
                         $savedImages[] = $savedImage;
@@ -74,11 +80,11 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                 }
             }
 
-            $images = $this->createImages(...$savedImages);
+            $this->createImages(...$savedImages);
 
             if ($this->pattern->getFiles()->isEmpty() === false) {
                 foreach ($this->pattern->getFiles() as $file) {
-                    $savedFile = $this->downloadFile($file);
+                    $savedFile = $this->downloadFile($file, $client);
 
                     if ($savedFile !== null) {
                         if ($savedFile->getType() === null) {
@@ -88,41 +94,25 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                         }
                     }
                 }
+
+                if ($savedFiles === []) {
+                    $this->setDownloadUrlWrong(true);
+                } else {
+                    $this->setDownloadUrlWrong(false);
+                }
+            } else {
+                $this->setDownloadUrlWrong(true);
             }
 
-            $files = $this->createFiles(...$savedFiles);
+            $this->createFiles(...$savedFiles);
 
-            // // $this->logCreateVideos();
+            $this->createVideos();
 
-            // $videos = $this->createVideos();
-
-            // // $this->logCreateReviews();
-
-            // $reviews = $this->createReviews();
-
-            // $this->logAttachCategoriesToPattern($categories);
+            $this->createReviews();
 
             $this->attachCategories($categories);
 
-            // // $this->logAttachTags($tags);
-
             $this->attachTags($tags);
-
-            // // $this->logAttachImages($images)
-
-            $this->attachImages($images);
-
-            // // $this->logAttachFiles($files);
-
-            $this->attachFiles($files);
-
-            // // $this->loagAttachVideos($videos);
-
-            // $this->attachVideos($videos);
-
-            // // $this->logAttachReviews($reviews);
-
-            // $this->attachReviews($reviews);
 
             DB::commit();
         } catch (\Throwable $th) {
@@ -159,6 +149,9 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         return $updated;
     }
 
+    /**
+     * @return \Illuminate\Support\Collection<\App\Models\PatternCategory>
+     */
     protected function createCategories(): SupportCollection
     {
         $categories = [];
@@ -176,6 +169,9 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         return collect($categories);
     }
 
+    /**
+     * @return \Illuminate\Support\Collection<\App\Models\PatternTag>
+     */
     protected function createTags(): SupportCollection
     {
         $tags = [];
@@ -193,17 +189,17 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         return collect($tags);
     }
 
-    protected function downloadImage(ImageDto &$image): ?SavedImageDto
+    protected function downloadImage(ImageDto &$image, Client &$client): ?SavedImageDto
     {
         $this->logDownloadImage($image);
 
         try {
-            $response = $this->client->get($image->getUrl(), options: [
+            $response = $client->get($image->getUrl(), options: [
                 'allow_redirects' => true,
             ]);
 
             $newPatternImage = new PatternImage();
-            $saveDiskName = $newPatternImage->getSaveDiskName();
+            $saveDiskName = $newPatternImage->getSaveToDiskName();
             $uploadPath = rtrim($newPatternImage->getUploadPath(), '/');
 
             $ext = $this->fileService->getExtension($image->getUrl()) ?? 'jpg';
@@ -242,39 +238,59 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         }
     }
 
-    protected function createImages(SavedImageDto ...$savedImages): SupportCollection
+    protected function createImages(SavedImageDto ...$savedImages): void
     {
-        $images = [];
-
         if ($savedImages !== []) {
-            $this->logCreateImages();
+            $this->logCreateImages(...$savedImages);
 
             foreach ($savedImages as $savedImage) {
-                $images = PatternImage::query()->createOrFirst(
-                    attributes: [
+                $imageExists = PatternImage::query()
+                    ->where('hash', $savedImage->getHash())
+                    ->where('pattern_id', $this->pattern->getPattern()->id)
+                    ->exists();
+
+                if ($imageExists === false) {
+                    PatternImage::query()->createOrFirst([
                         'hash' => $savedImage->getHash(),
                         'pattern_id' => $this->pattern->getPattern()->id,
-                    ],
-                    values: [
                         'extension' => $savedImage->getExt(),
                         'hash_algorithm' => $savedImage->getHashAlgorithm(),
                         'mime_type' => $savedImage->getMime(),
                         'path' => $savedImage->getPath(),
                         'size' => $savedImage->getSize(),
-                    ],
-                );
-            }
-        }
+                    ]);
+                } else {
+                    $this->logImageExists($savedImage);
 
-        return collect($images);
+                    $this->deleteSavedImages($savedImage);
+                }
+            }
+
+            $this->setImagesDownloaded();
+        }
     }
 
-    protected function downloadFile(FileDto &$file): ?SavedFileDto
+    protected function setImagesDownloaded(): void
+    {
+        $this->logSetImagesDownloaded();
+
+        if ($this->pattern->getPattern()->relationLoaded('meta') === false) {
+            $this->pattern->getPattern()->load('meta');
+        }
+
+        if ($this->pattern->getPattern()->meta instanceof PatternMeta) {
+            $this->pattern->getPattern()->meta->images_downloaded = true;
+
+            $this->pattern->getPattern()->meta->save();
+        }
+    }
+
+    protected function downloadFile(FileDto &$file, Client &$client): ?SavedFileDto
     {
         $this->logDownloadFile($file);
 
         $url = match (true) {
-            $this->isUrlYandexDisk($file->getUrl()) => $this->getDirectYandexDiskUrl($file->getUrl()),
+            $this->isUrlYandexDisk($file->getUrl()) => $this->getDirectYandexDiskUrl($file->getUrl(), $client),
             $this->isUrlGoogleDrive($file->getUrl()) => $this->getDirectGoogleDriveUrl($file->getUrl()),
             $this->isUrlVk($file->getUrl()) => $this->getDirectVkUrl($file->getUrl()),
             default => $file->getUrl(),
@@ -289,10 +305,10 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                 'allow_redirects' => true,
             ];
 
-            $response = $this->client->get($url, $params);
+            $response = $client->get($url, $params);
 
             $newPatternFile = new PatternFile();
-            $saveDiskName = $newPatternFile->getSaveDiskName();
+            $saveDiskName = $newPatternFile->getSaveToDiskName();
             $uploadPath = rtrim($newPatternFile->getUploadPath(), '/');
 
             $ext = $this->fileService->getExtension($file->getUrl()) ?? 'pdf';
@@ -336,34 +352,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         }
     }
 
-    protected function createFiles(SavedFileDto ...$savedFiles): SupportCollection
-    {
-        $files = [];
-
-        if ($savedFiles !== []) {
-            $this->logCreateFiles();
-
-            foreach ($savedFiles as $savedFile) {
-                $files = PatternFile::query()->createOrFirst(
-                    attributes: [
-                        'hash' => $savedFile->getHash(),
-                        'pattern_id' => $this->pattern->getPattern()->id,
-                    ],
-                    values: [
-                        'extension' => $savedFile->getExt(),
-                        'hash_algorithm' => $savedFile->getHashAlgorithm(),
-                        'mime_type' => $savedFile->getMime(),
-                        'path' => $savedFile->getPath(),
-                        'size' => $savedFile->getSize(),
-                        'type' => $savedFile->getType(),
-                    ],
-                );
-            }
-        }
-
-        return collect($files);
-    }
-
     protected function isUrlYandexDisk(string $url): bool
     {
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
@@ -391,12 +379,12 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         return str_contains($url, 'vk.com');
     }
 
-    protected function getDirectYandexDiskUrl(string $url): ?string
+    protected function getDirectYandexDiskUrl(string $url, Client &$client): ?string
     {
         $this->logGettingDirectYandexDiskUrl($url);
 
         try {
-            $response = $this->client->get(
+            $response = $client->get(
                 uri: "https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key={$url}",
             );
         } catch (Throwable $th) {
@@ -458,13 +446,15 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
             $this->logExtMimeMismatch($savedFile, $realExt);
 
             if ($mimeExt === null) {
-                return SavedFileDto::fromArray(
-                    array_merge(
-                        ...$savedFile->toArray(),
-                        [
-                            'type' => null,
-                        ],
-                    ),
+                return new SavedFileDto(
+                    path: $savedFile->getPath(),
+                    ext: $savedFile->getExt(),
+                    size: $savedFile->getSize(),
+                    mime: $savedFile->getMime(),
+                    hashAlgorithm: $savedFile->getHashAlgorithm(),
+                    hash: $savedFile->getHash(),
+                    type: null,
+                    saveDiskName: $savedFile->getSaveDiskName(),
                 );
             }
 
@@ -480,17 +470,20 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
             );
 
             if ($moved === true) {
-                $newSavedFile = SavedFileDto::fromArray(
-                    array_merge(
-                        ...$savedFile->toArray(),
-                        [
-                            'type' => FileTypeEnum::fromMimeType($savedFile->getMime()),
-                            'ext' => $savedFile->getExt(),
-                        ],
-                    ),
+                $newSavedFile = new SavedFileDto(
+                    path: $newPath,
+                    ext: $mimeExt,
+                    size: $savedFile->getSize(),
+                    mime: $savedFile->getMime(),
+                    hashAlgorithm: $savedFile->getHashAlgorithm(),
+                    hash: $savedFile->getHash(),
+                    type: $savedFile->getType(),
+                    saveDiskName: $savedFile->getSaveDiskName(),
                 );
 
                 $this->logSavedFileWasMoved($savedFile, $newSavedFile);
+
+                $savedFile = $newSavedFile;
             }
         }
 
@@ -508,6 +501,7 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
             'application/pdf' => 'pdf',
             'application/zip' => 'zip',
             'application/x-rar' => 'rar',
+            'application/vnd.rar' => 'rar',
             'application/x-7z-compressed' => '7z',
             'application/x-tar' => 'tar',
             'application/x-gzip' => 'gz',
@@ -519,14 +513,156 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         };
     }
 
+    protected function setDownloadUrlWrong(bool $isWrong): void
+    {
+        $this->logSetDownloadUrlWrong();
 
+        if ($this->pattern->getPattern()->relationLoaded('meta') === false) {
+            $this->pattern->getPattern()->load('meta');
+        }
 
+        if ($this->pattern->getPattern()->meta instanceof PatternMeta) {
+            $this->pattern->getPattern()->meta->is_download_url_wrong = $isWrong;
 
+            $this->pattern->getPattern()->meta->save();
+        }
+    }
 
+    protected function createFiles(SavedFileDto ...$savedFiles): void
+    {
+        if ($savedFiles !== []) {
+            $this->logCreateFiles(...$savedFiles);
 
+            foreach ($savedFiles as $savedFile) {
+                $fileExists = PatternFile::query()
+                    ->where('hash', $savedFile->getHash())
+                    ->where('pattern_id', $this->pattern->getPattern()->id)
+                    ->exists();
 
+                if ($fileExists === false) {
+                    PatternFile::query()->create([
+                        'hash' => $savedFile->getHash(),
+                        'pattern_id' => $this->pattern->getPattern()->id,
+                        'extension' => $savedFile->getExt(),
+                        'hash_algorithm' => $savedFile->getHashAlgorithm(),
+                        'mime_type' => $savedFile->getMime(),
+                        'path' => $savedFile->getPath(),
+                        'size' => $savedFile->getSize(),
+                        'type' => $savedFile->getType(),
+                    ]);
+                } else {
+                    $this->logFileExists($savedFile);
 
+                    $this->deleteSavedFiles($savedFile);
+                }
+            }
 
+            $this->setFilesDownloaded();
+        }
+    }
+
+    protected function setFilesDownloaded(): void
+    {
+        $this->logSetFilesDownloaded();
+
+        if ($this->pattern->getPattern()->relationLoaded('meta') === false) {
+            $this->pattern->getPattern()->load('meta');
+        }
+
+        if ($this->pattern->getPattern()->meta instanceof PatternMeta) {
+            $this->pattern->getPattern()->meta->pattern_downloaded = true;
+
+            $this->pattern->getPattern()->meta->save();
+        }
+    }
+
+    protected function createVideos(): void
+    {
+        if ($this->pattern->getVideos()->isEmpty() === false) {
+            $this->logCreateVideos();
+
+            foreach ($this->pattern->getVideos()->getItems() as $video) {
+                $videoExists = PatternVideo::query()
+                    ->where('pattern_id', $this->pattern->getPattern()->id)
+                    ->where('source_identifier', $video->getSourceIdentifier())
+                    ->exists();
+
+                if ($videoExists === false) {
+                    PatternVideo::query()->create([
+                        'source_identifier' => $video->getSourceIdentifier(),
+                        'pattern_id' => $this->pattern->getPattern()->id,
+                        'url' => $video->getUrl(),
+                        'source' => $video->getSource()->value,
+                    ]);
+                } else {
+                    $this->logVideoExists($video);
+                }
+            }
+        }
+
+        $this->setVideosChecked();
+    }
+
+    protected function setVideosChecked(): void
+    {
+        $this->logSetVideosChecked();
+
+        if ($this->pattern->getPattern()->relationLoaded('meta') === false) {
+            $this->pattern->getPattern()->load('meta');
+        }
+
+        if ($this->pattern->getPattern()->meta instanceof PatternMeta) {
+            $this->pattern->getPattern()->meta->is_video_checked = true;
+
+            $this->pattern->getPattern()->meta->save();
+        }
+    }
+
+    protected function createReviews(): void
+    {
+        if ($this->pattern->getReviews()->isEmpty() === false) {
+            $this->logCreateReviews();
+
+            foreach ($this->pattern->getReviews()->getItems() as $review) {
+                $reviewExists = PatternReview::query()
+                    ->where('reviewer_name', $review->getReviewerName())
+                    ->where('comment', $review->getComment())
+                    ->where('pattern_id', $this->pattern->getPattern()->id)
+                    ->exists();
+
+                if ($reviewExists === false) {
+                    PatternReview::query()->create([
+                        'reviewer_name' => $review->getReviewerName(),
+                        'comment' => $review->getComment(),
+                        'pattern_id' => $this->pattern->getPattern()->id,
+                        'is_approved' => false,
+                        'rating' => $review->getRating(),
+                    ]);
+                } else {
+                    $this->logReviewExists($review);
+                }
+            }
+        }
+
+        $this->setReviewsChecked();
+    }
+
+    protected function setReviewsChecked(): void
+    {
+        $now = Carbon::now();
+
+        $this->logSetReviewsChecked($now);
+
+        if ($this->pattern->getPattern()->relationLoaded('meta') === false) {
+            $this->pattern->getPattern()->load('meta');
+        }
+
+        if ($this->pattern->getPattern()->meta instanceof PatternMeta) {
+            $this->pattern->getPattern()->meta->reviews_updated_at = $now;
+
+            $this->pattern->getPattern()->meta->save();
+        }
+    }
 
     /**
      * @param \Illuminate\Support\Collection<\App\Models\PatternCategory>
@@ -536,7 +672,7 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         if ($categories->isEmpty() === false) {
             $this->logAttachCategories($categories);
 
-            $this->pattern->getPattern()->categories()->attach($categories);
+            $this->pattern->getPattern()->categories()->syncWithoutDetaching($categories);
         }
     }
 
@@ -548,38 +684,9 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         if ($tags->isEmpty() === false) {
             $this->logAttachTags($tags);
 
-            $this->pattern->getPattern()->tags()->attach($tags);
+            $this->pattern->getPattern()->tags()->syncWithoutDetaching($tags);
         }
     }
-
-    /**
-     * @param \Illuminate\Support\Collection<\App\Models\PatternImage> $images
-     */
-    protected function attachImages(SupportCollection &$images): void
-    {
-        if ($images->isEmpty() === false) {
-            $this->logAttachImages($images);
-
-            $this->pattern->getPattern()->images()->saveMany($images);
-        }
-    }
-
-    /**
-     * @param \Illuminate\Support\Collection<\App\Models\PatternFile> $files
-     */
-    protected function attachFiles(SupportCollection &$files): void
-    {
-        if ($files->isEmpty() === false) {
-            $this->logAttachFiles($files);
-
-            $this->pattern->getPattern()->files()->saveMany($files);
-        }
-    }
-
-
-
-
-
 
     protected function deleteSavedImages(SavedImageDto ...$savedImages): void
     {
@@ -606,9 +713,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
             }
         }
     }
-
-
-
 
     protected function logStart(): void
     {
@@ -710,6 +814,24 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                     array: $savedImages,
                     callback: fn(SavedImageDto $image) => $image->toArray(),
                 ),
+                'pattern_id' => $this->pattern->getPattern()->id,
+            ]
+        );
+    }
+
+    protected function logImageExists(SavedImageDto &$savedImage): void
+    {
+        Log::warning("Image exists", [
+            'saved_image' => $savedImage->toArray(),
+            'pattern_id' => $this->pattern->getPattern()->id,
+        ]);
+    }
+
+    protected function logSetImagesDownloaded(): void
+    {
+        Log::info(
+            message: "Set images downloaded for pattern",
+            context: [
                 'pattern_id' => $this->pattern->getPattern()->id,
             ]
         );
@@ -856,10 +978,20 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         );
     }
 
+    protected function logSetDownloadUrlWrong(): void
+    {
+        Log::info(
+            message: "Setting download URL wrong for pattern",
+            context: [
+                'pattern_id' => $this->pattern->getPattern()->id,
+            ]
+        );
+    }
+
     protected function logCreateFiles(SavedFileDto ...$savedFiles): void
     {
         Log::info(
-            message: "Creating files, if image with particular hash for specified pattern already exists it will be ignored",
+            message: "Creating files, if file with particular hash for specified pattern already exists it will be ignored",
             context: [
                 'files' => array_map(
                     array: $savedFiles,
@@ -870,10 +1002,86 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         );
     }
 
+    protected function logFileExists(SavedFileDto &$savedFile): void
+    {
+        Log::warning("File exists", [
+            'saved_file' => $savedFile->toArray(),
+            'pattern_id' => $this->pattern->getPattern()->id,
+        ]);
+    }
 
+    protected function logSetFilesDownloaded(): void
+    {
+        Log::info(
+            message: "Set files downloaded for pattern",
+            context: [
+                'pattern_id' => $this->pattern->getPattern()->id,
+            ]
+        );
+    }
 
+    protected function logCreateVideos(): void
+    {
+        Log::info(
+            message: "Create videos, if video already exists it will be ignored",
+            context: [
+                'tags' => array_map(
+                    array: $this->pattern->getVideos()->getItems(),
+                    callback: fn(VideoDto $video) => $video->toArray(),
+                ),
+            ],
+        );
+    }
 
+    protected function logVideoExists(VideoDto &$video): void
+    {
+        Log::warning("Video exists", [
+            'video' => $video->toArray(),
+            'pattern_id' => $this->pattern->getPattern()->id,
+        ]);
+    }
 
+    protected function logSetVideosChecked(): void
+    {
+        Log::info(
+            message: 'Set video checked for pattern',
+            context: [
+                'pattern_id' => $this->pattern->getPattern()->id,
+            ]
+        );
+    }
+
+    protected function logCreateReviews(): void
+    {
+        Log::info(
+            message: "Create reviews, if review already exists it will be ignored",
+            context: [
+                'tags' => array_map(
+                    array: $this->pattern->getReviews()->getItems(),
+                    callback: fn(ReviewDto $review) => $review->toArray(),
+                ),
+            ],
+        );
+    }
+
+    protected function logReviewExists(ReviewDto &$review): void
+    {
+        Log::warning("Review exists", [
+            'review' => $review->toArray(),
+            'pattern_id' => $this->pattern->getPattern()->id,
+        ]);
+    }
+
+    protected function logSetReviewsChecked(Carbon &$now): void
+    {
+        Log::info(
+            message: 'Set reviews checked for pattern',
+            context: [
+                'pattern_id' => $this->pattern->getPattern()->id,
+                'now' => $now->toDateTimeString(),
+            ],
+        );
+    }
 
     /**
      * @param \Illuminate\Support\Collection<\App\Models\PatternCategory> $categories
@@ -904,41 +1112,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         );
     }
 
-    /**
-     * @param \Illuminate\Support\Collection<\App\Models\PatternImage> $images
-     */
-    protected function logAttachImages(SupportCollection &$images): void
-    {
-        Log::info(
-            message: "Attaching image to pattern",
-            context: [
-                'images' => $images->toArray(),
-                'pattern_id' => $this->pattern->getPattern()->id,
-            ]
-        );
-    }
-
-
-    /**
-     * @param \Illuminate\Support\Collection<\App\Models\PatternFile> $files
-     */
-    protected function logAttachFiles(SupportCollection &$files): void
-    {
-        Log::info(
-            message: "Attaching files to pattern",
-            context: [
-                'files' => $files->toArray(),
-                'pattern_id' => $this->pattern->getPattern()->id,
-            ]
-        );
-    }
-
-
-
-
-
-
-
     protected function logDeleteSavedImage(SavedImageDto &$savedImage): void
     {
         Log::info(
@@ -960,12 +1133,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
             ],
         );
     }
-
-
-
-
-
-
 
     protected function logDbRollbackedBecauseOfError(Throwable $th): void
     {

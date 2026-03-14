@@ -2,24 +2,27 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Commands\Parsers\PatternAdapters;
+namespace App\Parsers;
 
-use Carbon\Carbon;
+use Throwable;
 use App\Models\Pattern;
-use App\Models\PatternMeta;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
-use App\Interfaces\Services\FileServiceInterface;
+use App\Dto\Parser\Pattern\TagListDto;
+use App\Dto\Parser\Pattern\FileListDto;
+use App\Dto\Parser\Pattern\ImageListDto;
+use App\Dto\Parser\Pattern\VideoListDto;
 use App\Interfaces\Parsers\PatternParserInterface;
 use App\Interfaces\Services\ParserServiceInterface;
 
 abstract class PatternParser implements PatternParserInterface
 {
-    protected readonly Carbon $now;
+    private readonly bool $runningInConsole;
+
     public function __construct(
         private readonly ParserServiceInterface $parserService,
-        private readonly FileServiceInterface $fileService,
     ) {
-        $this->now = Carbon::now();
+        $this->runningInConsole = App::runningInConsole();
     }
 
     public function getParserService(): ParserServiceInterface
@@ -27,9 +30,9 @@ abstract class PatternParser implements PatternParserInterface
         return $this->parserService;
     }
 
-    public function getFileService(): FileServiceInterface
+    public function isRunningInConsole(): bool
     {
-        return $this->fileService;
+        return $this->runningInConsole;
     }
 
     public function echoInfo(string $message): void
@@ -52,133 +55,97 @@ abstract class PatternParser implements PatternParserInterface
         echo "\033[32m{$message}\033[0m" . PHP_EOL;
     }
 
-    protected function setPatternFilesDownloaded(Pattern &$pattern): void
+    protected function log(string $type, string $message, array $context = []): void
     {
-        $this->logSetPatternFilesDownloaded($pattern);
-
-        if ($pattern->relationLoaded('meta') === false) {
-            $pattern->load('meta');
-        }
-
-        if ($pattern->meta instanceof PatternMeta) {
-            $pattern->meta->pattern_downloaded = true;
-
-            $pattern->meta->save();
-        }
-    }
-
-    protected function setPatternImagesDownloaded(Pattern &$pattern): void
-    {
-        $this->logSetPatternImagesDownloaded($pattern);
-
-        if ($pattern->relationLoaded('meta') === false) {
-            $pattern->load('meta');
-        }
-
-        if ($pattern->meta instanceof PatternMeta) {
-            $pattern->meta->images_downloaded = true;
-
-            $pattern->meta->save();
-        }
-    }
-
-    protected function setPatternVideoChecked(Pattern &$pattern): void
-    {
-        $this->logSetPatternVideoChecked($pattern);
-
-        if ($pattern->relationLoaded('meta') === false) {
-            $pattern->load('meta');
-        }
-
-        if ($pattern->meta instanceof PatternMeta) {
-            $pattern->meta->is_video_checked = true;
-
-            $pattern->meta->save();
-        }
-    }
-
-    protected function setPatternReviewsUpdatedAt(Pattern $pattern): void
-    {
-        $this->logSetPatternReviewsUpdatedAt($pattern);
-
-        if ($pattern->relationLoaded('meta') === false) {
-            $pattern->load('meta');
-        }
-
-        if ($pattern->meta instanceof PatternMeta) {
-            $pattern->meta->reviews_updated_at = $this->now;
-
-            $pattern->meta->save();
-        }
-    }
-
-    protected function setDownloadUrlWrong(Pattern $pattern): void
-    {
-        $this->logSetPatternDownloadUrlWrong($pattern);
-
-        if ($pattern->relationLoaded('meta') === false) {
-            $pattern->load('meta');
-        }
-
-        if ($pattern->meta instanceof PatternMeta) {
-            $pattern->meta->is_download_url_wrong = true;
-
-            $pattern->meta->save();
-        }
-    }
-
-    protected function logSetPatternFilesDownloaded(Pattern &$pattern): void
-    {
-        $message = "Setting pattern meta files downloaded for pattern with ID: {$pattern->id} to true";
-
-        Log::info($message);
+        match ($type) {
+            'success' => Log::info($message, $context),
+            'warn' => Log::warning($message, $context),
+            'error' => Log::error($message, $context),
+            'info' => Log::info($message, $context),
+            default => Log::info($message, $context),
+        };
 
         if ($this->isRunningInConsole()) {
-            $this->echoInfo($message);
+            match ($type) {
+                'success' => $this->echoSuccess($message),
+                'warn' => $this->echoWarn($message),
+                'error' => $this->echoError($message),
+                'info' => $this->echoInfo($message),
+                default => $this->echoInfo($message),
+            };
         }
     }
 
-    protected function logSetPatternImagesDownloaded(Pattern &$pattern): void
+    protected function logParsePattern(Pattern &$pattern): void
     {
-        $message = "Setting pattern meta images downloaded for pattern with ID: {$pattern->id} to true";
-
-        Log::info($message);
-
-        if ($this->isRunningInConsole()) {
-            $this->echoInfo($message);
-        }
+        $this->log('info', "Parsing pattern with ID: {$pattern->id}", [
+            'pattern' => $pattern->toArray(),
+        ]);
     }
 
-    protected function logSetPatternVideoChecked(Pattern &$pattern): void
+    protected function logFailedToParsePattern(Pattern &$pattern, Throwable &$th): void
     {
-        $message = "Setting pattern meta video checked for pattern with ID: {$pattern->id} to true";
-
-        Log::info($message);
-
-        if ($this->isRunningInConsole()) {
-            $this->echoInfo($message);
-        }
+        $this->log('info', "Failed to parse pattern with ID: {$pattern->id}", [
+            'pattern' => $pattern->toArray(),
+            'error' => $th->__toString(),
+        ]);
     }
 
-    protected function logSetPatternReviewsUpdatedAt(Pattern &$pattern): void
+    protected function logSearchForVideos(Pattern &$pattern): void
     {
-        $message = "Setting pattern meta reviews updated at for pattern with ID: {$pattern->id} to {$this->now->toDateTimeString()}";
-
-        Log::info($message);
-
-        if ($this->isRunningInConsole()) {
-            $this->echoInfo($message);
-        }
+        $this->log('info', "Search for videos for pattern with ID: {$pattern->id}");
     }
 
-    protected function logSetPatternDownloadUrlWrong(Pattern &$pattern): void
+    protected function logFoundedVideos(VideoListDto &$videos, Pattern &$pattern): void
     {
-        $message = "Setting pattern meta download URL wrong for pattern with ID: {$pattern->id} to true";
+        $this->log('info', "Found: {$videos->count()} videos for pattern with ID: {$pattern->id}", [
+            'videos' => $videos->toArray(),
+        ]);
+    }
 
-        Log::info($message);
+    protected function logSearchForImages(Pattern &$pattern): void
+    {
+        $this->log('info', "Search for images for pattern with ID: {$pattern->id}");
+    }
 
-        if ($this->isRunningInConsole()) {
-            $this->echoInfo($message);
-        }
+    protected function logFoundImages(ImageListDto &$images, Pattern &$pattern): void
+    {
+        $this->log('info', "Found: {$images->count()} images for pattern with ID: {$pattern->id}", [
+            'images' => $images->toArray(),
+        ]);
+    }
+
+    protected function logSearchForTags(Pattern &$pattern): void
+    {
+        $this->log('info', "Search for tags for pattern with ID: {$pattern->id}");
+    }
+
+    protected function logFoundTags(TagListDto &$tags, Pattern &$pattern): void
+    {
+        $this->log('info', "Found: {$tags->count()} tags for pattern with ID: {$pattern->id}", [
+            'tags' => $tags->toArray(),
+        ]);
+    }
+
+    protected function logSearchForTitle(Pattern &$pattern): void
+    {
+        $this->log('info', "Search for title for pattern with ID: {$pattern->id}");
+    }
+
+    protected function logTitle(string &$title, Pattern &$pattern): void
+    {
+        $this->log('info', "New title for pattern with ID: {$pattern->id} is: {$title}");
+    }
+
+    protected function logSearchForFiles(Pattern &$pattern): void
+    {
+        $this->log('info', "Search for files for pattern with ID: {$pattern->id}");
+    }
+
+    protected function logFoundFiles(FileListDto &$files, Pattern &$pattern): void
+    {
+        $this->log('info', "Found {$files->count()} files for pattern with ID: {$pattern->id}", [
+            'files' => $files->toArray(),
+        ]);
     }
 }
