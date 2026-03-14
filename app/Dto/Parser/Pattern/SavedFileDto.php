@@ -41,7 +41,7 @@ class SavedFileDto extends Dto
             'mime' => $this->mime,
             'hash_algorithm' => $this->hashAlgorithm,
             'hash' => $this->hash,
-            'type' => $this->type->value,
+            'type' => $this->type?->value,
             'save_disk_name' => $this->saveDiskName,
         ];
     }
