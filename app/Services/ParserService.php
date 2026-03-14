@@ -168,7 +168,7 @@ class ParserService implements ParserServiceInterface
             }
         }
 
-        return $imageUrl === null
+        return $imageUrl === null || $imageUrl === '' || $imageUrl === '0'
             ? null
             : new ImageDto(
                 url: $imageUrl,
