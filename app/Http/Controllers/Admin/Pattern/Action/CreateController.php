@@ -128,8 +128,8 @@ class CreateController extends Controller
             $storagePath = parse_url($url, PHP_URL_PATH);
             $path = str_replace('/storage/', '', $storagePath);
 
-            if (Storage::disk($newPatternImage->getSaveDiskName())->exists($path)) {
-                $publicPath = Storage::disk($newPatternImage->getSaveDiskName())->path($path);
+            if (Storage::disk($newPatternImage->getSaveToDiskName())->exists($path)) {
+                $publicPath = Storage::disk($newPatternImage->getSaveToDiskName())->path($path);
 
                 $ext = $this->fileService->getExtension($publicPath);
                 $size = $this->fileService->getSize($publicPath);
@@ -164,8 +164,8 @@ class CreateController extends Controller
             $storagePath = parse_url($url, PHP_URL_PATH);
             $path = str_replace('/storage/', '', $storagePath);
 
-            if (Storage::disk($newPatternFile->getSaveDiskName())->exists($path)) {
-                $publicPath = Storage::disk($newPatternFile->getSaveDiskName())->path($path);
+            if (Storage::disk($newPatternFile->getSaveToDiskName())->exists($path)) {
+                $publicPath = Storage::disk($newPatternFile->getSaveToDiskName())->path($path);
 
                 $ext = $this->fileService->getExtension($publicPath);
                 $size = $this->fileService->getSize($publicPath);

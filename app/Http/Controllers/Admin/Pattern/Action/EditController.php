@@ -9,6 +9,7 @@ use App\Models\PatternFile;
 use App\Models\PatternImage;
 use App\Enum\NotificationTypeEnum;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
@@ -88,7 +89,7 @@ class EditController extends Controller
                 /**
                  * @var \Illuminate\Filesystem\Filesystem
                  */
-                $disk  = Storage::disk($newPatternImage->getSaveDiskName());
+                $disk  = Storage::disk($newPatternImage->getSaveToDiskName());
 
                 $toDeleteImages = $pattern->images->filter(fn(PatternImage $patternImage) => in_array(
                     haystack: $removePatternImagesUrls,
@@ -106,7 +107,7 @@ class EditController extends Controller
                 /**
                  * @var \Illuminate\Filesystem\Filesystem
                  */
-                $disk  = Storage::disk($newPatternFile->getSaveDiskName());
+                $disk  = Storage::disk($newPatternFile->getSaveToDiskName());
 
                 $toDeleteFiles = $pattern->files->filter(fn(PatternFile $patternFile) => in_array(
                     haystack: $removePatternFilesUrls,
@@ -123,6 +124,11 @@ class EditController extends Controller
             $request->flashSelectedAuthor();
             $request->flashSelectedCategories();
             $request->flashSelectedTags();
+
+            Log::error('An error happened while trying to update pattern', [
+                'pattern' => $pattern->toArray(),
+                'error' => $th->__toString(),
+            ]);
 
             return back()->withInput()->with(
                 key: 'notifications',
@@ -172,8 +178,8 @@ class EditController extends Controller
             $storagePath = parse_url($url, PHP_URL_PATH);
             $path = str_replace('/storage/', '', $storagePath);
 
-            if (Storage::disk($newPatternImage->getSaveDiskName())->exists($path)) {
-                $publicPath = Storage::disk($newPatternImage->getSaveDiskName())->path($path);
+            if (Storage::disk($newPatternImage->getSaveToDiskName())->exists($path)) {
+                $publicPath = Storage::disk($newPatternImage->getSaveToDiskName())->path($path);
 
                 $ext = $this->fileService->getExtension($publicPath);
                 $size = $this->fileService->getSize($publicPath);
@@ -208,8 +214,8 @@ class EditController extends Controller
             $storagePath = parse_url($url, PHP_URL_PATH);
             $path = str_replace('/storage/', '', $storagePath);
 
-            if (Storage::disk($newPatternFile->getSaveDiskName())->exists($path)) {
-                $publicPath = Storage::disk($newPatternFile->getSaveDiskName())->path($path);
+            if (Storage::disk($newPatternFile->getSaveToDiskName())->exists($path)) {
+                $publicPath = Storage::disk($newPatternFile->getSaveToDiskName())->path($path);
 
                 $ext = $this->fileService->getExtension($publicPath);
                 $size = $this->fileService->getSize($publicPath);
