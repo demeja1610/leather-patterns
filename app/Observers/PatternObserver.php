@@ -83,7 +83,7 @@ class PatternObserver
 
                 dispatch(new DeleteFileJob(
                     path: $toRemove,
-                    disk: $newPatternImage->getSaveDiskName()
+                    disk: $newPatternImage->getSaveToDiskName()
                 ));
             }
 
@@ -91,7 +91,7 @@ class PatternObserver
                 foreach (array_keys($toRemoveDirs) as $dir) {
                     dispatch(new DeleteDirectoryJob(
                         path: $dir,
-                        disk: $newPatternImage->getSaveDiskName()
+                        disk: $newPatternImage->getSaveToDiskName()
                     ));
                 }
             }
@@ -119,7 +119,7 @@ class PatternObserver
 
                 dispatch(new DeleteFileJob(
                     path: $toRemove,
-                    disk: $newPatternFile->getSaveDiskName()
+                    disk: $newPatternFile->getSaveToDiskName()
                 ));
             }
 
@@ -127,7 +127,7 @@ class PatternObserver
                 foreach (array_keys($toRemoveDirs) as $dir) {
                     dispatch(new DeleteDirectoryJob(
                         path: $dir,
-                        disk: $newPatternFile->getSaveDiskName()
+                        disk: $newPatternFile->getSaveToDiskName()
                     ));
                 }
             }

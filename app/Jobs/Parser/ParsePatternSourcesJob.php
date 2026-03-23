@@ -47,6 +47,16 @@ class ParsePatternSourcesJob extends InfoJob implements ShouldQueue
         $this->info(message: "Processing source: {$patternSource->value}");
 
         match ($patternSource) {
+            PatternSourceEnum::LEATHER_PATTERNS => (
+                new \App\Parsers\PatternSource\LeatherPatternsSourceParser(
+                    parserService: $parserService,
+                ))->processSource(),
+
+            PatternSourceEnum::CUTME => (
+                new \App\Parsers\PatternSource\CutMeSourceParser(
+                    parserService: $parserService,
+                ))->processSource(),
+
             // PatternSourceEnum::NEOVIMA => (
             //     new \App\Console\Commands\Parsers\SourceAdapters\NeovimaSourceAdapter(
             //         parserService: $this->parserService,
@@ -99,16 +109,6 @@ class ParsePatternSourcesJob extends InfoJob implements ShouldQueue
 
             // PatternSourceEnum::SKINPAT => (
             //     new \App\Console\Commands\Parsers\SourceAdapters\SkinpatSourceAdapter(
-            //         parserService: $this->parserService,
-            //     ))->processSource(baseURL: $url),
-
-            PatternSourceEnum::LEATHER_PATTERNS => (
-                new \App\Parsers\PatternSource\LeatherPatternsSourceParser(
-                    parserService: $parserService,
-                ))->processSource(),
-
-            // PatternSourceEnum::CUTME => (
-            //     new \App\Console\Commands\Parsers\SourceAdapters\CutmeSourceAdapter(
             //         parserService: $this->parserService,
             //     ))->processSource(baseURL: $url),
 
