@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Enum\PatternSourceEnum;
 
 return [
-    // PatternSourceEnum::LEATHER_PATTERNS->value => 'https://leatherpatterns.ru',
+    PatternSourceEnum::LEATHER_PATTERNS->value => 'https://leatherpatterns.ru',
     PatternSourceEnum::CUTME->value => 'https://cutme.info',
 
     // PatternSourceEnum::NEOVIMA->value => 'https://neovima.com',

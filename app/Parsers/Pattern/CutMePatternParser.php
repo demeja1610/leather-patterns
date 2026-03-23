@@ -53,8 +53,62 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
 
         $this->logSearchForImages($pattern);
 
-        $images = [];
+        $images = $this->getImages($xpath);
 
+        if ($images->isEmpty() === false) {
+            $this->logFoundImages($images, $pattern);
+        }
+
+        $this->logSearchForTags($pattern);
+
+        $tags = $this->getTags($xpath);
+
+        if ($tags->isEmpty() === false) {
+            $this->logFoundTags($tags, $pattern);
+        }
+
+        $this->logSearchForCategories($pattern);
+
+        $categories = $this->getCategories($xpath);
+
+        if ($categories->isEmpty() === false) {
+            $this->logFoundCategories($categories, $pattern);
+        }
+
+        $this->logSearchForTitle($pattern);
+
+        $title = $this->getTitle($xpath);
+
+        $this->logTitle($title, $pattern);
+
+        $this->logSearchForFiles($pattern);
+
+        $files = $this->getFiles($xpath, $pattern);
+
+        $this->logFoundFiles($files, $pattern);
+
+        $this->logSearchForReviews($pattern);
+
+        $reviews = $this->parseReviews($xpath);
+
+        $this->logFoundReviews($reviews, $pattern);
+
+        $updatePattern = new ParsedPatternDto(
+            pattern: $pattern,
+            title: $title,
+            categories: $categories,
+            tags: $tags,
+            images: $images,
+            files: $files,
+            videos: $videos,
+            reviews: $reviews,
+        );
+
+        dispatch(new UpdatePatternFromParsedPatternJob($updatePattern));
+    }
+
+    protected function getImages(DOMXPath &$xpath): ImageListDto
+    {
         $imageElements = $xpath->query("//*[contains(@class, 'woocommerce-product-gallery__wrapper')]//img");
 
         /** @var \DOMElement $imageElement */
@@ -68,7 +122,7 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
             }
         }
 
-        $images = new ImageListDto(...array_map(
+        return new ImageListDto(...array_map(
             array: array_unique(array_map(
                 array: $images,
                 callback: fn(ImageDto $image) => $image->getUrl()
@@ -77,15 +131,10 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
                 url: $url,
             )
         ));
+    }
 
-        if ($images->isEmpty() === false) {
-            $this->logFoundImages($images, $pattern);
-        }
-
-        $this->logSearchForTags($pattern);
-
-        $tags = [];
-
+    protected function getTags(DOMXPath &$xpath): TagListDto
+    {
         $tagsElements = $xpath->query("//*[contains(@class, 'tagged_as')]//a");
 
         /** @var \DOMElement $tagElement */
@@ -95,16 +144,11 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
             );
         }
 
-        $tags = new TagListDto(...$tags);
+        return new TagListDto(...$tags);
+    }
 
-        if ($tags->isEmpty() === false) {
-            $this->logFoundTags($tags, $pattern);
-        }
-
-        $this->logSearchForCategories($pattern);
-
-        $categories = [];
-
+    protected function getCategories(DOMXPath &$xpath): CategoryListDto
+    {
         $categoriesElements = $xpath->query("//*[contains(@class, 'posted_in')]//a");
 
         /** @var \DOMElement $categoriesElement */
@@ -114,26 +158,57 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
             );
         }
 
-        $categories = new CategoryListDto(...$categories);
+        return new CategoryListDto(...$categories);
+    }
 
-        if ($categories->isEmpty() === false) {
-            $this->logFoundCategories($categories, $pattern);
+    protected function parseReviews(DOMXPath &$xpath): ReviewListDto
+    {
+        $reviews = [];
+
+        $reviewsEls = $xpath->query(expression: "//*[contains(@id, 'comments')]//*[contains(@class, 'comment-text')]");
+
+        foreach ($reviewsEls as $reviewsEl) {
+            $starsNodes = $xpath->query(expression: ".//strong[contains(@class, 'rating')]", contextNode: $reviewsEl);
+            $nameNodes = $xpath->query(expression: ".//*[contains(@class, 'woocommerce-review__author')]", contextNode: $reviewsEl);
+            $dateNodes = $xpath->query(expression: ".//*[contains(@class, 'woocommerce-review__published-date')]", contextNode: $reviewsEl);
+            $textNodes = $xpath->query(expression: ".//*[contains(@class, 'description')]", contextNode: $reviewsEl);
+
+            $stars = $starsNodes->item(0)?->textContent;
+
+            if (!$stars) {
+                $stars = null;
+            }
+
+            $name = $nameNodes->item(0)?->textContent;
+            $date = $dateNodes->item(0)?->attributes->getNamedItem('datetime')?->nodeValue;
+            $text = $textNodes->item(0)?->textContent;
+
+            $reviews[] = new ReviewDto(
+                reviewerName: trim(string: (string) $name),
+                reviewedAt: Carbon::parse($date),
+                comment: trim(string: (string) $text),
+                rating: floatval(value: $stars)
+            );
         }
 
-        $this->logSearchForTitle($pattern);
+        return new ReviewListDto(
+            ...$reviews
+        );
+    }
 
+    protected function getTitle(DOMXPath &$xpath): string
+    {
         $title = $xpath->query("//*[contains(@class, 'product_title')]")->item(0)?->textContent;
 
         if (!$title) {
             $title = 'No title';
         }
 
-        $this->logTitle($title, $pattern);
+        return $title;
+    }
 
-        $this->logSearchForFiles($pattern);
-
-        $files = [];
-
+    protected function getFiles(DOMXPath &$xpath, Pattern &$pattern): FileListDto
+    {
         $form = $xpath->query("//*[contains(@class, 'somdn-download-form')]")->item(0);
 
         if (!$form) {
@@ -184,63 +259,7 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
             callback: fn(FileDto $file) => !str_contains($file->getUrl(), 'youtu')
         );
 
-        $files = new FileListDto(...$files);
-
-        $this->logFoundFiles($files, $pattern);
-
-        $this->logSearchForReviews($pattern);
-
-        $reviews = $this->parseReviews($xpath);
-
-        $this->logFoundReviews($reviews, $pattern);
-
-        $updatePattern = new ParsedPatternDto(
-            pattern: $pattern,
-            title: $title,
-            categories: $categories,
-            tags: $tags,
-            images: $images,
-            files: $files,
-            videos: $videos,
-            reviews: $reviews,
-        );
-
-        dispatch(new UpdatePatternFromParsedPatternJob($updatePattern));
-    }
-
-    protected function parseReviews(DOMXPath $xpath): ReviewListDto
-    {
-        $reviews = [];
-
-        $reviewsEls = $xpath->query(expression: "//*[contains(@id, 'comments')]//*[contains(@class, 'comment-text')]");
-
-        foreach ($reviewsEls as $reviewsEl) {
-            $starsNodes = $xpath->query(expression: ".//strong[contains(@class, 'rating')]", contextNode: $reviewsEl);
-            $nameNodes = $xpath->query(expression: ".//*[contains(@class, 'woocommerce-review__author')]", contextNode: $reviewsEl);
-            $dateNodes = $xpath->query(expression: ".//*[contains(@class, 'woocommerce-review__published-date')]", contextNode: $reviewsEl);
-            $textNodes = $xpath->query(expression: ".//*[contains(@class, 'description')]", contextNode: $reviewsEl);
-
-            $stars = $starsNodes->item(0)?->textContent;
-
-            if (!$stars) {
-                $stars = null;
-            }
-
-            $name = $nameNodes->item(0)?->textContent;
-            $date = $dateNodes->item(0)?->attributes->getNamedItem('datetime')?->nodeValue;
-            $text = $textNodes->item(0)?->textContent;
-
-            $reviews[] = new ReviewDto(
-                reviewerName: trim(string: (string) $name),
-                reviewedAt: Carbon::parse($date),
-                comment: trim(string: (string) $text),
-                rating: floatval(value: $stars)
-            );
-        }
-
-        return new ReviewListDto(
-            ...$reviews
-        );
+        return new FileListDto(...$files);
     }
 
     protected function logNoProductIdFound(Pattern &$pattern): void

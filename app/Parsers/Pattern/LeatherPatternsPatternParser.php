@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Parsers\Pattern;
 
+use DOMXPath;
 use Throwable;
 use DOMElement;
 use App\Models\Pattern;
@@ -49,9 +50,54 @@ class LeatherPatternsPatternParser extends PatternParser implements PatternParse
 
         $this->logSearchForImages($pattern);
 
-        $images = [];
+        $images = $this->getImages($xpath);
 
+        if ($images->isEmpty() === false) {
+            $this->logFoundImages($images, $pattern);
+        }
+
+        $this->logSearchForTags($pattern);
+
+        $tags = $this->getTags($xpath);
+
+        if ($tags->isEmpty() === false) {
+            $this->logFoundTags($tags, $pattern);
+        }
+
+        $this->logSearchForTitle($pattern);
+
+        $title = $this->getTitle($xpath);
+
+        $this->logTitle($title, $pattern);
+
+        $this->logSearchForFiles($pattern);
+
+        $files = $this->getFiles($xpath);
+
+        $this->logFoundFiles($files, $pattern);
+
+        $categories = new CategoryListDto();
+        $reviews = new ReviewListDto();
+
+        $updatePattern = new ParsedPatternDto(
+            pattern: $pattern,
+            title: $title,
+            categories: $categories,
+            tags: $tags,
+            images: $images,
+            files: $files,
+            videos: $videos,
+            reviews: $reviews,
+        );
+
+        dispatch(new UpdatePatternFromParsedPatternJob($updatePattern));
+    }
+
+    protected function getImages(DOMXPath &$xpath): ImageListDto
+    {
         $imageElements = $xpath->query(expression: "//*[contains(@class, 'entry-content')]//img");
+
+        $images = [];
 
         /** @var \DOMElement $imageElement */
         foreach ($imageElements as $imageElement) {
@@ -71,7 +117,7 @@ class LeatherPatternsPatternParser extends PatternParser implements PatternParse
             }
         }
 
-        $images = new ImageListDto(...array_map(
+        return new ImageListDto(...array_map(
             array: array_unique(array_map(
                 array: $images,
                 callback: fn(ImageDto $image) => $image->getUrl()
@@ -80,15 +126,10 @@ class LeatherPatternsPatternParser extends PatternParser implements PatternParse
                 url: $url,
             )
         ));
+    }
 
-        if ($images->isEmpty() === false) {
-            $this->logFoundImages($images, $pattern);
-        }
-
-        $this->logSearchForTags($pattern);
-
-        $tags = [];
-
+    protected function getTags(DOMXPath &$xpath): TagListDto
+    {
         $tagsElements = $xpath->query(expression: "//*[contains(@class, 'entry-tags')]//a");
 
         /** @var \DOMElement $tagElement */
@@ -98,24 +139,22 @@ class LeatherPatternsPatternParser extends PatternParser implements PatternParse
             );
         }
 
-        $tags = new TagListDto(...$tags);
+        return new TagListDto(...$tags);
+    }
 
-        if ($tags->isEmpty() === false) {
-            $this->logFoundTags($tags, $pattern);
-        }
-
-        $this->logSearchForTitle($pattern);
-
+    protected function getTitle(DOMXPath &$xpath): string
+    {
         $title = $xpath->query(expression: "//*[contains(@class, 'entry-title')]")->item(0)?->textContent;
 
         if (!$title) {
             $title = 'No title';
         }
 
-        $this->logTitle($title, $pattern);
+        return $title;
+    }
 
-        $this->logSearchForFiles($pattern);
-
+    protected function getFiles(DOMXPath &$xpath): FileListDto
+    {
         $downloadLinks = $xpath->query(expression: "//*[contains(@class, 'download-link')]");
         $files = [];
 
@@ -150,30 +189,12 @@ class LeatherPatternsPatternParser extends PatternParser implements PatternParse
             callback: fn(string $url) => !str_contains($url, 'youtu')
         );
 
-        $files = new FileListDto(...array_map(
+        return new FileListDto(...array_map(
             array: $files,
             callback: fn(string $url) => new FileDto(
                 url: $url,
             ),
         ));
-
-        $this->logFoundFiles($files, $pattern);
-
-        $categories = new CategoryListDto();
-        $reviews = new ReviewListDto();
-
-        $updatePattern = new ParsedPatternDto(
-            pattern: $pattern,
-            title: $title,
-            categories: $categories,
-            tags: $tags,
-            images: $images,
-            files: $files,
-            videos: $videos,
-            reviews: $reviews,
-        );
-
-        dispatch(new UpdatePatternFromParsedPatternJob($updatePattern));
     }
 
     protected function decodeDataHref(string $dataHref): ?string
