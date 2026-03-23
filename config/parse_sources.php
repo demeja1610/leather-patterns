@@ -5,11 +5,12 @@ declare(strict_types=1);
 use App\Enum\PatternSourceEnum;
 
 return [
-    PatternSourceEnum::LEATHER_PATTERNS->value => 'https://leatherpatterns.ru',
-    PatternSourceEnum::CUTME->value => 'https://cutme.info',
+    // PatternSourceEnum::LEATHER_PATTERNS->value => 'https://leatherpatterns.ru',
+    // PatternSourceEnum::CUTME->value => 'https://cutme.info',
+    PatternSourceEnum::V_POMOSH_KOZHEVNIKU->value => 'https://patterns.somstylecraft.ru',
 
     // PatternSourceEnum::NEOVIMA->value => 'https://neovima.com',
-    // PatternSourceEnum::V_POMOSH_KOZHEVNIKU->value => 'https://patterns.somstylecraft.ru',
+    //
     // PatternSourceEnum::MLEATHER->value => 'https://www.mleather.ru',
     // PatternSourceEnum::ABZALA->value => 'https://abzala.com',
     // PatternSourceEnum::PATTERN_HUB->value => 'https://patternhub.su',
