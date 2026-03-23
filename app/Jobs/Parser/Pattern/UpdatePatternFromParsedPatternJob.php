@@ -305,7 +305,13 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                 'allow_redirects' => true,
             ];
 
-            $response = $client->get($url, $params);
+            if ($file->getPostData() !== []) {
+                $params['form_params'] = $file->getPostData();
+            }
+
+            $response = $file->getPostData() === []
+                ? $client->get($url, $params)
+                : $client->post($url, $params);
 
             $newPatternFile = new PatternFile();
             $saveDiskName = $newPatternFile->getSaveToDiskName();
@@ -637,6 +643,7 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                         'pattern_id' => $this->pattern->getPattern()->id,
                         'is_approved' => false,
                         'rating' => $review->getRating(),
+                        'created_at' => $review->getReviewedAt(),
                     ]);
                 } else {
                     $this->logReviewExists($review);

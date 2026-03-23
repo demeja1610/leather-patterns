@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Parsers;
 
+use App\Dto\Parser\Pattern\CategoryListDto;
 use Throwable;
 use App\Models\Pattern;
 use Illuminate\Support\Facades\App;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Dto\Parser\Pattern\TagListDto;
 use App\Dto\Parser\Pattern\FileListDto;
 use App\Dto\Parser\Pattern\ImageListDto;
+use App\Dto\Parser\Pattern\ReviewListDto;
 use App\Dto\Parser\Pattern\VideoListDto;
 use App\Interfaces\Parsers\PatternParserInterface;
 use App\Interfaces\Services\ParserServiceInterface;
@@ -127,6 +129,23 @@ abstract class PatternParser implements PatternParserInterface
         ]);
     }
 
+    protected function logSearchForCategories(Pattern &$pattern): void
+    {
+        $this->log('info', "Search for categories for pattern with ID: {$pattern->id}");
+    }
+
+    protected function logFoundCategories(CategoryListDto &$categories, Pattern &$pattern): void
+    {
+        $this->log('info', "Found: {$categories->count()} categories for pattern with ID: {$pattern->id}", [
+            'categories' => $categories->toArray(),
+        ]);
+    }
+
+    protected function logNoDownloadLinksFound(Pattern &$pattern): void
+    {
+        $this->log('warn', "No download links found for pattern with ID: {$pattern->id}");
+    }
+
     protected function logSearchForTitle(Pattern &$pattern): void
     {
         $this->log('info', "Search for title for pattern with ID: {$pattern->id}");
@@ -146,6 +165,18 @@ abstract class PatternParser implements PatternParserInterface
     {
         $this->log('info', "Found {$files->count()} files for pattern with ID: {$pattern->id}", [
             'files' => $files->toArray(),
+        ]);
+    }
+
+     protected function logSearchForReviews(Pattern &$pattern): void
+    {
+        $this->log('info', "Search for reviews for pattern with ID: {$pattern->id}");
+    }
+
+    protected function logFoundReviews(ReviewListDto &$reviews, Pattern &$pattern): void
+    {
+        $this->log('info', "Found {$reviews->count()} reviews for pattern with ID: {$pattern->id}", [
+            'reviews' => $reviews->toArray(),
         ]);
     }
 }

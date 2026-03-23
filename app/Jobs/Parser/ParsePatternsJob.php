@@ -51,6 +51,16 @@ class ParsePatternsJob extends InfoJob implements ShouldQueue
         $this->info("Processing pattern with ID: {$pattern->id} and URL: {$pattern->url}");
 
         match ($pattern->source) {
+            PatternSourceEnum::LEATHER_PATTERNS => (
+                new \App\Parsers\Pattern\LeatherPatternsPatternParser($parserService)
+            )
+                ->processPattern($pattern),
+
+            PatternSourceEnum::CUTME => (
+                new \App\Parsers\Pattern\CutMePatternParser($parserService)
+            )
+                ->processPattern(pattern: $pattern),
+
             // PatternSourceEnum::NEOVIMA => (
             //     new \App\Console\Commands\Parsers\PatternAdapters\NeovimaPatternAdapter(parserService: $this->parserService)
             // )
@@ -98,16 +108,6 @@ class ParsePatternsJob extends InfoJob implements ShouldQueue
 
             // PatternSourceEnum::SKINPAT => (
             //     new \App\Console\Commands\Parsers\PatternAdapters\SkinpatPatternAdapter(parserService: $this->parserService)
-            // )
-            //     ->processPattern(pattern: $pattern),
-
-            PatternSourceEnum::LEATHER_PATTERNS => (
-                new \App\Parsers\Pattern\LeatherPatternsPatternParser($parserService)
-            )
-                ->processPattern($pattern),
-
-            // PatternSourceEnum::CUTME => (
-            //     new \App\Console\Commands\Parsers\PatternAdapters\CutmePatternAdapter(parserService: $this->parserService)
             // )
             //     ->processPattern(pattern: $pattern),
 

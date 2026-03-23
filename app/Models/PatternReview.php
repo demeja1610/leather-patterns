@@ -29,6 +29,7 @@ class PatternReview extends Model
         'is_approved',
         'user_id',
         'pattern_id',
+        'created_at',
     ];
 
     public function pattern(): BelongsTo

@@ -10,7 +10,6 @@ use App\Models\Pattern;
 use App\Parsers\PatternParser;
 use App\Dto\Parser\Pattern\TagDto;
 use App\Dto\Parser\Pattern\FileDto;
-use Illuminate\Support\Facades\Log;
 use App\Dto\Parser\Pattern\ImageDto;
 use App\Dto\Parser\Pattern\TagListDto;
 use App\Dto\Parser\Pattern\FileListDto;
