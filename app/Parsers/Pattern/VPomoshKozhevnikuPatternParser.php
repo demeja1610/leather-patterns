@@ -7,13 +7,11 @@ namespace App\Parsers\Pattern;
 use DOMXPath;
 use Throwable;
 use DOMElement;
-use Carbon\Carbon;
 use App\Models\Pattern;
 use App\Parsers\PatternParser;
 use App\Dto\Parser\Pattern\TagDto;
 use App\Dto\Parser\Pattern\FileDto;
 use App\Dto\Parser\Pattern\ImageDto;
-use App\Dto\Parser\Pattern\ReviewDto;
 use App\Dto\Parser\Pattern\TagListDto;
 use App\Dto\Parser\Pattern\CategoryDto;
 use App\Dto\Parser\Pattern\FileListDto;
@@ -24,7 +22,7 @@ use App\Dto\Parser\Pattern\ParsedPatternDto;
 use App\Interfaces\Parsers\PatternParserInterface;
 use App\Jobs\Parser\Pattern\UpdatePatternFromParsedPatternJob;
 
-class CutMePatternParser extends PatternParser implements PatternParserInterface
+class VPomoshKozhevnikuPatternParser extends PatternParser implements PatternParserInterface
 {
     public function processPattern(Pattern $pattern): void
     {
@@ -83,15 +81,9 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
 
         $this->logSearchForFiles($pattern);
 
-        $files = $this->getFiles($xpath, $pattern);
+        $files = $this->getFiles($xpath);
 
         $this->logFoundFiles($files, $pattern);
-
-        $this->logSearchForReviews($pattern);
-
-        $reviews = $this->parseReviews($xpath);
-
-        $this->logFoundReviews($reviews, $pattern);
 
         $updatePattern = new ParsedPatternDto(
             pattern: $pattern,
@@ -101,7 +93,7 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
             images: $images,
             files: $files,
             videos: $videos,
-            reviews: $reviews,
+            reviews: new ReviewListDto(),
         );
 
         dispatch(new UpdatePatternFromParsedPatternJob($updatePattern));
@@ -111,7 +103,17 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
     {
         $images = [];
 
-        $imageElements = $xpath->query("//*[contains(@class, 'woocommerce-product-gallery__wrapper')]//img");
+        $postImage = $xpath->query(expression: "//*[contains(@class, 'blog-post-image')]//img");
+        $imageElements = $xpath->query("//*[contains(@class, 'wp-block-image')]//img");
+
+        if ($postImage->length > 0) {
+            /** @var DOMElement $element */
+            $element = $postImage->item(0);
+
+            $images[] = new ImageDto(
+                url: $element->getAttribute('src'),
+            );
+        }
 
         /** @var \DOMElement $imageElement */
         foreach ($imageElements as $imageElement) {
@@ -137,9 +139,9 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
 
     protected function getTags(DOMXPath &$xpath): TagListDto
     {
-        $tags = [];
+        $tagsElements = $xpath->query("//*[contains(@class, 'mz-entry-tags')]//a");
 
-        $tagsElements = $xpath->query("//*[contains(@class, 'tagged_as')]//a");
+        $tags = [];
 
         /** @var \DOMElement $tagElement */
         foreach ($tagsElements as $tagElement) {
@@ -153,8 +155,7 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
 
     protected function getCategories(DOMXPath &$xpath): CategoryListDto
     {
-        $categories = [];
-        $categoriesElements = $xpath->query("//*[contains(@class, 'posted_in')]//a");
+        $categoriesElements = $xpath->query("//*[contains(@class, 'ot-post-cats')]//a");
 
         /** @var \DOMElement $categoriesElement */
         foreach ($categoriesElements as $categoriesElement) {
@@ -166,44 +167,9 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
         return new CategoryListDto(...$categories);
     }
 
-    protected function parseReviews(DOMXPath &$xpath): ReviewListDto
-    {
-        $reviews = [];
-
-        $reviewsEls = $xpath->query(expression: "//*[contains(@id, 'comments')]//*[contains(@class, 'comment-text')]");
-
-        foreach ($reviewsEls as $reviewsEl) {
-            $starsNodes = $xpath->query(expression: ".//strong[contains(@class, 'rating')]", contextNode: $reviewsEl);
-            $nameNodes = $xpath->query(expression: ".//*[contains(@class, 'woocommerce-review__author')]", contextNode: $reviewsEl);
-            $dateNodes = $xpath->query(expression: ".//*[contains(@class, 'woocommerce-review__published-date')]", contextNode: $reviewsEl);
-            $textNodes = $xpath->query(expression: ".//*[contains(@class, 'description')]", contextNode: $reviewsEl);
-
-            $stars = $starsNodes->item(0)?->textContent;
-
-            if (!$stars) {
-                $stars = null;
-            }
-
-            $name = $nameNodes->item(0)?->textContent;
-            $date = $dateNodes->item(0)?->attributes->getNamedItem('datetime')?->nodeValue;
-            $text = $textNodes->item(0)?->textContent;
-
-            $reviews[] = new ReviewDto(
-                reviewerName: trim(string: (string) $name),
-                reviewedAt: Carbon::parse($date),
-                comment: trim(string: (string) $text),
-                rating: floatval(value: $stars)
-            );
-        }
-
-        return new ReviewListDto(
-            ...$reviews
-        );
-    }
-
     protected function getTitle(DOMXPath &$xpath): string
     {
-        $title = $xpath->query("//*[contains(@class, 'product_title')]")->item(0)?->textContent;
+        $title = $xpath->query("//*[contains(@class, 'entry-title')]")->item(0)?->textContent;
 
         if (!$title) {
             $title = 'No title';
@@ -212,53 +178,21 @@ class CutMePatternParser extends PatternParser implements PatternParserInterface
         return $title;
     }
 
-    protected function getFiles(DOMXPath &$xpath, Pattern &$pattern): FileListDto
+    protected function getFiles(DOMXPath &$xpath): FileListDto
     {
+        $downloadLinkElements = $xpath->query(expression: "//*[contains(@class, 'blog-post-body')]//a[contains(text(), 'Скачать')]");
         $files = [];
 
-        $form = $xpath->query("//*[contains(@class, 'somdn-download-form')]")->item(0);
+        if ($downloadLinkElements->length > 0) {
+            /** @var DOMElement $element */
+            $element = $downloadLinkElements->item(0);
+            $downloadUrl = $element->getAttribute(qualifiedName: 'href');
 
-        if (!$form) {
-            $this->logNoDownloadLinksFound($pattern);
-        } else {
-            do {
-                /** @var DOMElement $form */
-                $downloadUrl = $form->getAttribute(qualifiedName: 'action');
-
-                $downloadKeyEl = $xpath->query(expression: "//*[contains(@name, 'somdn_download_key')]")->item(0);
-                $productIdEl = $xpath->query(expression: "//*[contains(@name, 'somdn_product')]")->item(0);
-
-                if (!$productIdEl) {
-                    $this->logNoProductIdFound($pattern);
-
-                    break;
-                }
-
-                if (!$downloadKeyEl) {
-                    $this->logNoDownloadKeyFound($pattern);
-
-                    break;
-                }
-
-                /** @var DOMElement $downloadKeyEl */
-                $downloadKey = $downloadKeyEl->getAttribute(qualifiedName: 'value');
-
-                /** @var DOMElement $productIdEl */
-                $productId = $productIdEl->getAttribute(qualifiedName: 'value');
-
-                $action = 'somdn_download_single';
-
-                $postParams = [
-                    'somdn_download_key' => $downloadKey,
-                    'action' => $action,
-                    'somdn_product' => $productId,
-                ];
-
+            if ($downloadUrl) {
                 $files[] = new FileDto(
                     url: $downloadUrl,
-                    postData: $postParams,
                 );
-            } while (0);
+            }
         }
 
         $files = array_filter(

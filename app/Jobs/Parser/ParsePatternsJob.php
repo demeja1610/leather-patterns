@@ -53,21 +53,18 @@ class ParsePatternsJob extends InfoJob implements ShouldQueue
         match ($pattern->source) {
             PatternSourceEnum::LEATHER_PATTERNS => (
                 new \App\Parsers\Pattern\LeatherPatternsPatternParser($parserService)
-            )
-                ->processPattern($pattern),
+            )->processPattern($pattern),
 
             PatternSourceEnum::CUTME => (
                 new \App\Parsers\Pattern\CutMePatternParser($parserService)
-            )
-                ->processPattern(pattern: $pattern),
+            )->processPattern(pattern: $pattern),
+
+            PatternSourceEnum::V_POMOSH_KOZHEVNIKU => (
+                new \App\Parsers\Pattern\VPomoshKozhevnikuPatternParser($parserService)
+            )->processPattern(pattern: $pattern),
 
             // PatternSourceEnum::NEOVIMA => (
             //     new \App\Console\Commands\Parsers\PatternAdapters\NeovimaPatternAdapter(parserService: $this->parserService)
-            // )
-            //     ->processPattern(pattern: $pattern),
-
-            // PatternSourceEnum::V_POMOSH_KOZHEVNIKU => (
-            //     new \App\Console\Commands\Parsers\PatternAdapters\VPomoshKozhevnikuPatternAdapter(parserService: $this->parserService)
             // )
             //     ->processPattern(pattern: $pattern),
 

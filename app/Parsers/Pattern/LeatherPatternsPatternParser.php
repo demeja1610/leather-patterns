@@ -95,9 +95,9 @@ class LeatherPatternsPatternParser extends PatternParser implements PatternParse
 
     protected function getImages(DOMXPath &$xpath): ImageListDto
     {
-        $imageElements = $xpath->query(expression: "//*[contains(@class, 'entry-content')]//img");
-
         $images = [];
+
+        $imageElements = $xpath->query(expression: "//*[contains(@class, 'entry-content')]//img");
 
         /** @var \DOMElement $imageElement */
         foreach ($imageElements as $imageElement) {
@@ -130,6 +130,8 @@ class LeatherPatternsPatternParser extends PatternParser implements PatternParse
 
     protected function getTags(DOMXPath &$xpath): TagListDto
     {
+        $tags = [];
+
         $tagsElements = $xpath->query(expression: "//*[contains(@class, 'entry-tags')]//a");
 
         /** @var \DOMElement $tagElement */
