@@ -87,6 +87,11 @@ class ParsePatternSourcesJob extends InfoJob implements ShouldQueue
                     parserService: $parserService,
                 ))->processSource(),
 
+            PatternSourceEnum::MYETSY => (
+                new \App\Parsers\PatternSource\MyEtsySourceParser(
+                    parserService: $parserService,
+                ))->processSource(),
+
             // PatternSourceEnum::NEOVIMA => (
             //     new \App\Console\Commands\Parsers\SourceAdapters\NeovimaSourceAdapter(
             //         parserService: $this->parserService,
@@ -99,11 +104,6 @@ class ParsePatternSourcesJob extends InfoJob implements ShouldQueue
 
             // PatternSourceEnum::ABZALA => (
             //     new \App\Console\Commands\Parsers\SourceAdapters\AbzalaSourceAdapter(
-            //         parserService: $this->parserService,
-            //     ))->processSource(baseURL: $url),
-
-            // PatternSourceEnum::MYETSY => (
-            //     new \App\Console\Commands\Parsers\SourceAdapters\MyEtsySourceAdapter(
             //         parserService: $this->parserService,
             //     ))->processSource(baseURL: $url),
 
