@@ -309,17 +309,33 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                 $params['form_params'] = $file->getPostData();
             }
 
+            if ($file->getExtraHeaders() !== []) {
+                $params['headers'] = $file->getExtraHeaders();
+            }
+
             $response = $file->getPostData() === []
-                ? $client->get($url, $params)
-                : $client->post($url, $params);
+                ? $client->request('GET', $url, $params)
+                : $client->request('POST', $url, $params);
 
             $newPatternFile = new PatternFile();
             $saveDiskName = $newPatternFile->getSaveToDiskName();
             $uploadPath = rtrim($newPatternFile->getUploadPath(), '/');
 
-            $ext = $this->fileService->getExtension($file->getUrl()) ?? 'pdf';
+            $ext = $this->fileService->getExtension($file->getUrl());
+
+            $knownExts = [
+                'rar',
+                'zip',
+                'pdf',
+            ];
+
+            if (!in_array($ext, $knownExts)) {
+                $ext = 'pdf';
+            }
+
             $newFileName = $this->fileService->generateName();
 
+            
             $filePath = "{$uploadPath}/{$newFileName}.{$ext}";
 
             $saved = Storage::disk($saveDiskName)->put(
