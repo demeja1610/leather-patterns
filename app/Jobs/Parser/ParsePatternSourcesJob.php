@@ -82,6 +82,11 @@ class ParsePatternSourcesJob extends InfoJob implements ShouldQueue
                     parserService: $parserService,
                 ))->processSource(),
 
+            PatternSourceEnum::FIRST_KOZHA => (
+                new \App\Parsers\PatternSource\FirstKojaSourceParser(
+                    parserService: $parserService,
+                ))->processSource(),
+
             // PatternSourceEnum::NEOVIMA => (
             //     new \App\Console\Commands\Parsers\SourceAdapters\NeovimaSourceAdapter(
             //         parserService: $this->parserService,
@@ -104,11 +109,6 @@ class ParsePatternSourcesJob extends InfoJob implements ShouldQueue
 
             // PatternSourceEnum::LASERBIZ => (
             //     new \App\Console\Commands\Parsers\SourceAdapters\LaserbizSourceAdapter(
-            //         parserService: $this->parserService,
-            //     ))->processSource(baseURL: $url),
-
-            // PatternSourceEnum::FIRST_KOZHA => (
-            //     new \App\Console\Commands\Parsers\SourceAdapters\FirstKozhaSourceAdapter(
             //         parserService: $this->parserService,
             //     ))->processSource(baseURL: $url),
 
