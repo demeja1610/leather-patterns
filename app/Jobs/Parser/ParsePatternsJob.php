@@ -71,6 +71,10 @@ class ParsePatternsJob extends InfoJob implements ShouldQueue
                 new \App\Parsers\Pattern\PatternHubPatternParser($parserService)
             )->processPattern(pattern: $pattern),
 
+            PatternSourceEnum::PABLIK_KOZHEVNIKA => (
+                new \App\Parsers\Pattern\PablikKozhevnikaPatternParser($parserService)
+            )->processPattern(pattern: $pattern),
+
             // PatternSourceEnum::NEOVIMA => (
             //     new \App\Console\Commands\Parsers\PatternAdapters\NeovimaPatternAdapter(parserService: $this->parserService)
             // )
@@ -83,11 +87,6 @@ class ParsePatternsJob extends InfoJob implements ShouldQueue
 
             // PatternSourceEnum::FORMULA_KOZHI => (
             //     new \App\Console\Commands\Parsers\PatternAdapters\FormulaKozhiPatternAdapter(parserService: $this->parserService)
-            // )
-            //     ->processPattern(pattern: $pattern),
-
-            // PatternSourceEnum::PABLIK_KOZHEVNIKA => (
-            //     new \App\Console\Commands\Parsers\PatternAdapters\PablikKozhevnikaPatternAdapter(parserService: $this->parserService)
             // )
             //     ->processPattern(pattern: $pattern),
 

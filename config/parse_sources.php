@@ -9,7 +9,9 @@ return [
     // PatternSourceEnum::CUTME->value => 'https://cutme.info',
     // PatternSourceEnum::V_POMOSH_KOZHEVNIKU->value => 'https://patterns.somstylecraft.ru',
     // PatternSourceEnum::FORMULA_KOZHI->value => 'https://formulakozhi.ru',
-    PatternSourceEnum::PATTERN_HUB->value => 'https://patternhub.su',
+    // PatternSourceEnum::PATTERN_HUB->value => 'https://patternhub.su',
+    PatternSourceEnum::PABLIK_KOZHEVNIKA->value => 'https://pablik-kozhevnika.ru',
+
 
     // PatternSourceEnum::NEOVIMA->value => 'https://neovima.com',
     // PatternSourceEnum::MLEATHER->value => 'https://www.mleather.ru',
@@ -18,7 +20,6 @@ return [
     // PatternSourceEnum::LASERBIZ->value => 'https://maket.laserbiz.ru',
     // PatternSourceEnum::FIRST_KOZHA->value => 'https://1koja.ru',
     // // PatternSourceEnum::SKINCUTS->value => 'https://skincuts.ru',
-    // PatternSourceEnum::PABLIK_KOZHEVNIKA->value => 'https://pablik-kozhevnika.ru',
     // PatternSourceEnum::SKINPAT->value => 'https://skinpat.ru',
 
     //
