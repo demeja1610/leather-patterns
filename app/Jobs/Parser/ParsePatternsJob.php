@@ -95,7 +95,11 @@ class ParsePatternsJob extends InfoJob implements ShouldQueue
                 new \App\Parsers\Pattern\AbzalaPatternParser($parserService)
             )->processPattern(pattern: $pattern),
 
-            // PatternSourceEnum::NEOVIMA => (
+            PatternSourceEnum::NEOVIMA => (
+                new \App\Parsers\Pattern\NeovimaPatternParser($parserService)
+            )->processPattern(pattern: $pattern),
+
+            // PatternSourceEnum:: => (
             //     new \App\Console\Commands\Parsers\PatternAdapters\NeovimaPatternAdapter(parserService: $this->parserService)
             // )
             //     ->processPattern(pattern: $pattern),

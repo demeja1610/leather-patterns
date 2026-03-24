@@ -15,9 +15,10 @@ return [
     // PatternSourceEnum::FIRST_KOZHA->value => 'https://1koja.ru',
     // PatternSourceEnum::MYETSY->value => 'https://myetsy.ru', // At the refator time (24.03.2026) site is disabled by hosting owners due to unpaid bills
     // PatternSourceEnum::LASERBIZ->value => 'https://maket.laserbiz.ru',
-    PatternSourceEnum::ABZALA->value => 'https://abzala.com',
+    // PatternSourceEnum::ABZALA->value => 'https://abzala.com',
+    PatternSourceEnum::NEOVIMA->value => 'https://neovima.com',
 
-    // PatternSourceEnum::NEOVIMA->value => 'https://neovima.com',
+
     // PatternSourceEnum::MLEATHER->value => 'https://www.mleather.ru',
     // // PatternSourceEnum::SKINCUTS->value => 'https://skincuts.ru',
 ];
