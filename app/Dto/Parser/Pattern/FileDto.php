@@ -9,6 +9,7 @@ class FileDto extends Dto
     public function __construct(
         protected readonly string $url,
         protected readonly array $postData = [],
+        protected readonly array $extraHeaders = [],
     ) {}
 
     public static function fromArray(array $data): self
@@ -16,6 +17,7 @@ class FileDto extends Dto
         return new self(
             url: $data['url'],
             postData: $data['post_data'],
+            extraHeaders: $data['extra_headers'],
         );
     }
 
@@ -24,6 +26,7 @@ class FileDto extends Dto
         return [
             'url' => $this->url,
             'post_data' => $this->postData,
+            'extra_headers' => $this->extraHeaders,
         ];
     }
 
@@ -35,5 +38,10 @@ class FileDto extends Dto
     public function getPostData(): array
     {
         return $this->postData;
+    }
+
+    public function getExtraHeaders(): array
+    {
+        return $this->extraHeaders;
     }
 }
