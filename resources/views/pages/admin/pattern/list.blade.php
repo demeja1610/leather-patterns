@@ -593,6 +593,10 @@
                                 <x-link.button-ghost :href="route('admin.page.patterns.edit', ['id' => $pattern->id])">
                                     <x-icon.svg name="edit" />
                                 </x-link.button-ghost>
+
+                                <x-link.button-ghost :href="route('page.pattern.single', ['id' => $pattern->id])" target="_blank">
+                                    <x-icon.svg name="eye" />
+                                </x-link.button-ghost>
                             </x-table.td-actions>
 
                             <x-table.td>
