@@ -769,6 +769,7 @@
                     :confirm-text="__('actions.delete_confirm')"
                     x-bind:action="deleteUrl"
                     :text="__('pattern.admin.confirm_delete_text')"
+                    x-trap="deleteUrl !== null"
                 >
                     @method('DELETE')
                 </x-form.confirm>
