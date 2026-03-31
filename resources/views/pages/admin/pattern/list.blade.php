@@ -625,7 +625,7 @@
                                 @endif
                             </x-table.td>
 
-                            <x-table.td-clamp clamp="2">
+                            <x-table.td-clamp clamp="2" :title="$pattern->title">
                                 {{ $pattern->title }}
                             </x-table.td-clamp>
 
