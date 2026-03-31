@@ -15,6 +15,10 @@ return [
     'authors' => 'Авторы',
     'download_from_source' => 'Скачать из источника',
     'created_at' => 'Дата добавления',
+    'duplicates' => 'Дубликаты выкроек',
+    'duplicates_count' => 'Кол-во дубликатов',
+    'public_pattern_links' => 'Публичные ссылки',
+    'admin_pattern_links' => 'Ссылки на админ панель',
 
     'creation' => 'Создание выкройки',
     'edition' => 'Редактирование выкройки',

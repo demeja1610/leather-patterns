@@ -48,11 +48,18 @@
         </div>
 
         @if ($paginator->nextPageUrl() || $paginator->previousPageUrl())
-            <x-pagination.cursor
-                class="admin-page-list__pagination"
-                :prevPageUrl="$paginator->previousPageUrl()"
-                :nextPageUrl="$paginator->nextPageUrl()"
-            />
+            @if ($paginator instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                <x-pagination.default
+                    class="admin-page-list__pagination"
+                    :paginator="$paginator"
+                />
+            @else
+                <x-pagination.cursor
+                    class="admin-page-list__pagination"
+                    :prevPageUrl="$paginator->previousPageUrl()"
+                    :nextPageUrl="$paginator->nextPageUrl()"
+                />
+            @endif
         @endif
     </div>
 @endsection

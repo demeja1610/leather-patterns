@@ -35,6 +35,7 @@ return [
     'newer_than' => 'Новее чем',
     'title' => 'Заголовок',
     'url' => 'URL',
+    'duplicates_count' => 'Количество дубликатов',
 
     'pattern_order' => [
         'default' => 'По умолчанию',

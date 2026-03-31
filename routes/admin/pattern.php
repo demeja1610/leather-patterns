@@ -9,6 +9,9 @@ Route::prefix('patterns')
         Route::get('/', \App\Http\Controllers\Admin\Pattern\Page\ListPageController::class)
             ->name(name: 'page.patterns.list');
 
+        Route::get('/duplicates', \App\Http\Controllers\Admin\Pattern\Page\DuplicatesController::class)
+            ->name(name: 'page.patterns.duplicates');
+
         Route::group(['prefix' => 'create'], function (): void {
             Route::get('/', \App\Http\Controllers\Admin\Pattern\Page\CreatePageController::class)
                 ->name(name: 'page.patterns.create');

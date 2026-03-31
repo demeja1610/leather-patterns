@@ -1,0 +1,9 @@
+.admin-page-patterns-duplicates {
+    &__admin-links,
+    &__public-links {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.5rem;
+    }
+}

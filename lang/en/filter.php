@@ -35,6 +35,7 @@ return [
     'newer_than' => 'Newer than',
     'title' => 'Title',
     'url' => 'URL',
+    'duplicates_count' => 'Duplicates count',
 
     'pattern_order' => [
         'default' => 'Default',

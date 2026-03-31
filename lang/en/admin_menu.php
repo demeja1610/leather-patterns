@@ -36,6 +36,7 @@ return [
 
     'pattern' => [
         'patterns' => 'Patterns',
+        'duplicates' => 'Duplicated patterns',
         'list' => 'List',
         'add_new' => 'Add new',
     ],

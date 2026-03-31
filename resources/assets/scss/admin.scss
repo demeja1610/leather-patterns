@@ -33,7 +33,7 @@
 
 @use '@styles/components/loader/spin.scss' as loader-spin;
 
-@use '@styles/components/pagination/cursor.scss' as pagination-cursor;
+@use '@styles/components/pagination/pagination.scss' as pagination;
 
 @use '@styles/components/header/header.scss' as header;
 @use '@styles/components/header/auth.scss' as header-auth;
@@ -80,6 +80,7 @@
 @use '@styles/pages/admin/page-single.scss' as admin-page-single;
 
 @use '@styles/pages/admin/pattern/list.scss' as admin-page-patterns-list;
+@use '@styles/pages/admin/pattern/duplicates.scss' as admin-page-patterns-duplicates;
 @use '@styles/pages/admin/pattern-author/list.scss' as admin-page-pattern-authors-list;
 @use '@styles/pages/admin/pattern-author-social/list.scss' as admin-page-pattern-authors-social-list;
 
