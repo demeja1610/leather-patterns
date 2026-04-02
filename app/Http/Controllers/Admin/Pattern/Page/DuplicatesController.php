@@ -42,7 +42,7 @@ class DuplicatesController extends Controller
             ->select([
                 'hash',
                 DB::raw('COUNT(hash) as duplicates_count'),
-                DB::raw('GROUP_CONCAT(pattern_id) as patterns_ids'),
+                DB::raw('GROUP_CONCAT(DISTINCT pattern_id) as patterns_ids'),
             ]);
 
         $this->applyFilters(
