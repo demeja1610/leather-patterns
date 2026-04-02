@@ -15,7 +15,7 @@ return [
     'authors' => 'Authors',
     'download_from_source' => 'Download from source',
     'created_at' => 'Created at',
-    'duplicates' => 'Pattern duplicates',
+    'duplicates' => 'Duplicated files',
     'duplicates_count' => 'Duplicates count',
     'public_pattern_links' => 'Public links',
     'admin_pattern_links' => 'Admin links',
