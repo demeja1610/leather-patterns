@@ -32,7 +32,7 @@ class ListController extends Controller
 
     public function __invoke(Request $request): View
     {
-        $patternCategories = $this->getPatternategoriesForFilter(
+        $patternCategories = $this->getPatternCategoriesForFilter(
             request: $request,
         );
 
@@ -60,7 +60,7 @@ class ListController extends Controller
         ]);
     }
 
-    protected function getPatternategoriesForFilter(Request &$request): Collection
+    protected function getPatternCategoriesForFilter(Request &$request): Collection
     {
         $showAllPatternCategories = $request->input(key: 'show_all_pattern_categories', default: false);
 
@@ -362,7 +362,7 @@ class ListController extends Controller
     protected function getPatternCategories(?int $limit = null): Collection
     {
         $q = $this->getBasePatternCategoryQuery()
-            ->orderBy('id');
+            ->orderBy('name');
 
         if ($limit !== null) {
             $q->limit($limit);
@@ -374,7 +374,7 @@ class ListController extends Controller
     protected function getPatternTags(?int $limit = null): Collection
     {
         $q = $this->getBasePatternTagQuery()
-            ->orderBy('id');
+            ->orderBy('name');
 
         if ($limit !== null) {
             $q->limit($limit);
@@ -386,7 +386,7 @@ class ListController extends Controller
     protected function getPatternAuthors(?int $limit = null): Collection
     {
         $q = $this->getBasePatternAuthorQuery()
-            ->orderBy('id');
+            ->orderBy('name');
 
         if ($limit !== null) {
             $q->limit($limit);
