@@ -37,7 +37,7 @@ class GetAllController extends Controller
             'name',
         ]);
 
-        return $q->orderBy('id', 'asc')->get();
+        return $q->orderBy('name')->get();
     }
 
     protected function getBasePatternCategoryQuery(): Builder
