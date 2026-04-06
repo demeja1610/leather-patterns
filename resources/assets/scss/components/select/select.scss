@@ -52,6 +52,12 @@
             border-top: 5px solid var(--text-2);
             pointer-events: none;
         }
+
+        &:has(option:not(:first-child):checked) {
+            border-color: var(--red-2);
+            color: var(--red-2);
+            outline-color: var(--red-2);
+        }
     }
 
     &__option {
@@ -76,6 +82,6 @@
     }
 
     &__error {
-         @extend .input-text__error;
+        @extend .input-text__error;
     }
 }

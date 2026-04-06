@@ -1,0 +1,28 @@
+@use '@styles/components/button/button.scss';
+
+.button-copy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__button {
+        @extend .button;
+
+        background-color: var(--bg);
+        color: var(--text-1);
+        border: none;
+        box-shadow: var(--shadow-1);
+        width: 100%;
+
+        &:hover {
+            background-color: var(--bg-alt);
+        }
+    }
+
+    &__icon {
+        &--copied {
+            width: 0.8rem;
+            height: 0.8rem;
+        }
+    }
+}

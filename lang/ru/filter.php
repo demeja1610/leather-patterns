@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Enum\PatternOrderEnum;
+use App\Enum\OrderDirectionEnum;
+use App\Enum\OrderablePropertyEnum;
 
 return [
     'filter_categories_title' => 'Категории',
@@ -36,6 +38,28 @@ return [
     'title' => 'Заголовок',
     'url' => 'URL',
     'duplicates_count' => 'Количество дубликатов',
+
+    'hash' => 'Хэш',
+    'type' => 'Тип',
+    'ext' => 'Расширение',
+    'mime_type' => 'Мим тип',
+    'hash_algo' => 'Алгоритм хэширования',
+
+    'order_by' => 'Сортировать по',
+    'order_direction' => 'Направление сортировки',
+
+    'orders' => [
+        OrderablePropertyEnum::ID->value => 'ID',
+        OrderablePropertyEnum::TITLE->value => 'Заголовок',
+        OrderablePropertyEnum::NAME->value => 'Название',
+        OrderablePropertyEnum::SIZE->value => 'Размер',
+        OrderablePropertyEnum::CREATED_AT->value => 'Дата создания',
+    ],
+
+    'order_directions' => [
+        OrderDirectionEnum::DESC->value => 'По убыванию',
+        OrderDirectionEnum::ASC->value => 'По возрастанию',
+    ],
 
     'pattern_order' => [
         'default' => 'По умолчанию',

@@ -102,14 +102,27 @@ class MenuService implements MenuServiceInterface
                         icon: 'pattern',
                     ),
                     new MenuItemDto(
-                        text: __('admin_menu.pattern.duplicates'),
-                        route: 'admin.page.patterns.duplicates',
-                        icon: 'copy',
-                    ),
-                    new MenuItemDto(
                         text: __('admin_menu.pattern.add_new'),
                         route: 'admin.page.patterns.create',
                         icon: 'create',
+                    ),
+
+                    new MenuItemDto(
+                        text: __('admin_menu.pattern_file.files'),
+                        route: 'admin.page.pattern-files.list',
+                        icon: 'file',
+                        subMenu: new MenuItemListDto(
+                            new MenuItemDto(
+                                text: __('admin_menu.pattern_file.list'),
+                                route: 'admin.page.pattern-files.list',
+                                icon: 'file',
+                            ),
+                            new MenuItemDto(
+                                text: __('admin_menu.pattern_file.duplicates'),
+                                route: 'admin.page.pattern-files.duplicates',
+                                icon: 'copy',
+                            ),
+                        )
                     ),
 
                     new MenuItemDto(

@@ -21,6 +21,7 @@
 @use '@styles/components/button/button.scss' as button;
 @use '@styles/components/button/button-ghost.scss' as button-ghost;
 @use '@styles/components/button/button-link.scss' as button-link;
+@use '@styles/components/button/button-copy.scss' as button-copy;
 
 @use '@styles/components/link/link.scss' as link;
 @use '@styles/components/link/link-button-default.scss' as link-button-default;
@@ -80,7 +81,7 @@
 @use '@styles/pages/admin/page-single.scss' as admin-page-single;
 
 @use '@styles/pages/admin/pattern/list.scss' as admin-page-patterns-list;
-@use '@styles/pages/admin/pattern/duplicates.scss' as admin-page-patterns-duplicates;
+@use '@styles/pages/admin/pattern/duplicates.scss' as admin-page-pattern-files-duplicates;
 @use '@styles/pages/admin/pattern-author/list.scss' as admin-page-pattern-authors-list;
 @use '@styles/pages/admin/pattern-author-social/list.scss' as admin-page-pattern-authors-social-list;
 

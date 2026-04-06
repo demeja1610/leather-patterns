@@ -36,8 +36,13 @@ return [
 
     'pattern' => [
         'patterns' => 'Выкройки',
-        'duplicates' => 'Дубликаты файлов',
         'list' => 'Список',
         'add_new' => 'Добавить запись',
+    ],
+
+    'pattern_file' => [
+        'files' => 'Файлы',
+        'list' => 'Список',
+        'duplicates' => 'Дубликаты',
     ],
 ];

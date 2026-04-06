@@ -36,8 +36,13 @@ return [
 
     'pattern' => [
         'patterns' => 'Patterns',
-        'duplicates' => 'Duplicated files',
         'list' => 'List',
         'add_new' => 'Add new',
+    ],
+
+    'pattern_file' => [
+        'files' => 'Files',
+        'list' => 'List',
+        'duplicates' => 'Duplicates',
     ],
 ];

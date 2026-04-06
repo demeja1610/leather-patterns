@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Enum\OrderablePropertyEnum;
+use App\Enum\OrderDirectionEnum;
 use App\Enum\PatternOrderEnum;
 
 return [
@@ -36,6 +38,28 @@ return [
     'title' => 'Title',
     'url' => 'URL',
     'duplicates_count' => 'Duplicates count',
+
+    'hash' => 'Hash',
+    'type' => 'Type',
+    'ext' => 'Extension',
+    'mime_type' => 'Mime type',
+    'hash_algo' => 'Hash algorithm',
+
+    'order_by' => 'Order by',
+    'order_direction' => 'Order by direction',
+
+    'orders' => [
+        OrderablePropertyEnum::ID->value => 'ID',
+        OrderablePropertyEnum::TITLE->value => 'Title',
+        OrderablePropertyEnum::NAME->value => 'Name',
+        OrderablePropertyEnum::SIZE->value => 'Size',
+        OrderablePropertyEnum::CREATED_AT->value => 'Created at',
+    ],
+
+    'order_directions' => [
+        OrderDirectionEnum::DESC->value => 'Descending',
+        OrderDirectionEnum::ASC->value => 'Ascending',
+    ],
 
     'pattern_order' => [
         'default' => 'Default',

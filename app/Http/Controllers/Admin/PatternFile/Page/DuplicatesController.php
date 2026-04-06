@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Admin\Pattern\Page;
+namespace App\Http\Controllers\Admin\PatternFile\Page;
 
 use App\Models\PatternFile;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +24,7 @@ class DuplicatesController extends Controller
 
         $this->mutateDuplicates($duplicates);
 
-        return view(view: 'pages.admin.pattern.duplicates', data: [
+        return view(view: 'pages.admin.pattern-file.duplicates', data: [
             'activeFilters' => $this->activeFilters,
             'extraData' => $this->extraData,
             'duplicates' => $duplicates,
