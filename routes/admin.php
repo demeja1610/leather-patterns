@@ -8,7 +8,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->middleware([
         'auth',
-        'throttle:60,1',
+        // 'throttle:60,1',
         // EnsureUserCanAccessAdminPanel::class,
     ])
     ->group(callback: function (): void {
