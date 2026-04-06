@@ -3,6 +3,7 @@
 use App\Enum\FileTypeEnum;
 
 return [
+    'files' => 'Files',
     'id' => 'ID',
     'type' => 'File type',
     'ext' => 'File extension',
