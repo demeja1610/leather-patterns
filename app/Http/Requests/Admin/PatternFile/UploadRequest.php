@@ -21,7 +21,7 @@ class UploadRequest extends FormRequest
             'files.*' => [
                 'file',
                 'mimetypes:application/pdf,image/vnd.dwg,application/zip,application/x-rar,application/x-7z-compressed,image/svg+xml,image/jpeg,image/png',
-                'max:4098'
+                'max:16384'
             ]
         ];
     }
