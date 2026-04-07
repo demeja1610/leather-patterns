@@ -294,10 +294,24 @@
 
                 <x-slot:rows>
                     @foreach ($files as $file)
+                        @php
+                            $fileImages = [];
+
+                            if ($file->pattern->images->isEmpty() === false) {
+                                foreach ($file->pattern->images as $image) {
+                                    $fileImages[] = asset('/storage/' . $image->path);
+                                }
+                            }
+                        @endphp
                         <x-table.tr>
                             <x-table.td>
                                 {{ $file->id }}
                             </x-table.td>
+
+                            <x-table.td-images
+                                :images="$fileImages"
+                                :canZoom="true"
+                            />
 
                             <x-table.td>
                                 {{ __("pattern_file.types.{$file->type->value}") }}
@@ -344,7 +358,7 @@
                             </x-table.td>
 
                             <x-table.td>
-                                <x-button.copy :copyValue="$file->hash"/>
+                                <x-button.copy :copyValue="$file->hash" />
                             </x-table.td>
                         </x-table.tr>
                     @endforeach

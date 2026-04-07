@@ -69,7 +69,7 @@ class ListPageController extends Controller
         );
 
         $q->with(relations: [
-            'pattern'
+            'pattern.images'
         ]);
 
         $q->orderBy('id', $orderDirection->value);

@@ -1,0 +1,46 @@
+@use '@styles/components/table/td-image.scss';
+
+.table-data-images {
+    @extend .table-data-image;
+
+    padding: 0;
+
+    &__image-wrapper {
+        @extend .table-data-image__image-wrapper;
+
+        position: relative;
+    }
+
+    &__image-link {
+        @extend .table-data-image__image-link;
+        z-index: 2;
+
+        &:nth-child(n+4) {
+            display: none;
+        }
+
+        &:nth-child(2),
+        &:nth-child(3) {
+            position: absolute;
+            top: 50%;
+            left: calc(50% + 20px);
+            transform: translate(-50%, -50%) scale(0.8);
+            z-index: 1;
+        }
+
+        &:nth-child(3) {
+              left: calc(50% + 40px);
+            transform: translate(-50%, -50%) scale(0.6);
+        }
+    }
+
+    &__image-placeholder {
+        @extend .table-data-image__image-placeholder;
+    }
+
+    &__image {
+        @extend .table-data-image__image;
+
+
+    }
+}
