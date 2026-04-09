@@ -17,6 +17,7 @@ return [
     'admin_pattern_links' => 'Admin links',
     'mb_size' => 'Size (MByte)',
     'mb' => 'MByte',
+    'pattern_id' => 'Pattern ID',
 
     'types' => [
         FileTypeEnum::IMAGE->value => 'Image',

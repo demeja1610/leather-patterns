@@ -11,4 +11,5 @@ enum OrderablePropertyEnum: string
     case NAME = 'name';
     case SIZE = 'size';
     case CREATED_AT = 'created_at';
+    case PATTERN_ID = 'pattern_id';
 }

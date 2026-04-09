@@ -17,6 +17,7 @@ return [
     'admin_pattern_links' => 'Ссылки на админ панель',
     'mb_size' => 'Размер (МБайт)',
     'mb' => 'МБайт',
+    'pattern_id' => 'ID выкройки',
 
     'types' => [
         FileTypeEnum::IMAGE->value => 'Изображение',

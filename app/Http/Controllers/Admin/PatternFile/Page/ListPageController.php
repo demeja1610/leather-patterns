@@ -220,6 +220,7 @@ class ListPageController extends Controller
             OrderablePropertyEnum::ID->value => 'id',
             OrderablePropertyEnum::SIZE->value => 'size',
             OrderablePropertyEnum::CREATED_AT->value => 'created_at',
+            OrderablePropertyEnum::PATTERN_ID->value => 'pattern_id',
         ];
     }
 

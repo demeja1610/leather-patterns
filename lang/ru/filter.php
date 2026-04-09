@@ -54,6 +54,7 @@ return [
         OrderablePropertyEnum::NAME->value => 'Название',
         OrderablePropertyEnum::SIZE->value => 'Размер',
         OrderablePropertyEnum::CREATED_AT->value => 'Дата создания',
+        OrderablePropertyEnum::PATTERN_ID->value => 'ID выкройки',
     ],
 
     'order_directions' => [

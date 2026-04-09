@@ -54,6 +54,7 @@ return [
         OrderablePropertyEnum::NAME->value => 'Name',
         OrderablePropertyEnum::SIZE->value => 'Size',
         OrderablePropertyEnum::CREATED_AT->value => 'Created at',
+        OrderablePropertyEnum::PATTERN_ID->value => 'Pattern ID',
     ],
 
     'order_directions' => [

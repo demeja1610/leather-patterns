@@ -259,6 +259,10 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern.images') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern_file.type') }}
                         </x-table.th>
 
@@ -276,6 +280,10 @@
 
                         <x-table.th>
                             {{ __('pattern_file.hash_algo') }}
+                        </x-table.th>
+
+                        <x-table.th>
+                            {{ __('pattern_file.pattern_id') }}
                         </x-table.th>
 
                         <x-table.th>
@@ -333,6 +341,10 @@
 
                             <x-table.td>
                                 {{ $file->hash_algorithm }}
+                            </x-table.td>
+
+                            <x-table.td>
+                                {{ $file->pattern_id }}
                             </x-table.td>
 
                             <x-table.td>
