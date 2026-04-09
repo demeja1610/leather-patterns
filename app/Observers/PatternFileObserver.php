@@ -23,7 +23,7 @@ class PatternFileObserver
         }
     }
 
-    public function deleting(PatternFile $patternFile): void
+    public function deleted(PatternFile $patternFile): void
     {
         dispatch(new DeleteFileJob(
             path: $patternFile->path,
