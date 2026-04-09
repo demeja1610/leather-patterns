@@ -5,7 +5,12 @@
 
 <td {{ $attributes->merge(['class' => 'table-data-images']) }}>
     <div class="table-data-images__image-wrapper">
-        @if ((is_array($images) && $images !== []) || $images->isEmpty() === false)
+        @if ($images === [])
+            <x-icon.svg
+                name="image-placeholder"
+                class="table-data-images__image-placeholder"
+            />
+        @else
             @foreach ($images as $image)
                 @if ($canZoom === true)
                     <a
@@ -26,11 +31,6 @@
                     >
                 @endif
             @endforeach
-        @else
-            <x-icon.svg
-                name="image-placeholder"
-                class="table-data-images__image-placeholder"
-            />
         @endif
     </div>
 </td>
