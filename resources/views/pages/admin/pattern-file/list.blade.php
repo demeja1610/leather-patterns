@@ -261,6 +261,22 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern_file.hash') }}
+                        </x-table.th>
+
+                        <x-table.th>
+                            {{ __('pattern_file.public_pattern_links') }}
+                        </x-table.th>
+
+                        <x-table.th>
+                            {{ __('pattern_file.admin_pattern_links') }}
+                        </x-table.th>
+
+                        <x-table.th>
+                            {{ __('pattern_file.download') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern.images') }}
                         </x-table.th>
 
@@ -287,18 +303,6 @@
                         <x-table.th>
                             {{ __('pattern_file.pattern_id') }}
                         </x-table.th>
-
-                        <x-table.th>
-                            {{ __('pattern_file.public_pattern_links') }}
-                        </x-table.th>
-
-                        <x-table.th>
-                            {{ __('pattern_file.admin_pattern_links') }}
-                        </x-table.th>
-
-                        <x-table.th>
-                            {{ __('pattern_file.hash') }}
-                        </x-table.th>
                     </x-table.head>
                 </x-slot:header>
 
@@ -316,6 +320,41 @@
                         <x-table.tr>
                             <x-table.td>
                                 {{ $file->id }}
+                            </x-table.td>
+
+                            <x-table.td>
+                                <x-button.copy :copyValue="$file->hash" />
+                            </x-table.td>
+
+                            <x-table.td>
+                                <x-link.button-ghost
+                                    :href="route('page.pattern.single', ['id' => $file->pattern->id])"
+                                    target="_blank"
+                                >
+                                    {{ $file->pattern->id }}
+
+                                    <x-icon.svg name="external-link" />
+                                </x-link.button-ghost>
+                            </x-table.td>
+
+                            <x-table.td>
+                                <x-link.button-default
+                                    :href="route('admin.page.patterns.list', ['id' => $file->pattern->id])"
+                                    target="_blank"
+                                >
+                                    {{ $file->pattern->id }}
+
+                                    <x-icon.svg name="external-link" />
+                                </x-link.button-default>
+                            </x-table.td>
+
+                            <x-table.td>
+                                <x-link.button-default
+                                    :href="asset('/storage/' . $file->path)"
+                                    download
+                                >
+                                    <x-icon.svg name="download" />
+                                </x-link.button-default>
                             </x-table.td>
 
                             <x-table.td-images
@@ -347,32 +386,6 @@
 
                             <x-table.td>
                                 {{ $file->pattern_id }}
-                            </x-table.td>
-
-                            <x-table.td>
-                                <x-link.button-ghost
-                                    :href="route('page.pattern.single', ['id' => $file->pattern->id])"
-                                    target="_blank"
-                                >
-                                    {{ $file->pattern->id }}
-
-                                    <x-icon.svg name="external-link" />
-                                </x-link.button-ghost>
-                            </x-table.td>
-
-                            <x-table.td>
-                                <x-link.button-default
-                                    :href="route('admin.page.patterns.list', ['id' => $file->pattern->id])"
-                                    target="_blank"
-                                >
-                                    {{ $file->pattern->id }}
-
-                                    <x-icon.svg name="external-link" />
-                                </x-link.button-default>
-                            </x-table.td>
-
-                            <x-table.td>
-                                <x-button.copy :copyValue="$file->hash" />
                             </x-table.td>
                         </x-table.tr>
                     @endforeach
