@@ -2,31 +2,32 @@
 
 namespace App\Jobs\Pattern;
 
-use App\Enum\FileTypeEnum;
-use App\Interfaces\Services\FileServiceInterface;
+use Exception;
 use ZipArchive;
 use App\Models\Pattern;
+use App\Enum\FileTypeEnum;
 use App\Models\PatternFile;
-use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
+use App\Interfaces\Services\FileServiceInterface;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
-class UnarchiveSinglePatternFilesJob implements ShouldQueue
+class UnarchivePatternFilesJob implements ShouldQueue
 {
     use Queueable;
 
-    protected string $actionName = 'unarchive pattern(s) single file(s)';
+    protected string $actionName = 'unarchive pattern(s) file(s)';
 
     protected FileServiceInterface $fileService;
 
     public function __construct(
-        public ?int $patternId = null
+        public ?int $patternId = null,
+        public bool $deleteOriginal = false,
     ) {}
 
     public function handle(FileServiceInterface $fileService): void
@@ -45,7 +46,10 @@ class UnarchiveSinglePatternFilesJob implements ShouldQueue
             $pattern = $q->first();
 
             if ($pattern === null) {
-                Log::info(ucfirst($this->actionName) . ". Specified pattern with ID: {$this->patternId} doesn't have any files with .zip ext or doesn't exists");
+                Log::info(
+                    ucfirst($this->actionName) .
+                        ". Specified pattern with ID: {$this->patternId} doesn't have any files with type of 'archive' or doesn't exists"
+                );
 
                 return;
             }
@@ -92,36 +96,12 @@ class UnarchiveSinglePatternFilesJob implements ShouldQueue
         Log::info(ucfirst($this->actionName) . " Processing pattern with ID: {$pattern->id}");
 
         foreach ($pattern->files as $file) {
-            Log::info(ucfirst($this->actionName) . " Processing pattern file with ID: {$file->id} for pattern with ID: {$pattern->id}");
+            Log::info(ucfirst($this->actionName) . " Processing pattern file with ID: {$file->id}", [
+                'file' => $file->toArray(),
+            ]);
 
             $fileDiskName = $file->getSaveToDiskName();
             $filePath = Storage::disk($fileDiskName)->path($file->path);
-
-            $filesCount = match ($file->extension) {
-                'zip' => $this->countFilesInZipArchive($filePath),
-                // 'rar' =>
-                default => 0,
-            };
-
-            Log::info(ucfirst($this->actionName) . " Pattern file with ID: {$file->id} has {$filesCount} files inside");
-
-            if ($filesCount > 1 || $filesCount === 0) {
-                Log::info(ucfirst($this->actionName) .  "Skipping file with ID: {$file->id}");
-
-                return;
-            }
-
-            $hasFolders = match ($file->extension) {
-                'zip' => $this->isZipContainsFolders($filePath),
-                // 'rar' =>
-                default => false,
-            };
-
-            if ($hasFolders === true) {
-                Log::info(ucfirst($this->actionName) . " Pattern file with ID: {$file->id} has folders inside, skipping.");
-
-                return;
-            }
 
             try {
                 $newFiles = match ($file->extension) {
@@ -145,7 +125,9 @@ class UnarchiveSinglePatternFilesJob implements ShouldQueue
 
                 DB::commit();
 
-                $file->delete();
+                if ($this->deleteOriginal === true) {
+                    $file->delete();
+                }
             } catch (\Throwable $th) {
                 DB::rollBack();
 
@@ -162,51 +144,6 @@ class UnarchiveSinglePatternFilesJob implements ShouldQueue
                 }
             }
         }
-    }
-
-    protected function countFilesInZipArchive(string $fullFilePath): int
-    {
-        $zip = new ZipArchive();
-        $count = 0;
-
-        if ($zip->open($fullFilePath) === true) {
-            $count = $zip->count();
-        } else {
-            Log::error(ucfirst($this->actionName) . " Cannot open file", [
-                'path' => $fullFilePath,
-            ]);
-        }
-
-        $zip->close();
-
-        return $count;
-    }
-
-    protected function isZipContainsFolders(string $fullFilePath): bool
-    {
-        $zip = new ZipArchive();
-
-        $hasFolder = false;
-
-        if ($zip->open($fullFilePath) === true) {
-            for ($i = 0; $i < $zip->numFiles; $i++) {
-                $name = $zip->getNameIndex($i);
-                // A trailing slash indicates a directory entry
-                if (substr($name, -1) === '/') {
-                    $hasFolder = true;
-
-                    break;
-                }
-            }
-        } else {
-            Log::error(ucfirst($this->actionName) . " Cannot open file", [
-                'path' => $fullFilePath,
-            ]);
-        }
-
-        $zip->close();
-
-        return $hasFolder;
     }
 
     /**
@@ -233,9 +170,18 @@ class UnarchiveSinglePatternFilesJob implements ShouldQueue
 
                 $fileDirRelativePath = trim(dirname($file->path), '/');
 
-                $extractedFiles = Storage::disk($fileDiskName)->files($fileDirRelativePath . "/{$extractTofolderName}");
+                $extractedFiles = Storage::disk($fileDiskName)->allFiles($fileDirRelativePath . "/{$extractTofolderName}");
 
                 foreach ($extractedFiles as $extractedFile) {
+                    $fileMimeType = $this->fileService->getMimeType(Storage::disk($fileDiskName)->path($extractedFile));
+                    $fileType = $this->fileService->getFileType($fileMimeType);
+
+                    if ($fileType === null) {
+                        Storage::disk($fileDiskName)->delete($extractedFile);
+
+                        continue;
+                    }
+
                     $moveTo = $fileDirRelativePath . '/' . basename($extractedFile);
 
                     $successMove = Storage::disk($fileDiskName)->move(
@@ -246,6 +192,12 @@ class UnarchiveSinglePatternFilesJob implements ShouldQueue
                     if ($successMove) {
                         $newFiles[] = $moveTo;
                     }
+                }
+
+                $allSubfolders = Storage::disk($fileDiskName)->allDirectories($fileDirRelativePath . "/{$extractTofolderName}");
+
+                foreach ($allSubfolders as $subFolder) {
+                    Storage::disk($fileDiskName)->deleteDirectory($subFolder);
                 }
 
                 rmdir($extractToDir);

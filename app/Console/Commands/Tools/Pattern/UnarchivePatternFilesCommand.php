@@ -3,17 +3,18 @@
 namespace App\Console\Commands\Tools\Pattern;
 
 use App\Console\Commands\Command;
-use App\Jobs\Pattern\UnarchiveSinglePatternFilesJob;
+use App\Jobs\Pattern\UnarchivePatternFilesJob;
 
-class UnarchiveSinglePatternFilesCommand extends Command
+class UnarchivePatternFilesCommand extends Command
 {
-    protected $signature = 'tools:unarchive-single-pattern-files {--pattern_id=}';
+    protected $signature = 'tools:unarchive-pattern-files {--pattern_id=} {--delete_original}';
 
-    protected $description = 'Unarchive pattern(s) file(s) that is archive type and contains inside archive single file';
+    protected $description = 'Unarchive pattern(s) file(s) that is archive type';
 
     public function handle()
     {
         $patternId = $this->option(key: 'pattern_id');
+        $deleteOriginal = $this->option('delete_original');
 
         $this->info(message: "A job will be dispatched to unarchive pattern(s) file(s), don't forget to run the job");
 
@@ -23,6 +24,6 @@ class UnarchiveSinglePatternFilesCommand extends Command
             $patternId = (int) $patternId;
         }
 
-        UnarchiveSinglePatternFilesJob::dispatch($patternId);
+        UnarchivePatternFilesJob::dispatch($patternId, $deleteOriginal);
     }
 }
