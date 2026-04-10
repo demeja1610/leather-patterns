@@ -20,8 +20,8 @@ class UploadRequest extends FormRequest
             ],
             'files.*' => [
                 'file',
-                'mimetypes:application/pdf,image/vnd.dwg,application/zip,application/x-rar,application/x-7z-compressed,image/svg+xml,image/jpeg,image/png',
-                'max:16384'
+                'mimetypes:application/pdf,application/zip',
+                'max:32768'
             ]
         ];
     }

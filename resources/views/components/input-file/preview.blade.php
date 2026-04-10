@@ -5,7 +5,7 @@
     'placeholder' => __('phrases.select_file'),
     'files' => '[]',
     'multiple' => false,
-    'accept' => 'application/pdf, image/vnd.dwg, application/zip, application/x-rar, application/x-7z-compressed, image/svg+xml, image/jpeg, image/png',
+    'accept' => 'application/pdf, application/zip',
     'url',
     'id',
     'name',
