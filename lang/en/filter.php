@@ -47,6 +47,7 @@ return [
 
     'order_by' => 'Order by',
     'order_direction' => 'Order by direction',
+    'files_count' => 'Files count',
 
     'orders' => [
         OrderablePropertyEnum::ID->value => 'ID',

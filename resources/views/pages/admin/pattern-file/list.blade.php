@@ -17,6 +17,7 @@
             id="id"
             name="id"
             type="number"
+            :placeholder="__('filter.id')"
             :value="$activeFilters['id'] ?? null"
             :title="__('filter.id')"
         />
@@ -31,6 +32,7 @@
             id="hash"
             name="hash"
             type="text"
+            :placeholder="__('filter.hash')"
             :value="$activeFilters['hash'] ?? null"
             :title="__('filter.hash')"
         />

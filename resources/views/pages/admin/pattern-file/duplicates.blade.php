@@ -17,6 +17,7 @@
             id="duplicates_count"
             name="duplicates_count"
             type="number"
+             :placeholder="__('filter.duplicates_count')"
             :value="$activeFilters['duplicates_count'] ?? null"
             :title="__('filter.duplicates_count')"
         />

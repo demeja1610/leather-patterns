@@ -16,6 +16,7 @@
             id="id"
             name="id"
             type="text"
+            :placeholder="__('filter.id')"
             :value="$activeFilters['id'] ?? null"
             :title="__('filter.id')"
         />
@@ -30,6 +31,7 @@
             id="reviewer_name"
             name="reviewer_name"
             type="text"
+            :placeholder="__('filter.reviewer_name')"
             :value="$activeFilters['reviewer_name'] ?? null"
             :title="__('pattern_review.reviewer_name')"
         />
@@ -77,6 +79,7 @@
             id="rating_more_than"
             name="rating_more_than"
             type="number"
+            :placeholder="__('pattern_review.rating_more_than')"
             :value="$activeFilters['rating_more_than'] ?? null"
             :title="__('pattern_review.rating_more_than')"
         />
@@ -91,6 +94,7 @@
             id="rating_less_than"
             name="rating_less_than"
             type="number"
+            :placeholder="__('pattern_review.rating_less_than')"
             :value="$activeFilters['rating_less_than'] ?? null"
             :title="__('pattern_review.rating_less_than')"
         />

@@ -25,6 +25,7 @@
             id="id"
             name="id"
             type="text"
+            :placeholder="__('filter.id')"
             :value="$activeFilters['id'] ?? null"
             :title="__('filter.id')"
         />
@@ -39,6 +40,7 @@
             id="title"
             name="title"
             type="text"
+            :placeholder="__('filter.title')"
             :value="$activeFilters['title'] ?? null"
             :title="__('filter.title')"
         />
@@ -306,6 +308,21 @@
             </x-select.option>
         </x-select.select>
     </x-select.wrapper>
+
+    <x-input-text.input-text>
+        <x-input-text.label for="files_count">
+            {{ __('filter.files_count') }}
+        </x-input-text.label>
+
+        <x-input-text.input
+            id="files_count"
+            name="files_count"
+            type="number"
+            :placeholder="__('filter.files_count')"
+            :value="$activeFilters['files_count'] ?? null"
+            :title="__('filter.files_count')"
+        />
+    </x-input-text.input-text>
 
     <x-select.wrapper>
         <x-select.label for="has_videos">
@@ -594,7 +611,10 @@
                                     <x-icon.svg name="edit" />
                                 </x-link.button-ghost>
 
-                                <x-link.button-ghost :href="route('page.pattern.single', ['id' => $pattern->id])" target="_blank">
+                                <x-link.button-ghost
+                                    :href="route('page.pattern.single', ['id' => $pattern->id])"
+                                    target="_blank"
+                                >
                                     <x-icon.svg name="eye" />
                                 </x-link.button-ghost>
                             </x-table.td-actions>
@@ -625,7 +645,10 @@
                                 @endif
                             </x-table.td>
 
-                            <x-table.td-clamp clamp="2" :title="$pattern->title">
+                            <x-table.td-clamp
+                                clamp="2"
+                                :title="$pattern->title"
+                            >
                                 {{ $pattern->title }}
                             </x-table.td-clamp>
 

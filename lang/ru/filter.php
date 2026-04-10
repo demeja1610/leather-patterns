@@ -47,6 +47,7 @@ return [
 
     'order_by' => 'Сортировать по',
     'order_direction' => 'Направление сортировки',
+    'files_count' => 'Кол-во файлов',
 
     'orders' => [
         OrderablePropertyEnum::ID->value => 'ID',

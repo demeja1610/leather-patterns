@@ -19,6 +19,13 @@
 
         >.input-text {
             width: 100%;
+
+            [type="text"]:not(:placeholder-shown),
+            [type="number"]:not(:placeholder-shown) {
+                border-color: var(--red-2);
+                color: var(--red-2);
+                outline-color: var(--red-2);
+            }
         }
 
         >.select {

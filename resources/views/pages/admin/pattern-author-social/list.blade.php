@@ -25,6 +25,7 @@
             id="id"
             name="id"
             type="text"
+             :placeholder="__('filter.id')"
             :value="$activeFilters['id'] ?? null"
             :title="__('filter.id')"
         />
@@ -39,6 +40,7 @@
             id="url"
             name="url"
             type="text"
+            :placeholder="__('filter.url')"
             :value="$activeFilters['url'] ?? null"
             :title="__('filter.url')"
         />
