@@ -256,6 +256,14 @@ class ListPageController extends Controller
             }
         }
 
+        $filesCount = $request->input(key: 'files_count');
+
+        if ($filesCount !== null) {
+            $this->activeFilters['files_count'] = (int) $filesCount;
+
+            $query->has('files', $filesCount);
+        }
+
         $hasVideos = $request->input(key: 'has_videos');
 
         if ($hasVideos !== null) {
