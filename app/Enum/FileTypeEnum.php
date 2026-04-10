@@ -9,8 +9,8 @@ enum FileTypeEnum: string
     case IMAGE = 'image';
     case ARCHIVE = 'archive';
     case PDF = 'pdf';
-    case DWG = 'dwg';
-    case SVG = 'svg';
+    case CAD = 'cad';
+    case VECTOR = 'vector';
 
     public static function fromMimeType(string $mimeType): ?self
     {
@@ -23,13 +23,9 @@ enum FileTypeEnum: string
             'application/zip' => self::ARCHIVE,
             'application/x-rar' => self::ARCHIVE,
             'application/vnd.rar' => self::ARCHIVE,
-            'application/x-7z-compressed' => self::ARCHIVE,
-            'application/x-tar' => self::ARCHIVE,
-            'application/x-gzip' => self::ARCHIVE,
-            'application/x-bzip2' => self::ARCHIVE,
-            'application/x-xz' => self::ARCHIVE,
-            'image/vnd.dwg' => self::DWG,
-            'image/svg+xml' => self::SVG,
+            'image/vnd.dwg' => self::CAD,
+            'image/vnd.dxf' => self::CAD,
+            'image/svg+xml' => self::VECTOR,
             default => null,
         };
     }

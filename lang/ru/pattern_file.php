@@ -18,12 +18,13 @@ return [
     'mb_size' => 'Размер (МБайт)',
     'mb' => 'МБайт',
     'pattern_id' => 'ID выкройки',
+    'download' => 'Скачать',
 
     'types' => [
         FileTypeEnum::IMAGE->value => 'Изображение',
         FileTypeEnum::ARCHIVE->value => 'Архив',
         FileTypeEnum::PDF->value => 'PDF файл',
-        FileTypeEnum::DWG->value => 'CAD файл',
-        FileTypeEnum::SVG->value => 'Файл векторной графики',
+        FileTypeEnum::CAD->value => 'CAD файл',
+        FileTypeEnum::VECTOR->value => 'Файл векторной графики',
     ],
 ];

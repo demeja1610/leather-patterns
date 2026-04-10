@@ -335,7 +335,7 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
 
             $newFileName = $this->fileService->generateName();
 
-            
+
             $filePath = "{$uploadPath}/{$newFileName}.{$ext}";
 
             $saved = Storage::disk($saveDiskName)->put(
@@ -530,6 +530,7 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
             'application/x-bzip2' => 'bz2',
             'application/x-xz' => 'xz',
             'image/vnd.dwg' => 'dwg',
+            'image/vnd.dxf' => 'dxf',
             'image/svg+xml' => 'svg',
             default => null,
         };

@@ -18,12 +18,13 @@ return [
     'mb_size' => 'Size (MByte)',
     'mb' => 'MByte',
     'pattern_id' => 'Pattern ID',
+    'download' => 'Download',
 
     'types' => [
         FileTypeEnum::IMAGE->value => 'Image',
         FileTypeEnum::ARCHIVE->value => 'Archive',
         FileTypeEnum::PDF->value => 'PDF file',
-        FileTypeEnum::DWG->value => 'CAD file',
-        FileTypeEnum::SVG->value => 'Vector graphic file',
+        FileTypeEnum::CAD->value => 'CAD file',
+        FileTypeEnum::VECTOR->value => 'Vector graphic file',
     ],
 ];
