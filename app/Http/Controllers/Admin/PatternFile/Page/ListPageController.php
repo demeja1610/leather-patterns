@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\PatternFile\Page;
 
-use App\Enum\OrderablePropertyEnum;
-use App\Enum\OrderDirectionEnum;
 use Carbon\Carbon;
 use App\Models\Pattern;
 use App\Models\PatternFile;
+use App\Enum\OrderDirectionEnum;
 use Illuminate\Support\Facades\DB;
+use App\Enum\OrderablePropertyEnum;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\Admin\Pattern\ListRequest;
-use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListPageController extends Controller
 {
@@ -55,9 +55,9 @@ class ListPageController extends Controller
         ]);
     }
 
-    protected function getFiles(ListRequest &$request): CursorPaginator
+    protected function getFiles(ListRequest &$request): LengthAwarePaginator
     {
-        $cursor = $request->input(key: 'cursor');
+        $page = $request->input(key: 'page');
         $orderDirection = $this->getOrderDirection($request);
 
         $q = PatternFile::query();
@@ -74,9 +74,9 @@ class ListPageController extends Controller
 
         $q->orderBy('id', $orderDirection->value);
 
-        return $q->cursorPaginate(
+        return $q->paginate(
             perPage: 30,
-            cursor: $cursor,
+            page: $page,
         )->withQueryString();
     }
 

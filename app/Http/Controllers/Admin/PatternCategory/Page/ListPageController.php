@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\Admin\PatternCategory\ListRequest;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListPageController extends Controller
 {
@@ -28,9 +29,9 @@ class ListPageController extends Controller
         ]);
     }
 
-    protected function getCategories(ListRequest &$request)
+    protected function getCategories(ListRequest &$request): LengthAwarePaginator
     {
-        $cursor = $request->input(key: 'cursor');
+        $page = $request->input(key: 'page');
 
         $q = PatternCategory::query();
 
@@ -50,9 +51,9 @@ class ListPageController extends Controller
             'tagReplacement',
         ]);
 
-        return $q->orderBy('id', 'desc')->cursorPaginate(
+        return $q->orderBy('id', 'desc')->paginate(
             perPage: 30,
-            cursor: $cursor,
+            page: $page,
         )->withQueryString();
     }
 

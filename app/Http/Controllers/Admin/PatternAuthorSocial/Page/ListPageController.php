@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\Admin\PatternAuthorSocial\ListRequest;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListPageController extends Controller
 {
@@ -31,9 +32,9 @@ class ListPageController extends Controller
         ]);
     }
 
-    protected function getSocials(ListRequest &$request)
+    protected function getSocials(ListRequest &$request): LengthAwarePaginator
     {
-        $cursor = $request->input(key: 'cursor');
+        $page = $request->input(key: 'page');
 
         $q = PatternAuthorSocial::query();
 
@@ -44,9 +45,9 @@ class ListPageController extends Controller
 
         $q->with(relations: 'author');
 
-        return $q->orderBy('id', 'desc')->cursorPaginate(
+        return $q->orderBy('id', 'desc')->paginate(
             perPage: 30,
-            cursor: $cursor,
+            page: $page,
         )->withQueryString();
     }
 

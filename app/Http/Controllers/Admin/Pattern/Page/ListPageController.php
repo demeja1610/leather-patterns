@@ -15,7 +15,7 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Requests\Admin\Pattern\ListRequest;
-use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListPageController extends Controller
 {
@@ -41,9 +41,9 @@ class ListPageController extends Controller
         ]);
     }
 
-    protected function getPatterns(ListRequest &$request): CursorPaginator
+    protected function getPatterns(ListRequest &$request): LengthAwarePaginator
     {
-        $cursor = $request->input(key: 'cursor');
+        $page = $request->input(key: 'page');
 
         $q = Pattern::query();
 
@@ -66,9 +66,9 @@ class ListPageController extends Controller
             'meta',
         ]);
 
-        return $q->orderBy('id', 'desc')->cursorPaginate(
+        return $q->orderBy('id', 'desc')->paginate(
             perPage: 30,
-            cursor: $cursor,
+            page: $page,
         )->withQueryString();
     }
 
