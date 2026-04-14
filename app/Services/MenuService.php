@@ -106,38 +106,38 @@ class MenuService implements MenuServiceInterface
                         route: 'admin.page.patterns.create',
                         icon: 'create',
                     ),
+                ),
+            ),
 
+            new MenuItemDto(
+                text: __('admin_menu.pattern_file.files'),
+                route: 'admin.page.pattern-files.list',
+                icon: 'file',
+                subMenu: new MenuItemListDto(
                     new MenuItemDto(
-                        text: __('admin_menu.pattern_file.files'),
+                        text: __('admin_menu.pattern_file.list'),
                         route: 'admin.page.pattern-files.list',
                         icon: 'file',
-                        subMenu: new MenuItemListDto(
-                            new MenuItemDto(
-                                text: __('admin_menu.pattern_file.list'),
-                                route: 'admin.page.pattern-files.list',
-                                icon: 'file',
-                            ),
-                            new MenuItemDto(
-                                text: __('admin_menu.pattern_file.duplicates'),
-                                route: 'admin.page.pattern-files.duplicates',
-                                icon: 'copy',
-                            ),
-                        )
                     ),
-
                     new MenuItemDto(
-                        text: __('admin_menu.pattern_review.pattern_reviews'),
+                        text: __('admin_menu.pattern_file.duplicates'),
+                        route: 'admin.page.pattern-files.duplicates',
+                        icon: 'copy',
+                    ),
+                )
+            ),
+
+            new MenuItemDto(
+                text: __('admin_menu.pattern_review.pattern_reviews'),
+                route: 'admin.page.pattern-review.list',
+                icon: 'star',
+                subMenu: new MenuItemListDto(
+                    new MenuItemDto(
+                        text: __('admin_menu.pattern_review.list'),
                         route: 'admin.page.pattern-review.list',
                         icon: 'star',
-                        subMenu: new MenuItemListDto(
-                            new MenuItemDto(
-                                text: __('admin_menu.pattern_review.list'),
-                                route: 'admin.page.pattern-review.list',
-                                icon: 'star',
-                            ),
-                        )
                     ),
-                ),
+                )
             ),
         );
     }
