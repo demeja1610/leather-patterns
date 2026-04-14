@@ -46,6 +46,34 @@
         />
     </x-input-text.input-text>
 
+    <x-select.wrapper>
+        <x-select.label for="source">
+            {{ __('pattern.source') }}
+        </x-select.label>
+
+        <x-select.select
+            name="source"
+            id="source"
+            :title="__('pattern.source')"
+        >
+            <x-select.option
+                value=""
+                :selected="!isset($activeFilters['source'])"
+            >
+                {{ __('filter.not_selected') }}
+            </x-select.option>
+
+            @foreach ($sources as $source)
+                <x-select.option
+                    :value="$source"
+                    :selected="isset($activeFilters['source']) && $activeFilters['source'] === $source"
+                >
+                    {{ __("pattern_source.{$source}") }}
+                </x-select.option>
+            @endforeach
+        </x-select.select>
+    </x-select.wrapper>
+
     <x-input-text.input-text>
         <x-input-text.label for="older_than">
             {{ __('filter.older_than') }}

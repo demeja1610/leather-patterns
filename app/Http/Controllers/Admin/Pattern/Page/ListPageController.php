@@ -10,6 +10,7 @@ use App\Models\PatternTag;
 use App\Models\PatternAuthor;
 use App\Enum\PatternSourceEnum;
 use App\Models\PatternCategory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,15 +21,23 @@ class ListPageController extends Controller
 {
     protected array $activeFilters = [];
     protected array $extraData = [];
+    protected readonly Pattern $newPattern;
+
+    public function __construct()
+    {
+        $this->newPattern = new Pattern();
+    }
 
     public function __invoke(ListRequest $request): View
     {
         $patterns = $this->getPatterns(request: $request);
+        $sources = $this->getSources();
 
         return view(view: 'pages.admin.pattern.list', data: [
             'activeFilters' => $this->activeFilters,
             'extraData' => $this->extraData,
             'patterns' => $patterns,
+            'sources' => $sources,
         ]);
     }
 
@@ -96,6 +105,14 @@ class ListPageController extends Controller
             ->first();
     }
 
+    protected function getSources(): array
+    {
+        return DB::table($this->newPattern->getTable())
+            ->distinct()
+            ->pluck('source')
+            ->toArray();
+    }
+
     protected function applyFilters(ListRequest &$request, Builder &$query): void
     {
         $id = $request->input(key: 'id');
@@ -112,6 +129,8 @@ class ListPageController extends Controller
             $source = PatternSourceEnum::tryFrom($sourceStr);
 
             if ($source !== null) {
+                $this->activeFilters['source'] = $sourceStr;
+
                 $query->where('source', $source->value);
             }
         }
