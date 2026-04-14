@@ -30,7 +30,7 @@ return [
     ],
 
     'pattern_review' => [
-        'pattern_reviews' => 'Reviews',
+        'pattern_reviews' => 'Pattern reviews',
         'list' => 'List',
     ],
 
@@ -41,7 +41,7 @@ return [
     ],
 
     'pattern_file' => [
-        'files' => 'Files',
+        'files' => 'Pattern files',
         'list' => 'List',
         'duplicates' => 'Duplicates',
     ],

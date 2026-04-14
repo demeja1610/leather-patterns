@@ -30,7 +30,7 @@ return [
     ],
 
     'pattern_review' => [
-        'pattern_reviews' => 'Отзывы',
+        'pattern_reviews' => 'Отзывы на выкройки',
         'list' => 'Список',
     ],
 
@@ -41,7 +41,7 @@ return [
     ],
 
     'pattern_file' => [
-        'files' => 'Файлы',
+        'files' => 'Файлы выкроек',
         'list' => 'Список',
         'duplicates' => 'Дубликаты',
     ],
