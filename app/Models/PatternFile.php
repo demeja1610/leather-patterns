@@ -59,4 +59,9 @@ class PatternFile extends Model
     {
         return 'public';
     }
+
+    public function isDeletable(): bool
+    {
+        return true;
+    }
 }

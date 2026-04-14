@@ -27,4 +27,10 @@ return [
         FileTypeEnum::CAD->value => 'CAD file',
         FileTypeEnum::VECTOR->value => 'Vector graphic file',
     ],
+
+    'admin' => [
+        'single_delete_success' => 'Pattern file with ID: `:id` successfully deleted',
+        'single_failed_to_delete' => 'Failed to delete pattern file with ID: `:id`',
+        'confirm_delete_text' => 'Please confirm pattern file delete.',
+    ],
 ];

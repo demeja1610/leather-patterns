@@ -252,10 +252,17 @@
             {{ __('phrases.nothing_found') }}
         </x-table.empty>
     @else
-        <x-table.overflow-x-container>
+        <x-table.overflow-x-container
+            x-data="{ deleteUrl: null }"
+            x-on:close-modal="deleteUrl = null"
+        >
             <x-table.table>
                 <x-slot:header>
                     <x-table.head>
+                        <x-table.th-actions class="table__header--actions">
+                            {{ __('actions.actions') }}
+                        </x-table.th-actions>
+
                         <x-table.th>
                             {{ __('pattern_file.id') }}
                         </x-table.th>
@@ -318,6 +325,17 @@
                             }
                         @endphp
                         <x-table.tr>
+                            <x-table.td-actions>
+                                @if ($file->isDeletable() === true)
+                                    <x-link.button-default
+                                        :href="route('admin.pattern-files.delete', ['id' => $file->id])"
+                                        x-on:click.prevent="() => {deleteUrl=$el.href}"
+                                    >
+                                        <x-icon.svg name="delete" />
+                                    </x-link.button-default>
+                                @endif
+                            </x-table.td-actions>
+
                             <x-table.td>
                                 {{ $file->id }}
                             </x-table.td>
@@ -391,6 +409,22 @@
                     @endforeach
                 </x-slot:rows>
             </x-table.table>
+
+            <x-modal.modal
+                :title="__('phrases.confirmation')"
+                x-show="deleteUrl !== null"
+            >
+                <x-form.confirm
+                    x-on:cancel="$dispatch('close-modal')"
+                    x-on:submit="setTimeout(() => $dispatch('close-modal'), 300)"
+                    :confirm-text="__('actions.delete_confirm')"
+                    x-bind:action="deleteUrl"
+                    :text="__('pattern_file.admin.confirm_delete_text')"
+                    x-trap="deleteUrl !== null"
+                >
+                    @method('DELETE')
+                </x-form.confirm>
+            </x-modal.modal>
         </x-table.overflow-x-container>
     @endif
 @endsection

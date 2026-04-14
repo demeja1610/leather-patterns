@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\PatternImage;
+namespace App\Http\Controllers\Admin\PatternImage\Action;
 
 use App\Models\PatternImage;
 use App\Http\Controllers\Controller;

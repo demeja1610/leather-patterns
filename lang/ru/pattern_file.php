@@ -27,4 +27,10 @@ return [
         FileTypeEnum::CAD->value => 'CAD файл',
         FileTypeEnum::VECTOR->value => 'Файл векторной графики',
     ],
+
+    'admin' => [
+        'single_delete_success' => 'Файл выкройки с ID: `:id` успешно удален',
+        'single_failed_to_delete' => 'Не получилось удалить файл выкройки с ID: `:id`',
+        'confirm_delete_text' => 'Пожалуйста, подтвердите удаление файла выкройки.',
+    ],
 ];

@@ -11,4 +11,9 @@ Route::prefix('pattern-files')
 
         Route::get('/duplicates', \App\Http\Controllers\Admin\PatternFile\Page\DuplicatesController::class)
             ->name(name: 'page.pattern-files.duplicates');
+
+        Route::prefix('/{id}')->group(function () {
+            Route::get('/delete', \App\Http\Controllers\Admin\PatternFile\Action\DeleteController::class)
+                ->name('pattern-files.delete');
+        });
     });

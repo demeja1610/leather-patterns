@@ -7,6 +7,6 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('pattern-image')
     ->name('pattern-image.')
     ->group(callback: function (): void {
-        Route::post('upload', \App\Http\Controllers\Admin\PatternImage\UploadController::class)
+        Route::post('upload', \App\Http\Controllers\Admin\PatternImage\Action\UploadController::class)
             ->name(name: 'upload');
     });

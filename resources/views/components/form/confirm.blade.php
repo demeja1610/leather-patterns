@@ -2,11 +2,12 @@
     'confirmText' => __('actions.confirm'),
     'cancelText' => __('actions.cancel'),
     'text' => __('phrases.confirm_text'),
+    'defaultMethod' => 'GET',
 ])
 
 <form
     {{ $attributes->merge(['class' => 'confirm-form']) }}
-    method="GET"
+    method="{{ $defaultMethod }}"
 >
     @csrf
 
