@@ -45,4 +45,10 @@ return [
         'list' => 'List',
         'duplicates' => 'Duplicates',
     ],
+
+    'pattern_video' => [
+        'pattern_videos' => 'Pattern Videos',
+        'list' => 'List',
+        'add_new' => 'Add new',
+    ],
 ];

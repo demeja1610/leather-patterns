@@ -57,4 +57,9 @@ class PatternVideo extends Model
             'source' => VideoSourceEnum::class,
         ];
     }
+
+    public function isDeletable(): bool
+    {
+        return true;
+    }
 }

@@ -45,4 +45,10 @@ return [
         'list' => 'Список',
         'duplicates' => 'Дубликаты',
     ],
+
+    'pattern_video' => [
+        'pattern_videos' => 'Видео выкроек',
+        'list' => 'Список',
+        'add_new' => 'Добавить запись',
+    ],
 ];

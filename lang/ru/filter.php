@@ -48,6 +48,8 @@ return [
     'order_by' => 'Сортировать по',
     'order_direction' => 'Направление сортировки',
     'files_count' => 'Кол-во файлов',
+    'source' => 'Источник',
+    'source_identifier' => 'ID в источнике',
 
     'orders' => [
         OrderablePropertyEnum::ID->value => 'ID',

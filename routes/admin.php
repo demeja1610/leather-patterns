@@ -28,4 +28,6 @@ Route::prefix('admin')
         require_once __DIR__ . '/admin/pattern.php';
 
         require_once __DIR__ . '/admin/pattern-file.php';
+
+        require_once __DIR__ . '/admin/pattern-video.php';
     });

@@ -128,6 +128,24 @@ class MenuService implements MenuServiceInterface
             ),
 
             new MenuItemDto(
+                text: __('admin_menu.pattern_video.pattern_videos'),
+                route: 'admin.page.pattern-videos.list',
+                icon: 'youtube',
+                subMenu: new MenuItemListDto(
+                    new MenuItemDto(
+                        text: __('admin_menu.pattern_video.list'),
+                        route: 'admin.page.pattern-videos.list',
+                        icon: 'youtube',
+                    ),
+                    new MenuItemDto(
+                        text: __('admin_menu.pattern_video.add_new'),
+                        route: 'admin.page.pattern-videos.create',
+                        icon: 'create',
+                    ),
+                )
+            ),
+
+            new MenuItemDto(
                 text: __('admin_menu.pattern_review.pattern_reviews'),
                 route: 'admin.page.pattern-review.list',
                 icon: 'star',
