@@ -142,6 +142,14 @@ class ListPageController extends Controller
             $query->where('title', 'LIKE', "%{$title}%");
         }
 
+        $sourceUrl = $request->input(key: 'source_url');
+
+        if ($sourceUrl !== null) {
+            $this->activeFilters['source_url'] = $sourceUrl;
+
+            $query->where('source_url', 'LIKE', "%{$sourceUrl}%");
+        }
+
         $olderThanStr = $request->input(key: 'older_than');
 
         if ($olderThanStr !== null) {
