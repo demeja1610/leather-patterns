@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Parsers;
 
-use App\Dto\Parser\Pattern\CategoryListDto;
 use Throwable;
 use App\Models\Pattern;
 use Illuminate\Support\Facades\App;
@@ -12,8 +11,9 @@ use Illuminate\Support\Facades\Log;
 use App\Dto\Parser\Pattern\TagListDto;
 use App\Dto\Parser\Pattern\FileListDto;
 use App\Dto\Parser\Pattern\ImageListDto;
-use App\Dto\Parser\Pattern\ReviewListDto;
 use App\Dto\Parser\Pattern\VideoListDto;
+use App\Dto\Parser\Pattern\ReviewListDto;
+use App\Dto\Parser\Pattern\CategoryListDto;
 use App\Interfaces\Parsers\PatternParserInterface;
 use App\Interfaces\Services\ParserServiceInterface;
 

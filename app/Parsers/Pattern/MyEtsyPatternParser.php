@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Parsers\Pattern;
 
-use App\Dto\Parser\Pattern\CategoryDto;
 use DOMXPath;
 use Throwable;
 use DOMElement;
@@ -13,6 +12,7 @@ use App\Parsers\PatternParser;
 use App\Dto\Parser\Pattern\FileDto;
 use App\Dto\Parser\Pattern\ImageDto;
 use App\Dto\Parser\Pattern\TagListDto;
+use App\Dto\Parser\Pattern\CategoryDto;
 use App\Dto\Parser\Pattern\FileListDto;
 use App\Dto\Parser\Pattern\ImageListDto;
 use App\Dto\Parser\Pattern\ReviewListDto;
