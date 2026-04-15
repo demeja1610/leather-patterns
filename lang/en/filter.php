@@ -51,6 +51,7 @@ return [
     'source' => 'Source',
     'source_identifier' => 'Source identifier',
     'source_url' => 'Source url',
+    'reviewer_name' => 'Reviewer name',
 
     'orders' => [
         OrderablePropertyEnum::ID->value => 'ID',

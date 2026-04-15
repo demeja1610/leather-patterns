@@ -51,6 +51,7 @@ return [
     'source' => 'Источник',
     'source_identifier' => 'ID в источнике',
     'source_url' => 'URL источника',
+    'reviewer_name' => 'Имя рецензента',
 
     'orders' => [
         OrderablePropertyEnum::ID->value => 'ID',
