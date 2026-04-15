@@ -23,6 +23,7 @@ class ParseReviewsCommand extends Command
     protected $sources = [
         PatternSourceEnum::NEOVIMA,
         PatternSourceEnum::MLEATHER,
+        PatternSourceEnum::FIRST_KOZHA,
     ];
 
     public function __construct(
@@ -38,16 +39,9 @@ class ParseReviewsCommand extends Command
         $id = $this->option(key: 'id');
 
         $q = Pattern::query()
-            ->whereHas(
-                relation: 'meta',
-                callback: fn($query) => $query
-                    ->where(column: 'reviews_updated_at', operator: '<', value: now()->subDays(14))
-                    ->orWhereNull('reviews_updated_at'),
-            )
             ->whereIn('source', $this->sources)
             ->with([
                 'reviews',
-                'meta',
             ]);
 
         if ($id) {
@@ -66,8 +60,6 @@ class ParseReviewsCommand extends Command
 
                 if ($allPatternReviewsOnPage === []) {
                     $this->info(string: "No reviews found for pattern: " . $pattern->id);
-
-                    $pattern->meta->update(['reviews_updated_at' => now()]);
 
                     return;
                 }
@@ -91,8 +83,6 @@ class ParseReviewsCommand extends Command
                 if ($toCreate === []) {
                     $this->info(string: "No new reviews found for pattern: " . $pattern->id);
 
-                    $pattern->meta->update(['reviews_updated_at' => now()]);
-
                     return;
                 }
 
@@ -100,8 +90,6 @@ class ParseReviewsCommand extends Command
                     DB::beginTransaction();
 
                     $pattern->reviews()->saveMany($toCreate);
-
-                    $pattern->meta->update(['reviews_updated_at' => now()]);
 
                     $this->call(command: 'tools:pattern:calculate-average-rating', arguments: [
                         '--id' => $pattern->id,

@@ -613,10 +613,6 @@
                         </x-table.th>
 
                         <x-table.th>
-                            {{ __('pattern.meta.meta') }}
-                        </x-table.th>
-
-                        <x-table.th>
                             {{ __('pattern.created_at') }}
                         </x-table.th>
                     </x-table.head>
@@ -731,76 +727,6 @@
                             <x-table.td>
                                 {{ $pattern->reviews_count }}
                             </x-table.td>
-
-                            <x-table.td-dropdown :headerText="__('phrases.list')">
-                                <ul class="admin-page-patterns-list__meta-list">
-                                    <li class="admin-page-patterns-list__meta">
-                                        <span class="admin-page-patterns-list__meta-name">
-                                            {{ __('pattern.meta.pattern_downloaded') }}:
-                                        </span>
-
-                                        <x-bool.bool
-                                            :value="$pattern->meta->pattern_downloaded"
-                                            class="admin-page-patterns-list__meta-value"
-                                        >
-                                            {{ $pattern->meta->pattern_downloaded ? __('phrases.yes') : __('phrases.no') }}
-                                        </x-bool.bool>
-                                    </li>
-
-                                    <li class="admin-page-patterns-list__meta">
-                                        <span class="admin-page-patterns-list__meta-name">
-                                            {{ __('pattern.meta.images_downloaded') }}:
-                                        </span>
-
-                                        <x-bool.bool
-                                            :value="$pattern->meta->images_downloaded"
-                                            class="admin-page-patterns-list__meta-value"
-                                        >
-                                            {{ $pattern->meta->images_downloaded ? __('phrases.yes') : __('phrases.no') }}
-                                        </x-bool.bool>
-                                    </li>
-
-                                    <li class="admin-page-patterns-list__meta">
-                                        <span class="admin-page-patterns-list__meta-name">
-                                            {{ __('pattern.meta.is_download_url_wrong') }}:
-                                        </span>
-
-                                        <x-bool.bool-reverse
-                                            :value="$pattern->meta->is_download_url_wrong"
-                                            class="admin-page-patterns-list__meta-value"
-                                        >
-                                            {{ $pattern->meta->is_download_url_wrong ? __('phrases.yes') : __('phrases.no') }}
-                                        </x-bool.bool-reverse>
-                                    </li>
-
-                                    <li class="admin-page-patterns-list__meta">
-                                        <span class="admin-page-patterns-list__meta-name">
-                                            {{ __('pattern.meta.is_video_checked') }}:
-                                        </span>
-
-                                        <x-bool.bool
-                                            :value="$pattern->meta->is_video_checked"
-                                            class="admin-page-patterns-list__meta-value"
-                                        >
-                                            {{ $pattern->meta->is_video_checked ? __('phrases.yes') : __('phrases.no') }}
-                                        </x-bool.bool>
-                                    </li>
-
-                                    <li class="admin-page-patterns-list__meta">
-                                        <span class="admin-page-patterns-list__meta-name">
-                                            {{ __('pattern.meta.reviews_updated_at') }}:
-                                        </span>
-
-                                        <span class="admin-page-patterns-list__meta-value">
-                                            @if ($pattern->meta->reviews_updated_at)
-                                                {{ $pattern->meta->reviews_updated_at?->translatedFormat('d F Y H:i') }}
-                                            @else
-                                                {{ __('phrases.empty') }}
-                                            @endif
-                                        </span>
-                                    </li>
-                                </ul>
-                            </x-table.td-dropdown>
 
                             <x-table.td>
                                 {{ $pattern->created_at->translatedFormat('d F Y H:i') }}

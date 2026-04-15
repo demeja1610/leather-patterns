@@ -26,12 +26,7 @@ class ParsePatternsJob extends InfoJob implements ShouldQueue
         if ($this->id) {
             $q->where('id', $this->id);
         } else {
-            $q->whereHas(
-                relation: 'meta',
-                callback: fn(Builder $query) => $query
-                    ->where('pattern_downloaded', false)
-                    ->where('is_download_url_wrong', false),
-            );
+            $q->whereDoesntHave('files');
         }
 
         $count = $q->count();

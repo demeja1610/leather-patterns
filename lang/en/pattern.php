@@ -46,15 +46,6 @@ return [
     'images' => 'Images',
     'files' => 'Files',
 
-    'meta' => [
-        'meta' => 'Metadata',
-        'pattern_downloaded' => 'Pattern downloaded',
-        'images_downloaded' => 'Images downloaded',
-        'is_download_url_wrong' => 'Download URL wrong',
-        'is_video_checked' => 'Page checked for videos',
-        'reviews_updated_at' => 'Reviews updated at',
-    ],
-
     'admin' => [
         'created' => 'Pattern with title: `:title` successfully created',
         'updated' => 'Pattern with id: `:id` successfully updated',

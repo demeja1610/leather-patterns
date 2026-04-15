@@ -174,6 +174,8 @@ class ListController extends Controller
             request: $request,
         );
 
+        $q->whereHas('files');
+
         $q->with(
             relations: [
                 'categories' => function (BelongsToMany $sq): void {
@@ -225,13 +227,6 @@ class ListController extends Controller
                     ]);
                 },
             ],
-        );
-
-        $q->whereHas(
-            relation: 'meta',
-            callback: fn($query) => $query
-                ->select('pattern_downloaded')
-                ->where('pattern_downloaded', true)
         );
 
         $cursor = $request->input(key: 'cursor');

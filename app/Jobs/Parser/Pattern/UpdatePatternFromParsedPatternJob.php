@@ -7,7 +7,6 @@ use GuzzleHttp\Client;
 use App\Enum\FileTypeEnum;
 use App\Models\PatternTag;
 use App\Models\PatternFile;
-use App\Models\PatternMeta;
 use App\Models\PatternImage;
 use App\Models\PatternVideo;
 use App\Models\PatternReview;
@@ -94,14 +93,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                         }
                     }
                 }
-
-                if ($savedFiles === []) {
-                    $this->setDownloadUrlWrong(true);
-                } else {
-                    $this->setDownloadUrlWrong(false);
-                }
-            } else {
-                $this->setDownloadUrlWrong(true);
             }
 
             $this->createFiles(...$savedFiles);
@@ -265,23 +256,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                     $this->deleteSavedImages($savedImage);
                 }
             }
-
-            $this->setImagesDownloaded();
-        }
-    }
-
-    protected function setImagesDownloaded(): void
-    {
-        $this->logSetImagesDownloaded();
-
-        if ($this->pattern->getPattern()->relationLoaded('meta') === false) {
-            $this->pattern->getPattern()->load('meta');
-        }
-
-        if ($this->pattern->getPattern()->meta instanceof PatternMeta) {
-            $this->pattern->getPattern()->meta->images_downloaded = true;
-
-            $this->pattern->getPattern()->meta->save();
         }
     }
 
@@ -536,21 +510,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         };
     }
 
-    protected function setDownloadUrlWrong(bool $isWrong): void
-    {
-        $this->logSetDownloadUrlWrong();
-
-        if ($this->pattern->getPattern()->relationLoaded('meta') === false) {
-            $this->pattern->getPattern()->load('meta');
-        }
-
-        if ($this->pattern->getPattern()->meta instanceof PatternMeta) {
-            $this->pattern->getPattern()->meta->is_download_url_wrong = $isWrong;
-
-            $this->pattern->getPattern()->meta->save();
-        }
-    }
-
     protected function createFiles(SavedFileDto ...$savedFiles): void
     {
         if ($savedFiles !== []) {
@@ -579,23 +538,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                     $this->deleteSavedFiles($savedFile);
                 }
             }
-
-            $this->setFilesDownloaded();
-        }
-    }
-
-    protected function setFilesDownloaded(): void
-    {
-        $this->logSetFilesDownloaded();
-
-        if ($this->pattern->getPattern()->relationLoaded('meta') === false) {
-            $this->pattern->getPattern()->load('meta');
-        }
-
-        if ($this->pattern->getPattern()->meta instanceof PatternMeta) {
-            $this->pattern->getPattern()->meta->pattern_downloaded = true;
-
-            $this->pattern->getPattern()->meta->save();
         }
     }
 
@@ -621,23 +563,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                     $this->logVideoExists($video);
                 }
             }
-        }
-
-        $this->setVideosChecked();
-    }
-
-    protected function setVideosChecked(): void
-    {
-        $this->logSetVideosChecked();
-
-        if ($this->pattern->getPattern()->relationLoaded('meta') === false) {
-            $this->pattern->getPattern()->load('meta');
-        }
-
-        if ($this->pattern->getPattern()->meta instanceof PatternMeta) {
-            $this->pattern->getPattern()->meta->is_video_checked = true;
-
-            $this->pattern->getPattern()->meta->save();
         }
     }
 
@@ -666,25 +591,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
                     $this->logReviewExists($review);
                 }
             }
-        }
-
-        $this->setReviewsChecked();
-    }
-
-    protected function setReviewsChecked(): void
-    {
-        $now = Carbon::now();
-
-        $this->logSetReviewsChecked($now);
-
-        if ($this->pattern->getPattern()->relationLoaded('meta') === false) {
-            $this->pattern->getPattern()->load('meta');
-        }
-
-        if ($this->pattern->getPattern()->meta instanceof PatternMeta) {
-            $this->pattern->getPattern()->meta->reviews_updated_at = $now;
-
-            $this->pattern->getPattern()->meta->save();
         }
     }
 
@@ -851,16 +757,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         ]);
     }
 
-    protected function logSetImagesDownloaded(): void
-    {
-        Log::info(
-            message: "Set images downloaded for pattern",
-            context: [
-                'pattern_id' => $this->pattern->getPattern()->id,
-            ]
-        );
-    }
-
     protected function logDownloadFile(FileDto &$file): void
     {
         Log::info(
@@ -1002,16 +898,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         );
     }
 
-    protected function logSetDownloadUrlWrong(): void
-    {
-        Log::info(
-            message: "Setting download URL wrong for pattern",
-            context: [
-                'pattern_id' => $this->pattern->getPattern()->id,
-            ]
-        );
-    }
-
     protected function logCreateFiles(SavedFileDto ...$savedFiles): void
     {
         Log::info(
@@ -1032,16 +918,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
             'saved_file' => $savedFile->toArray(),
             'pattern_id' => $this->pattern->getPattern()->id,
         ]);
-    }
-
-    protected function logSetFilesDownloaded(): void
-    {
-        Log::info(
-            message: "Set files downloaded for pattern",
-            context: [
-                'pattern_id' => $this->pattern->getPattern()->id,
-            ]
-        );
     }
 
     protected function logCreateVideos(): void
@@ -1065,16 +941,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         ]);
     }
 
-    protected function logSetVideosChecked(): void
-    {
-        Log::info(
-            message: 'Set video checked for pattern',
-            context: [
-                'pattern_id' => $this->pattern->getPattern()->id,
-            ]
-        );
-    }
-
     protected function logCreateReviews(): void
     {
         Log::info(
@@ -1094,17 +960,6 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
             'review' => $review->toArray(),
             'pattern_id' => $this->pattern->getPattern()->id,
         ]);
-    }
-
-    protected function logSetReviewsChecked(Carbon &$now): void
-    {
-        Log::info(
-            message: 'Set reviews checked for pattern',
-            context: [
-                'pattern_id' => $this->pattern->getPattern()->id,
-                'now' => $now->toDateTimeString(),
-            ],
-        );
     }
 
     /**

@@ -70,11 +70,6 @@ class Pattern extends Model
         return $this->hasMany(related: PatternFile::class);
     }
 
-    public function meta(): HasOne
-    {
-        return $this->hasOne(related: PatternMeta::class);
-    }
-
     public function isDeletable(): bool
     {
         return true;

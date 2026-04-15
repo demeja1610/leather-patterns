@@ -46,15 +46,6 @@ return [
     'images' => 'Изображения',
     'files' => 'Файлы',
 
-    'meta' => [
-        'meta' => 'Метаданные',
-        'pattern_downloaded' => 'Выкройка скачана',
-        'images_downloaded' => 'Изображения скачаны',
-        'is_download_url_wrong' => 'Неверное URL скачивания',
-        'is_video_checked' => 'Наличие видео проверено',
-        'reviews_updated_at' => 'Дата обновления отзывов',
-    ],
-
     'admin' => [
         'created' => 'Выкройка: `:title` успешно создана',
         'updated' => 'Выкройка с ID: `:id` успешно обновлена',

@@ -63,7 +63,6 @@ class ListPageController extends Controller
             'author',
             'categories',
             'tags',
-            'meta',
         ]);
 
         return $q->orderBy('id', 'desc')->paginate(
@@ -305,54 +304,6 @@ class ListPageController extends Controller
             } else {
                 $query->whereDoesntHave(relation: 'reviews');
             }
-        }
-
-        $patternDownloaded = $request->input(key: 'pattern_downloaded');
-
-        if ($patternDownloaded !== null) {
-            $this->activeFilters['pattern_downloaded'] = (bool) $patternDownloaded;
-
-            $query->whereHas(
-                relation: 'meta',
-                callback: fn(Builder $sq) => $sq
-                    ->where('pattern_downloaded', (bool) $patternDownloaded)
-            );
-        }
-
-        $imagesDownloaded = $request->input(key: 'images_downloaded');
-
-        if ($imagesDownloaded !== null) {
-            $this->activeFilters['images_downloaded'] = (bool) $imagesDownloaded;
-
-            $query->whereHas(
-                relation: 'meta',
-                callback: fn(Builder $sq) => $sq
-                    ->where('images_downloaded', (bool) $imagesDownloaded)
-            );
-        }
-
-        $downloadUrlWrong = $request->input(key: 'is_download_url_wrong');
-
-        if ($downloadUrlWrong !== null) {
-            $this->activeFilters['is_download_url_wrong'] = (bool) $downloadUrlWrong;
-
-            $query->whereHas(
-                relation: 'meta',
-                callback: fn(Builder $sq) => $sq
-                    ->where('is_download_url_wrong', (bool) $downloadUrlWrong)
-            );
-        }
-
-        $videoChecked = $request->input(key: 'is_video_checked');
-
-        if ($videoChecked !== null) {
-            $this->activeFilters['is_video_checked'] = (bool) $videoChecked;
-
-            $query->whereHas(
-                relation: 'meta',
-                callback: fn(Builder $sq) => $sq
-                    ->where('is_video_checked', (bool) $videoChecked)
-            );
         }
     }
 }

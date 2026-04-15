@@ -7,7 +7,6 @@ namespace App\Observers;
 use App\Models\Pattern;
 use App\Jobs\DeleteFileJob;
 use App\Models\PatternFile;
-use App\Models\PatternMeta;
 use App\Models\PatternImage;
 use App\Enum\PatternSourceEnum;
 use App\Jobs\DeleteDirectoryJob;
@@ -22,8 +21,6 @@ class PatternObserver
 {
     public function created(Pattern $pattern): void
     {
-        $this->createPatternMeta(pattern: $pattern);
-
         if ($pattern->source !== PatternSourceEnum::LOCAL) {
             $this->clearParsedPattern($pattern);
         }
@@ -48,19 +45,6 @@ class PatternObserver
     // public function restored(Pattern $pattern): void {}
 
     // public function forceDeleted(Pattern $pattern): void {}
-
-    protected function createPatternMeta(Pattern &$pattern): void
-    {
-        $data = [
-            'pattern_id' => $pattern->id,
-        ];
-
-        if ($pattern->source === PatternSourceEnum::MLEATHER) {
-            $data['is_download_url_wrong'] = true;
-        }
-
-        PatternMeta::query()->create(attributes: $data);
-    }
 
     protected function removeImagesFiles(Pattern &$pattern): void
     {

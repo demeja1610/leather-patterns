@@ -31,8 +31,7 @@ class ParsePatternVideosCommand extends Command
         $id = $this->option(key: 'id');
 
         $q = Pattern::query()
-            ->whereHas(relation: 'meta', callback: fn($query) => $query->where('is_video_checked', false))
-            ->with(relations: 'videos');
+            ->whereDoesntHave('videos');
 
         if ($id) {
             $q->where('id', $id);
@@ -57,8 +56,6 @@ class ParsePatternVideosCommand extends Command
 
                 if ($pattern->videos->isNotEmpty()) {
                     $this->info(message: "Pattern {$pattern->id} has videos, skipping...");
-
-                    $pattern->meta->update(['is_video_checked' => true]);
 
                     return;
                 }
@@ -97,8 +94,6 @@ class ParsePatternVideosCommand extends Command
 
                         $this->success(message: "Created {$videosToCreateCount} videos for pattern {$pattern->id}");
                     }
-
-                    $pattern->meta->update(['is_video_checked' => true]);
 
                     DB::commit();
                 } catch (Exception $exception) {
