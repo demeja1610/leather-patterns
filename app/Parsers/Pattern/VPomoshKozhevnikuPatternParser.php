@@ -181,6 +181,15 @@ class VPomoshKozhevnikuPatternParser extends PatternParser implements PatternPar
     protected function getFiles(DOMXPath &$xpath): FileListDto
     {
         $downloadLinkElements = $xpath->query(expression: "//*[contains(@class, 'blog-post-body')]//a[contains(text(), 'Скачать')]");
+
+        if ($downloadLinkElements->length === 0) {
+            $downloadLinkElements = $xpath->query(expression: "//*[contains(@class, 'blog-post-body')]//a[contains(@title, 'Скачать')]");
+        }
+
+        if ($downloadLinkElements->length === 0) {
+            $downloadLinkElements = $xpath->query(expression: "//*[contains(@class, 'blog-post-body')]//strong[contains(text(), 'Скачать')]/parent::*//a");
+        }
+
         $files = [];
 
         if ($downloadLinkElements->length > 0) {
