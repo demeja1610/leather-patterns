@@ -266,7 +266,7 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         $url = match (true) {
             $this->isUrlYandexDisk($file->getUrl()) => $this->getDirectYandexDiskUrl($file->getUrl(), $client),
             $this->isUrlGoogleDrive($file->getUrl()) => $this->getDirectGoogleDriveUrl($file->getUrl()),
-            $this->isUrlVk($file->getUrl()) => $this->getDirectVkUrl($file->getUrl()),
+            $this->isUrlVk($file->getUrl()) => $this->getDirectVkUrl($file->getUrl(), $client),
             default => $file->getUrl(),
         };
 
@@ -423,13 +423,35 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
             : null;
     }
 
-    protected function getDirectVkUrl(string $url): ?string
+    protected function getDirectVkUrl(string $url, Client &$client): ?string
     {
         $this->logGettingDirectVkUrl($url);
 
-        $this->logFailToGetDirectVkUrl($url);
+        try {
+            $response = $client->get(
+                uri: $url,
+            );
+        } catch (Throwable $th) {
+            $this->logFailToGetDirectVkUrl($url);
 
-        return null;
+            return null;
+        }
+
+        $body = $response->getBody()->getContents();
+
+        $docUrl = null;
+
+        preg_match('/"docUrl":"([^"]+)"/', $body, $matches);
+
+        if (isset($matches[1])) {
+            $docUrl = $matches[1];
+
+            $docUrl = stripslashes($docUrl);
+        } else {
+            $this->logFailToGetDirectVkUrl($url);
+        }
+
+        return $docUrl;
     }
 
     protected function fixSavedFileExt(SavedFileDto &$savedFile): SavedFileDto
@@ -824,13 +846,19 @@ class UpdatePatternFromParsedPatternJob implements ShouldQueue
         );
     }
 
-    protected function logFailToGetDirectVkUrl(string $url): void
+    protected function logFailToGetDirectVkUrl(string $url, ?Throwable &$th = null): void
     {
+        $context =  [
+            'url' => $url,
+        ];
+
+        if ($th instanceof Throwable) {
+            $context['error'] = $th->__toString();
+        }
+
         Log::error(
             message: "Failed to get direct URL to file on VK",
-            context: [
-                'url' => $url,
-            ]
+            context: $context,
         );
     }
 

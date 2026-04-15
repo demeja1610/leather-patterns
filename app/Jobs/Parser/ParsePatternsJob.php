@@ -94,50 +94,13 @@ class ParsePatternsJob extends InfoJob implements ShouldQueue
                 new \App\Parsers\Pattern\NeovimaPatternParser($parserService)
             )->processPattern(pattern: $pattern),
 
+            PatternSourceEnum::MLEATHER => (
+                new \App\Parsers\Pattern\MleatherPatternParser($parserService)
+            )->processPattern(pattern: $pattern),
+
             default => $this->processUnknownPattern(pattern: $pattern),
         };
     }
-
-    /**
-     * Commented until we ca download patterns from sources like VK or Google Drive
-     */
-    // protected function parseMleatherPatternReviews(string $content, Pattern $pattern): array
-    // {
-    //     $this->info('Parsing reviews for pattern: ' . $pattern->id);
-
-    //     if (str_contains($content, 'Отзывов еще никто не оставлял')) {
-    //         $this->info('No reviews found for pattern: ' . $pattern->id);
-
-    //         return [];
-    //     }
-
-    //     $dom = $this->parserService->parseDOM($content);
-    //     $xpath = $this->parserService->getDOMXPath($dom);
-
-    //     $reviews = $xpath->query("//*[contains(@id, 'reviews')]//*[contains(@class, 'masonry-reviews-item')]");
-
-    //     $toReturn = [];
-
-    //     foreach ($reviews as $review) {
-    //         $nameNodes = $xpath->query(".//*[contains(@class, 'author')]", $review);
-    //         $dateNodes = $xpath->query(".//*[contains(@class, 'date')]", $review);
-    //         $textNodes = $xpath->query(".//*[contains(@class, 'review-content')]", $review);
-
-    //         $stars = null;
-
-    //         $name = $nameNodes->item(0)?->textContent;
-    //         $date = $dateNodes->item(0)?->textContent;
-    //         $text = $textNodes->item(0)?->textContent;
-
-    //         $toReturn[] = [
-    //             'rating' => floatval($stars),
-    //             'reviewer_name' => trim($name),
-    //             'comment' => trim($text),
-    //         ];
-    //     }
-
-    //     return $toReturn;
-    // }
 
     protected function processUnknownPattern(Pattern &$pattern): void
     {
