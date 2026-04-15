@@ -573,8 +573,8 @@
         </x-table.empty>
     @else
         <x-table.overflow-x-container
-            x-data="{ deleteUrl: null }"
-            x-on:close-modal="deleteUrl = null"
+            x-data="{ deleteUrl: null, sourceUpdateUrl: null }"
+            x-on:close-modal="() => {deleteUrl = null; sourceUpdateUrl = null}"
         >
             <x-table.table>
                 <x-slot:header>
@@ -650,12 +650,23 @@
                                     <x-icon.svg name="edit" />
                                 </x-link.button-ghost>
 
+                                @if ($pattern->source->value !== 'local' && $pattern->files_count === 0)
+                                    <x-link.button-ghost
+                                        :href="route('admin.pattern.update-from-source', ['id' => $pattern->id])"
+                                        x-on:click.prevent="() => {sourceUpdateUrl=$el.href}"
+                                    >
+                                        <x-icon.svg name="cloud-download" />
+                                    </x-link.button-ghost>
+                                @endif
+
                                 <x-link.button-ghost
                                     :href="route('page.pattern.single', ['id' => $pattern->id])"
                                     target="_blank"
                                 >
                                     <x-icon.svg name="eye" />
                                 </x-link.button-ghost>
+
+
                             </x-table.td-actions>
 
                             <x-table.td>
@@ -764,6 +775,21 @@
                     x-trap="deleteUrl !== null"
                 >
                     @method('DELETE')
+                </x-form.confirm>
+            </x-modal.modal>
+
+            <x-modal.modal
+                :title="__('phrases.confirmation')"
+                x-show="sourceUpdateUrl !== null"
+            >
+                <x-form.confirm
+                    x-on:cancel="$dispatch('close-modal')"
+                    x-on:submit="setTimeout(() => $dispatch('close-modal'), 300)"
+                    :confirm-text="__('actions.confirm')"
+                    x-bind:action="sourceUpdateUrl"
+                    :text="__('pattern.admin.confirm_source_update_text')"
+                    x-trap="sourceUpdateUrl !== null"
+                >
                 </x-form.confirm>
             </x-modal.modal>
         </x-table.overflow-x-container>

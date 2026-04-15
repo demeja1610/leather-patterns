@@ -56,5 +56,8 @@ return [
         'single_failed_to_delete' => 'Failed to delete pattern with title: `:title`',
         'confirm_delete_text' => 'Please confirm pattern delete. (It will also delete all related files and images without restore option)',
         'pattern_isnt_deletable' => 'Pattern with name :name cannot be deleted',
+        'updating_from_source' => 'Updating pattern with ID: `:id` from source, it may take some time',
+        'only_not_local_allowed' => 'Pattern with ID: `:id` cannot be updated from source, only not local allowed',
+        'confirm_source_update_text' => 'Please confirm pattern update from it original source (Warning: it may rewrite some data).',
     ],
 ];

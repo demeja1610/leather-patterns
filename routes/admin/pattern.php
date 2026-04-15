@@ -29,5 +29,8 @@ Route::prefix('patterns')
 
             Route::get('/delete', \App\Http\Controllers\Admin\Pattern\Action\DeleteController::class)
                 ->name(name: 'pattern.delete');
+
+            Route::get('/update-from-source', \App\Http\Controllers\Admin\Pattern\Action\UpdateFromSourceController::class)
+                ->name(name: 'pattern.update-from-source');
         });
     });
