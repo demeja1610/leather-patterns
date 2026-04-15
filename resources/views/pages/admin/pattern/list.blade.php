@@ -75,6 +75,21 @@
     </x-select.wrapper>
 
     <x-input-text.input-text>
+        <x-input-text.label for="source_url">
+            {{ __('filter.source_url') }}
+        </x-input-text.label>
+
+        <x-input-text.input
+            id="source_url"
+            name="source_url"
+            type="url"
+            :placeholder="__('filter.source_url')"
+            :value="$activeFilters['source_url'] ?? null"
+            :title="__('filter.source_url')"
+        />
+    </x-input-text.input-text>
+
+    <x-input-text.input-text>
         <x-input-text.label for="older_than">
             {{ __('filter.older_than') }}
         </x-input-text.label>

@@ -50,6 +50,7 @@ return [
     'files_count' => 'Files count',
     'source' => 'Source',
     'source_identifier' => 'Source identifier',
+    'source_url' => 'Source url',
 
     'orders' => [
         OrderablePropertyEnum::ID->value => 'ID',

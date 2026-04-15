@@ -181,7 +181,7 @@ class MleatherPatternParser extends PatternParser implements PatternParserInterf
 
         foreach ($reviewsEls as $reviewsEl) {
             $nameNodes = $xpath->query(".//*[contains(@class, 'author')]", $reviewsEl);
-            $dateNodes = $xpath->query(".//*[contains(@class, 'date", $reviewsEl);
+            $dateNodes = $xpath->query(".//*[contains(@class, 'date')]", $reviewsEl);
             $textNodes = $xpath->query(".//*[contains(@class, 'review-content')]", $reviewsEl);
             $stars = null;
 
