@@ -138,6 +138,13 @@ class MleatherPatternParser extends PatternParser implements PatternParserInterf
         $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'article-content')]//strong[contains(text(), 'скачать')]/parent::a");
         $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'article-content')]//strong[contains(text(), 'Скачать')]/parent::a");
 
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'article-content')]//a[contains(text(), 'Часть')]");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'article-content')]//a[contains(text(), 'часть')]");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'article-content')]//a[contains(text(), 'ЧАСТЬ')]");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'article-content')]//strong[contains(text(), 'ЧАСТЬ')]/parent::a");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'article-content')]//strong[contains(text(), 'часть')]/parent::a");
+        $downloadLinkElements[] = $xpath->query(expression: "//*[contains(@class, 'article-content')]//strong[contains(text(), 'Часть')]/parent::a");
+
         foreach ($downloadLinkElements as $downloadLinkElement) {
             if ($downloadLinkElement->length > 0) {
                 $downloadLinkElements = $downloadLinkElement;
