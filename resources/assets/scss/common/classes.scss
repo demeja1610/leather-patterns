@@ -12,3 +12,23 @@
 .dn {
     display: none;
 }
+
+.text {
+    &-right {
+        text-align: right;
+    }
+
+    &-left {
+        text-align: left;
+    }
+
+    &-center {
+        text-align: center;
+    }
+}
+
+.w {
+    &-full {
+        width: 100%;
+    }
+}
