@@ -45,6 +45,7 @@ return [
     'source_url' => 'Source URL',
     'images' => 'Images',
     'files' => 'Files',
+    'has_multiple_files' => 'Has multiple files',
 
     'admin' => [
         'created' => 'Pattern with title: `:title` successfully created',

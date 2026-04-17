@@ -45,6 +45,7 @@ return [
     'source_url' => 'URL источника',
     'images' => 'Изображения',
     'files' => 'Файлы',
+    'has_multiple_files' => 'Есть несколько файлов',
 
     'admin' => [
         'created' => 'Выкройка: `:title` успешно создана',

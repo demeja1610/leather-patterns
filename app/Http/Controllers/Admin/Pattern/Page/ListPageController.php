@@ -282,6 +282,18 @@ class ListPageController extends Controller
             }
         }
 
+        $hasMultipleFiles = $request->input(key: 'has_multiple_files');
+
+        if ($hasMultipleFiles !== null) {
+            $this->activeFilters['has_multiple_files'] = (bool) $hasMultipleFiles;
+
+            if ((bool) $hasMultipleFiles) {
+                $query->has('files', '>', 1);
+            } else {
+                $query->has('files', '=', 1);
+            }
+        }
+
         $filesCount = $request->input(key: 'files_count');
 
         if ($filesCount !== null) {

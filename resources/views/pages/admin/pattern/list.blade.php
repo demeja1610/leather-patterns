@@ -352,6 +352,39 @@
         </x-select.select>
     </x-select.wrapper>
 
+    <x-select.wrapper>
+        <x-select.label for="has_multiple_files">
+            {{ __('pattern.has_multiple_files') }}
+        </x-select.label>
+
+        <x-select.select
+            name="has_multiple_files"
+            id="has_multiple_files"
+            :title="__('pattern.has_multiple_files')"
+        >
+            <x-select.option
+                value=""
+                :selected="!isset($activeFilters['has_multiple_files'])"
+            >
+                {{ __('filter.not_selected') }}
+            </x-select.option>
+
+            <x-select.option
+                value="1"
+                :selected="isset($activeFilters['has_multiple_files']) && $activeFilters['has_multiple_files'] === true"
+            >
+                {{ __('phrases.yes') }}
+            </x-select.option>
+
+            <x-select.option
+                value="0"
+                :selected="isset($activeFilters['has_multiple_files']) && $activeFilters['has_multiple_files'] === false"
+            >
+                {{ __('phrases.no') }}
+            </x-select.option>
+        </x-select.select>
+    </x-select.wrapper>
+
     <x-input-text.input-text>
         <x-input-text.label for="files_count">
             {{ __('filter.files_count') }}
