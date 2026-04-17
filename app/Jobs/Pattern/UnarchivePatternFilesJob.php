@@ -158,34 +158,65 @@ class UnarchivePatternFilesJob implements ShouldQueue
 
         try {
             $fileDiskName = $file->getSaveToDiskName();
-
             $filePath = Storage::disk($fileDiskName)->path($file->path);
+            $fileDirRelativePath = trim(dirname($file->path), '/');
 
             if ($zip->open($filePath) === true) {
-                $extractTofolderName = 'extracted_zip';
+                $extractToFolderName = 'extracted_zip';
                 $extractFromDir = trim(dirname($filePath), '/');
-                $extractToDir =  $extractFromDir . "/{$extractTofolderName}";
+                $extractToDir = $extractFromDir . "/{$extractToFolderName}";
+                $extractToRelativeDir = $fileDirRelativePath . "/{$extractToFolderName}";
 
-                $zip->extractTo($extractToDir);
+                if (!is_dir($extractToDir)) {
+                    mkdir($extractToDir, 0777, true);
+                }
 
-                $fileDirRelativePath = trim(dirname($file->path), '/');
+                $extractedPaths = [];
 
-                $extractedFiles = Storage::disk($fileDiskName)->allFiles($fileDirRelativePath . "/{$extractTofolderName}");
+                for ($i = 0; $i < $zip->numFiles; $i++) {
+                    $stat = $zip->statIndex($i);
 
-                foreach ($extractedFiles as $extractedFile) {
-                    $fileMimeType = $this->fileService->getMimeType(Storage::disk($fileDiskName)->path($extractedFile));
+                    $originalName = $stat['name'];
+
+                    if (substr($originalName, -1) === '/') {
+                        continue;
+                    }
+
+                    $baseName = basename($originalName);
+
+                    $uniqueName = uniqid() . '_' . $baseName;
+
+                    $tempExtractPath = $extractToDir . '/' . $uniqueName;
+                    $tempRelativeExtractPath = $extractToRelativeDir . '/' . $uniqueName;
+
+                    if ($zip->extractTo($extractToDir, $originalName)) {
+                        $originalExtractedPath = $extractToDir . '/' . $originalName;
+
+                        if ($originalName !== $uniqueName && file_exists($originalExtractedPath)) {
+                            rename($originalExtractedPath, $tempExtractPath);
+                        }
+
+                        $extractedPaths[] = $tempRelativeExtractPath;
+                    }
+                }
+
+                foreach ($extractedPaths as $extractedFilePath) {
+
+                    $fullExtractedFilePath = Storage::disk($fileDiskName)->path($extractedFilePath);
+
+                    $fileMimeType = $this->fileService->getMimeType($fullExtractedFilePath);
                     $fileType = $this->fileService->getFileType($fileMimeType);
 
                     if ($fileType === null) {
-                        Storage::disk($fileDiskName)->delete($extractedFile);
+                        Storage::disk($fileDiskName)->delete($extractedFilePath);
 
                         continue;
                     }
 
-                    $moveTo = $fileDirRelativePath . '/' . basename($extractedFile);
+                    $moveTo = $fileDirRelativePath . '/' . basename($extractedFilePath);
 
                     $successMove = Storage::disk($fileDiskName)->move(
-                        from: $extractedFile,
+                        from: $extractedFilePath,
                         to: $moveTo,
                     );
 
@@ -194,13 +225,7 @@ class UnarchivePatternFilesJob implements ShouldQueue
                     }
                 }
 
-                $allSubfolders = Storage::disk($fileDiskName)->allDirectories($fileDirRelativePath . "/{$extractTofolderName}");
-
-                foreach ($allSubfolders as $subFolder) {
-                    Storage::disk($fileDiskName)->deleteDirectory($subFolder);
-                }
-
-                rmdir($extractToDir);
+                $this->deleteDirectory($extractToDir);
             }
         } catch (\Throwable $th) {
             Log::error(ucfirst($this->actionName) . " An error happened while trying to unzip file", [
@@ -209,16 +234,35 @@ class UnarchivePatternFilesJob implements ShouldQueue
                 'error' => $th->__toString(),
             ]);
 
-            foreach ($newFiles as $file) {
-                Storage::disk($fileDiskName)->delete($newFiles);
+            foreach ($newFiles as $deletedFile) {
+                Storage::disk($fileDiskName)->delete($deletedFile);
             }
 
-            Storage::disk($fileDiskName)->deleteDirectory($extractToDir);
+            if (isset($extractToDir) && is_dir($extractToDir)) {
+                $this->deleteDirectory($extractToDir);
+            }
         }
 
         $zip->close();
 
         return $newFiles;
+    }
+
+    protected function deleteDirectory(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        $files = array_diff(scandir($dir), ['.', '..']);
+
+        foreach ($files as $file) {
+            $path = $dir . '/' . $file;
+
+            is_dir($path) ? $this->deleteDirectory($path) : unlink($path);
+        }
+
+        rmdir($dir);
     }
 
     protected function saveNewFiles(PatternFile &$file, array &$newFiles): int
