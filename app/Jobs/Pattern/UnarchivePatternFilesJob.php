@@ -242,6 +242,7 @@ class UnarchivePatternFilesJob implements ShouldQueue
                 'path' => $newFile,
                 'size' => $this->fileService->getSize($fullFilePath),
                 'type' => FileTypeEnum::fromMimeType($mimeType),
+                'parent_id' => $file->id,
             ]);
 
             $savedCount++;

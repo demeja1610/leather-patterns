@@ -19,6 +19,9 @@ return [
     'mb' => 'MByte',
     'pattern_id' => 'Pattern ID',
     'download' => 'Download',
+    'parent' => 'Parent file',
+    'has_parent' => 'Has parent',
+    'has_childs' => 'Has childs',
 
     'types' => [
         FileTypeEnum::IMAGE->value => 'Image',

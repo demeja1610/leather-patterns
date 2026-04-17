@@ -19,6 +19,9 @@ return [
     'mb' => 'МБайт',
     'pattern_id' => 'ID выкройки',
     'download' => 'Скачать',
+    'parent' => 'Родительский файл',
+    'has_parent' => 'Есть родительский файл',
+    'has_childs' => 'Есть дети',
 
     'types' => [
         FileTypeEnum::IMAGE->value => 'Изображение',

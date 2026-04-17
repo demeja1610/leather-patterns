@@ -175,6 +175,72 @@
         />
     </x-input-text.input-text>
 
+    <x-select.wrapper>
+        <x-select.label for="has_parent">
+            {{ __('pattern_file.has_parent') }}
+        </x-select.label>
+
+        <x-select.select
+            name="has_parent"
+            id="has_parent"
+            :title="__('pattern_file.has_parent')"
+        >
+            <x-select.option
+                value=""
+                :selected="!isset($activeFilters['has_parent'])"
+            >
+                {{ __('filter.not_selected') }}
+            </x-select.option>
+
+            <x-select.option
+                value="1"
+                :selected="isset($activeFilters['has_parent']) && $activeFilters['has_parent'] === true"
+            >
+                {{ __('phrases.yes') }}
+            </x-select.option>
+
+            <x-select.option
+                value="0"
+                :selected="isset($activeFilters['has_parent']) && $activeFilters['has_parent'] === false"
+            >
+                {{ __('phrases.no') }}
+            </x-select.option>
+        </x-select.select>
+    </x-select.wrapper>
+
+    <x-select.wrapper>
+        <x-select.label for="has_childs">
+            {{ __('pattern_file.has_childs') }}
+        </x-select.label>
+
+        <x-select.select
+            name="has_childs"
+            id="has_childs"
+            :title="__('pattern_file.has_childs')"
+        >
+            <x-select.option
+                value=""
+                :selected="!isset($activeFilters['has_childs'])"
+            >
+                {{ __('filter.not_selected') }}
+            </x-select.option>
+
+            <x-select.option
+                value="1"
+                :selected="isset($activeFilters['has_childs']) && $activeFilters['has_childs'] === true"
+            >
+                {{ __('phrases.yes') }}
+            </x-select.option>
+
+            <x-select.option
+                value="0"
+                :selected="isset($activeFilters['has_childs']) && $activeFilters['has_childs'] === false"
+            >
+                {{ __('phrases.no') }}
+            </x-select.option>
+        </x-select.select>
+    </x-select.wrapper>
+
     <x-input-text.input-text>
         <x-input-text.label for="newer_than">
             {{ __('filter.newer_than') }}
@@ -268,6 +334,10 @@
                         </x-table.th>
 
                         <x-table.th>
+                            {{ __('pattern_file.parent') }}
+                        </x-table.th>
+
+                        <x-table.th>
                             {{ __('pattern_file.hash') }}
                         </x-table.th>
 
@@ -338,6 +408,17 @@
 
                             <x-table.td>
                                 {{ $file->id }}
+                            </x-table.td>
+
+                            <x-table.td>
+                                @if ($file->parent_id)
+                                    <x-link.default
+                                        :href="route('admin.page.pattern-files.list', ['id' => $file->parent_id])"
+                                        target="_blank"
+                                    >
+                                        {{ $file->parent_id }}
+                                    </x-link.default>
+                                @endif
                             </x-table.td>
 
                             <x-table.td>

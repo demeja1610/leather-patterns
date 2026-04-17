@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enum\FileTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $hash_algorithm
  * @property string $hash
  * @property int $pattern_id
+ * @property null|int $parent_id
  *
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
@@ -34,6 +36,7 @@ class PatternFile extends Model
         'hash_algorithm',
         'hash',
         'pattern_id',
+        'parent_id',
     ];
 
     public function pattern(): BelongsTo
@@ -63,5 +66,15 @@ class PatternFile extends Model
     public function isDeletable(): bool
     {
         return true;
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function childs(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id');
     }
 }

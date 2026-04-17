@@ -130,6 +130,30 @@ class ListPageController extends Controller
             $query->where('hash_algorithm', $hashAlgo);
         }
 
+        $hasChilds = $request->input(key: 'has_childs');
+
+        if ($hasChilds !== null) {
+            $this->activeFilters['has_childs'] = (bool) $hasChilds;
+
+            if ((bool) $hasChilds) {
+                $query->has('childs');
+            } else {
+                $query->doesntHave('childs');
+            }
+        }
+
+        $hasParent = $request->input(key: 'has_parent');
+
+        if ($hasParent !== null) {
+            $this->activeFilters['has_parent'] = (bool) $hasParent;
+
+            if ((bool) $hasParent) {
+                $query->has('parent');
+            } else {
+                $query->doesntHave('parent');
+            }
+        }
+
         $olderThanStr = $request->input(key: 'older_than');
 
         if ($olderThanStr !== null) {
