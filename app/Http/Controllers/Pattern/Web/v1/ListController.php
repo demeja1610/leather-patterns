@@ -174,7 +174,7 @@ class ListController extends Controller
             request: $request,
         );
 
-        $q->whereHas('files');
+        $q->whereHas('files', fn(Builder $sq) => $sq->whereNull('parent_id'));
 
         $q->with(
             relations: [
@@ -219,12 +219,13 @@ class ListController extends Controller
                 'files' => function (HasMany $sq): void {
                     $table = $sq->getRelated()->getTable();
 
-                    $sq->select([
-                        "{$table}.path",
-                        "{$table}.extension",
-                        "{$table}.type",
-                        "{$table}.pattern_id",
-                    ]);
+                    $sq->whereNull('parent_id')
+                        ->select([
+                            "{$table}.path",
+                            "{$table}.extension",
+                            "{$table}.type",
+                            "{$table}.pattern_id",
+                        ]);
                 },
             ],
         );

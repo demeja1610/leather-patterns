@@ -83,12 +83,13 @@ class SingleController extends Controller
                     'files' => function (HasMany $sq): HasMany {
                         $table = $sq->getRelated()->getTable();
 
-                        $sq->select([
-                            "{$table}.id",
-                            "{$table}.path",
-                            "{$table}.type",
-                            "{$table}.pattern_id",
-                        ]);
+                        $sq->whereNull('parent_id')
+                            ->select([
+                                "{$table}.id",
+                                "{$table}.path",
+                                "{$table}.type",
+                                "{$table}.pattern_id",
+                            ]);
 
                         return $sq;
                     },
