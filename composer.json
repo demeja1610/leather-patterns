@@ -9,7 +9,8 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
-        "livewire/blaze": "1.0"
+        "livewire/blaze": "1.0",
+        "spatie/image": "^3.9"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",
