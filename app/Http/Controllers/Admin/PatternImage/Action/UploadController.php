@@ -20,6 +20,9 @@ class UploadController extends Controller
         $uploadPath = $newPatternImage->getUploadPath();
 
         if ($request->hasFile('images')) {
+            /**
+             * @var \Illuminate\Http\UploadedFile $imagefile
+             */
             foreach ($request->file('images') as $imageFile) {
                 $filename = Str::uuid() . '.jpg';
                 $tempPath = $imageFile->getRealPath();
@@ -27,6 +30,16 @@ class UploadController extends Controller
                 $tempImage = Image::load($tempPath);
                 $originalWidth = $tempImage->getWidth();
                 $originalSize = $imageFile->getSize();
+
+                if ($originalSize <= 250 * 1024) {
+                    $savedPath = Storage::disk($disk)->putFileAs($uploadPath, $tempPath, $filename);
+
+                    if ($savedPath) {
+                        $saved[] = Storage::disk($disk)->url($savedPath);
+                    }
+
+                    continue;
+                }
 
                 $targetWidth = 1920;
                 $shouldResize = $originalWidth > $targetWidth;
