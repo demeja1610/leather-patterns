@@ -31,6 +31,7 @@ class SingleController extends Controller
 
         $q = Pattern::query()
             ->where('id', $id)
+            ->where('is_published', true)
             ->with(
                 relations: [
                     'categories' => function (BelongsToMany $sq): BelongsToMany {
