@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\PatternLike;
 use App\Enum\PatternSourceEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -68,6 +69,11 @@ class Pattern extends Model
     public function files(): HasMany
     {
         return $this->hasMany(related: PatternFile::class);
+    }
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(PatternLike::class);
     }
 
     public function isDeletable(): bool

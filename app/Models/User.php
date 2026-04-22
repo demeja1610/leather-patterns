@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\PatternLike;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -34,8 +36,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function reviews()
+    public function reviews(): HasMany
     {
         return $this->hasMany(related: PatternReview::class);
+    }
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(PatternLike::class);
     }
 }
