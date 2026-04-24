@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Api\Pattern;
+namespace App\Http\Resources\Api\v1\App\PatternImage;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
-class PatternResource extends JsonResource
+class PatternImageResource extends JsonResource
 {
     /**
      * @return array<string, mixed>
@@ -15,13 +16,7 @@ class PatternResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->resource->id,
-            'title' => $this->resource->title,
+            'url' => Storage::disk($this->getSaveToDiskName())->url($this->path),
         ];
-    }
-
-    public function jsonOptions()
-    {
-        return JSON_UNESCAPED_UNICODE;
     }
 }

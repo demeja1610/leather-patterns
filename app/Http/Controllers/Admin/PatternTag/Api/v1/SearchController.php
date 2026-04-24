@@ -8,9 +8,9 @@ use App\Models\PatternTag;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use App\Http\Resources\Api\PatternTag\PatternTagResource;
 use App\Http\Requests\Admin\PatternTag\Api\v1\SearchRequest;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use App\Http\Resources\Api\v1\Admin\PatternTag\PatternTagResource;
 
 class SearchController extends Controller
 {

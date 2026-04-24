@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use App\Http\Requests\Admin\PatternCategory\Api\v1\SearchRequest;
-use App\Http\Resources\Api\PatternCategory\PatternCategoryResource;
+use App\Http\Resources\Api\v1\Admin\PatternCategory\PatternCategoryResource;
 
 class SearchController extends Controller
 {

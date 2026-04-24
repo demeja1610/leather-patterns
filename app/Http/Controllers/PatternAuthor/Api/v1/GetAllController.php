@@ -9,8 +9,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use App\Http\Requests\PatternAuthor\Api\v1\GetAllRequest;
-use App\Http\Resources\Api\PatternAuthor\PatternAuthorResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use App\Http\Resources\Api\v1\App\PatternAuthor\PatternAuthorResource;
 
 class GetAllController extends Controller
 {

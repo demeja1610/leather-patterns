@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\Pattern\Api\v1;
 
+use App\Models\Pattern;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use App\Http\Resources\Api\Pattern\PatternResource;
 use App\Http\Requests\Admin\Pattern\Api\v1\SearchRequest;
-use App\Models\Pattern;
+use App\Http\Resources\Api\v1\Admin\Pattern\PatternResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SearchController extends Controller
@@ -53,7 +53,7 @@ class SearchController extends Controller
 
         $hasReviews = (bool) $request->input('has_reviews', false);
 
-        if($hasReviews === true) {
+        if ($hasReviews === true) {
             $query->whereHas('reviews');
         }
     }

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\PatternCategory\Api\v1;
 
+use App\Models\PatternCategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use App\Http\Requests\PatternCategory\Api\v1\GetAllRequest;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use App\Http\Resources\Api\PatternCategory\PatternCategoryResource;
-use App\Models\PatternCategory;
+use App\Http\Resources\Api\v1\App\PatternCategory\PatternCategoryResource;
 
 class GetAllController extends Controller
 {

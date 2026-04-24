@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Api\PatternCategory;
+namespace App\Http\Resources\Api\v1\Admin\Pattern;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PatternCategoryResource extends JsonResource
+class PatternResource extends JsonResource
 {
     /**
      * @return array<string, mixed>
@@ -16,7 +16,7 @@ class PatternCategoryResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'name' => $this->resource->name,
+            'title' => $this->resource->title,
         ];
     }
 

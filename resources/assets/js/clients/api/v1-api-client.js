@@ -1,11 +1,11 @@
 export default class V1ApiClient {
     static ALL_ENDPOINT = "all";
 
-    static PATTERN_CATEGORY_ENDPOINT = "pattern-category";
+    static PATTERN_CATEGORY_ENDPOINT = "pattern-categories";
 
-    static PATTERN_TAG_ENDPOINT = "pattern-tag";
+    static PATTERN_TAG_ENDPOINT = "pattern-tags";
 
-    static PATTERN_AUTHOR_ENDPOINT = "pattern-author";
+    static PATTERN_AUTHOR_ENDPOINT = "pattern-authors";
 
     constructor() {
         this.apiBaseUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/v1`;
