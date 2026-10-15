@@ -29,6 +29,8 @@
 
 @use '@styles/components/pagination/pagination.scss' as pagination;
 
+@use '@styles/components/context-menu/context-menu.scss' as context-menu;
+
 // componets for pages
 
 @use '@styles/components/filter/filter.scss' as filter;

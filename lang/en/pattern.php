@@ -15,6 +15,7 @@ return [
     'authors' => 'Authors',
     'download_from_source' => 'Download from source',
     'created_at' => 'Created at',
+    'show_gallery' => 'Show gallery',
 
     'creation' => 'Create pattern',
     'edition' => 'Edit pattern',

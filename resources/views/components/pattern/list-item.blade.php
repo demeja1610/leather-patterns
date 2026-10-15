@@ -17,28 +17,58 @@
         />
     @endif
 
-    <div class="pattern-list-item__floating-actions">
+    <x-context-menu.context-menu class="pattern-list-item__menu">
         @if ($pattern->images->count() !== 0)
-            <x-button.ghost
-                :title="__('pattern.zoom_image')"
-                class="pattern-list-item__floating-action"
+            <x-context-menu.context-menu-item-button
                 data-gallery-trigger
+                :title="__('pattern.show_gallery')"
             >
                 <x-icon.svg name="zoom" />
-            </x-button.ghost>
+
+                {{ __('pattern.show_gallery') }}
+            </x-context-menu.context-menu-item-button>
         @endif
 
         @if ($pattern->source_url !== null)
-            <x-link.button-ghost
+            <x-context-menu.context-menu-item-link
                 :href="$pattern->source_url"
                 :title="__('pattern.source')"
                 target="_blank"
-                class="pattern-list-item__floating-action"
             >
                 <x-icon.svg name="globe" />
-            </x-link.button-ghost>
+
+                {{ __('pattern.source') }}
+            </x-context-menu.context-menu-item-link>
         @endif
-    </div>
+
+        @if ($pattern->files->count() !== 0)
+            @if ($pattern->files->count() === 1)
+                <x-context-menu.context-menu-item-link
+                    :href="asset('/storage/' . $pattern->files->first()->path)"
+                    :title="__('pattern.download')"
+                    target="_blank"
+                    :download="basename($pattern->files->first()->path)"
+                >
+                    <x-icon.svg name="download" />
+
+                    {{ __('pattern.download') }}
+                </x-context-menu.context-menu-item-link>
+            @else
+                @foreach ($pattern->files as $file)
+                    <x-context-menu.context-menu-item-link
+                        :href="asset('/storage/' . $file->first()->path)"
+                        :title="__('pattern.download')"
+                        target="_blank"
+                        :download="basename($file->first()->path)"
+                    >
+                        <x-icon.svg name="download" />
+
+                        {{ __('pattern.download') . ' ' . $loop->index + 1 }}
+                    </x-context-menu.context-menu-item-link>
+                @endforeach
+            @endif
+        @endif
+    </x-context-menu.context-menu>
 
     @if ($pattern->images->count() !== 0)
         <div class="pattern-list-item__image">
@@ -92,40 +122,6 @@
                         class="pattern-list-item__tag"
                         :text="$tag->name"
                     />
-                @endforeach
-            </div>
-        @endif
-
-        @if ($pattern->files->count() !== 0)
-            <div class="pattern-list-item__downloads">
-                @foreach ($pattern->files as $file)
-                    <x-link.button-default
-                        :title="__('pattern.download')"
-                        :href="asset('/storage/' . $file->path)"
-                        target="_blank"
-                        :download="$file->extension !== 'pdf'"
-                        class="pattern-list-item__download"
-                    >
-                        <x-icon.svg
-                            class="pattern-list-item__download-icon pattern-list-item__download-icon--download"
-                            name="download"
-                        />
-
-                        <span class="pattern-list-item__download-text">
-                            {{ __('pattern.download') }}
-
-                            @if ($pattern->files->count() > 1)
-                                ({{ $loop->index + 1 }})
-                            @endif
-                        </span>
-
-                        {{ $file->extension }}
-
-                        <x-icon.svg
-                            class="pattern-list-item__download-icon pattern-list-item__download-icon--{{ $file->type->value }}"
-                            name="{{ $file->type->value }}-file"
-                        />
-                    </x-link.button-default>
                 @endforeach
             </div>
         @endif

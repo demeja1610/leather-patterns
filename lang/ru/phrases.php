@@ -22,4 +22,5 @@ return [
     'select_files' => 'Выберите файлы',
     'select_file' => 'Выберите файл',
     'remove' => 'Удалить',
+    'menu' => 'Меню',
 ];
