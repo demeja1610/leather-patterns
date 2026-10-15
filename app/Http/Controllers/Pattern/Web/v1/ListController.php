@@ -175,7 +175,8 @@ class ListController extends Controller
         );
 
         $q->whereHas('files', fn(Builder $sq) => $sq->whereNull('parent_id'))
-            ->where('is_published', true);
+            // ->where('is_published', true)
+        ;
 
         $q->with(
             relations: [
